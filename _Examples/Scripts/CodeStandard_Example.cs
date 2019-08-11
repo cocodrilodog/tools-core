@@ -64,7 +64,7 @@
 //		Properties
 //		Methods
 
-namespace CocodriloDog.Core {
+namespace CocodriloDog.Core.Examples {
 
 	// Using statements go inside the namespace
 	using System;
