@@ -69,7 +69,7 @@
 		/// Use this method if you want to instantiate the singleton more than 
 		/// once in the app lifecycle.
 		/// </remarks>
-		public static void DestroyInstance() {
+		public static void DestroyForReinstantiation() {
 			if(Instance != null) {
 				Instance.m_AllowReInstantiationAfterDestroy = true;
 				Destroy(Instance.gameObject);
