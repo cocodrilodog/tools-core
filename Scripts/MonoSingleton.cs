@@ -63,7 +63,7 @@
 		#region Public Static Methods
 
 		/// <summary>
-		/// Destroys the instance.
+		/// Destroys the instance and allows further reinstantiation.
 		/// </summary>
 		/// <remarks>
 		/// Use this method if you want to instantiate the singleton more than 
