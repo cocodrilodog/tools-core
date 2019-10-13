@@ -1,6 +1,7 @@
 ﻿namespace CocodriloDog.Core {
 
 	using System;
+	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -30,11 +31,43 @@
 
 		#region Public Static Methods
 
+		/// <summary>
+		/// Performs an <paramref name="action"/> after the <paramref name="delay"/>
+		/// </summary>
+		/// <param name="action">Action.</param>
+		/// <param name="delay">Delay.</param>
 		public static void DelayedAction(Action action, float delay) {
 			DelayedActionInfo.Action = action;
 			DelayedActionInfo.Delay = delay;
 			DelayedActionInfo.Time = EditorApplication.timeSinceStartup;
 			EditorApplication.update += EditorApplication_Update_DelayedAction;
+		}
+
+		/// <summary>
+		/// Used by attribute property drawers to validate the received field.
+		/// </summary>
+		/// <returns><c>true</c>, if field drawable was ised, <c>false</c> otherwise.</returns>
+		/// <param name="fieldInfo">The field info of the property drawer.</param>
+		/// <param name="requiredType">The type that is required by the property drawer.</param>
+		public static bool IsFieldDrawable(FieldInfo fieldInfo, Type requiredType) {
+
+			Type fieldType = fieldInfo.FieldType;
+
+			if (fieldInfo.FieldType.IsArray) {
+				// Is an array
+				fieldType = fieldInfo.FieldType.GetElementType();
+			} else if (fieldInfo.FieldType.IsGenericType) {
+				if (typeof(IList).IsAssignableFrom(fieldInfo.FieldType)) {
+					// Is a list
+					fieldType = fieldInfo.FieldType.GenericTypeArguments[0];
+				}
+			}
+
+			if (requiredType.IsAssignableFrom(fieldType)) {
+				return true;
+			}
+
+			return false;
 		}
 
 		#endregion
