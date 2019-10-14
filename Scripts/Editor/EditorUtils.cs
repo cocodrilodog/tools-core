@@ -70,6 +70,48 @@
 			return false;
 		}
 
+		/// <summary>
+		/// Gets a MethodInfo by its name.
+		/// </summary>
+		/// <returns>The method.</returns>
+		/// <param name="target">Target.</param>
+		/// <param name="methodName">Method name.</param>
+		public static MethodInfo GetMethod(UnityEngine.Object target, string methodName) {
+
+			MethodInfo method = null;
+
+			// Try to get the method from the current type
+			Type type = target.GetType();
+			method = type.GetMethod(
+				methodName,
+				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+			);
+
+			// If not found go ahead with the base classes
+			if (method == null) {
+				while (type.BaseType != null) {
+					type = type.BaseType;
+					method = type.GetMethod(
+						methodName,
+						BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+					);
+					if (method != null) {
+						break;
+					}
+				}
+			}
+
+			// If method with the provided name is not found
+			if (method == null) {
+				throw new InvalidOperationException(
+					string.Format("Didn't find a method named \"{0}\"", methodName)
+				);
+			}
+
+			return method;
+
+		}
+
 		#endregion
 
 
