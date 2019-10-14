@@ -11,12 +11,17 @@
 	public class PropertyDrawerBase : PropertyDrawer {
 
 
+		#region Public Methods
+
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			float height = base.GetPropertyHeight(property, label);
 			Property = property;
 			Label = label;
 			return height;
 		}
+
+		#endregion
+
 
 		#region Unity Methods
 
@@ -36,7 +41,13 @@
 
 		protected Rect Position { get; private set; }
 
-		protected SerializedProperty Property { get; private set; }
+		protected SerializedProperty Property {
+			get { return m_Property; }
+			private set { 
+				m_Property = value;
+				SerializedObject = m_Property.serializedObject;
+			}
+		}
 
 		protected GUIContent Label { get; private set; }
 
@@ -73,6 +84,37 @@
 			CurrentY += rect.height + 2;
 			CurrentY += postSpace;
 			return rect;
+		}
+
+		/// <summary>
+		/// Called when the serialized object of the property changes. This may 
+		/// happen when selecting a different instance of the same type, both 
+		/// inspected by the same editor.
+		/// </summary>
+		protected virtual void OnSerializedObjectChange() { }
+
+		#endregion
+
+
+		#region Private Fields
+
+		private SerializedProperty m_Property;
+
+		private SerializedObject m_SerializedObject;
+
+		#endregion
+
+
+		#region Private properties
+
+		private SerializedObject SerializedObject {
+			get { return m_SerializedObject; }
+			set {
+				if (value != m_SerializedObject) {
+					m_SerializedObject = value;
+					OnSerializedObjectChange();
+				}
+			}
 		}
 
 		#endregion
