@@ -9,12 +9,19 @@
 	public class MinMaxRangePropertyDrawer : PropertyDrawer {
 
 
-		#region Editor Methods
+		#region Public Methods
+
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+			return base.GetPropertyHeight(property, label) * 2;
+		}
+
+		#endregion
+
+
+		#region Unity Methods
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-			if (property.type != "MinMaxRange")
-				Debug.LogWarning("Use only with MinMaxRange type");
-			else {
+			if (property.type == typeof(MinMaxRange).Name) {
 
 				label = EditorGUI.BeginProperty(position, label, property);
 
@@ -42,17 +49,23 @@
 
 				EditorGUI.EndProperty();
 
+			} else {
+				EditorGUI.HelpBox(
+					position,
+					string.Format(
+						"{0} only supports {1}",
+						typeof(MinMaxRangeAttribute).Name,
+						typeof(MinMaxRange).Name
+					),
+					MessageType.Error
+				);
 			}
-		}
-
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			return base.GetPropertyHeight(property, label) * 2;
 		}
 
 		#endregion
 
 
-		#region Internal Methods
+		#region Private Methods
 
 		private void DrawMinMaxControls(
 			Rect position,

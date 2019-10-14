@@ -44,33 +44,6 @@
 		}
 
 		/// <summary>
-		/// Used by attribute property drawers to validate the received field.
-		/// </summary>
-		/// <returns><c>true</c>, if field drawable was ised, <c>false</c> otherwise.</returns>
-		/// <param name="fieldInfo">The field info of the property drawer.</param>
-		/// <param name="requiredType">The type that is required by the property drawer.</param>
-		public static bool IsFieldDrawable(FieldInfo fieldInfo, Type requiredType) {
-
-			Type fieldType = fieldInfo.FieldType;
-
-			if (fieldInfo.FieldType.IsArray) {
-				// Is an array
-				fieldType = fieldInfo.FieldType.GetElementType();
-			} else if (fieldInfo.FieldType.IsGenericType) {
-				if (typeof(IList).IsAssignableFrom(fieldInfo.FieldType)) {
-					// Is a list
-					fieldType = fieldInfo.FieldType.GenericTypeArguments[0];
-				}
-			}
-
-			if (requiredType.IsAssignableFrom(fieldType)) {
-				return true;
-			}
-
-			return false;
-		}
-
-		/// <summary>
 		/// Gets a MethodInfo by its name.
 		/// </summary>
 		/// <returns>The method.</returns>
