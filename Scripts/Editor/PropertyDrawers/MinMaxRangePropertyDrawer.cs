@@ -31,14 +31,14 @@
 			base.OnGUI(position, property, label);
 
 			if (Property.type == typeof(MinMaxRange).Name) {
-				EditorGUI.BeginProperty(position, label, property);
-				EditorGUI.LabelField(GetNextPosition(), label);
+				EditorGUI.BeginProperty(Position, Label, Property);
+				EditorGUI.LabelField(GetNextPosition(), Label);
 				DrawMinMaxControls();
 				ClampValuesToLimits();
 				EditorGUI.EndProperty();
 			} else {
 				EditorGUI.HelpBox(
-					position,
+					Position,
 					string.Format(
 						"{0} only supports {1}",
 						typeof(MinMaxRangeAttribute).Name,
@@ -53,19 +53,25 @@
 		#endregion
 
 
+		#region Protected Methods
+
+		protected override void InitializePropertiesOnGUI() {
+			base.InitializePropertiesOnGUI();
+			MinValueProperty = Property.FindPropertyRelative("m_MinValue");
+			MaxValueProperty = Property.FindPropertyRelative("m_MaxValue");
+			MinMaxRangeAttribute = attribute as MinMaxRangeAttribute;
+		}
+
+		#endregion
+
+
 		#region Private Properties
 
-		private SerializedProperty MinValueProperty {
-			get { return Property.FindPropertyRelative("m_MinValue"); }
-		}
+		private SerializedProperty MinValueProperty { get; set; }
 
-		private SerializedProperty MaxValueProperty {
-			get { return Property.FindPropertyRelative("m_MaxValue"); }
-		}
+		private SerializedProperty MaxValueProperty { get; set; }
 
-		private MinMaxRangeAttribute MinMaxRangeAttribute {
-			get { return attribute as MinMaxRangeAttribute; }
-		}
+		private MinMaxRangeAttribute MinMaxRangeAttribute { get; set; }
 
 		#endregion
 

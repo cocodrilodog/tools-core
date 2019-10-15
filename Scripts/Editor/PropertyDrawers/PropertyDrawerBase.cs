@@ -17,6 +17,7 @@
 			float height = base.GetPropertyHeight(property, label);
 			Property = property;
 			Label = label;
+			InitializePropertiesGetHeight();
 			return height;
 		}
 
@@ -30,14 +31,13 @@
 			Position = position;
 			Property = property;
 			Label = label;
+			InitializePropertiesOnGUI();
 		}
 
 		#endregion
 
 
 		#region Protected Properties
-
-		protected float CurrentY { get; private set; }
 
 		protected Rect Position { get; private set; }
 
@@ -87,11 +87,38 @@
 		}
 
 		/// <summary>
-		/// Called when the serialized object of the property changes. This may 
-		/// happen when selecting a different instance of the same type, both 
-		/// inspected by the same editor.
+		/// Called when the serialized object of the property changes.
 		/// </summary>
+		/// 
+		/// <remarks>
+		/// This may happen when selecting a different instance of the same type, 
+		/// both inspected by the same editor. It is a good time to renew any cached
+		/// serialized data.
+		/// </remarks>
 		protected virtual void OnSerializedObjectChange() { }
+
+		/// <summary>
+		/// Called after setting <see cref="Property"/> and <see cref="Label"/>
+		/// on <see cref=" GetPropertyHeight(SerializedProperty, GUIContent)"/>
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// It is a good place to initialize properties that should be available
+		/// for the OnGUI cycle and that are already required to calculate the height
+		/// of the property.
+		/// </remarks>
+		protected virtual void InitializePropertiesGetHeight() { }
+
+		/// <summary>
+		/// Called after setting <see cref="Position"/>, <see cref="Property"/> and 
+		/// <see cref="Label"/> on <see cref="OnGUI(Rect, SerializedProperty, GUIContent)"/>
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// It is a good place to initialize properties that should be available
+		/// for the OnGUI cycle.
+		/// </remarks>
+		protected virtual void InitializePropertiesOnGUI() { }
 
 		#endregion
 
@@ -106,6 +133,8 @@
 
 
 		#region Private properties
+
+		private float CurrentY { get; set; }
 
 		private SerializedObject SerializedObject {
 			get { return m_SerializedObject; }
