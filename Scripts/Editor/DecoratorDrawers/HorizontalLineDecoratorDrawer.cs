@@ -15,6 +15,11 @@
 			return 12;
 		}
 
+		#endregion
+
+
+		#region Unity Methods
+
 		public override void OnGUI(Rect position) {
 			Rect rect = new Rect(position);
 			rect.y += 8;

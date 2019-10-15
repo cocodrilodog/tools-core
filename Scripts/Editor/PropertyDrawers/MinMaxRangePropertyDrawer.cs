@@ -6,13 +6,19 @@
 	using System.Collections.Generic;
 
 	[CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
-	public class MinMaxRangePropertyDrawer : PropertyDrawer {
+	public class MinMaxRangePropertyDrawer : PropertyDrawerBase {
 
 
 		#region Public Methods
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			return base.GetPropertyHeight(property, label) * 2;
+			// I left this condition for consistency with the other property drawers.
+			base.GetPropertyHeight(property, label);
+			if (Property.type == typeof(MinMaxRange).Name) {
+				return FieldHeight * 2;
+			} else {
+				return FieldHeight * 2;
+			}
 		}
 
 		#endregion
@@ -21,34 +27,15 @@
 		#region Unity Methods
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-			if (property.type == typeof(MinMaxRange).Name) {
 
-				label = EditorGUI.BeginProperty(position, label, property);
+			base.OnGUI(position, property, label);
 
-				// Property variables
-				MinMaxRangeAttribute minMaxRangeAttribute = attribute as MinMaxRangeAttribute;
-				SerializedProperty minValueProperty = property.FindPropertyRelative("m_MinValue");
-				SerializedProperty maxValueProperty = property.FindPropertyRelative("m_MaxValue");
-
-				// Label
-				Rect labelPosition = position;
-				labelPosition.height = EditorGUIUtility.singleLineHeight;
-				EditorGUI.LabelField(labelPosition, label);
-
-				// Min Max Controls
-				Rect minMaxControlsRect = labelPosition;
-				minMaxControlsRect.y += EditorGUIUtility.singleLineHeight;
-
-				EditorGUI.indentLevel++;
-				minMaxControlsRect = EditorGUI.IndentedRect(minMaxControlsRect);
-				EditorGUI.indentLevel--;
-
-				DrawMinMaxControls(minMaxControlsRect, minMaxRangeAttribute, minValueProperty, maxValueProperty);
-
-				ClampValuesToLimits(minMaxRangeAttribute, minValueProperty, maxValueProperty);
-
+			if (Property.type == typeof(MinMaxRange).Name) {
+				EditorGUI.BeginProperty(position, label, property);
+				EditorGUI.LabelField(GetNextPosition(), label);
+				DrawMinMaxControls();
+				ClampValuesToLimits();
 				EditorGUI.EndProperty();
-
 			} else {
 				EditorGUI.HelpBox(
 					position,
@@ -60,6 +47,24 @@
 					MessageType.Error
 				);
 			}
+
+		}
+
+		#endregion
+
+
+		#region Private Properties
+
+		private SerializedProperty MinValueProperty {
+			get { return Property.FindPropertyRelative("m_MinValue"); }
+		}
+
+		private SerializedProperty MaxValueProperty {
+			get { return Property.FindPropertyRelative("m_MaxValue"); }
+		}
+
+		private MinMaxRangeAttribute MinMaxRangeAttribute {
+			get { return attribute as MinMaxRangeAttribute; }
 		}
 
 		#endregion
@@ -67,28 +72,33 @@
 
 		#region Private Methods
 
-		private void DrawMinMaxControls(
-			Rect position,
-			MinMaxRangeAttribute minMaxRangeAttribute,
-			SerializedProperty minValueProperty,
-			SerializedProperty maxValueProperty
-		) {
+		private Rect GetMinMaxControlsRect() {
+			Rect minMaxControlsRect = GetNextPosition();
+			EditorGUI.indentLevel++;
+			minMaxControlsRect = EditorGUI.IndentedRect(minMaxControlsRect);
+			EditorGUI.indentLevel--;
+			return minMaxControlsRect;
+		}
+
+		private void DrawMinMaxControls() {
+
+			Rect position = GetMinMaxControlsRect();
 
 			float floatFieldWidth = position.width * 0.2f;
 
 			Rect minFloatFieldPosition = position;
 			minFloatFieldPosition.width = floatFieldWidth - 4;
-			DrawMinFloat(minFloatFieldPosition, minValueProperty, maxValueProperty);
+			DrawMinFloat(minFloatFieldPosition, MinValueProperty, MaxValueProperty);
 
 			Rect maxFloatFieldPosition = position;
 			maxFloatFieldPosition.x = position.xMax - floatFieldWidth + 4;
 			maxFloatFieldPosition.width = floatFieldWidth - 4;
-			DrawMaxFloat(maxFloatFieldPosition, minValueProperty, maxValueProperty);
+			DrawMaxFloat(maxFloatFieldPosition, MinValueProperty, MaxValueProperty);
 
 			Rect sliderPosition = position;
 			sliderPosition.x += floatFieldWidth;
 			sliderPosition.width -= floatFieldWidth * 2;
-			DrawMinMaxSlider(sliderPosition, minMaxRangeAttribute, minValueProperty, maxValueProperty);
+			DrawMinMaxSlider(sliderPosition, MinMaxRangeAttribute, MinValueProperty, MaxValueProperty);
 
 		}
 
@@ -140,22 +150,18 @@
 
 		}
 
-		private void ClampValuesToLimits(
-			MinMaxRangeAttribute minMaxRangeAttribute,
-			SerializedProperty minValueProperty, 
-			SerializedProperty maxValueProperty
-		) {
-			if (minValueProperty.floatValue < minMaxRangeAttribute.MinLimit) {
-				minValueProperty.floatValue = minMaxRangeAttribute.MinLimit;
+		private void ClampValuesToLimits() {
+			if (MinValueProperty.floatValue < MinMaxRangeAttribute.MinLimit) {
+				MinValueProperty.floatValue = MinMaxRangeAttribute.MinLimit;
 			}
-			if (minValueProperty.floatValue > minMaxRangeAttribute.MaxLimit) {
-				minValueProperty.floatValue = minMaxRangeAttribute.MaxLimit;
+			if (MinValueProperty.floatValue > MinMaxRangeAttribute.MaxLimit) {
+				MinValueProperty.floatValue = MinMaxRangeAttribute.MaxLimit;
 			}
-			if (maxValueProperty.floatValue < minMaxRangeAttribute.MinLimit) {
-				maxValueProperty.floatValue = minMaxRangeAttribute.MinLimit;
+			if (MaxValueProperty.floatValue < MinMaxRangeAttribute.MinLimit) {
+				MaxValueProperty.floatValue = MinMaxRangeAttribute.MinLimit;
 			}
-			if (maxValueProperty.floatValue > minMaxRangeAttribute.MaxLimit) {
-				maxValueProperty.floatValue = minMaxRangeAttribute.MaxLimit;
+			if (MaxValueProperty.floatValue > MinMaxRangeAttribute.MaxLimit) {
+				MaxValueProperty.floatValue = MinMaxRangeAttribute.MaxLimit;
 			}
 		}
 
