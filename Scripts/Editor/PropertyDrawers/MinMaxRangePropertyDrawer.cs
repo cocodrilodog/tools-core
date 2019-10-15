@@ -55,8 +55,8 @@
 
 		#region Protected Methods
 
-		protected override void InitializePropertiesOnGUI() {
-			base.InitializePropertiesOnGUI();
+		protected override void InitializePropertiesForOnGUI() {
+			base.InitializePropertiesForOnGUI();
 			MinValueProperty = Property.FindPropertyRelative("m_MinValue");
 			MaxValueProperty = Property.FindPropertyRelative("m_MaxValue");
 			MinMaxRangeAttribute = attribute as MinMaxRangeAttribute;

@@ -17,7 +17,7 @@
 			float height = base.GetPropertyHeight(property, label);
 			Property = property;
 			Label = label;
-			InitializePropertiesGetHeight();
+			InitializePropertiesForGetHeight();
 			return height;
 		}
 
@@ -31,7 +31,7 @@
 			Position = position;
 			Property = property;
 			Label = label;
-			InitializePropertiesOnGUI();
+			InitializePropertiesForOnGUI();
 		}
 
 		#endregion
@@ -107,7 +107,7 @@
 		/// for the OnGUI cycle and that are already required to calculate the height
 		/// of the property.
 		/// </remarks>
-		protected virtual void InitializePropertiesGetHeight() { }
+		protected virtual void InitializePropertiesForGetHeight() { }
 
 		/// <summary>
 		/// Called after setting <see cref="Position"/>, <see cref="Property"/> and 
@@ -118,7 +118,7 @@
 		/// It is a good place to initialize properties that should be available
 		/// for the OnGUI cycle.
 		/// </remarks>
-		protected virtual void InitializePropertiesOnGUI() { }
+		protected virtual void InitializePropertiesForOnGUI() { }
 
 		#endregion
 
