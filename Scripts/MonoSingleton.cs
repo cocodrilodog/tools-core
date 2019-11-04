@@ -13,12 +13,12 @@
 
 		#region Singleton
 
-		private static T _Instance;
+		private static T s_Instance;
 
 		/// <summary>
 		/// Has the singleton an instance either living or already destroyed?
 		/// </summary>
-		private static bool _HasInstance; 
+		private static bool s_HasInstance; 
 
 		public static T Instance {
 			get {
@@ -32,26 +32,26 @@
 				//
 				// This is due to the way MonoBehavior implements its == operator:
 				// https://blogs.unity3d.com/2014/05/16/custom-operator-should-we-keep-it/
-				if (!_HasInstance) {
+				if (!s_HasInstance) {
 
 					// If the object was created in the editor, it will be found here:
-					_Instance = FindObjectOfType<T>();
+					s_Instance = FindObjectOfType<T>();
 
 					// If it is still null, create a game object
-					if (_Instance == null) { 
+					if (s_Instance == null) { 
 						GameObject gameObject = new GameObject(typeof(T).Name);
-						_Instance = gameObject.AddComponent<T>();
+						s_Instance = gameObject.AddComponent<T>();
 					}
 
-					_HasInstance = true;
+					s_HasInstance = true;
 
 				}
 
 				// It will return null only if it has been created but is already destroyed.
-				if (_Instance.m_IsDestroyed) {
+				if (s_Instance.m_IsDestroyed) {
 					return null;
 				} else {
-					return _Instance;
+					return s_Instance;
 				}
 
 			}
@@ -81,6 +81,17 @@
 
 		#region MonoBehaviour Methods
 
+		protected virtual void Awake() {
+			// Assign the instance on awake in case an instance that was created
+			// manually in the scene is disabled. Otherwise, when calling
+			// Instance, it won't be found by FindObjectOfType<T>() and will create
+			// a new one.
+			if (!s_HasInstance) {
+				s_Instance = this as T;
+				s_HasInstance = true;
+			}
+		}
+
 		protected virtual void OnDestroy() {
 
 			m_IsDestroyed = true;
@@ -89,7 +100,7 @@
 				m_AllowReInstantiationAfterDestroy = false;
 				// This will allow to re-instantiate the singleton next time Instance 
 				// is called
-				_HasInstance = false;
+				s_HasInstance = false;
 			}
 
 		}
