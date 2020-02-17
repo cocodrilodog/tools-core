@@ -12,11 +12,11 @@
 		#region Public Methods
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			// I left this condition for consistency with the other property drawers.
 			base.GetPropertyHeight(property, label);
 			if (Property.type == typeof(MinMaxRange).Name) {
-				return FieldHeight * 2;
+				return FieldHeight * 1;
 			} else {
+				// Shows HelpBox
 				return FieldHeight * 2;
 			}
 		}
@@ -79,10 +79,9 @@
 		#region Private Methods
 
 		private Rect GetMinMaxControlsRect() {
-			Rect minMaxControlsRect = GetNextPosition();
-			EditorGUI.indentLevel++;
-			minMaxControlsRect = EditorGUI.IndentedRect(minMaxControlsRect);
-			EditorGUI.indentLevel--;
+			Rect minMaxControlsRect = Position;
+			minMaxControlsRect.x += EditorGUIUtility.labelWidth;
+			minMaxControlsRect.width -= EditorGUIUtility.labelWidth;
 			return minMaxControlsRect;
 		}
 
@@ -115,7 +114,7 @@
 			EditorGUI.PropertyField(position, minValueProperty, GUIContent.none);
 			if (EditorGUI.EndChangeCheck()) {
 				if (minValueProperty.floatValue > maxValueProperty.floatValue) {
-					minValueProperty.floatValue = maxValueProperty.floatValue;
+					maxValueProperty.floatValue = minValueProperty.floatValue;
 				}
 			}
 		}
@@ -127,7 +126,7 @@
 			EditorGUI.PropertyField(position, maxValueProperty, GUIContent.none);
 			if (EditorGUI.EndChangeCheck()) {
 				if (maxValueProperty.floatValue < minValueProperty.floatValue) {
-					maxValueProperty.floatValue = minValueProperty.floatValue;
+					minValueProperty.floatValue = maxValueProperty.floatValue;
 				}
 			}
 		}

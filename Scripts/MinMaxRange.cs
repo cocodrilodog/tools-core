@@ -16,7 +16,8 @@
 			get { return m_MinValue; }
 			set {
 				if (value > m_MaxValue) {
-					value = m_MaxValue;
+					//value = m_MaxValue;
+					MaxValue = value;
 				}
 				m_MinValue = value;
 			}
@@ -26,7 +27,8 @@
 			get { return m_MaxValue; }
 			set {
 				if (value < m_MinValue) {
-					value = m_MinValue;
+					//value = m_MinValue;
+					MinValue = value;
 				}
 				m_MaxValue = value;
 			}
