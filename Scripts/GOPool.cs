@@ -5,14 +5,23 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// A pool for game objects.
+	/// </summary>
 	public class GOPool : MonoBehaviour {
 
 
 		#region Public Fields
 
+		/// <summary>
+		/// The prefab to create clones from.
+		/// </summary>
 		[SerializeField]
 		public GameObject Prefab;
 
+		/// <summary>
+		/// Will the pool create new instances when empty?
+		/// </summary>
 		[SerializeField]
 		public bool InstantiateWhenEmpty = true;
 
@@ -21,6 +30,10 @@
 
 		#region Public Methods
 
+		/// <summary>
+		/// Obtains a clone of the <see cref="Prefab"/>.
+		/// </summary>
+		/// <returns></returns>
 		public GameObject GetClone() {
 			Initialize();
 			if (InactiveClones.Count == 0) {
@@ -38,6 +51,10 @@
 			return clone;
 		}
 
+		/// <summary>
+		/// Stores back a clone into the pool.
+		/// </summary>
+		/// <param name="clone"></param>
 		public void DumpClone(GameObject clone) {
 			if (ActiveClones.Remove(clone)) {
 				InactiveClones.Add(clone);

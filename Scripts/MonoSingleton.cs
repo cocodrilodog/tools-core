@@ -8,6 +8,7 @@
 	/// <summary>
 	/// Generic template for <see cref="MonoBehaviour"/> singletons
 	/// </summary>
+	// TODO: Add abstract keyword, but do it in a project that is tested in many cases.
 	public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T> {
 
 
