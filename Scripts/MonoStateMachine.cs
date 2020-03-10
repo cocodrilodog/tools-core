@@ -5,7 +5,7 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	public class MonoStateMachine<T_State, T_Machine> : MonoBehaviour
+	public abstract class MonoStateMachine<T_State, T_Machine> : MonoBehaviour
 		where T_State : MonoState<T_State, T_Machine>
 		where T_Machine : MonoStateMachine<T_State, T_Machine> {
 
@@ -36,23 +36,23 @@
 
 	}
 
-	public class MonoState<T_State, T_Machine>
+	public abstract class MonoState<T_State, T_Machine>
 		where T_State : MonoState<T_State, T_Machine>
 		where T_Machine : MonoStateMachine<T_State, T_Machine> {
 
 
 		#region Public Methods
 
-		public virtual void Enter() { }
+		public abstract void Enter();
 
-		public virtual void Exit() { }
+		public abstract void Exit();
 
 		#endregion
 
 
 		#region Protected Constructors
 
-		public MonoState(T_Machine machine) {
+		protected MonoState(T_Machine machine) {
 			m_Machine = machine;
 		}
 
@@ -68,6 +68,7 @@
 
 		#region Private Fields
 
+		[NonSerialized]
 		private T_Machine m_Machine;
 
 		#endregion
