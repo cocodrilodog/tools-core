@@ -5,6 +5,11 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// A template for <see cref="MonoBehaviour"/> state machines.
+	/// </summary>
+	/// <typeparam name="T_State">The type of the state.</typeparam>
+	/// <typeparam name="T_Machine">The type of the state machine.</typeparam>
 	public abstract class MonoStateMachine<T_State, T_Machine> : MonoBehaviour
 		where T_State : MonoState<T_State, T_Machine>
 		where T_Machine : MonoStateMachine<T_State, T_Machine> {
