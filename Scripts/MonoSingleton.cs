@@ -85,8 +85,8 @@
 		protected virtual void Awake() {
 			// Assign the instance on awake in case an instance that was created
 			// manually in the scene is disabled. Otherwise, when calling
-			// Instance, it won't be found by FindObjectOfType<T>() and will create
-			// a new one.
+			// Instance, it won't be found by FindObjectOfType<T>() while disabled
+			// and a new one will be created instead.
 			if (!s_HasInstance) {
 				s_Instance = this as T;
 				s_HasInstance = true;
