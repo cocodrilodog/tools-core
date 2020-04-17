@@ -31,7 +31,9 @@
 			base.OnGUI(position, property, label);
 
 			if (Property.type == typeof(MinMaxRange).Name) {
-				EditorGUI.BeginProperty(Position, Label, Property);
+				// This assignment is required for the tooltip to be shown
+				// TODO: Apply this in other property drawers
+				Label = EditorGUI.BeginProperty(Position, Label, Property);
 				EditorGUI.LabelField(GetNextPosition(), Label);
 				DrawMinMaxControls();
 				ClampValuesToLimits();

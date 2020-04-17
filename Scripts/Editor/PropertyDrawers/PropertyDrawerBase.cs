@@ -49,7 +49,7 @@
 			}
 		}
 
-		protected GUIContent Label { get; private set; }
+		protected GUIContent Label { get; set; }
 
 		protected float FieldHeight { get { return EditorGUIUtility.singleLineHeight + 2; } }
 
