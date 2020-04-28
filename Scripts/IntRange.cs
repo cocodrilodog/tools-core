@@ -7,7 +7,7 @@
 	/// An <c>int</c> range between a <see cref="MinValue"/> and  <see cref="MaxValue"/>.
 	/// </summary>
 	[Serializable]
-	public class MinMaxInt {
+	public class IntRange {
 
 
 		#region Public Properties

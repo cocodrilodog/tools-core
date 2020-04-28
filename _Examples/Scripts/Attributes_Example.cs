@@ -8,7 +8,7 @@
 
 		[MinMaxRange(0, 10)]
 		[SerializeField]
-		public MinMaxFloat MinMaxRange;
+		public FloatRange MinMaxRange;
 
 		[Space]
 		[HorizontalLine]
