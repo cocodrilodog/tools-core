@@ -6,14 +6,14 @@
 	using System.Collections.Generic;
 
 	[CustomPropertyDrawer(typeof(MinMaxRangeAttribute))]
-	public class MinMaxRangePropertyDrawer : PropertyDrawerBase {
+	public class MinMaxPropertyDrawer : PropertyDrawerBase {
 
 
 		#region Public Methods
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			base.GetPropertyHeight(property, label);
-			if (Property.type == typeof(MinMaxRange).Name) {
+			if (Property.type == typeof(MinMaxFloat).Name) {
 				return FieldHeight * 1;
 			} else {
 				// Shows HelpBox
@@ -30,9 +30,8 @@
 
 			base.OnGUI(position, property, label);
 
-			if (Property.type == typeof(MinMaxRange).Name) {
+			if (Property.type == typeof(MinMaxFloat).Name) {
 				// This assignment is required for the tooltip to be shown
-				// TODO: Apply this in other property drawers
 				Label = EditorGUI.BeginProperty(Position, Label, Property);
 				EditorGUI.LabelField(GetNextPosition(), Label);
 				DrawMinMaxControls();
@@ -44,7 +43,7 @@
 					string.Format(
 						"{0} only supports {1}",
 						typeof(MinMaxRangeAttribute).Name,
-						typeof(MinMaxRange).Name
+						typeof(MinMaxFloat).Name
 					),
 					MessageType.Error
 				);

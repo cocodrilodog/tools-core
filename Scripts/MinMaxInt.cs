@@ -4,15 +4,15 @@
 	using UnityEngine;
 
 	/// <summary>
-	/// A range between a <see cref="MinValue"/> and  <see cref="MaxValue"/>.
+	/// An <c>int</c> range between a <see cref="MinValue"/> and  <see cref="MaxValue"/>.
 	/// </summary>
 	[Serializable]
-	public class MinMaxFloat {
+	public class MinMaxInt {
 
 
 		#region Public Properties
 
-		public float MinValue {
+		public int MinValue {
 			get { return m_MinValue; }
 			set {
 				if (value > MaxValue) {
@@ -22,7 +22,7 @@
 			}
 		}
 
-		public float MaxValue {
+		public int MaxValue {
 			get { return m_MaxValue; }
 			set {
 				if (value < MinValue) {
@@ -38,10 +38,10 @@
 		#region Private Properties
 
 		[SerializeField]
-		private float m_MinValue;
+		private int m_MinValue;
 
 		[SerializeField]
-		private float m_MaxValue;
+		private int m_MaxValue;
 
 		#endregion
 

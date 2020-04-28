@@ -58,13 +58,14 @@
 		public void DumpClone(GameObject clone) {
 			if (ActiveClones.Remove(clone)) {
 				InactiveClones.Add(clone);
+				clone.SetActive(false);
 			} else {
 				throw new InvalidOperationException(
 					string.Format(
 						"The provided GameObject {0} isn't part of this {1} or isn't active yet.",
 						clone.name, GetType().Name
 					)
-				); ;
+				);
 			}
 		}
 
