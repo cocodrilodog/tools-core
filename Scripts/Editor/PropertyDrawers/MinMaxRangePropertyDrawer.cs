@@ -41,9 +41,10 @@
 				EditorGUI.HelpBox(
 					Position,
 					string.Format(
-						"{0} only supports {1}",
+						"{0} only supports {1} and {2}.",
 						typeof(MinMaxRangeAttribute).Name,
-						typeof(FloatRange).Name
+						typeof(FloatRange).Name,
+						typeof(IntRange).Name
 					),
 					MessageType.Error
 				);
