@@ -35,6 +35,18 @@
 		#endregion
 
 
+		#region Public Constructors
+
+		public IntRange() { }
+
+		public IntRange(int minValue, int maxValue) {
+			MinValue = minValue;
+			MaxValue = maxValue;
+		}
+
+		#endregion
+
+
 		#region Private Properties
 
 		[SerializeField]

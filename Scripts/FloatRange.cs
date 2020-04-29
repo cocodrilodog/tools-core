@@ -35,6 +35,18 @@
 		#endregion
 
 
+		#region Public Constructors
+
+		public FloatRange() { }
+
+		public FloatRange(float minValue, float maxValue) {
+			MinValue = minValue;
+			MaxValue = maxValue;
+		}
+
+		#endregion
+
+
 		#region Private Properties
 
 		[SerializeField]
