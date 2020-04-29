@@ -7,7 +7,7 @@
 	/// A range between a <see cref="MinValue"/> and  <see cref="MaxValue"/>.
 	/// </summary>
 	[Serializable]
-	public class FloatRange {
+	public struct FloatRange {
 
 
 		#region Public Properties
@@ -37,11 +37,21 @@
 
 		#region Public Constructors
 
-		public FloatRange() { }
-
 		public FloatRange(float minValue, float maxValue) {
-			MinValue = minValue;
-			MaxValue = maxValue;
+			m_MinValue = minValue;
+			m_MaxValue = maxValue;
+			if(m_MaxValue < m_MinValue) {
+				m_MinValue = m_MaxValue;
+			}
+		}
+
+		#endregion
+
+
+		#region Public Methods
+
+		public override string ToString() {
+			return string.Format("({0}, {1})", MinValue, MaxValue);
 		}
 
 		#endregion
