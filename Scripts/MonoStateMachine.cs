@@ -15,10 +15,24 @@
 		where T_Machine : MonoStateMachine<T_State, T_Machine> {
 
 
+		#region Unity Methods
+
+		protected virtual void Start() {
+			State = DefaultState;
+		}
+
+		#endregion
+
+
 		#region Protected Properties
 
 		protected virtual T_State State {
-			get { return m_State; }
+			get {
+				if(m_State == null) {
+					State = DefaultState;
+				}
+				return m_State; 
+			}
 			set {
 				if(m_State != null) {
 					m_State.Exit();
@@ -27,6 +41,8 @@
 				m_State.Enter();
 			}
 		}
+
+		protected abstract T_State DefaultState { get; }
 
 		#endregion
 
