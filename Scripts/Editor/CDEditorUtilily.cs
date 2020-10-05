@@ -26,7 +26,7 @@
 	#endregion
 
 
-	public static class EditorUtils {
+	public static class CDEditorUtility {
 
 
 		#region Public Static Methods
@@ -83,6 +83,23 @@
 
 			return method;
 
+		}
+
+		/// <summary>
+		/// Gets a rect that is a horizontal fraction of the provided rect.
+		/// </summary>
+		/// <param name="rect">The original rect</param>
+		/// <param name="x">
+		/// The current x to place one rect after the other. It is updated at the end of the method
+		/// </param>
+		/// <param name="percent">The desired percent of width with respect to the original rect.</param>
+		/// <param name="gap">How much gap between the rects.</param>
+		/// <returns></returns>
+		public static Rect HorizontalFractionOfRect(Rect rect, ref float x, float percent, float gap) {
+			rect.x = x + gap * 0.5f;
+			rect.width = rect.width * percent - gap;
+			x += rect.width + gap;
+			return rect;
 		}
 
 		#endregion
