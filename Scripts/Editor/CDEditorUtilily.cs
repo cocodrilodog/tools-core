@@ -95,7 +95,7 @@
 		/// <param name="percent">The desired percent of width with respect to the original rect.</param>
 		/// <param name="gap">How much gap between the rects.</param>
 		/// <returns></returns>
-		public static Rect HorizontalFractionOfRect(Rect rect, ref float x, float percent, float gap) {
+		public static Rect HorizontalFractionOfRect(Rect rect, ref float x, float percent, float gap = 10) {
 			rect.x = x + gap * 0.5f;
 			rect.width = rect.width * percent - gap;
 			x += rect.width + gap;
