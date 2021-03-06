@@ -59,6 +59,8 @@
 			if (ActiveClones.Remove(clone)) {
 				InactiveClones.Add(clone);
 				clone.SetActive(false);
+				// Make it a child again, in case it was taken out while active.
+				clone.transform.parent = transform;
 			} else {
 				throw new InvalidOperationException(
 					string.Format(
