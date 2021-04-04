@@ -40,6 +40,7 @@
 			DelayedActionInfo.Action = action;
 			DelayedActionInfo.Delay = delay;
 			DelayedActionInfo.Time = EditorApplication.timeSinceStartup;
+			EditorApplication.update -= EditorApplication_Update_DelayedAction; // <- Prevent multiple adds of the event handler
 			EditorApplication.update += EditorApplication_Update_DelayedAction;
 		}
 
