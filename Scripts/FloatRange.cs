@@ -13,7 +13,7 @@
 		#region Public Properties
 
 		public float MinValue {
-			get { return m_MinValue; }
+			get => m_MinValue;
 			set {
 				if (value > MaxValue) {
 					m_MaxValue = value;
@@ -23,7 +23,7 @@
 		}
 
 		public float MaxValue {
-			get { return m_MaxValue; }
+			get => m_MaxValue;
 			set {
 				if (value < MinValue) {
 					m_MinValue = value;
@@ -31,6 +31,8 @@
 				m_MaxValue = value;
 			}
 		}
+
+		public float Length => MaxValue - MinValue;
 
 		#endregion
 
