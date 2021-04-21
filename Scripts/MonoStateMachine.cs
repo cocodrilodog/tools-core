@@ -15,10 +15,21 @@
 		where T_Machine : MonoStateMachine<T_State, T_Machine> {
 
 
+		#region Public Events
+
+		public event Action OnStateChange;
+
+		#endregion
+
+
 		#region Unity Methods
 
 		protected virtual void Start() {
 			State = DefaultState;
+		}
+
+		protected virtual void OnDestroy() {
+			OnStateChange = null;
 		}
 
 		#endregion
@@ -38,6 +49,9 @@
 					m_State.Exit();
 				}
 				m_State = value;
+				// Invoke this before entering the next state because the Enter() of the next state
+				// may set a different state
+				OnStateChange?.Invoke();
 				m_State.Enter();
 			}
 		}
