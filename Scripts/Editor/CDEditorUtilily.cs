@@ -5,7 +5,9 @@
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
+	using UnityEngine.UIElements;
 	using UnityEditor;
+	using UnityEditor.UIElements;
 
 
 	#region Small Types
@@ -101,6 +103,22 @@
 			rect.width = rect.width * percent - gap;
 			x += rect.width + gap;
 			return rect;
+		}
+
+		/// <summary>
+		/// Creates a <see cref="IMGUIContainer"/> for the script property so that it works as the Unity standard
+		/// way.
+		/// </summary>
+		/// <param name="serializedObject"></param>
+		/// <returns></returns>
+		public static IMGUIContainer GetScriptIMGUIContainer(SerializedObject serializedObject) {
+			// Script. Using IMGUI version to allow click/double-click for highlight/select script
+			SerializedProperty scriptProperty = serializedObject.FindProperty("m_Script");
+			return new IMGUIContainer(() => {
+				EditorGUI.BeginDisabledGroup(true);
+				EditorGUILayout.PropertyField(scriptProperty);
+				EditorGUI.EndDisabledGroup();
+			});
 		}
 
 		#endregion
