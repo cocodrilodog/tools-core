@@ -80,7 +80,7 @@
 		#endregion
 
 
-		#region MonoBehaviour Methods
+		#region Unity Methods
 
 		protected virtual void Awake() {
 			// Assign the instance on awake in case an instance that was created
@@ -109,7 +109,7 @@
 		#endregion
 
 
-		#region Internal Fields
+		#region Private Fields
 
 		[NonSerialized]
 		private bool m_IsDestroyed;
