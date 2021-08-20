@@ -32,6 +32,8 @@
 			}
 		}
 
+		public float Length => MaxValue - MinValue;
+
 		#endregion
 
 

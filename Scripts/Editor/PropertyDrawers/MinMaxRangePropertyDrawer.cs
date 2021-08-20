@@ -95,56 +95,18 @@
 
 			Rect minValueFieldPosition = position;
 			minValueFieldPosition.width = valueFieldWidth - 4;
-			DrawMinValue(minValueFieldPosition, MinValueProperty, MaxValueProperty);
+			EditorGUI.PropertyField(minValueFieldPosition, MinValueProperty, GUIContent.none);
 
 			Rect maxValueFieldPosition = position;
 			maxValueFieldPosition.x = position.xMax - valueFieldWidth + 4;
 			maxValueFieldPosition.width = valueFieldWidth - 4;
-			DrawMaxValue(maxValueFieldPosition, MinValueProperty, MaxValueProperty);
+			EditorGUI.PropertyField(maxValueFieldPosition, MaxValueProperty, GUIContent.none);
 
 			Rect sliderPosition = position;
 			sliderPosition.x += valueFieldWidth;
 			sliderPosition.width -= valueFieldWidth * 2;
 			DrawMinMaxSlider(sliderPosition, MinMaxRangeAttribute, MinValueProperty, MaxValueProperty);
 
-		}
-
-		private void DrawMinValue(
-			Rect position, SerializedProperty minValueProperty, SerializedProperty maxValueProperty
-		) {
-			EditorGUI.BeginChangeCheck();
-			EditorGUI.PropertyField(position, minValueProperty, GUIContent.none);
-			if (EditorGUI.EndChangeCheck()) {
-				if (Property.type == typeof(FloatRange).Name) {
-					if (minValueProperty.floatValue > maxValueProperty.floatValue) {
-						maxValueProperty.floatValue = minValueProperty.floatValue;
-					}
-				}
-				if (Property.type == typeof(IntRange).Name) {
-					if (minValueProperty.intValue > maxValueProperty.intValue) {
-						maxValueProperty.intValue = minValueProperty.intValue;
-					}
-				}
-			}
-		}
-
-		private void DrawMaxValue(
-			Rect position, SerializedProperty minValueProperty, SerializedProperty maxValueProperty
-		) {
-			EditorGUI.BeginChangeCheck();
-			EditorGUI.PropertyField(position, maxValueProperty, GUIContent.none);
-			if (EditorGUI.EndChangeCheck()) {
-				if (Property.type == typeof(FloatRange).Name) {
-					if (maxValueProperty.floatValue < minValueProperty.floatValue) {
-						minValueProperty.floatValue = maxValueProperty.floatValue;
-					}
-				}
-				if (Property.type == typeof(IntRange).Name) {
-					if (maxValueProperty.intValue < minValueProperty.intValue) {
-						minValueProperty.intValue = maxValueProperty.intValue;
-					}
-				}
-			}
 		}
 
 		private void DrawMinMaxSlider(
