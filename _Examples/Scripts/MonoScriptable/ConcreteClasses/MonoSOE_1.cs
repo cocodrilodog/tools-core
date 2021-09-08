@@ -4,13 +4,16 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class MonoSOE_2 : MonoScriptableObject_Example {
+    /// <summary>
+    /// Concrete MonoScriptableObject Example 1.
+    /// </summary>
+    public class MonoSOE_1 : MonoScriptableObject_Example {
 
 
 		#region Public Fields
 
 		[SerializeField]
-        public float Prop2;
+        public string Prop1;
 
 		#endregion
 

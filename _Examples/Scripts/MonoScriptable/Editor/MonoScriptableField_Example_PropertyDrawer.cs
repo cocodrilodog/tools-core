@@ -5,6 +5,9 @@
     using UnityEditor;
     using UnityEngine;
 
+	/// <summary>
+	/// Concrete property drawer example.
+	/// </summary>
     [CustomPropertyDrawer(typeof(MonoScriptableField_Example))]
     public class MonoScriptableField_Example_PropertyDrawer : MonoScriptableFieldPropertyDrawer {
 

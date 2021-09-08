@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using UnityEngine;
 
+    /// <summary>
+    /// Example for the MonoScriptable systems.
+    /// </summary>
     public class MonoScriptable_Example : MonoBehaviour {
 
 

@@ -6,7 +6,15 @@
 	using UnityEditor;
 	using UnityEngine;
 
-    public abstract class MonoScriptableFieldPropertyDrawer : PropertyDrawerBase {
+	/// <summary>
+	/// Base class for property drawers used in subclasses of <see cref="MonoScriptableField{T}"/>.
+	/// </summary>
+	/// 
+	/// <remarks>
+	/// This drawer allows to create, select (edit) and remove <see cref="MonoScriptableObject"/>s
+	/// that will be assigned to MonoBehaviours fields.
+	/// </remarks>
+	public abstract class MonoScriptableFieldPropertyDrawer : PropertyDrawerBase {
 
 
 		#region Unity Methods
