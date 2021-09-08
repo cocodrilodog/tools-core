@@ -12,9 +12,12 @@
         [SerializeField]
         public MonoScriptableField_Example SomeScriptableField;
 
-		#endregion
+        [SerializeField]
+        public MonoScriptableField_Example[] SomeScriptableFields;
+
+        #endregion
 
 
-	}
+    }
 
 }

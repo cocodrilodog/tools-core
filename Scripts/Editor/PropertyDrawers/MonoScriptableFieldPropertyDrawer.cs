@@ -14,10 +14,24 @@
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 
 			base.OnGUI(position, property, label);
-			
-			Rect rect = GetNextPosition();
-			float buttonsWidth = 110;
-			
+
+			// Update pending stuff
+			//
+			// We need to defer these actions because the GenericMenu seems to be firing the actions
+			// outside of the Update/ApplyModifiedproperties so the new MonoScriptableObject doesn't "stick"
+			if (m_PendingMonoScriptableObject != null) {
+				Property.serializedObject.FindProperty($"{m_PendingPathProperty}.m_MonoScriptableObject").objectReferenceValue = m_PendingMonoScriptableObject;
+				m_PendingMonoScriptableObject.name = m_PendingMonoScriptableObject.GetType().Name;
+				m_PendingMonoScriptableObject.SetOwner(Property.serializedObject.targetObject);
+				m_PendingMonoScriptableObject = null;
+				m_PendingPathProperty = null;
+			}
+
+			// Vars
+			var rect = GetNextPosition();
+			var buttonsWidth = 110f;
+			var monoScriptableObjectProperty = Property.FindPropertyRelative("m_MonoScriptableObject");
+
 			// The field
 			Rect fieldRect = rect;
 			fieldRect.xMax -= buttonsWidth;
@@ -26,31 +40,44 @@
 			EditorGUI.EndDisabledGroup();
 
 			// Create/Edit button
-			Rect createButtonRect = rect;
-			createButtonRect.xMin += rect.width - buttonsWidth;
-			createButtonRect.xMax -= buttonsWidth * 0.53f;
-			if(GUI.Button(createButtonRect, "Create")) {
-				var menu = new GenericMenu();
-				foreach(var type in MonoScriptableTypes) {
-					menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), false, () => {
-						m_NewMonoScriptableObject = ScriptableObject.CreateInstance(type) as MonoScriptableObject;
-					});
+			Rect createEditRect = rect;
+			createEditRect.xMin += rect.width - buttonsWidth;
+			createEditRect.xMax -= buttonsWidth * 0.53f;
+
+			if (monoScriptableObjectProperty.objectReferenceValue == null) {
+				if (GUI.Button(createEditRect, "Create")) {
+
+					// Save the path because when the object is an array element, it will need the path with the index
+					// in order to assign the value to the correct slot in the deferred assignment above. Otherwise it 
+					// will always assign the value to the first slot.
+					m_PendingPathProperty = Property.propertyPath;
+
+					// Show the menu only when there are more than one types
+					if (MonoScriptableTypes.Count > 1) {
+						var menu = new GenericMenu();
+						foreach (var type in MonoScriptableTypes) {
+							menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), false, () => {
+								m_PendingMonoScriptableObject = ScriptableObject.CreateInstance(type) as MonoScriptableObject;
+							});
+						}
+						menu.ShowAsContext();
+					} else {
+						m_PendingMonoScriptableObject = ScriptableObject.CreateInstance(MonoScriptableTypes[0]) as MonoScriptableObject;
+					}
+
 				}
-				menu.ShowAsContext();
+			} else {
+				if (GUI.Button(createEditRect, "Edit")) {
+					Selection.activeObject = monoScriptableObjectProperty.objectReferenceValue;
+				}
 			}
 
 			// Remove button
-			Rect removeButtonRect = rect;
-			removeButtonRect.xMin += rect.width - buttonsWidth;
-			removeButtonRect.xMin += buttonsWidth * 0.47f;
-			if(GUI.Button(removeButtonRect, "Remove")) {
-				Property.FindPropertyRelative("m_MonoScriptableObject").objectReferenceValue = null;
-			}
-
-			// Deferred actions
-			if (m_NewMonoScriptableObject != null) {
-				Property.FindPropertyRelative("m_MonoScriptableObject").objectReferenceValue = m_NewMonoScriptableObject;
-				m_NewMonoScriptableObject = null;
+			Rect removeRect = rect;
+			removeRect.xMin += rect.width - buttonsWidth;
+			removeRect.xMin += buttonsWidth * 0.47f; 
+			if(GUI.Button(removeRect, "Remove")) {
+				monoScriptableObjectProperty.objectReferenceValue = null;				
 			}
 
 		}
@@ -76,7 +103,9 @@
 
 		#region Private Fields
 
-		private MonoScriptableObject m_NewMonoScriptableObject;
+		private MonoScriptableObject m_PendingMonoScriptableObject;
+
+		private string m_PendingPathProperty;
 
 		#endregion
 

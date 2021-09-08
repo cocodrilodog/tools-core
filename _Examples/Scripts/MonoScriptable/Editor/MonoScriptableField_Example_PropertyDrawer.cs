@@ -15,8 +15,9 @@
 			get {
                 if (m_MonoScriptableTypes == null){
                     m_MonoScriptableTypes = new List<Type> { 
-                        typeof(MonoScriptableObject_Example) 
-                    };
+                        typeof(MonoSOE_1),
+						typeof(MonoSOE_2),
+					};
                 }
                 return m_MonoScriptableTypes;
 			}

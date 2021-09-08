@@ -25,6 +25,7 @@
 
 		#region Private Fields
 
+		[SerializeField]
 		private Object m_Owner;
 
 		#endregion
