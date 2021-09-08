@@ -17,24 +17,38 @@
 
 		#region Unity Methods
 
-		protected override void OnEnable() {
-			base.OnEnable();
-			Prop2Property = serializedObject.FindProperty("Prop2");
-		}
-
 		public override void OnInspectorGUI() {
 			base.OnInspectorGUI();
 			serializedObject.Update();
-			EditorGUILayout.PropertyField(Prop2Property);
+			foreach(var property in Properties) {
+				EditorGUILayout.PropertyField(property);
+			}
 			serializedObject.ApplyModifiedProperties();
 		}
 
 		#endregion
 
 
+		#region Private Fields
+
+		private List<SerializedProperty> m_Properties;
+
+		#endregion
+
+
 		#region Private Properties
 
-		private SerializedProperty Prop2Property { get; set; }
+		private List<SerializedProperty> Properties {
+			get {
+				if(m_Properties == null) {
+					m_Properties = new List<SerializedProperty> {
+						serializedObject.FindProperty("Prop2"),
+						serializedObject.FindProperty("m_ChildMonoSOE")
+					};
+				}
+				return m_Properties;
+			}
+		}
 
 		#endregion
 

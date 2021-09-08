@@ -135,6 +135,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Owner: {fileID: 2020111370}
   Prop1: dos
+--- !u!114 &946873236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f649c39e17d8c794ba0e121b3cd7adfa, type: 3}
+  m_Name: Child
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 2050437434}
+  Prop2: 789
+  m_ChildMonoSOE:
+    m_MonoScriptableObject: {fileID: 1327039627}
+--- !u!114 &1327039627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45aa12a56aafa014f969f12b0360e327, type: 3}
+  m_Name: GrandChild
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 946873236}
+  Prop1: SomeValue
 --- !u!114 &1577191467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +179,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Owner: {fileID: 2020111370}
   Prop2: 456
+  m_ChildMonoSOE:
+    m_MonoScriptableObject: {fileID: 0}
 --- !u!1 &1645186491
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +369,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f649c39e17d8c794ba0e121b3cd7adfa, type: 3}
-  m_Name: MonoSOE_2
+  m_Name: GrandFather
   m_EditorClassIdentifier: 
   m_Owner: {fileID: 2020111370}
   Prop2: 123
+  m_ChildMonoSOE:
+    m_MonoScriptableObject: {fileID: 946873236}

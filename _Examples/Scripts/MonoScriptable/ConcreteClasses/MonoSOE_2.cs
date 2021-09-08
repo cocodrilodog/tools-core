@@ -15,6 +15,9 @@
 		[SerializeField]
         public float Prop2;
 
+        [SerializeField]
+        public MonoScriptableField_Example m_ChildMonoSOE;
+
 		#endregion
 
 

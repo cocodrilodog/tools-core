@@ -44,7 +44,9 @@
 			Rect fieldRect = rect;
 			fieldRect.xMax -= buttonsWidth;
 			EditorGUI.BeginDisabledGroup(true);
+			EditorGUIUtility.labelWidth -= buttonsWidth * 0.4f;
 			EditorGUI.PropertyField(fieldRect, MonoScriptableObjectProperty, new GUIContent(Property.displayName));
+			EditorGUIUtility.labelWidth = 0;
 			EditorGUI.EndDisabledGroup();
 
 			// Create/Edit button
