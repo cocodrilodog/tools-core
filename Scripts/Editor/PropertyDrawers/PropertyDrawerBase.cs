@@ -63,13 +63,13 @@
 		/// </summary>
 		/// 
 		/// <remarks>
-		/// This returns rectangles from with standard field height and separation. 
+		/// This returns rectangles with standard field height and separation. 
 		/// This can be called sequentially and it will return rectangles below one 
 		/// another. It is reset at OnGUI().
 		/// </remarks>
 		/// 
 		/// <returns>The next position.</returns>
-		/// <param name="fieldsCount">How many fields should fit intor this rect.</param>
+		/// <param name="fieldsCount">How many fields should fit into this rect.</param>
 		/// <param name="preSpace">Vertical space before the rect.</param>
 		/// <param name="postSpace">Vertical space after the rect.</param>
 		protected Rect GetNextPosition(int fieldsCount = 1, float preSpace = 0, float postSpace = 0) {

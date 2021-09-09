@@ -1,4 +1,5 @@
 ﻿namespace CocodriloDog.Core.Examples {
+
 	using System;
 	using System.Collections;
     using System.Collections.Generic;
