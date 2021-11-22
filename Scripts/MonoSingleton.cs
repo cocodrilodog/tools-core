@@ -71,9 +71,22 @@
 		/// once in the app lifecycle.
 		/// </remarks>
 		public static void DestroyForReinstantiation() {
-			if(Instance != null) {
+			if (Instance != null) {
 				Instance.m_AllowReInstantiationAfterDestroy = true;
 				Destroy(Instance.gameObject);
+			}
+		}
+
+		/// <summary>
+		/// Allows further reinstantiation after the instance has been destroyed.
+		/// </summary>
+		/// <remarks>
+		/// Call this before the insance is destroyed if you want to instantiate the 
+		/// singleton more than once in the app lifecycle.
+		/// </remarks>
+		public static void AllowReInstantiation() {
+			if(Instance != null) {
+				Instance.m_AllowReInstantiationAfterDestroy = true;
 			}
 		}
 
