@@ -60,7 +60,7 @@
 				InactiveClones.Add(clone);
 				clone.SetActive(false);
 				// Make it a child again, in case it was taken out while active.
-				clone.transform.parent = transform;
+				clone.transform.SetParent(transform);
 			} else {
 				throw new InvalidOperationException(
 					string.Format(
@@ -76,7 +76,9 @@
 
 		#region Unity Methods
 
-		private void Awake() {
+		// Changed this to Start() so that when the pool is created via code, 
+		// the prefab and count can be set before.
+		private void Start() {
 			Initialize();
 		}
 
