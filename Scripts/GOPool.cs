@@ -16,6 +16,9 @@
 		/// <summary>
 		/// The prefab to create clones from.
 		/// </summary>
+		/// <remarks>
+		/// This will only have effect if it is set before <see cref="Start"/>.
+		/// </remarks>
 		[SerializeField]
 		public GameObject Prefab;
 
@@ -24,6 +27,22 @@
 		/// </summary>
 		[SerializeField]
 		public bool InstantiateWhenEmpty = true;
+
+		#endregion
+
+
+		#region Public Properties
+
+		/// <summary>
+		/// The number of initial instances.
+		/// </summary>
+		/// <remarks>
+		/// This will only have effect if it is set before <see cref="Start"/>.
+		/// </remarks>
+		public int Count {
+			get => m_Count;
+			set => m_Count = value;
+		}
 
 		#endregion
 
@@ -77,7 +96,7 @@
 		#region Unity Methods
 
 		// Changed this to Start() so that when the pool is created via code, 
-		// the prefab and count can be set before.
+		// the prefab and count can be set before it initializes.
 		private void Start() {
 			Initialize();
 		}
