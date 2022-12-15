@@ -16,10 +16,17 @@
     public abstract class MonoScriptableField<T> where T : MonoScriptableObject {
 
 
-        #region Private Fields
+		#region Public Properties
 
-        [SerializeField]
-        private T m_MonoScriptableObject;
+		public T Object => m_Object;
+
+		#endregion
+
+
+		#region Private Fields
+
+		[SerializeField]
+        private T m_Object;
 
 		#endregion
 

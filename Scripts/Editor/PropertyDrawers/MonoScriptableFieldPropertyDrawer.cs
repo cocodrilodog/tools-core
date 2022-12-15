@@ -28,7 +28,7 @@
 			// We need to defer these actions because the GenericMenu seems to be firing the actions
 			// outside of the Update/ApplyModifiedproperties so the new MonoScriptableObject doesn't "stick"
 			if (m_PendingMonoScriptableObject != null) {
-				Property.serializedObject.FindProperty($"{m_PendingPathProperty}.m_MonoScriptableObject").objectReferenceValue = m_PendingMonoScriptableObject;
+				Property.serializedObject.FindProperty($"{m_PendingPathProperty}.m_Object").objectReferenceValue = m_PendingMonoScriptableObject;
 				m_PendingMonoScriptableObject.name = m_PendingMonoScriptableObject.GetType().Name;
 				m_PendingMonoScriptableObject.SetOwner(Property.serializedObject.targetObject);
 				m_PendingMonoScriptableObject = null;
@@ -38,14 +38,14 @@
 			// Vars
 			var rect = GetNextPosition();
 			var buttonsWidth = 110f;
-			var monoScriptableObjectProperty = Property.FindPropertyRelative("m_MonoScriptableObject");
+			var monoScriptableObjectProperty = Property.FindPropertyRelative("m_Object");
 
 			// The field
 			Rect fieldRect = rect;
 			fieldRect.xMax -= buttonsWidth;
 			EditorGUI.BeginDisabledGroup(true);
 			EditorGUIUtility.labelWidth -= buttonsWidth * 0.4f;
-			EditorGUI.PropertyField(fieldRect, MonoScriptableObjectProperty, new GUIContent(Property.displayName));
+			EditorGUI.PropertyField(fieldRect, ObjectProperty, new GUIContent(Property.displayName));
 			EditorGUIUtility.labelWidth = 0;
 			EditorGUI.EndDisabledGroup();
 
@@ -105,7 +105,7 @@
 		#region Protected Methods
 
 		protected override void InitializePropertiesForOnGUI() {
-			MonoScriptableObjectProperty = Property.FindPropertyRelative("m_MonoScriptableObject");
+			ObjectProperty = Property.FindPropertyRelative("m_Object");
 		}
 
 		#endregion
@@ -122,7 +122,7 @@
 
 		#region Private Properties
 
-		private SerializedProperty MonoScriptableObjectProperty;
+		private SerializedProperty ObjectProperty;
 
 		#endregion
 

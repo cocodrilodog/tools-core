@@ -27,12 +27,18 @@
 		public override void OnInspectorGUI() {
 
 			serializedObject.Update();
+
 			DisabledField(ScriptProperty);
-			if (GUILayout.Button("Back", GUILayout.Width(60))) {
+
+			EditorGUILayout.BeginHorizontal();
+			DisabledField(OwnerProperty);
+			if (GUILayout.Button("Inspect", GUILayout.Width(60))) {
 				Selection.activeObject = (target as MonoScriptableObject).Owner;
 			}
-			DisabledField(OwnerProperty);
+			EditorGUILayout.EndHorizontal();
+
 			EditorGUILayout.PropertyField(NameProperty);
+
 			serializedObject.ApplyModifiedProperties();
 
 			void DisabledField(SerializedProperty property) {
