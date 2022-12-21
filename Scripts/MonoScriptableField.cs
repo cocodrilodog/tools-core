@@ -18,7 +18,10 @@
 
 		#region Public Properties
 
-		public T Object => m_Object;
+		public T Object {
+			get => m_Object;
+			set => m_Object = value;
+		}
 
 		#endregion
 
