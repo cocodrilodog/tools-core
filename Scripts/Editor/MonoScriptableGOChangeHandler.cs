@@ -58,12 +58,33 @@ namespace CocodriloDog.Core {
 
 						monoScriptableOwner = gameObject.GetComponent<IMonoScriptableOwner>();
 						if (monoScriptableOwner != null) {
-							Debug.Log($"Change GameObject structure: {gameObject} in scene {changeGameObjectStructure.scene}.");
 							monoScriptableOwner.RecreateMonoScriptableObjects();
 						}
 
 						break;
-;
+
+					case ObjectChangeKind.ChangeGameObjectOrComponentProperties:
+
+						stream.GetChangeGameObjectOrComponentPropertiesEvent(i, out var changeGameObjectOrComponent);
+						var goOrComponent = EditorUtility.InstanceIDToObject(changeGameObjectOrComponent.instanceId);
+
+						if (goOrComponent is IMonoScriptableOwner) {
+							((IMonoScriptableOwner)goOrComponent).ValidateMonoScriptableArrayOrLists();
+						}
+
+						break;
+
+					case ObjectChangeKind.ChangeAssetObjectProperties:
+
+						stream.GetChangeAssetObjectPropertiesEvent(i, out var changeAssetObjectPropertiesEvent);
+						var changeAsset = EditorUtility.InstanceIDToObject(changeAssetObjectPropertiesEvent.instanceId);
+
+						if (changeAsset is IMonoScriptableOwner) {
+							((IMonoScriptableOwner)changeAsset).ValidateMonoScriptableArrayOrLists();
+						}
+
+						break;
+
 				}
 			}
 

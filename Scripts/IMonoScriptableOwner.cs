@@ -11,6 +11,8 @@ namespace CocodriloDog.Core {
 
 		void RecreateMonoScriptableObjects();
 
+		void ValidateMonoScriptableArrayOrLists();
+
 		#endregion
 
 
