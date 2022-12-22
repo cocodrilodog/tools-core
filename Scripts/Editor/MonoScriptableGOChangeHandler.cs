@@ -34,8 +34,7 @@ namespace CocodriloDog.Core {
 
 						monoScriptableOwner = gameObject.GetComponent<IMonoScriptableOwner>();
 						if (monoScriptableOwner != null) {
-							Debug.Log($"Create GameObject: {gameObject} in scene {createGameObjectHierarchyEvent.scene}.");
-							monoScriptableOwner.UpdateMonoScriptableObjects();
+							monoScriptableOwner.RecreateMonoScriptableObjects();
 						}
 
 						break;
@@ -47,8 +46,7 @@ namespace CocodriloDog.Core {
 
 						monoScriptableOwner = gameObject.GetComponent<IMonoScriptableOwner>();
 						if (monoScriptableOwner != null) {
-							Debug.Log($"Change GameObject hierarchy: {gameObject} in scene {changeGameObjectStructureHierarchy.scene}.");
-							monoScriptableOwner.UpdateMonoScriptableObjects();
+							monoScriptableOwner.RecreateMonoScriptableObjects();
 						}
 
 						break;
@@ -61,7 +59,7 @@ namespace CocodriloDog.Core {
 						monoScriptableOwner = gameObject.GetComponent<IMonoScriptableOwner>();
 						if (monoScriptableOwner != null) {
 							Debug.Log($"Change GameObject structure: {gameObject} in scene {changeGameObjectStructure.scene}.");
-							monoScriptableOwner.UpdateMonoScriptableObjects();
+							monoScriptableOwner.RecreateMonoScriptableObjects();
 						}
 
 						break;

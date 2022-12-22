@@ -9,7 +9,7 @@ namespace CocodriloDog.Core {
 
 		#region Methods
 
-		void UpdateMonoScriptableObjects();
+		void RecreateMonoScriptableObjects();
 
 		#endregion
 

@@ -18,10 +18,14 @@
 
 		#region Public Properties
 
-		public T Object {
-			get => m_Object;
-			set => m_Object = value;
-		}
+		public T Object => m_Object;
+
+		#endregion
+
+
+		#region Public Methods
+
+		public void SetObject(T value) => m_Object = value;
 
 		#endregion
 
