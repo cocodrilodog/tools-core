@@ -90,7 +90,7 @@ namespace CocodriloDog.Core {
 						var goOrComponent = EditorUtility.InstanceIDToObject(changeGameObjectOrComponent.instanceId);
 
 						if (goOrComponent is IMonoScriptableOwner) {
-							((IMonoScriptableOwner)goOrComponent).RecreateRepeatedMonoScriptableArrayOrListItem();
+							((IMonoScriptableOwner)goOrComponent).RecreateRepeatedMonoScriptableArrayOrListItems();
 						}
 
 						break;
@@ -102,7 +102,7 @@ namespace CocodriloDog.Core {
 						var changeAsset = EditorUtility.InstanceIDToObject(changeAssetObjectPropertiesEvent.instanceId);
 
 						if (changeAsset is IMonoScriptableOwner) {
-							((IMonoScriptableOwner)changeAsset).RecreateRepeatedMonoScriptableArrayOrListItem();
+							((IMonoScriptableOwner)changeAsset).RecreateRepeatedMonoScriptableArrayOrListItems();
 						}
 
 						break;

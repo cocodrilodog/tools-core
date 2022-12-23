@@ -55,7 +55,7 @@ namespace CocodriloDog.Core {
 		/// <typeparam name="T">The type of <see cref="MonoScriptableObject"/></typeparam>
 		/// <param name="fields">An array of referencing fields</param>
 		/// <param name="owner">The owner of the <see cref="MonoScriptableObject"/> assets</param>
-		public static void RecreateRepeatedMonoScriptableArrayOrListItem<T>(MonoScriptableField<T>[] fields, Object owner) where T : MonoScriptableObject {
+		public static void RecreateRepeatedMonoScriptableArrayOrListItems<T>(MonoScriptableField<T>[] fields, Object owner) where T : MonoScriptableObject {
 			
 			var fieldIDs = new List<int>();
 			
