@@ -94,16 +94,6 @@
 			var propertyPath = Property.propertyPath;
 			var pathSteps = propertyPath.Split('.');
 
-			//// This is an item of an array
-			//if(pathSteps.Length >= 2 && pathSteps[pathSteps.Length - 2] == "Array") {
-			//	var arrayPath = "";
-			//	for(int i = 0; i < pathSteps.Length - 2; i++) {
-			//		arrayPath += pathSteps[i];
-			//	}
-			//	var arrayProperty = Property.serializedObject.FindProperty(arrayPath);
-			//	Debug.Log($"	arrayProperty: {arrayProperty.propertyPath}");
-			//}
-
 		}
 
 		#endregion
