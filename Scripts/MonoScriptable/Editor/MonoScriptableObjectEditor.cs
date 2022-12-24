@@ -10,8 +10,8 @@
 	/// </summary>
 	/// 
 	/// <remarks>
-	/// It allows the user to go "Back" to the owner object, a usability feature and disables
-	/// the owner field so that it is not changed unintentionally.
+	/// It allows the user to go back and inspect to the owner object, as a  usability feature. 
+	/// It also disables the owner field so that it is not changed unintentionally.
 	/// </remarks>
     public abstract class MonoScriptableObjectEditor : Editor {
 

@@ -4,11 +4,22 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class MonoScriptableObject : ScriptableObject {
+	/// <summary>
+	/// Base class for <c>ScriptableObjects</c> that will be created on top of <c>MonoBehaviours</c> 
+	/// with the help of <see cref="MonoScriptableField{T}"/>s.
+	/// </summary>
+	public class MonoScriptableObject : ScriptableObject {
 
 
 		#region Public Methods
 
+		/// <summary>
+		/// Sets the owner of this MonoScriptableObject.
+		/// </summary>
+		/// <remarks>
+		/// This will be handled automatically by the related Unity editor tools.
+		/// </remarks>
+		/// <param name="owner">The owner of this MonoScriptableObject</param>
 		public void SetOwner(Object owner) {
 			m_Owner = owner;
 		}
@@ -18,6 +29,9 @@
 
 		#region Public Properties
 
+		/// <summary>
+		/// The owner of this object. It can be a <c>MonoBehaviour</c> or other MonoScriptableObject
+		/// </summary>
 		public Object Owner => m_Owner;
 
 		#endregion
