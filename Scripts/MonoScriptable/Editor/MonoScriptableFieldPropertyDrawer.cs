@@ -77,7 +77,7 @@
 
 				}
 			} else {
-				if (GUI.Button(createEditRect, "Edit")) {
+				if (GUI.Button(createEditRect, "Edit ▸")) {
 					Selection.activeObject = monoScriptableObjectProperty.objectReferenceValue;
 				}
 			}

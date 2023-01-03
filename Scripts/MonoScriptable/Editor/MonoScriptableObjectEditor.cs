@@ -31,19 +31,31 @@
 			DisabledField(ScriptProperty);
 
 			EditorGUILayout.BeginHorizontal();
-			DisabledField(OwnerProperty);
-			if (GUILayout.Button("Inspect", GUILayout.Width(60))) {
-				Selection.activeObject = (target as MonoScriptableObject).Owner;
+			var owner = (target as MonoScriptableObject).Owner;
+			var owners = new List<Object>();
+			while(owner != null) {
+				owners.Add(owner);
+				owner = owner is MonoScriptableObject ? (owner as MonoScriptableObject).Owner : null;
+			}
+			for(int i = owners.Count - 1; i >= 0; i--) {
+				if (GUILayout.Button($"◂ {owners[i].name}", GUILayout.ExpandWidth(false))) {
+					Selection.activeObject = owners[i];
+				}
 			}
 			EditorGUILayout.EndHorizontal();
+			DisabledField(OwnerProperty);
 
 			EditorGUILayout.PropertyField(NameProperty);
 
 			serializedObject.ApplyModifiedProperties();
 
-			void DisabledField(SerializedProperty property) {
+			void DisabledField(SerializedProperty property, bool hasLabel = true) {
 				EditorGUI.BeginDisabledGroup(true);
-				EditorGUILayout.PropertyField(property);
+				if (hasLabel) {
+					EditorGUILayout.PropertyField(property);
+				} else {
+					EditorGUILayout.PropertyField(property, GUIContent.none);
+				}				
 				EditorGUI.EndDisabledGroup();
 			}
 
