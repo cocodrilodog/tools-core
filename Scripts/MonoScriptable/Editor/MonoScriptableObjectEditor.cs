@@ -28,7 +28,7 @@
 			serializedObject.Update();
 			DisabledField(ScriptProperty);
 			DrawBreadcrumbs();
-			DisabledField(OwnerProperty);
+			//DisabledField(OwnerProperty);
 			EditorGUILayout.PropertyField(NameProperty);
 			serializedObject.ApplyModifiedProperties();
 		}
@@ -72,6 +72,9 @@
 					Selection.activeObject = owners[i];
 				}
 			}
+			EditorGUI.BeginDisabledGroup(true);
+			GUILayout.Button($"• {target.name}", GUILayout.ExpandWidth(false));
+			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
 		}
 
