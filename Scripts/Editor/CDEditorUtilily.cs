@@ -1,4 +1,4 @@
-﻿namespace CocodriloDog.Core {
+﻿namespace CocodriloDog.Core { //TODO: Move this to Utility
 
 	using System;
 	using System.Reflection;
