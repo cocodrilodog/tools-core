@@ -27,7 +27,9 @@
 
 	#endregion
 
-
+	/// <summary>
+	/// Utility class for editor-related tasks.
+	/// </summary>
 	public static class CDEditorUtility {
 
 
@@ -121,6 +123,27 @@
 			});
 		}
 
+		/// <summary>
+		/// Draws a horizontal line for inspectors.
+		/// </summary>
+		/// <param name="rect">The rectangle of the line</param>
+		public static void DrawHorizontalLine(Rect rect) {
+			var color = GUI.color;
+			GUI.color = new Color(0.15f, 0.15f, 0.15f);
+			GUI.Box(rect, GUIContent.none, HorizontalLineStyle);
+			GUI.color = color;
+		}
+		
+		/// <summary>
+		/// Draws a horizontal line for inspectors with <see cref="GUILayout"/>.
+		/// </summary>
+		public static void DrawHorizontalLine() {
+			var color = GUI.color;
+			GUI.color = new Color(0.15f, 0.15f, 0.15f);
+			GUILayout.Box(GUIContent.none, HorizontalLineStyle);
+			GUI.color = color;
+		}
+
 		#endregion
 
 
@@ -142,6 +165,8 @@
 
 		private static DelayedActionInfo m_DelayedActionInfo;
 
+		private static GUIStyle m_HorizontalLineStyle;
+
 		#endregion
 
 
@@ -149,6 +174,18 @@
 
 		private static DelayedActionInfo DelayedActionInfo {
 			get { return m_DelayedActionInfo = m_DelayedActionInfo ?? new DelayedActionInfo(); }
+		}
+
+		private static GUIStyle HorizontalLineStyle {
+			get {
+				if (m_HorizontalLineStyle == null) {
+					m_HorizontalLineStyle = new GUIStyle();
+					m_HorizontalLineStyle.normal.background = EditorGUIUtility.whiteTexture;
+					m_HorizontalLineStyle.margin = new RectOffset(0, 0, 4, 4);
+					m_HorizontalLineStyle.fixedHeight = 1;
+				}
+				return m_HorizontalLineStyle;
+			}
 		}
 
 		#endregion
