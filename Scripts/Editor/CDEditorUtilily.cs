@@ -144,6 +144,16 @@
 			GUI.color = color;
 		}
 
+		/// <summary>
+		/// This is very often used to draw disabled script fields as standard Unity style.
+		/// </summary>
+		/// <param name="serializedProperty">The property</param>
+		public static void DrawDisabledField(SerializedProperty serializedProperty) {
+			EditorGUI.BeginDisabledGroup(true);
+			EditorGUILayout.PropertyField(serializedProperty);
+			EditorGUI.EndDisabledGroup();
+		}
+
 		#endregion
 
 
