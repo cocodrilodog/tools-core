@@ -51,7 +51,7 @@ namespace CocodriloDog.Core {
 
 						monoScriptableOwner = gameObject.GetComponent<IMonoScriptableOwner>();
 						if (monoScriptableOwner != null) {
-							monoScriptableOwner.RecreateMonoScriptableObjects();
+							monoScriptableOwner.OnMonoScriptableOwnerCreated();
 						}
 
 						break;
@@ -64,7 +64,7 @@ namespace CocodriloDog.Core {
 
 						monoScriptableOwner = gameObject.GetComponent<IMonoScriptableOwner>();
 						if (monoScriptableOwner != null) {
-							monoScriptableOwner.RecreateMonoScriptableObjects();
+							monoScriptableOwner.OnMonoScriptableOwnerCreated();
 						}
 
 						break;
@@ -78,7 +78,7 @@ namespace CocodriloDog.Core {
 
 						monoScriptableOwner = gameObject.GetComponent<IMonoScriptableOwner>();
 						if (monoScriptableOwner != null) {
-							monoScriptableOwner.RecreateMonoScriptableObjects();
+							monoScriptableOwner.OnMonoScriptableOwnerCreated();
 						}
 
 						break;
@@ -90,7 +90,7 @@ namespace CocodriloDog.Core {
 						var goOrComponent = EditorUtility.InstanceIDToObject(changeGameObjectOrComponent.instanceId);
 
 						if (goOrComponent is IMonoScriptableOwner) {
-							((IMonoScriptableOwner)goOrComponent).RecreateRepeatedMonoScriptableArrayOrListItems();
+							((IMonoScriptableOwner)goOrComponent).OnMonoScriptableOwnerModified();
 						}
 
 						break;
@@ -102,7 +102,7 @@ namespace CocodriloDog.Core {
 						var changeAsset = EditorUtility.InstanceIDToObject(changeAssetObjectPropertiesEvent.instanceId);
 
 						if (changeAsset is IMonoScriptableOwner) {
-							((IMonoScriptableOwner)changeAsset).RecreateRepeatedMonoScriptableArrayOrListItems();
+							((IMonoScriptableOwner)changeAsset).OnMonoScriptableOwnerModified();
 						}
 
 						break;

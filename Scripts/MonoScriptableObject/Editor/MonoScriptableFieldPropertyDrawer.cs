@@ -26,7 +26,7 @@
 			// Update pending stuff
 			//
 			// We need to defer these actions because the GenericMenu seems to be firing the actions
-			// outside of the Update/ApplyModifiedproperties so the new MonoScriptableObject doesn't "stick"
+			// outside of the Update/ApplyModifiedProperties so the new MonoScriptableObject doesn't "stick"
 			if (m_PendingMonoScriptableObject != null) {
 				Property.serializedObject.FindProperty($"{m_PendingPathProperty}.m_Object").objectReferenceValue = m_PendingMonoScriptableObject;
 				m_PendingMonoScriptableObject.name = m_PendingMonoScriptableObject.GetType().Name;
@@ -40,10 +40,18 @@
 			var buttonsWidth = 110f;
 			var monoScriptableObjectProperty = Property.FindPropertyRelative("m_Object");
 
+			var fullPath = $"{Property.serializedObject.targetObject.GetInstanceID()}.{Property.propertyPath}";
+
+			// Enable field for copy/paste
+			var e = Event.current;
+			if (e.type == EventType.MouseDown && e.button == 1 && Position.Contains(e.mousePosition)) {
+				MonoScriptableContextMenuHandler.EnabledFieldPath = fullPath;
+			}
+
 			// The field
 			Rect fieldRect = rect;
 			fieldRect.xMax -= buttonsWidth;
-			EditorGUI.BeginDisabledGroup(true);
+			EditorGUI.BeginDisabledGroup(!(fullPath == MonoScriptableContextMenuHandler.EnabledFieldPath));
 			EditorGUIUtility.labelWidth -= buttonsWidth * 0.4f;
 			EditorGUI.PropertyField(fieldRect, ObjectProperty, new GUIContent(Property.displayName));
 			EditorGUIUtility.labelWidth = 0;

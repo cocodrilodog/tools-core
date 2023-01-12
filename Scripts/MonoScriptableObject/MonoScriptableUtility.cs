@@ -42,7 +42,7 @@ namespace CocodriloDog.Core {
 				field.SetObject(clone);
 				field.Object.SetOwner(owner);
 				if (field.Object is IMonoScriptableOwner) {
-					((IMonoScriptableOwner)field.Object).RecreateMonoScriptableObjects();
+					((IMonoScriptableOwner)field.Object).OnMonoScriptableOwnerCreated();
 				}
 
 			}
@@ -67,6 +67,10 @@ namespace CocodriloDog.Core {
 				}
 			}
 
+		}
+
+		public static void RecreateMonoScriptableObjectAtPath(string path, Object owner) {
+			// TODO: This
 		}
 
 		#endregion

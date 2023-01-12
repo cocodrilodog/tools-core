@@ -36,7 +36,7 @@ namespace CocodriloDog.Core {
 		/// and if that asset has <see cref="MonoScriptableObject"/> properties and implements <see cref="IMonoScriptableOwner"/> too, 
 		/// it should reinstantiate its own <see cref="MonoScriptableObject"/> instances as well.
 		/// </remarks>
-		void RecreateMonoScriptableObjects();
+		void OnMonoScriptableOwnerCreated();
 
 		/// <summary> 
 		/// This will be invoked when a component or asset that implements <see cref="IMonoScriptableOwner"/>
@@ -47,7 +47,10 @@ namespace CocodriloDog.Core {
 		/// At this time, the implementation of this method should search for duplicate references of 
 		/// <see cref="MonoScriptableObject"/> in arrays or lists and reinstantiate them.
 		/// </summary>
-		void RecreateRepeatedMonoScriptableArrayOrListItems();
+		void OnMonoScriptableOwnerModified();
+
+		// TODO: Optimize implementations so that only the relevant property is recreated.
+		void OnMonoScriptableOwnerContextMenu(string propertyPath);
 
 		#endregion
 
