@@ -5,8 +5,7 @@ namespace CocodriloDog.Core {
 
 	/// <summary>
 	/// This works in conjunction with <see cref="MonoScriptableFieldPropertyDrawer"/> to enable the
-	/// fields while a context menu operation is taking place. For example, for copying / pasting or 
-	/// applying changes to a prefab.
+	/// fields while a context menu operation is taking place. For example, for copying / pasting.
 	/// </summary>
 	[InitializeOnLoad]
 	public static class MonoScriptableContextMenuHandler {
@@ -45,7 +44,7 @@ namespace CocodriloDog.Core {
 					monoScriptableOwner.OnMonoScriptableOwnerContextMenu(property.propertyPath);
 				}, 0.1f);
 
-				Debug.Log(property.propertyPath);
+				//Debug.Log(property.propertyPath);
 
 			}
 		}

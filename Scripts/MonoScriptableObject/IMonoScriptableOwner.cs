@@ -10,8 +10,9 @@ namespace CocodriloDog.Core {
 	/// </summary>
 	/// 
 	/// <remarks>
-	/// This happens when the owner game object is duplicated, when an owner component is copied/pasted and when
-	/// a MonoScriptableObject array size is increased and the items are duplicated.
+	/// This happens when the owner game object is duplicated, when an owner component is copied/pasted, when
+	/// a MonoScriptableObject array size is increased and the items are duplicated and when a <see cref="MonoScriptableField{T}"/>
+	/// is copied/pasted.
 	/// </remarks>
 	public interface IMonoScriptableOwner {
 
@@ -35,6 +36,10 @@ namespace CocodriloDog.Core {
 		/// property and implements <see cref="IMonoScriptableOwner"/> should reinstantiate the <see cref="MonoScriptableObject"/>
 		/// and if that asset has <see cref="MonoScriptableObject"/> properties and implements <see cref="IMonoScriptableOwner"/> too, 
 		/// it should reinstantiate its own <see cref="MonoScriptableObject"/> instances as well.
+		/// 
+		/// Implementations will usually use:
+		/// <see cref="MonoScriptableUtility.RecreateMonoScriptableObject{T}(MonoScriptableField{T}, Object)"/> and
+		/// <see cref="MonoScriptableUtility.RecreateMonoScriptableObjects{T}(MonoScriptableField{T}[], Object)"/>
 		/// </remarks>
 		void OnMonoScriptableOwnerCreated();
 
@@ -43,13 +48,34 @@ namespace CocodriloDog.Core {
 		/// has changes in their properties in edit mode. When an array or list of <see cref="MonoScriptableObject"/>
 		/// increases in size, the newly added elements are duplicates of the last item. This may be the case given that the
 		/// property changes of the asset or component may be the result of an array size increase.
+		/// </summary>
 		/// 
+		/// <remarks>
 		/// At this time, the implementation of this method should search for duplicate references of 
 		/// <see cref="MonoScriptableObject"/> in arrays or lists and reinstantiate them.
-		/// </summary>
+		/// 
+		/// Implementations will usually use:
+		/// <see cref="MonoScriptableUtility.RecreateRepeatedMonoScriptableArrayOrListItems{T}(MonoScriptableField{T}[], Object)"/> and
+		/// </remarks>
 		void OnMonoScriptableOwnerModified();
 
-		// TODO: Optimize implementations so that only the relevant property is recreated.
+		/// <summary>
+		/// This will be invoked when a ContextMenu operation has taken place on a <see cref="IMonoScriptableOwner"/>
+		/// Through the <paramref name="propertyPath"/>, it specifies the property involved with the operation so that 
+		/// the related <see cref="MonoScriptableObject"/> can be recreated by an implementation.
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// This was created so that when a <see cref="MonoScriptableObject"/> is copied/pasted, the pasted version is
+		/// recreated and now is independent from the original one. Unfortunately, this will cause any right-clicked field 
+		/// (even the one that is copied) to recreate their corresponding <see cref="MonoScriptableObject"/>, which is 
+		/// not needed. This can be improved if I find a way to handle when a value is pasted.
+		/// 
+		/// Implementations will usually use:
+		/// <see cref="MonoScriptableUtility.RecreateMonoScriptableObjectAtPath{T}(string, Object)"/> and
+		/// </remarks>
+		/// 
+		/// <param name="propertyPath">The propertyPath, as defined by SerializedObject.</param>
 		void OnMonoScriptableOwnerContextMenu(string propertyPath);
 
 		#endregion
