@@ -30,7 +30,17 @@
 	/// <summary>
 	/// Utility class for editor-related tasks.
 	/// </summary>
+	[InitializeOnLoad]
 	public static class CDEditorUtility {
+
+
+		#region Static Constructors
+
+		static CDEditorUtility() {
+			EditorApplication.update += EditorApplication_Update;
+		}
+
+		#endregion
 
 
 		#region Public Static Methods
@@ -41,11 +51,11 @@
 		/// <param name="action">Action.</param>
 		/// <param name="delay">Delay.</param>
 		public static void DelayedAction(Action action, float delay) {
-			DelayedActionInfo.Action = action;
-			DelayedActionInfo.Delay = delay;
-			DelayedActionInfo.Time = EditorApplication.timeSinceStartup;
-			EditorApplication.update -= EditorApplication_Update_DelayedAction; // <- Prevent multiple adds of the event handler
-			EditorApplication.update += EditorApplication_Update_DelayedAction;
+			var actionInfo = new DelayedActionInfo();
+			actionInfo.Action = action;
+			actionInfo.Delay = delay;
+			actionInfo.Time = EditorApplication.timeSinceStartup;
+			DelayedActionInfos.Add(actionInfo);
 		}
 
 		/// <summary>
@@ -159,12 +169,20 @@
 
 		#region Event Handlers
 
-		private static void EditorApplication_Update_DelayedAction() {
-			double elapsed = EditorApplication.timeSinceStartup - DelayedActionInfo.Time;
-			if (elapsed >= DelayedActionInfo.Delay) {
-				EditorApplication.update -= EditorApplication_Update_DelayedAction;
-				DelayedActionInfo.Action();
-				m_DelayedActionInfo = null;
+		private static void EditorApplication_Update() {
+			List<DelayedActionInfo> actionsToRemove = null;
+			foreach(var actionInfo in DelayedActionInfos) {
+				double elapsed = EditorApplication.timeSinceStartup - actionInfo.Time;
+				if (elapsed >= actionInfo.Delay) {
+					actionInfo.Action();
+					actionsToRemove = actionsToRemove ?? new List<DelayedActionInfo>();
+					actionsToRemove.Add(actionInfo);
+				}
+			}
+			if (actionsToRemove != null) {
+				foreach (var actionInfo in actionsToRemove) {
+					DelayedActionInfos.Remove(actionInfo);
+				}
 			}
 		}
 
@@ -173,7 +191,7 @@
 
 		#region Private Static Fields
 
-		private static DelayedActionInfo m_DelayedActionInfo;
+		private static List<DelayedActionInfo> m_DelayedActionInfos;
 
 		private static GUIStyle m_HorizontalLineStyle;
 
@@ -182,9 +200,8 @@
 
 		#region Private Properties
 
-		private static DelayedActionInfo DelayedActionInfo {
-			get { return m_DelayedActionInfo = m_DelayedActionInfo ?? new DelayedActionInfo(); }
-		}
+		private static List<DelayedActionInfo> DelayedActionInfos => 
+			m_DelayedActionInfos = m_DelayedActionInfos ?? new List<DelayedActionInfo>();
 
 		private static GUIStyle HorizontalLineStyle {
 			get {

@@ -1,9 +1,9 @@
 ﻿namespace CocodriloDog.Core.Examples {
 
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEditor;
-    using UnityEngine;
+	using System.Collections;
+	using System.Collections.Generic;
+	using UnityEditor;
+	using UnityEngine;
 
 	/// <summary>
 	/// Example editor for <see cref="MonoSOE_1"/>.
@@ -19,7 +19,9 @@
 
 		protected override void OnEnable() {
 			base.OnEnable();
-			Prop1Property = serializedObject.FindProperty("Prop1");
+			if (target != null) {
+				Prop1Property = serializedObject.FindProperty("Prop1");
+			}
 		}
 
 		public override void OnInspectorGUI() {

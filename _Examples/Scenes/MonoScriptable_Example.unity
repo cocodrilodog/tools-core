@@ -123,48 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &469553722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45aa12a56aafa014f969f12b0360e327, type: 3}
-  m_Name: MonoSOE_1
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 1755054839}
-  Prop1: 
---- !u!114 &951419638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45aa12a56aafa014f969f12b0360e327, type: 3}
-  m_Name: MonoSOE_1
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 2020111370}
-  Prop1: 
---- !u!114 &1378505304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45aa12a56aafa014f969f12b0360e327, type: 3}
-  m_Name: MonoSOE_1
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 1780309522}
-  Prop1: 
 --- !u!1 &1645186491
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,52 +241,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &1755054839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f649c39e17d8c794ba0e121b3cd7adfa, type: 3}
-  m_Name: MonoSOE_2
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 2020111370}
-  Prop2: 0
-  m_ChildMonoSOE:
-    m_Object: {fileID: 469553722}
---- !u!114 &1780309522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f649c39e17d8c794ba0e121b3cd7adfa, type: 3}
-  m_Name: MonoSOE_2
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 2020111370}
-  Prop2: 0
-  m_ChildMonoSOE:
-    m_Object: {fileID: 1378505304}
---- !u!114 &1814202984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45aa12a56aafa014f969f12b0360e327, type: 3}
-  m_Name: MonoSOE_1
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 2020111370}
-  Prop1: 
 --- !u!1 &2020111369
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +250,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2020111371}
-  - component: {fileID: 2020111370}
+  - component: {fileID: 2020111375}
+  - component: {fileID: 2020111378}
+  - component: {fileID: 2020111377}
+  - component: {fileID: 2020111376}
   m_Layer: 0
   m_Name: MonoScriptable_Example
   m_TagString: Untagged
@@ -346,7 +261,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2020111370
+--- !u!4 &2020111371
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020111369}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2020111375
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -358,24 +288,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22c2fe2d18959e848be7e73ae88faa7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HandledCreation: 1
+  m_SelectedMonoScriptableObject: {fileID: 0}
   SomeScriptableField:
-    m_Object: {fileID: 1755054839}
+    m_Object: {fileID: 2020111378}
   SomeScriptableFields:
-  - m_Object: {fileID: 951419638}
-  - m_Object: {fileID: 1780309522}
-  - m_Object: {fileID: 1814202984}
---- !u!4 &2020111371
-Transform:
+  - m_Object: {fileID: 2020111377}
+--- !u!114 &2020111376
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020111369}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45aa12a56aafa014f969f12b0360e327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 2020111377}
+  m_ObjectName: Child 1
+  Prop1: 
+--- !u!114 &2020111377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020111369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f649c39e17d8c794ba0e121b3cd7adfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 2020111375}
+  m_ObjectName: Item 1
+  Prop2: 0
+  m_ChildMonoSOE:
+    m_Object: {fileID: 2020111376}
+--- !u!114 &2020111378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020111369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45aa12a56aafa014f969f12b0360e327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 2020111375}
+  m_ObjectName: Single
+  Prop1: 

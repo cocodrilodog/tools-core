@@ -15,7 +15,7 @@ namespace CocodriloDog.Core {
 
 		/// <summary>
 		/// A path built by <see cref="MonoScriptableFieldPropertyDrawer"/> to identify a field
-		/// that must be enabled while richt clicking it.
+		/// that must be enabled while right clicking it. This will enable the "Copy" menu item.
 		/// </summary>
 		public static string EnabledFieldPath;
 
@@ -34,18 +34,11 @@ namespace CocodriloDog.Core {
 		#region Event Handlers
 
 		private static void OnContextMenuOpening(GenericMenu menu, SerializedProperty property) {
+			// This will be invoked after the copy or paste command have taken effect, so if the field is nulled
+			// the MonoScriptableField will be disabled again.
 			var monoScriptableOwner = property.serializedObject.targetObject as IMonoScriptableOwner;
 			if (monoScriptableOwner != null) {
-
 				EnabledFieldPath = null;
-				
-				// This needs a small delay for the MonoScriptableObjects to be instantiated before they are recreated
-				CDEditorUtility.DelayedAction(() => {
-					monoScriptableOwner.OnMonoScriptableOwnerContextMenu(property.propertyPath);
-				}, 0.1f);
-
-				//Debug.Log(property.propertyPath);
-
 			}
 		}
 

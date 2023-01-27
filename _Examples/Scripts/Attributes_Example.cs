@@ -10,8 +10,8 @@
 		[SerializeField]
 		public FloatRange MinMaxRange;
 
-		[Space]
 		[HorizontalLine]
+		[Space]
 		public string SomeField;
 
 	}

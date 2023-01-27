@@ -23,22 +23,10 @@
 
 			base.OnGUI(position, property, label);
 
-			// Update pending stuff
-			//
-			// We need to defer these actions because the GenericMenu seems to be firing the actions
-			// outside of the Update/ApplyModifiedProperties so the new MonoScriptableObject doesn't "stick"
-			if (m_PendingMonoScriptableObject != null) {
-				Property.serializedObject.FindProperty($"{m_PendingPathProperty}.m_Object").objectReferenceValue = m_PendingMonoScriptableObject;
-				m_PendingMonoScriptableObject.name = m_PendingMonoScriptableObject.GetType().Name;
-				m_PendingMonoScriptableObject.SetOwner(Property.serializedObject.targetObject);
-				m_PendingMonoScriptableObject = null;
-				m_PendingPathProperty = null;
-			}
-
 			// Vars
 			var rect = GetNextPosition();
 			var buttonsWidth = 110f;
-			var monoScriptableObjectProperty = Property.FindPropertyRelative("m_Object");
+			var objectProperty = Property.FindPropertyRelative("m_Object");
 
 			var fullPath = $"{Property.serializedObject.targetObject.GetInstanceID()}.{Property.propertyPath}";
 
@@ -48,45 +36,85 @@
 				MonoScriptableContextMenuHandler.EnabledFieldPath = fullPath;
 			}
 
+			// The field and label
+			var fieldLabelRect = rect;
+			fieldLabelRect.xMax -= buttonsWidth;
+
 			// The field
-			Rect fieldRect = rect;
-			fieldRect.xMax -= buttonsWidth;
-			EditorGUI.BeginDisabledGroup(!(fullPath == MonoScriptableContextMenuHandler.EnabledFieldPath));
+			var fieldRect = fieldLabelRect;
+			if (ObjectProperty.objectReferenceValue != null) {
+				fieldRect.width *= 0.7f;
+			}
+
+			// Help readability
+			var enableField = fullPath == MonoScriptableContextMenuHandler.EnabledFieldPath;
+			var disableField = !enableField;
+
+			// The field is enabled while the paths are equal
+			EditorGUI.BeginDisabledGroup(disableField);
 			EditorGUIUtility.labelWidth -= buttonsWidth * 0.4f;
 			EditorGUI.PropertyField(fieldRect, ObjectProperty, new GUIContent(Property.displayName));
-			EditorGUIUtility.labelWidth = 0;
 			EditorGUI.EndDisabledGroup();
+			EditorGUIUtility.labelWidth = 0;
+
+			if (ObjectProperty.objectReferenceValue != null) {
+				// The label
+				var labelRect = fieldLabelRect;
+				labelRect.width *= 0.3f;
+				labelRect.x = fieldRect.xMax;
+				labelRect.xMin += 5;
+				labelRect.xMax -= 5;
+				EditorGUI.LabelField(labelRect, (ObjectProperty.objectReferenceValue as MonoScriptableObject).ObjectName);
+			}
 
 			// Create/Edit button
 			Rect createEditRect = rect;
 			createEditRect.xMin += rect.width - buttonsWidth;
 			createEditRect.xMax -= buttonsWidth * 0.53f;
 
-			if (monoScriptableObjectProperty.objectReferenceValue == null) {
+			if (objectProperty.objectReferenceValue == null) {
 				if (GUI.Button(createEditRect, "Create")) {
 
 					// Save the path because when the object is an array element, it will need the path with the index
-					// in order to assign the value to the correct slot in the deferred assignment above. Otherwise it 
+					// in order to assign the value to the correct slot in the deferred assignment below. Otherwise it 
 					// will always assign the value to the first slot.
-					m_PendingPathProperty = Property.propertyPath;
+					var pendingPropertyPath = Property.propertyPath;
 
 					// Show the menu only when there are more than one types
 					if (MonoScriptableTypes.Count > 1) {
 						var menu = new GenericMenu();
 						foreach (var type in MonoScriptableTypes) {
 							menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), false, () => {
-								m_PendingMonoScriptableObject = ScriptableObject.CreateInstance(type) as MonoScriptableObject;
+								CreateObject(type);
 							});
 						}
 						menu.ShowAsContext();
 					} else {
-						m_PendingMonoScriptableObject = ScriptableObject.CreateInstance(MonoScriptableTypes[0]) as MonoScriptableObject;
+						CreateObject(MonoScriptableTypes[0]);
+					}
+
+					void CreateObject(Type t) {
+						CDEditorUtility.DelayedAction(() => {
+
+							Property.serializedObject.Update();
+
+							var monoScriptableObject =(MonoScriptableObject)Undo.AddComponent(GameObject, t);
+							monoScriptableObject.ObjectName = t.Name;
+							monoScriptableObject.hideFlags = HideFlags.HideInInspector;
+
+							Property.serializedObject.FindProperty($"{pendingPropertyPath}.m_Object").objectReferenceValue = monoScriptableObject;
+							monoScriptableObject.SetOwner(Property.serializedObject.targetObject as MonoBehaviour);
+							pendingPropertyPath = null;
+
+							Property.serializedObject.ApplyModifiedProperties();
+
+						}, 0);
 					}
 
 				}
 			} else {
-				if (GUI.Button(createEditRect, "Edit ▸")) {
-					Selection.activeObject = monoScriptableObjectProperty.objectReferenceValue;
+				if (GUI.Button(createEditRect, "Edit ▸")) {					
+					MonoScriptableRoot.SelectedMonoScriptableObject = (MonoScriptableObject)objectProperty.objectReferenceValue;
 				}
 			}
 
@@ -95,12 +123,16 @@
 			removeRect.xMin += rect.width - buttonsWidth;
 			removeRect.xMin += buttonsWidth * 0.47f; 
 			if(GUI.Button(removeRect, "Remove")) {
-				monoScriptableObjectProperty.objectReferenceValue = null;				
+				if (objectProperty.objectReferenceValue != null) {
+					CDEditorUtility.DelayedAction(() => {
+						Property.serializedObject.Update();
+						objectProperty.objectReferenceValue = null;
+						// Let this handle the destruction
+						MonoScriptableGOChangeHandler.UpdateMonoScriptableObjects(GameObject);
+						Property.serializedObject.ApplyModifiedProperties();
+					}, 0);
+				}
 			}
-
-			// Check for array owner property
-			var propertyPath = Property.propertyPath;
-			var pathSteps = propertyPath.Split('.');
 
 		}
 
@@ -125,16 +157,36 @@
 
 		#region Private Fields
 
-		private MonoScriptableObject m_PendingMonoScriptableObject;
+		private GameObject m_GameObject;
 
-		private string m_PendingPathProperty;
+		private MonoScriptableRoot m_MonoScriptableRoot;
 
 		#endregion
 
 
 		#region Private Properties
 
-		private SerializedProperty ObjectProperty;
+		private GameObject GameObject {
+			get {
+				if (m_GameObject == null) {
+					if (Property.serializedObject.targetObject is Component) {
+						m_GameObject = ((Component)Property.serializedObject.targetObject).gameObject;
+					}
+				}
+				return m_GameObject;
+			}
+		}
+
+		private MonoScriptableRoot MonoScriptableRoot {
+			get {
+				if(m_MonoScriptableRoot == null) {
+					m_MonoScriptableRoot = GameObject.GetComponent<MonoScriptableRoot>();
+				}
+				return m_MonoScriptableRoot;
+			}
+		}
+
+		private SerializedProperty ObjectProperty { get; set; }
 
 		#endregion
 
