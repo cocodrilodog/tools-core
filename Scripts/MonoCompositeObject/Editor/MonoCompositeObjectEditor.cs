@@ -58,29 +58,37 @@
 		}
 
 		private void DrawBreadcrumbs() {
+
 			EditorGUILayout.BeginHorizontal();
-			var owner = (target as MonoCompositeObject).Parent;
-			var owners = new List<MonoBehaviour>();
-			while (owner != null) {
-				owners.Add(owner);
-				owner = owner is MonoCompositeObject ? (owner as MonoCompositeObject).Parent : null;
+
+			// Gather the parents until the root
+			var parent = (target as MonoCompositeObject).Parent;
+			var parents = new List<MonoBehaviour>();
+			while (parent != null) {
+				parents.Add(parent);
+				parent = parent is MonoCompositeObject ? (parent as MonoCompositeObject).Parent : null;
 			}
-			for (int i = owners.Count - 1; i >= 0; i--) {
-				if(owners[i] is MonoCompositeObject) {
-					var ownerMSO = (MonoCompositeObject)owners[i];
-					if (GUILayout.Button($"◂ {ownerMSO.ObjectName}", GUILayout.ExpandWidth(false))) {
-						(target as MonoCompositeObject).GetComponent<MonoCompositeRoot>().SelectedMonoCompositeObject = ownerMSO;
+			var rootParent = parents[parents.Count - 1] as MonoCompositeRoot;
+
+			// Draw the buttons starting with the last one (the parent)
+			for (int i = parents.Count - 1; i >= 0; i--) {
+				if(parents[i] is MonoCompositeObject) {
+					var nonRootParent = (MonoCompositeObject)parents[i];
+					if (GUILayout.Button($"◂ {nonRootParent.ObjectName}", GUILayout.ExpandWidth(false))) {
+						rootParent.SelectedMonoCompositeObject = nonRootParent;
 					}
-				} else if(owners[i] is MonoCompositeRoot) {
-					if (GUILayout.Button($"◂ {owners[i].name}", GUILayout.ExpandWidth(false))) {
-						(target as MonoCompositeObject).GetComponent<MonoCompositeRoot>().SelectedMonoCompositeObject = null;
+				} else if(parents[i] is MonoCompositeRoot) {
+					if (GUILayout.Button($"◂ {parents[i].GetType().Name}", GUILayout.ExpandWidth(false))) {
+						rootParent.SelectedMonoCompositeObject = null;
 					}
 				}
 			}
+
 			EditorGUI.BeginDisabledGroup(true);
 			GUILayout.Button($"• {(target as MonoCompositeObject).ObjectName}", GUILayout.ExpandWidth(false));
 			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
+
 		}
 
 		#endregion

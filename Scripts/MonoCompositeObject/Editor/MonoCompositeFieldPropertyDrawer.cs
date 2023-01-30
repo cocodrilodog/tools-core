@@ -178,8 +178,19 @@
 
 		private MonoCompositeRoot MonoCompositeRoot {
 			get {
-				if(m_MonoCompositeRoot == null) {
-					m_MonoCompositeRoot = GameObject.GetComponent<MonoCompositeRoot>();
+				if (m_MonoCompositeRoot == null) {
+					
+					var objectProperty = Property.FindPropertyRelative("m_Object");
+					var monoCompositeObject = objectProperty.objectReferenceValue as MonoCompositeObject;
+
+					MonoBehaviour parent = monoCompositeObject.Parent;
+					while (!(parent is MonoCompositeRoot) && parent != null) {
+						monoCompositeObject = (parent as MonoCompositeObject);
+						parent = monoCompositeObject != null ? monoCompositeObject.Parent : null;
+					}
+
+					m_MonoCompositeRoot = parent as MonoCompositeRoot;
+
 				}
 				return m_MonoCompositeRoot;
 			}

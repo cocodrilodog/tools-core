@@ -21,7 +21,7 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
-		private void OnEnable() {
+		protected virtual void OnEnable() {
 			SelectedMonoCompositeObjectProperty = serializedObject.FindProperty("m_SelectedMonoCompositeObject");
 		}
 
