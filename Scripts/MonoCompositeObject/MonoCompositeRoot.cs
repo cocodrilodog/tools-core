@@ -45,7 +45,7 @@ namespace CocodriloDog.Core {
 			Debug.Log($"This {this} was reset");
 #if UNITY_EDITOR
 			// Give time for the fields to point to non-null references.
-			EditorApplication.delayCall += () => OnOwnerReset(this);
+			EditorApplication.delayCall += () => OnParentReset(this);
 #endif
 		}
 
@@ -63,16 +63,20 @@ namespace CocodriloDog.Core {
 
 		#region Private Methods
 
-		private void OnOwnerReset(IMonoCompositeParent resetOwner) {
-			Debug.Log($"OnOwnerReset: {resetOwner}, {resetOwner.GetChildren().Length}");
-			foreach (var field in resetOwner.GetChildren()) {
-				var newOwner = field.Recreate((resetOwner as MonoBehaviour).gameObject);
-				if (newOwner != null) {
+		/// <summary>
+		/// This handles the repeated references when a component is pasted via "Paste component as new".
+		/// </summary>
+		/// <param name="resetParent">The parent to reset</param>
+		private void OnParentReset(IMonoCompositeParent resetParent) {
+			Debug.Log($"OnOwnerReset: {resetParent}, {resetParent.GetChildren().Length}");
+			foreach (var field in resetParent.GetChildren()) {
+				var newParent = field.Recreate((resetParent as MonoBehaviour).gameObject);
+				if (newParent != null) {
 					// Recursion
-					OnOwnerReset(newOwner);
+					OnParentReset(newParent);
 				}
 			}
-			resetOwner.ConfirmChildren();
+			resetParent.ConfirmChildren();
 		}
 
 		#endregion

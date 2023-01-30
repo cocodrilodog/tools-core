@@ -41,25 +41,17 @@ namespace CocodriloDog.Core {
 	///			removes it.
 	///		</description>
 	/// </item>
+	/// <item>
+	///		<term>Removing a <see cref="MonoCompositeRoot"/></term>
+	///		<description>
+	///			When a <see cref="MonoCompositeRoot"/> is removed, this will check if there are any orphan 
+	///			<see cref="MonoCompositeObject"/> left.
+	///		</description>
+	/// </item>
 	/// </list>
 	/// </remarks>
 	[InitializeOnLoad]
 	public static class MonoCompositeGOChangeHandler {
-
-
-		#region Public Static Methods
-
-		/// <summary>
-		/// Recreates repeated references of <see cref="MonoCompositeObject"/> and removes orphan
-		/// <see cref="MonoCompositeObject"/> components from the <c>GameObject</c>.
-		/// </summary>
-		/// <param name="gameObject"></param>
-		public static void UpdateMonoCompositeObjects(GameObject gameObject) {
-			RecreateRepeatedReferences(gameObject);
-			RemoveOrphans(gameObject);
-		}
-
-		#endregion
 
 
 		#region Static Constructors
@@ -74,20 +66,14 @@ namespace CocodriloDog.Core {
 
 		#region Event Handlers
 
-		/// <summary>
-		/// Undo is fired first so I use this flag for no change handling to occur during an undo operation,
-		/// otherwise strange things will happen.
-		/// </summary>
-		private static bool m_IgnoreChanges;
-
 		private static void OnUndo() {
-			IgnoreChanges();
+			IgnoreAllChanges();
 		}
 
 		private static void OnChangesPublished(ref ObjectChangeEventStream stream) {
 
-			if (m_IgnoreChanges) {
-				m_IgnoreChanges = false;
+			if (m_IgnoreAllChanges) {
+				m_IgnoreAllChanges = false;
 				return;
 			}
 
@@ -95,30 +81,38 @@ namespace CocodriloDog.Core {
 				switch (stream.GetEventType(i)) {
 
 					// This will work when a IMonoCompositeParent component changes any of its properties
-					case ObjectChangeKind.ChangeGameObjectStructure:
-						// TODO: Remove composite children when the root is removed
-						stream.GetChangeGameObjectStructureEvent(i, out var changeGameObjectStructure);
-						var go = EditorUtility.InstanceIDToObject(changeGameObjectStructure.instanceId) as GameObject;
-						// It is a game object and it has MonoCompositeObjects. This case will check if the root was removed
-						// ad if so, remove all MonoCompositeObjects
-						if (go != null && go.GetComponentsInChildren<MonoCompositeObject>().Length > 0) {
-							Debug.Log("GAME OBJECT STRUCTURE CHANGED");
-							RemoveOrphans(go);
+					case ObjectChangeKind.ChangeGameObjectStructure: {
+
+							stream.GetChangeGameObjectStructureEvent(i, out var changeGameObjectStructure);
+							var go = EditorUtility.InstanceIDToObject(changeGameObjectStructure.instanceId) as GameObject;
+
+							// It is a game object and it has MonoCompositeObjects. This will check if a root was removed
+							// ad if so, remove all of its former MonoCompositeObjects children
+							if (go != null && go.GetComponentsInChildren<MonoCompositeObject>().Length > 0) {
+								Debug.Log("GAME OBJECT STRUCTURE CHANGED");
+								RemoveOrphans(go);
+							}
+
 						}
 						break;
 
 					// This will work when a IMonoCompositeParent component changes any of its properties
-					case ObjectChangeKind.ChangeGameObjectOrComponentProperties:
+					case ObjectChangeKind.ChangeGameObjectOrComponentProperties: {
 
-						stream.GetChangeGameObjectOrComponentPropertiesEvent(i, out var changeGameObjectOrComponent);
-						var goOrComponent = EditorUtility.InstanceIDToObject(changeGameObjectOrComponent.instanceId);
+							stream.GetChangeGameObjectOrComponentPropertiesEvent(i, out var changeGameObjectOrComponent);
+							var goOrComponent = EditorUtility.InstanceIDToObject(changeGameObjectOrComponent.instanceId);
 
-						if (goOrComponent is IMonoCompositeParent) {
-							Debug.Log("CHANGED PROPERTIES");
-							// Send the game object in which the change was originated
-							UpdateMonoCompositeObjects((goOrComponent as Component).gameObject);
+							if (goOrComponent is IMonoCompositeParent) {
+								Debug.Log("CHANGED PROPERTIES");
+								// Send the game object in which the change was originated
+								var go = (goOrComponent as Component).gameObject;
+								// If an array added an element or an element was pasted, we check for repetition
+								RecreateRepeatedReferences(go);
+								// If an array element was removed, we need to clean
+								RemoveOrphans(go);
+							}
+
 						}
-
 						break;
 				}
 			}
@@ -128,9 +122,20 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Private Fields
+
+		/// <summary>
+		/// Undo is fired first so I use this flag for no change handling to occur during an undo operation,
+		/// otherwise strange things will happen.
+		/// </summary>
+		private static bool m_IgnoreAllChanges;
+
+		#endregion
+
+
 		#region Private Static Methods
 
-		private static void IgnoreChanges() => m_IgnoreChanges = true;
+		private static void IgnoreAllChanges() => m_IgnoreAllChanges = true;
 
 		private static void RecreateRepeatedReferences(GameObject gameObject) {
 
@@ -141,7 +146,7 @@ namespace CocodriloDog.Core {
 			gameObjects.Add(gameObject); // <- make it the last one so that the repetitions
 										 // are more likely to be found on these one
 
-			// Collect all parents because one MSO may have been copied from other game object
+			// Collect all parents because one MCO may have been copied from other game object
 			var allParents = new List<IMonoCompositeParent>();
 
 			// Isolate the parents that correspond to the gameObject for later use
@@ -188,47 +193,44 @@ namespace CocodriloDog.Core {
 
 		}
 
-		private static  void RemoveOrphans(GameObject gameObject) {
+		/// <summary>
+		/// Removes the <see cref="MonoCompositeObject"/> that have no parent from the <paramref name="gameObject"/>
+		/// </summary>
+		/// <param name="gameObject">The game object to check</param>
+		private static void RemoveOrphans(GameObject gameObject) {
 
-			// Look for the owned objects
-			var ownedObjects = new List<MonoCompositeObject>();
-			var root = gameObject.GetComponent<MonoCompositeRoot>() as IMonoCompositeParent;
+			// Look for all the owned children
+			var children = new List<MonoCompositeObject>();
+			var roots = gameObject.GetComponents<MonoCompositeRoot>();
 
-			// Start on the root
-			if (root != null) {
-
-				// Look from root to leaves. Everyone else (that is not owned) must be destroyed.
-				FindOwnedObjects(root.GetChildren());
-				void FindOwnedObjects(MonoCompositeFieldBase[] fields) {
-					foreach (var field in fields) {
-						if (field.ObjectBase != null) {
-							var ownedObject = field.ObjectBase;
-							Debug.Log($"Owned object: {ownedObject.ObjectName}");
-							ownedObjects.Add(ownedObject);
-							// Recursion
-							if (ownedObject is IMonoCompositeParent) {
-								FindOwnedObjects((ownedObject as IMonoCompositeParent).GetChildren());
+			// Find all the children
+			foreach (var root in roots) {
+				// Start on the root
+				if (root != null) {
+					// Look from root to leaves. Everyone else (that is not owned) must be destroyed.
+					FindChildren(root.GetChildren());
+					void FindChildren(MonoCompositeFieldBase[] fields) {
+						foreach (var field in fields) {
+							if (field.ObjectBase != null) {
+								var child = field.ObjectBase;
+								//Debug.Log($"Child object: {child.ObjectName}");
+								children.Add(child);
+								// Recursion
+								if (child is IMonoCompositeParent) {
+									FindChildren((child as IMonoCompositeParent).GetChildren());
+								}
 							}
 						}
 					}
 				}
+			}
 
-				// Get the currently attached objects
-				var attachedObjects = gameObject.GetComponentsInChildren<MonoCompositeObject>();
-				foreach (var attachedObject in attachedObjects) {
-					Debug.Log($"Attached object: {attachedObject.ObjectName}");
-					if (!ownedObjects.Contains(attachedObject)) {
-						// Destroy the ones that are not owned
-						Debug.Log($"Destroying: {attachedObject.ObjectName}");
-						Undo.DestroyObjectImmediate(attachedObject);
-					}
-				}
-
-			} else {
-				// The root was removed, so let us remove all!
-				Debug.Log($"Destroying all MonoComposite objects from {gameObject}");
-				var attachedObjects = gameObject.GetComponentsInChildren<MonoCompositeObject>();
-				foreach (var attachedObject in attachedObjects) {
+			// Get the currently attached objects
+			var attachedObjects = gameObject.GetComponentsInChildren<MonoCompositeObject>();
+			foreach (var attachedObject in attachedObjects) {
+				//Debug.Log($"Attached object: {attachedObject.ObjectName}");
+				if (!children.Contains(attachedObject)) {
+					// Destroy the ones that are not children
 					Debug.Log($"Destroying: {attachedObject.ObjectName}");
 					Undo.DestroyObjectImmediate(attachedObject);
 				}

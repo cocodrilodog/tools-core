@@ -127,8 +127,7 @@
 					CDEditorUtility.DelayedAction(() => {
 						Property.serializedObject.Update();
 						objectProperty.objectReferenceValue = null;
-						// Let this handle the destruction
-						MonoCompositeGOChangeHandler.UpdateMonoCompositeObjects(GameObject);
+						// Destruction is handled by MonoCompositeGOChangeHandler on ChangeGameObjectOrComponentProperties
 						Property.serializedObject.ApplyModifiedProperties();
 					}, 0);
 				}

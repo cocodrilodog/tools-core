@@ -132,13 +132,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1617279746}
-  - component: {fileID: 1617279747}
   - component: {fileID: 1617279753}
   - component: {fileID: 1617279752}
   - component: {fileID: 1617279751}
   - component: {fileID: 1617279750}
   - component: {fileID: 1617279749}
   - component: {fileID: 1617279748}
+  - component: {fileID: 1617279747}
   m_Layer: 0
   m_Name: MonoCompositeExample
   m_TagString: Untagged
@@ -163,25 +163,6 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1617279747
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1617279745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c2fe2d18959e848be7e73ae88faa7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SelectedMonoCompositeObject: {fileID: 0}
-  SomeScriptableField:
-    m_Object: {fileID: 1617279753}
-  SomeScriptableFields:
-  - m_Object: {fileID: 1617279752}
-  - m_Object: {fileID: 1617279750}
-  - m_Object: {fileID: 1617279749}
---- !u!114 &1617279748
-MonoBehaviour:
   m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -192,10 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4755a5c2c35a744b1efc1ac1fd5b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 1617279749}
+  m_Parent: {fileID: 1617279748}
   m_ObjectName: Child3
   Prop1: 
---- !u!114 &1617279749
+--- !u!114 &1617279748
 MonoBehaviour:
   m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,11 +188,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe3dde1f01bf1641b383b643f6b9cef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 1617279747}
+  m_Parent: {fileID: 1617279753}
   m_ObjectName: Item3
   Prop2: 0
   m_ChildMonoCOE:
-    m_Object: {fileID: 1617279748}
+    m_Object: {fileID: 1617279747}
+--- !u!114 &1617279749
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617279745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4755a5c2c35a744b1efc1ac1fd5b14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 1617279753}
+  m_ObjectName: Item2
+  Prop1: 
 --- !u!114 &1617279750
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -224,25 +220,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4755a5c2c35a744b1efc1ac1fd5b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 1617279747}
-  m_ObjectName: Item2
-  Prop1: 
---- !u!114 &1617279751
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1617279745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4755a5c2c35a744b1efc1ac1fd5b14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 1617279752}
+  m_Parent: {fileID: 1617279751}
   m_ObjectName: Child1
   Prop1: 
---- !u!114 &1617279752
+--- !u!114 &1617279751
 MonoBehaviour:
   m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,12 +235,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe3dde1f01bf1641b383b643f6b9cef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 1617279747}
+  m_Parent: {fileID: 1617279753}
   m_ObjectName: Item1
   Prop2: 0
   m_ChildMonoCOE:
-    m_Object: {fileID: 1617279751}
---- !u!114 &1617279753
+    m_Object: {fileID: 1617279750}
+--- !u!114 &1617279752
 MonoBehaviour:
   m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,9 +252,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4755a5c2c35a744b1efc1ac1fd5b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 1617279747}
+  m_Parent: {fileID: 1617279753}
   m_ObjectName: Single
   Prop1: 
+--- !u!114 &1617279753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617279745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c2fe2d18959e848be7e73ae88faa7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SelectedMonoCompositeObject: {fileID: 0}
+  SomeScriptableField:
+    m_Object: {fileID: 1617279752}
+  SomeScriptableFields:
+  - m_Object: {fileID: 1617279751}
+  - m_Object: {fileID: 1617279749}
+  - m_Object: {fileID: 1617279748}
 --- !u!1 &1645186491
 GameObject:
   m_ObjectHideFlags: 0
