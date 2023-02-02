@@ -1,12 +1,12 @@
-namespace CocodriloDog.Core {
+namespace CocodriloDog.Core.Examples {
 
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEditor;
 	using UnityEngine;
 
-	[CustomEditor(typeof(SerializeReferenceTest))]
-	public class SerializeReferenceTestEditor : Editor {
+	[CustomEditor(typeof(SerializeReference_Example))]
+	public class SerializeReference_Example_Editor : Editor {
 
 		private void OnEnable() {
 			CatAProperty = serializedObject.FindProperty("CatA");

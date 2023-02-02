@@ -216,37 +216,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1713010361}
-  - component: {fileID: 1713010360}
+  - component: {fileID: 1713010362}
   m_Layer: 0
-  m_Name: CompositeExample
+  m_Name: SerializeReferenceTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1713010360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1713010359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f6c21b1a11726549a6addce51468ee7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CatA:
-    rid: 931731246490583077
-  CatB:
-  - rid: 931731246490583077
-  references:
-    version: 2
-    RefIds:
-    - rid: 931731246490583077
-      type: {class: Cat, ns: CocodriloDog.Core, asm: Assembly-CSharp}
-      data:
-        Name: Boom Fighters
 --- !u!4 &1713010361
 Transform:
   m_ObjectHideFlags: 0
@@ -262,3 +239,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1713010362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713010359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4400029455ec80042af715b3deb63591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CatA:
+    rid: 7857419116390121476
+  CatB:
+  - rid: 7857419116390121476
+  references:
+    version: 2
+    RefIds:
+    - rid: 7857419116390121476
+      type: {class: MotherCat, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        Name: Beat Boy
+        Kittens: []

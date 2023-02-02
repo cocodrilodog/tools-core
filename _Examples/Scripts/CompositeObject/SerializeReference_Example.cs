@@ -1,10 +1,11 @@
-namespace CocodriloDog.Core {
+namespace CocodriloDog.Core.Examples {
+
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	public class SerializeReferenceTest : MonoBehaviour {
+	public class SerializeReference_Example : MonoBehaviour {
 
 		[SerializeReference]
 		public Cat CatA = new Cat();
