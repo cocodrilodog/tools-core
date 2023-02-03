@@ -1,4 +1,5 @@
 ﻿namespace CocodriloDog.Core {
+
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -25,14 +26,17 @@
 
 			if (Property.managedReferenceValue != null && EditProperty.boolValue) {
 
-				var mainRect = GetNextPosition();
-				var size = GUI.skin.button.CalcSize(new GUIContent("Back"));
+				//var mainRect = GetNextPosition();
+				//var content = new GUIContent("◂ Back");
+				//var size = GUI.skin.button.CalcSize(content);
 
-				var buttonRect = mainRect;
-				buttonRect.width = size.x;
-				if (GUI.Button(buttonRect, "Back")) {
-					EditProperty.boolValue = false;
-				}
+				//var buttonRect = mainRect;
+				//buttonRect.width = size.x;
+				//if (GUI.Button(buttonRect, content)) {
+				//	EditProperty.boolValue = false;
+				//}
+
+				DrawBreadcrums();
 
 				OnEditGUI(position, property, label);
 
@@ -98,7 +102,7 @@
 		}
 
 		protected virtual float GetEditPropertyHeight(SerializedProperty property, GUIContent label) { 
-			return base.GetPropertyHeight(property, label) + FieldHeight; 
+			return base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty); 
 		}
 
 		protected virtual void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
@@ -109,6 +113,8 @@
 
 
 		#region Private Properties
+
+		private CompositeRoot Root => Property.serializedObject.targetObject as CompositeRoot;
 
 		private SerializedProperty EditProperty { get; set; }
 
@@ -142,7 +148,8 @@
 			}
 
 			void CreateObject(Type t) {
-				// Delay the action, otherwise, the object won't "stick'
+
+				// Delay the action, otherwise, the object won't "stick" around
 				CDEditorUtility.DelayedAction(() => {
 
 					Property.serializedObject.Update();
@@ -171,6 +178,59 @@
 				Property.managedReferenceValue = null;
 			}
 			EditorGUI.EndDisabledGroup();
+		}
+
+		private void DrawBreadcrums() {
+
+			var buttonRect = GetNextPosition();
+			var closeFollowing = false;
+
+			DrawButton($"◂ {Property.serializedObject.targetObject.GetType().Name}", () => {
+				Root.SelectedCompositeObject = null;
+				closeFollowing = true;
+			});
+
+			var pathParts = Property.propertyPath.Split('.');
+			for (int i = 0; i < pathParts.Length; i++) {
+
+				var partialPath = string.Join('.', pathParts, 0, i + 1);
+				var partialProperty = Property.serializedObject.FindProperty(partialPath);
+
+				var isManagedReference = partialProperty.type.Contains("managedReference");
+				if (isManagedReference) {
+
+					var tempComposite = partialProperty.managedReferenceValue as CompositeObject;
+					tempComposite.Edit = !closeFollowing;
+					if (tempComposite == Property.managedReferenceValue) {
+						DrawButton($"• {tempComposite.Name}");
+					} else {
+						DrawButton($"◂ {tempComposite.Name}", () => {
+							Root.SelectedCompositeObject = tempComposite;
+							closeFollowing = true;
+						});
+					}
+
+				}
+
+
+			}
+
+			void DrawButton(string label, Action action = null) {
+
+				var content = new GUIContent(label);
+				var size = GUI.skin.button.CalcSize(content);
+				buttonRect.width = size.x;
+
+				EditorGUI.BeginDisabledGroup(action == null);
+				if (GUI.Button(buttonRect, content)) {
+					action?.Invoke();
+				}
+				EditorGUI.EndDisabledGroup();
+
+				buttonRect.x += size.x;
+
+			}
+
 		}
 
 		#endregion

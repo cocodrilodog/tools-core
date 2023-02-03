@@ -4,13 +4,19 @@ namespace CocodriloDog.Core.Examples {
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	public class CompositeObject_Example : MonoBehaviour {
+	public class Composite_Example : CompositeRoot {
+
+
+		#region Public Fields
 
 		[SerializeReference]
 		public Dog Composite;
 
 		[SerializeReference]
 		public List<Dog> Composites;
+
+		#endregion
+
 
 	}
 

@@ -252,14 +252,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CatA:
-    rid: 7857419116390121476
+    rid: 7857419116390121525
   CatB:
-  - rid: 7857419116390121476
+  - rid: 7857419116390121525
   references:
     version: 2
     RefIds:
-    - rid: 7857419116390121476
-      type: {class: MotherCat, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+    - rid: 7857419116390121525
+      type: {class: CatMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         Name: Beat Boy
         Kittens: []

@@ -29,7 +29,7 @@ namespace CocodriloDog.Core.Examples {
 				Debug.Log($"A:managedReferenceId:{CatAProperty.managedReferenceId}");
 			}
 			if (GUILayout.Button("Cat A: New MotherCat")) {
-				CatAProperty.managedReferenceValue = new MotherCat("Moana");
+				CatAProperty.managedReferenceValue = new CatMother("Moana");
 				Debug.Log($"A:managedReferenceId:{CatAProperty.managedReferenceId}");
 			}
 
@@ -44,7 +44,7 @@ namespace CocodriloDog.Core.Examples {
 				CatBProperty.GetArrayElementAtIndex(0).managedReferenceValue = new Cat("Andino Kid");
 			}
 			if (GUILayout.Button("Cat B[0]: New MotherCat")) {
-				CatBProperty.GetArrayElementAtIndex(0).managedReferenceValue = new MotherCat("JoJo Siwa");
+				CatBProperty.GetArrayElementAtIndex(0).managedReferenceValue = new CatMother("JoJo Siwa");
 			}
 
 			EditorGUILayout.Space();
@@ -57,7 +57,7 @@ namespace CocodriloDog.Core.Examples {
 			}
 			if (GUILayout.Button("Cat A and B[0]: New Mother Cat")) {
 				CatBProperty.GetArrayElementAtIndex(0).managedReferenceValue =
-					CatAProperty.managedReferenceValue = new MotherCat("Beat Boy");
+					CatAProperty.managedReferenceValue = new CatMother("Beat Boy");
 				Debug.Log($"A:managedReferenceId:{CatAProperty.managedReferenceId}");
 				Debug.Log($"B:managedReferenceId:{CatBProperty.managedReferenceId}");
 			}

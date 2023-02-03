@@ -21,6 +21,15 @@ namespace CocodriloDog.Core {
 			set => m_Edit = value;
 		}
 
+		public object Parent => m_Parent;
+
+		#endregion
+
+
+		#region Public Methods
+
+		public void SetParent(object value) => m_Parent = value;
+
 		#endregion
 
 
@@ -31,6 +40,9 @@ namespace CocodriloDog.Core {
 
 		[SerializeField]
 		private bool m_Edit;
+
+		[SerializeField]
+		private object m_Parent;
 
 		#endregion
 

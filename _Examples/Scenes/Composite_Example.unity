@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 437508405}
   - component: {fileID: 437508406}
   m_Layer: 0
-  m_Name: CompositeObject_Example
+  m_Name: Composite_Example
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,19 +167,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c8aa8d52b67ad4982d7ce97ae45a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SelectedCompositeObject:
+    rid: -2
   Composite:
-    rid: 7857419116390121512
-  Composites: []
+    rid: 7857419116390121544
+  Composites:
+  - rid: 7857419116390121538
   references:
     version: 2
     RefIds:
-    - rid: 7857419116390121512
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7857419116390121538
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: DogMother
-        m_Edit: 0
+        m_Edit: 1
         Race: 
         Puppies: []
+    - rid: 7857419116390121544
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: DogMother1
+        m_Edit: 1
+        Race: 
+        Puppies:
+        - rid: 7857419116390121545
+    - rid: 7857419116390121545
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: DogMother2
+        m_Edit: 1
+        Race: 
+        Puppies:
+        - rid: 7857419116390121562
+    - rid: 7857419116390121562
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: Dog3
+        m_Edit: 1
+        Race: 
 --- !u!1 &506034114
 GameObject:
   m_ObjectHideFlags: 0

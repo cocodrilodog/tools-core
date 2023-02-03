@@ -30,14 +30,14 @@ namespace CocodriloDog.Core.Examples {
 	}
 
 	[Serializable]
-	public class MotherCat : Cat {
+	public class CatMother : Cat {
 
 		[SerializeReference]
 		public List<Cat> Kittens;
 
-		public MotherCat() { }
+		public CatMother() { }
 
-		public MotherCat(string name) : base(name) { }
+		public CatMother(string name) : base(name) { }
 
 	}
 

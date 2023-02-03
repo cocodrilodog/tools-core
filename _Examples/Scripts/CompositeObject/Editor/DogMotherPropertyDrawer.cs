@@ -18,18 +18,12 @@ namespace CocodriloDog.Core.Examples {
 
 		protected override float GetEditPropertyHeight(SerializedProperty property, GUIContent label) {
 			var baseHeight = base.GetEditPropertyHeight(property, label);
-			if (PuppiesProperty.isExpanded) {
-				return baseHeight + GetPuppiesHeight();
-			} else {
-				return baseHeight + FieldHeight;
-			}
+			return baseHeight + EditorGUI.GetPropertyHeight(PuppiesProperty) + 5;
 		}
 
 		protected override void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
 			base.OnEditGUI(position, property, label);
-			var rect = GetNextPosition();
-			rect.height = FieldHeight * (PuppiesProperty.arraySize + 3);
-			//Debug.Log($"???: {PuppiesProperty.serializedObject}");
+			var rect = GetNextPosition(); // An accurate height is not needed here
 			EditorGUI.PropertyField(rect, PuppiesProperty, true);
 		}
 
