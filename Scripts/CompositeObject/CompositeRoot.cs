@@ -19,7 +19,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		//[HideInInspector]
+		[HideInInspector]
 		[SerializeField]
 		private string m_SelectedCompositePath;
 

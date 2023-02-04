@@ -10,10 +10,10 @@ namespace CocodriloDog.Core.Examples {
 		#region Public Fields
 
 		[SerializeReference]
-		public Dog Composite;
+		public Dog SingleDog;
 
 		[SerializeReference]
-		public List<Dog> Composites;
+		public List<Dog> DogsList;
 
 		#endregion
 

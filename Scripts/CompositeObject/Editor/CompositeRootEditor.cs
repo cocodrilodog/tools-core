@@ -12,8 +12,8 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		protected virtual void OnEnable() {
+			ScriptProperty = serializedObject.FindProperty("m_Script");
 			SelectedCompositePathProperty = serializedObject.FindProperty("m_SelectedCompositePath");
-			//Debug.Log($"SelectedCompositePathProperty: {SelectedCompositePathProperty}");
 		}
 
 		public sealed override void OnInspectorGUI() {
@@ -21,11 +21,11 @@ namespace CocodriloDog.Core {
 				OnRootInspectorGUI();
 			} else {
 				serializedObject.Update();
-				var selectedProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
-				if (selectedProperty != null) {
-					EditorGUILayout.PropertyField(selectedProperty);
+				CDEditorUtility.DrawDisabledField(ScriptProperty);
+				var selectedCompositeProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
+				if (selectedCompositeProperty != null) {
+					EditorGUILayout.PropertyField(selectedCompositeProperty);
 				}
-				//Debug.Log($"PATH {SelectedCompositePathProperty.stringValue}");
 				serializedObject.ApplyModifiedProperties();
 			}
 		}
@@ -41,6 +41,8 @@ namespace CocodriloDog.Core {
 
 
 		#region Private Properties
+
+		private SerializedProperty ScriptProperty { get; set; }
 
 		private SerializedProperty SelectedCompositePathProperty { get; set; }
 
