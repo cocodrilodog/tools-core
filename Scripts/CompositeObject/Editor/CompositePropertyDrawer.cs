@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Reflection;
 	using UnityEditor;
 	using UnityEngine;
 
@@ -292,10 +293,20 @@
 				menu.AddItem(new GUIContent("Paste"), false, () => {
 					// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
 					EditorApplication.delayCall += () => {
+
 						var pendingProperty = Property.serializedObject.FindProperty(pendingContextPath);
+
+						// Get the type from pendingProperty.managedReferenceFieldTypename
+						// Example: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
+						var typenameParts = pendingProperty.managedReferenceFieldTypename.Split(' ');
+						var assembly = Assembly.Load(typenameParts[0]);
+						var type = assembly.GetType(typenameParts[1]);
+
+						Debug.Log($"Here: {pendingProperty.managedReferenceFieldTypename} | {assembly} | {type}");
 						pendingProperty.serializedObject.Update();
 						pendingProperty.managedReferenceValue = CompositeCopier.Paste();
 						pendingProperty.serializedObject.ApplyModifiedProperties();
+
 					};
 				});
 
