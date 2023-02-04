@@ -28,6 +28,7 @@
 			} else {
 				OnNonEditGUI(position, property, label);
 			}
+			ContextMenu();
 		}
 
 		#endregion
@@ -153,7 +154,7 @@
 
 		#region Private Methods - Non Edit Mode
 
-		protected virtual void OnNonEditGUI(Rect position, SerializedProperty property, GUIContent label) {
+		private void OnNonEditGUI(Rect position, SerializedProperty property, GUIContent label) {
 
 			// Main rect
 			var mainRect = GetNextPosition();
@@ -163,10 +164,11 @@
 			var buttonsRect = mainRect;
 			buttonsRect.xMin += mainRect.width - buttonsWidth;
 
-			// Specific rects
-			var labelRect = mainRect;
-			labelRect.xMax -= buttonsWidth;
-
+			// Property rects
+			var propertyRect = mainRect;
+			propertyRect.xMax -= buttonsWidth + 2;
+			
+			// Button specific rects
 			var firstButtonRect = buttonsRect;
 			firstButtonRect.width *= 0.5f;
 
@@ -175,22 +177,37 @@
 
 			if (Property.managedReferenceValue == null) {
 				// Create button
-				EditorGUI.LabelField(labelRect, $"{Property.displayName}: [Null]");
+				DrawPropertyField(propertyRect, $"{Property.displayName}", $"Null");
 				DrawCreateButton(firstButtonRect);
 			} else {
 				// Edit button
 				if (CDEditorUtility.IsArrayElement(Property)) {
 					int index = CDEditorUtility.GetElementIndex(Property);
-					EditorGUI.LabelField(labelRect, $"Element {index}: {NameProperty.stringValue}");
-
+					DrawPropertyField(propertyRect, $"Element {index}", $"{NameProperty.stringValue}");
 				} else {
-					EditorGUI.LabelField(labelRect, $"{Property.displayName}: {NameProperty.stringValue}");
+					DrawPropertyField(propertyRect, $"{Property.displayName}", $"{NameProperty.stringValue}");
 				}
 				DrawEditButton(firstButtonRect);
 			}
 
 			// Remove button
 			DrawRemoveButton(secondButtonRect);
+
+		}
+
+		private void DrawPropertyField(Rect propertyRect, string label, string name) {
+
+			var labelWidth = EditorGUIUtility.labelWidth * 0.6f;
+			var labelRect = propertyRect;
+			labelRect.width += labelWidth;
+
+			var fieldRect = propertyRect;
+			fieldRect.xMin += labelWidth + 2;
+
+			EditorGUI.LabelField(labelRect, label);
+			EditorGUI.BeginDisabledGroup(true);
+			GUI.Box(fieldRect, name, EditorStyles.objectField);
+			EditorGUI.EndDisabledGroup();
 
 		}
 
@@ -247,6 +264,24 @@
 				Property.managedReferenceValue = null;
 			}
 			EditorGUI.EndDisabledGroup();
+		}
+
+		private void ContextMenu() {
+
+			Event current = Event.current;
+
+			if (Position.Contains(current.mousePosition) && current.type == EventType.ContextClick) {
+				GenericMenu menu = new GenericMenu();
+				menu.AddDisabledItem(new GUIContent("I clicked on a CompositeObject"));
+				menu.AddItem(new GUIContent("Do a thing"), false, YourCallback);
+				menu.ShowAsContext();
+				current.Use();
+			}
+
+			void YourCallback() {
+				Debug.Log("Hi there");
+			}
+
 		}
 
 		#endregion

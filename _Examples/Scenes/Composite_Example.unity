@@ -167,12 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c8aa8d52b67ad4982d7ce97ae45a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SelectedCompositePath: 
+  m_SelectedCompositePath: SingleDog.Puppies.Array.data[0].Puppies.Array.data[0]
   SingleDog:
     rid: 7857419161603407874
   DogsList:
-  - rid: 7857419161603407877
   - rid: -2
+  - rid: 7857419161603407877
   references:
     version: 2
     RefIds:
@@ -198,7 +198,7 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Dog3
-        m_Edit: 0
+        m_Edit: 1
         Race: Single3
     - rid: 7857419161603407877
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
