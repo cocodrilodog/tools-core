@@ -9,9 +9,9 @@ namespace CocodriloDog.Core {
 
 		#region Public Properties
 
-		public CompositeObject SelectedCompositeObject {
-			get => m_SelectedCompositeObject;
-			set => m_SelectedCompositeObject = value;
+		public string SelectedCompositePath {
+			get => m_SelectedCompositePath;
+			set => m_SelectedCompositePath = value;
 		}
 
 		#endregion
@@ -19,9 +19,9 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		[HideInInspector]
-		[SerializeReference]
-		private CompositeObject m_SelectedCompositeObject;
+		//[HideInInspector]
+		[SerializeField]
+		private string m_SelectedCompositePath;
 
 		#endregion
 

@@ -167,8 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c8aa8d52b67ad4982d7ce97ae45a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SelectedCompositeObject:
-    rid: -2
+  m_SelectedCompositePath: 
   Composite:
     rid: 7857419116390121544
   Composites:
@@ -176,8 +175,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 7857419116390121538
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:

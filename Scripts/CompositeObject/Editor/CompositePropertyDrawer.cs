@@ -25,21 +25,8 @@
 			base.OnGUI(position, property, label);
 
 			if (Property.managedReferenceValue != null && EditProperty.boolValue) {
-
-				//var mainRect = GetNextPosition();
-				//var content = new GUIContent("◂ Back");
-				//var size = GUI.skin.button.CalcSize(content);
-
-				//var buttonRect = mainRect;
-				//buttonRect.width = size.x;
-				//if (GUI.Button(buttonRect, content)) {
-				//	EditProperty.boolValue = false;
-				//}
-
 				DrawBreadcrums();
-
 				OnEditGUI(position, property, label);
-
 			} else {
 
 				// Main rect
@@ -93,12 +80,14 @@
 			base.InitializePropertiesForGetHeight();
 			EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
+			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 		}
 
 		protected override void InitializePropertiesForOnGUI() {
 			base.InitializePropertiesForOnGUI();
 			EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
+			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 		}
 
 		protected virtual float GetEditPropertyHeight(SerializedProperty property, GUIContent label) { 
@@ -114,11 +103,13 @@
 
 		#region Private Properties
 
-		private CompositeRoot Root => Property.serializedObject.targetObject as CompositeRoot;
+		//private CompositeRoot Root => Property.serializedObject.targetObject as CompositeRoot;
 
 		private SerializedProperty EditProperty { get; set; }
 
 		private SerializedProperty NameProperty { get; set; }
+
+		private SerializedProperty SelectedCompositePathProperty { get; set; }
 
 		#endregion
 
@@ -168,7 +159,10 @@
 
 		private void DrawEditButton(Rect rect) {
 			if (GUI.Button(rect, "Edit ▸")) {
-				Property.FindPropertyRelative("m_Edit").boolValue = true;
+				//Property.FindPropertyRelative("m_Edit").boolValue = true;
+				//SelectedCompositePathProperty.stringValue = Property.propertyPath;
+				SetSelectedCompositePath(Property.propertyPath);
+				Debug.Log(SelectedCompositePathProperty.stringValue);
 			}
 		}
 
@@ -183,11 +177,13 @@
 		private void DrawBreadcrums() {
 
 			var buttonRect = GetNextPosition();
-			var closeFollowing = false;
+			//var closeFollowing = false;
 
 			DrawButton($"◂ {Property.serializedObject.targetObject.GetType().Name}", () => {
-				Root.SelectedCompositeObject = null;
-				closeFollowing = true;
+				//SelectedCompositePathProperty.stringValue = null;
+				SetSelectedCompositePath(null);
+				Debug.Log(SelectedCompositePathProperty.stringValue);
+				//closeFollowing = true;
 			});
 
 			var pathParts = Property.propertyPath.Split('.');
@@ -196,22 +192,27 @@
 				var partialPath = string.Join('.', pathParts, 0, i + 1);
 				var partialProperty = Property.serializedObject.FindProperty(partialPath);
 
-				var isManagedReference = partialProperty.type.Contains("managedReference");
-				if (isManagedReference) {
+				if (partialProperty != null) {
 
-					var tempComposite = partialProperty.managedReferenceValue as CompositeObject;
-					tempComposite.Edit = !closeFollowing;
-					if (tempComposite == Property.managedReferenceValue) {
-						DrawButton($"• {tempComposite.Name}");
-					} else {
-						DrawButton($"◂ {tempComposite.Name}", () => {
-							Root.SelectedCompositeObject = tempComposite;
-							closeFollowing = true;
-						});
+					var isManagedReference = partialProperty.type.Contains("managedReference");
+					if (isManagedReference) {
+
+						var tempComposite = partialProperty.managedReferenceValue as CompositeObject;
+						//tempComposite.Edit = !closeFollowing;
+						if (tempComposite == Property.managedReferenceValue) {
+							DrawButton($"• {tempComposite.Name}");
+						} else {
+							DrawButton($"◂ {tempComposite.Name}", () => {
+								//SelectedCompositePathProperty.stringValue = partialProperty.propertyPath;
+								SetSelectedCompositePath(partialProperty.propertyPath);
+								Debug.Log(SelectedCompositePathProperty.stringValue);
+								//closeFollowing = true;
+							});
+						}
+
 					}
 
 				}
-
 
 			}
 
@@ -231,6 +232,18 @@
 
 			}
 
+		}
+
+		private void SetSelectedCompositePath(string path) {
+			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
+				var selectedCompositeObjectProperty = Property.serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
+				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = false;
+			}
+			SelectedCompositePathProperty.stringValue = path;
+			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
+				var selectedCompositeObjectProperty = Property.serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
+				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = true;
+			}
 		}
 
 		#endregion

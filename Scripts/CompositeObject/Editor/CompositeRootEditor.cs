@@ -8,9 +8,44 @@ namespace CocodriloDog.Core {
 	[CustomEditor(typeof(CompositeRoot))]
 	public class CompositeRootEditor : Editor {
 
-		public override void OnInspectorGUI() {
-			base.OnInspectorGUI();
+
+		#region Unity Methods
+
+		protected virtual void OnEnable() {
+			SelectedCompositePathProperty = serializedObject.FindProperty("m_SelectedCompositePath");
+			//Debug.Log($"SelectedCompositePathProperty: {SelectedCompositePathProperty}");
 		}
+
+		public sealed override void OnInspectorGUI() {
+			if (string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
+				OnRootInspectorGUI();
+			} else {
+				serializedObject.Update();
+				var selectedProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
+				if (selectedProperty != null) {
+					EditorGUILayout.PropertyField(selectedProperty);
+				}
+				//Debug.Log($"PATH {SelectedCompositePathProperty.stringValue}");
+				serializedObject.ApplyModifiedProperties();
+			}
+		}
+
+		#endregion
+
+
+		#region Protected Methods
+
+		public virtual void OnRootInspectorGUI() => base.OnInspectorGUI();
+
+		#endregion
+
+
+		#region Private Properties
+
+		private SerializedProperty SelectedCompositePathProperty { get; set; }
+
+		#endregion
+
 
 	}
 
