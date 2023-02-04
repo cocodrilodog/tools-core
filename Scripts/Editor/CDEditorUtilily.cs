@@ -133,16 +133,33 @@
 		#region Public Static Methods - Serialized Data
 
 		/// <summary>
+		/// If the provided <paramref name="property"/> is an array element, this assigns the index of 
+		/// the element to <paramref name="index"/> and returns <c>true</c>, otherwise returns <c>false</c>
+		/// and assigns -1 to <paramref name="index"/>.
+		/// </summary>
+		/// <param name="property">The <c>SerializedProperty</c></param>
+		/// <param name="index">The index of the element</param>
+		/// <returns><c>true</c> if the property is an array element, <c>false</c> otherwise.</returns>
+		public static bool GetElementIndex(SerializedProperty property, out int index) {
+			index = -1;
+			if (IsArrayElement(property)) {
+				index = GetElementIndex(property);
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
 		/// Determines whether the <paramref name="property"/> is an array element or not.
 		/// </summary>
 		/// <param name="property">The <c>SerializedProperty</c></param>
-		/// <returns><c>true</c> if theproperty is an array element, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if the property is an array element, <c>false</c> otherwise.</returns>
 		public static bool IsArrayElement(SerializedProperty property) {
 			return property.propertyPath.EndsWith(']');
 		}
 
 		/// <summary>
-		/// if the provided <paramref name="property"/> is an array element, this gets the index of 
+		/// If the provided <paramref name="property"/> is an array element, this gets the index of 
 		/// the element.
 		/// </summary>
 		/// <remarks>

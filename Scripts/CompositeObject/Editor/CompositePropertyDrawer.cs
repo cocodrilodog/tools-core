@@ -21,7 +21,10 @@
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+
 			base.OnGUI(position, property, label);
+
+			label = EditorGUI.BeginProperty(position, label, property);
 			if (Property.managedReferenceValue != null && EditProperty.boolValue) {
 				DrawBreadcrums();
 				OnEditGUI(position, property, label);
@@ -29,6 +32,8 @@
 				OnNonEditGUI(position, property, label);
 			}
 			ContextMenu();
+			EditorGUI.EndProperty();
+
 		}
 
 		#endregion
@@ -97,7 +102,7 @@
 
 				if (partialProperty != null) {
 
-					var isManagedReference = partialProperty.type.Contains("managedReference");
+					var isManagedReference = partialProperty.propertyType == SerializedPropertyType.ManagedReference;
 					if (isManagedReference) {
 
 						var tempComposite = partialProperty.managedReferenceValue as CompositeObject;
@@ -181,8 +186,7 @@
 				DrawCreateButton(firstButtonRect);
 			} else {
 				// Edit button
-				if (CDEditorUtility.IsArrayElement(Property)) {
-					int index = CDEditorUtility.GetElementIndex(Property);
+				if (CDEditorUtility.GetElementIndex(Property, out var index)) {
 					DrawPropertyField(propertyRect, $"Element {index}", $"{NameProperty.stringValue}");
 				} else {
 					DrawPropertyField(propertyRect, $"{Property.displayName}", $"{NameProperty.stringValue}");
@@ -213,41 +217,41 @@
 
 		private void DrawCreateButton(Rect rect) {
 
-			// Save the path because when the object is an array element, it will need the path with the index
-			// in order to assign the value to the correct slot in the deferred assignment below. Otherwise it 
-			// will always assign the value to the first slot.
-			var pendingPropertyPath = Property.propertyPath;
-
 			if (GUI.Button(rect, "Create")) {
+
+				// Save the path for later because it will be used by the GenericMenu which happens later
+				var pendingPropertyPath = Property.propertyPath;
+
 				// Show the menu only when there are more than one types
 				if (CompositeTypes.Count > 1) {
 					var menu = new GenericMenu();
 					foreach (var type in CompositeTypes) {
 						menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), false, () => {
-							CreateObject(type);
+							CreateObject(type, pendingPropertyPath);
 						});
 					}
 					menu.ShowAsContext();
 				} else {
-					CreateObject(CompositeTypes[0]);
+					CreateObject(CompositeTypes[0], pendingPropertyPath);
 				}
+
 			}
 
-			void CreateObject(Type t) {
+			void CreateObject(Type t, string propertyPath) {
 
-				// Delay the action, otherwise, the object won't "stick" around
-				CDEditorUtility.DelayedAction(() => {
+				// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
+				EditorApplication.delayCall += () => {
 
 					Property.serializedObject.Update();
 					var compositeObject = Activator.CreateInstance(t) as CompositeObject;
 					compositeObject.Name = t.Name;
 
-					Property.serializedObject.FindProperty($"{pendingPropertyPath}").managedReferenceValue = compositeObject;
-					pendingPropertyPath = null;
+					Property.serializedObject.FindProperty($"{propertyPath}").managedReferenceValue = compositeObject;
+					propertyPath = null;
 
 					Property.serializedObject.ApplyModifiedProperties();
 
-				}, 0);
+				};
 			}
 
 		}
@@ -271,15 +275,33 @@
 			Event current = Event.current;
 
 			if (Position.Contains(current.mousePosition) && current.type == EventType.ContextClick) {
+
+				// Save the path for later because it will be used by the GenericMenu which happens later
+				var pendingContextPath = Property.propertyPath;
+
 				GenericMenu menu = new GenericMenu();
-				menu.AddDisabledItem(new GUIContent("I clicked on a CompositeObject"));
-				menu.AddItem(new GUIContent("Do a thing"), false, YourCallback);
+				if (Property.managedReferenceValue != null) {
+					menu.AddItem(new GUIContent("Copy"), false, () => {
+						var pendingProperty = Property.serializedObject.FindProperty(pendingContextPath);
+						CompositeCopier.Copy(pendingProperty.managedReferenceValue as CompositeObject);
+					});
+				} else {
+					menu.AddDisabledItem(new GUIContent("Copy"));
+				}
+
+				menu.AddItem(new GUIContent("Paste"), false, () => {
+					// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
+					EditorApplication.delayCall += () => {
+						var pendingProperty = Property.serializedObject.FindProperty(pendingContextPath);
+						pendingProperty.serializedObject.Update();
+						pendingProperty.managedReferenceValue = CompositeCopier.Paste();
+						pendingProperty.serializedObject.ApplyModifiedProperties();
+					};
+				});
+
 				menu.ShowAsContext();
 				current.Use();
-			}
 
-			void YourCallback() {
-				Debug.Log("Hi there");
 			}
 
 		}

@@ -37,18 +37,6 @@ namespace CocodriloDog.Core.Examples {
 		#endregion
 
 
-		#region Private Methods
-
-		private float GetPuppiesHeight() {
-			// A space for the header + spaces for the items + 2 extra spaces
-			return FieldHeight +
-				(FieldHeight * Mathf.Max(1, PuppiesProperty.arraySize)) +
-				FieldHeight * 2;
-		}
-
-		#endregion
-
-
 	}
 
 }

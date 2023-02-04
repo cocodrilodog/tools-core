@@ -39,11 +39,6 @@ namespace CocodriloDog.Core.Examples {
 			return baseHeight + EditorGUI.GetPropertyHeight(RaceProperty) + 5;
 		}
 
-		//protected override void InitializePropertiesForOnGUI() {
-		//	base.InitializePropertiesForOnGUI();
-		//	RaceProperty = Property.FindPropertyRelative("Race");
-		//}
-
 		protected override void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
 			base.OnEditGUI(position, property, label);
 			var raceRect = GetNextPosition();
