@@ -81,12 +81,26 @@
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 		}
 
+		/// <summary>
+		/// Gets the height needed for the property when it is in edit mode.
+		/// </summary>
+		/// <param name="property">The property</param>
+		/// <param name="label">The label</param>
+		/// <returns>The height</returns>
 		protected virtual float GetEditPropertyHeight(SerializedProperty property, GUIContent label) { 
+			// One-field height for the breadcrums + the name. Subclasses should add extra space for their properties
 			return base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty); 
 		}
 
+		/// <summary>
+		/// The <c>OnGUI</c> for the edit mode.
+		/// </summary>
+		/// <param name="position">The position</param>
+		/// <param name="property">The property</param>
+		/// <param name="label">The label</param>
 		protected virtual void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
-			EditorGUI.PropertyField(GetNextPosition(), Property.FindPropertyRelative("m_Name"));		
+			// This base class only handles the name property.
+			EditorGUI.PropertyField(GetNextPosition(), NameProperty);		
 		}
 
 		#endregion
@@ -109,13 +123,16 @@
 
 			var buttonRect = GetNextPosition();
 
+			// This button will make the inspector to go back to the root
 			DrawButton($"◂ {Property.serializedObject.targetObject.GetType().Name}", () => {
 				SelectCompositeObject(null);
 			});
 
+			// Analize path parts and create a breadcrum button for each CompositeObject in the path
 			var pathParts = Property.propertyPath.Split('.');
 			for (int i = 0; i < pathParts.Length; i++) {
 
+				// Each path until the i part
 				var partialPath = string.Join('.', pathParts, 0, i + 1);
 				var partialProperty = Property.serializedObject.FindProperty(partialPath);
 
@@ -124,11 +141,15 @@
 					var isManagedReference = partialProperty.propertyType == SerializedPropertyType.ManagedReference;
 					if (isManagedReference) {
 
-						var tempComposite = partialProperty.managedReferenceValue as CompositeObject;
-						if (tempComposite == Property.managedReferenceValue) {
-							DrawButton($"• {tempComposite.Name}");
+						// Possible composite for each partial path
+						var partialComposite = partialProperty.managedReferenceValue as CompositeObject;
+						if (partialComposite == Property.managedReferenceValue) {
+							// The partialComposite is the main composite object of this property
+							DrawButton($"• {partialComposite.Name}");
 						} else {
-							DrawButton($"◂ {tempComposite.Name}", () => {
+							// The partialComposite is an intermediate between the root and the main
+							// composite object of this property
+							DrawButton($"◂ {partialComposite.Name}", () => {
 								SelectCompositeObject(partialProperty.propertyPath);
 							});
 						}
@@ -141,6 +162,7 @@
 
 			void DrawButton(string label, Action action = null) {
 
+				// Fit the button to the text
 				var content = new GUIContent(label);
 				var size = GUI.skin.button.CalcSize(content);
 				buttonRect.width = size.x;
@@ -151,6 +173,7 @@
 				}
 				EditorGUI.EndDisabledGroup();
 
+				// buttonRect += button width, for the next button
 				buttonRect.x += size.x;
 
 			}
@@ -159,18 +182,23 @@
 
 		private void SelectCompositeObject(string propertyPath) {
 
+			// Set to non-edit the previosly selected composite object
 			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
 				var selectedCompositeObjectProperty = Property.serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
 				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = false;
 			}
 
+			// Assign the new value
 			SelectedCompositePathProperty.stringValue = propertyPath;
 
+			// Set to edit the new selected composite object
 			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
 				var selectedCompositeObjectProperty = Property.serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
 				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = true;
 			}
 
+			// Set any selected field to be non-selected. Otherwise the text content of a selected field
+			// will remain displayed, even if a new selected text field has other text.
 			GUI.FocusControl(null);
 
 		}
@@ -222,14 +250,19 @@
 
 		private void DrawPropertyField(Rect propertyRect, string label, string name) {
 
+			// Label rect
 			var labelWidth = EditorGUIUtility.labelWidth * 0.6f;
 			var labelRect = propertyRect;
-			labelRect.width += labelWidth;
+			labelRect.width = labelWidth;
 
+			// Field rect
 			var fieldRect = propertyRect;
 			fieldRect.xMin += labelWidth + 2;
 
+			// Create a label with the property name
 			EditorGUI.LabelField(labelRect, label);
+
+			// Create a box resembling an Object field
 			EditorGUI.BeginDisabledGroup(true);
 			GUI.Box(fieldRect, name, EditorStyles.objectField);
 			EditorGUI.EndDisabledGroup();
@@ -241,40 +274,42 @@
 			if (GUI.Button(rect, "Create")) {
 
 				// Save the path for later because it will be used by the GenericMenu which happens later
-				var pendingPropertyPath = Property.propertyPath;
+				var pendingProperty = Property.Copy(); // Copy, just in case
 
 				// Show the menu only when there are more than one types
 				if (CompositeTypes.Count > 1) {
 					var menu = new GenericMenu();
 					foreach (var type in CompositeTypes) {
 						menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), false, () => {
-							CreateObject(type, pendingPropertyPath);
+							CreateObject(type, pendingProperty);
 						});
 					}
 					menu.ShowAsContext();
 				} else {
-					CreateObject(CompositeTypes[0], pendingPropertyPath);
+					// When there is only one type, create the object immediatly
+					CreateObject(CompositeTypes[0], pendingProperty);
 				}
 
 			}
 
-			void CreateObject(Type t, string propertyPath) {
+		}
 
-				// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
-				EditorApplication.delayCall += () => {
+		void CreateObject(Type t, SerializedProperty property) {
 
-					Property.serializedObject.Update();
-					var compositeObject = Activator.CreateInstance(t) as CompositeObject;
-					compositeObject.Name = t.Name;
+			// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
+			EditorApplication.delayCall += () => {
 
-					Property.serializedObject.FindProperty($"{propertyPath}").managedReferenceValue = compositeObject;
-					propertyPath = null;
+				property.serializedObject.Update();
 
-					Property.serializedObject.ApplyModifiedProperties();
+				var compositeObject = Activator.CreateInstance(t) as CompositeObject;
+				compositeObject.Name = t.Name;
+				property.managedReferenceValue = compositeObject;
 
-				};
-			}
+				property.serializedObject.ApplyModifiedProperties();
 
+				property = null;
+
+			};
 		}
 
 		private void DrawEditButton(Rect rect) {
@@ -298,7 +333,7 @@
 			if (Position.Contains(current.mousePosition) && current.type == EventType.ContextClick) {
 
 				// Save the property for later because it will be used by the GenericMenu which happens later
-				var pendingProperty = Property.Copy();
+				var pendingProperty = Property.Copy(); // Copy, just in case
 
 				GenericMenu menu = new GenericMenu();
 				if (Property.managedReferenceValue != null) {
