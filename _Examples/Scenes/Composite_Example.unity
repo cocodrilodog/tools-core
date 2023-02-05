@@ -172,6 +172,7 @@ MonoBehaviour:
     rid: 7857419161603407874
   DogsList:
   - rid: 7857419161603407997
+  - rid: 7857419161603408160
   references:
     version: 2
     RefIds:
@@ -200,7 +201,7 @@ MonoBehaviour:
     - rid: 7857419161603407997
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
-        m_Name: List_DogMother1
+        m_Name: 0_List_DogMother1
         m_Edit: 0
         Race: List1
         Puppies:
@@ -208,7 +209,7 @@ MonoBehaviour:
     - rid: 7857419161603407998
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
-        m_Name: List_DogMother2
+        m_Name: 0_List_DogMother2
         m_Edit: 0
         Race: List2
         Puppies:
@@ -216,7 +217,29 @@ MonoBehaviour:
     - rid: 7857419161603407999
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
-        m_Name: List_Dog3
+        m_Name: 0_List_Dog3
+        m_Edit: 0
+        Race: List3
+    - rid: 7857419161603408160
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: 1_List_DogMother1
+        m_Edit: 0
+        Race: List1
+        Puppies:
+        - rid: 7857419161603408161
+    - rid: 7857419161603408161
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: 1_List_DogMother2
+        m_Edit: 0
+        Race: List2
+        Puppies:
+        - rid: 7857419161603408162
+    - rid: 7857419161603408162
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: 1_List_Dog3
         m_Edit: 0
         Race: List3
 --- !u!1 &506034114

@@ -5,8 +5,7 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 	using UnityEngine;
 
-	[CustomEditor(typeof(CompositeRoot))]
-	public class CompositeRootEditor : Editor {
+	public abstract class CompositeRootEditor : Editor {
 
 
 		#region Unity Methods

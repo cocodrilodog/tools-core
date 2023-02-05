@@ -7,18 +7,28 @@
 	using UnityEditor;
 	using UnityEngine;
 
+	/// <summary>
+	/// Base class for property drawers of <see cref="CompositeObject"/> concrete classes.
+	/// </summary>
 	public abstract class CompositePropertyDrawer : PropertyDrawerBase {
 
 
 		#region Unity Methods
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+
+			// Non-edit is one-field height and can be obtained from the base definition.
+			// This is called first to initialize the properties correctly.
 			var nonEditHeight = base.GetPropertyHeight(property, label);
+
 			if (Property.managedReferenceValue != null && EditProperty.boolValue) {
+				// Return the height for the edit mode
 				return GetEditPropertyHeight(property, label);
 			} else {
+				// Return the single field height
 				return nonEditHeight;
 			}
+
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
@@ -27,9 +37,11 @@
 
 			label = EditorGUI.BeginProperty(position, label, property);
 			if (Property.managedReferenceValue != null && EditProperty.boolValue) {
+				// Draw edit mode
 				DrawBreadcrums();
 				OnEditGUI(position, property, label);
 			} else {
+				// Draw non-edit mode
 				OnNonEditGUI(position, property, label);
 			}
 			ContextMenu();
@@ -42,6 +54,10 @@
 
 		#region Protected Properties
 
+		/// <summary>
+		/// Implement this in subclasses to obtain a list of possible concrete classes that will appear 
+		/// in a context menu when the user clicks the "Create" button.
+		/// </summary>
 		protected abstract List<Type> CompositeTypes { get; }
 
 		#endregion
@@ -51,6 +67,7 @@
 
 		protected override void InitializePropertiesForGetHeight() {
 			base.InitializePropertiesForGetHeight();
+			// It seems that the properties need to be initialized in both places for it to work correctly.
 			EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
@@ -58,6 +75,7 @@
 
 		protected override void InitializePropertiesForOnGUI() {
 			base.InitializePropertiesForOnGUI();
+			// It seems that the properties need to be initialized in both places for it to work correctly.
 			EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
@@ -152,6 +170,8 @@
 				var selectedCompositeObjectProperty = Property.serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
 				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = true;
 			}
+
+			GUI.FocusControl(null);
 
 		}
 
