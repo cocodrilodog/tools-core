@@ -277,38 +277,31 @@
 
 			if (Position.Contains(current.mousePosition) && current.type == EventType.ContextClick) {
 
-				// Save the path for later because it will be used by the GenericMenu which happens later
-				var pendingContextPath = Property.propertyPath;
+				// Save the property for later because it will be used by the GenericMenu which happens later
+				var pendingProperty = Property.Copy();
 
 				GenericMenu menu = new GenericMenu();
 				if (Property.managedReferenceValue != null) {
 					menu.AddItem(new GUIContent("Copy"), false, () => {
-						var pendingProperty = Property.serializedObject.FindProperty(pendingContextPath);
 						CompositeCopier.Copy(pendingProperty.managedReferenceValue as CompositeObject);
 					});
 				} else {
 					menu.AddDisabledItem(new GUIContent("Copy"));
 				}
 
-				menu.AddItem(new GUIContent("Paste"), false, () => {
-					// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
-					EditorApplication.delayCall += () => {
-
-						var pendingProperty = Property.serializedObject.FindProperty(pendingContextPath);
-
-						// Get the type from pendingProperty.managedReferenceFieldTypename
-						// Example: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
-						var typenameParts = pendingProperty.managedReferenceFieldTypename.Split(' ');
-						var assembly = Assembly.Load(typenameParts[0]);
-						var type = assembly.GetType(typenameParts[1]);
-
-						Debug.Log($"Here: {pendingProperty.managedReferenceFieldTypename} | {assembly} | {type}");
-						pendingProperty.serializedObject.Update();
-						pendingProperty.managedReferenceValue = CompositeCopier.Paste();
-						pendingProperty.serializedObject.ApplyModifiedProperties();
-
-					};
-				});
+				var propertyType = CDEditorUtility.GetManagedReferenceType(pendingProperty);
+				if(propertyType.IsAssignableFrom(CompositeCopier.CopiedType)) {
+					menu.AddItem(new GUIContent("Paste"), false, () => {
+						// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
+						EditorApplication.delayCall += () => {
+							pendingProperty.serializedObject.Update();
+							pendingProperty.managedReferenceValue = CompositeCopier.Paste();
+							pendingProperty.serializedObject.ApplyModifiedProperties();
+						};
+					});
+				} else {
+					menu.AddDisabledItem(new GUIContent("Paste"));
+				}
 
 				menu.ShowAsContext();
 				current.Use();

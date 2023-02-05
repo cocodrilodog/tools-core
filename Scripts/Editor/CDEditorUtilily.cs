@@ -181,6 +181,22 @@
 			return index;
 		}
 
+		/// <summary>
+		/// Gets the <c>Type</c> of the <paramref name="property"/>, in case it is a 
+		/// <see cref="SerializedPropertyType.ManagedReference"/>
+		/// </summary>
+		/// <param name="property">The property</param>
+		/// <returns>The <c>Type</c></returns>
+		public static Type GetManagedReferenceType(SerializedProperty property) {
+			if (property.propertyType == SerializedPropertyType.ManagedReference) {
+				// Example of managedReferenceFieldTypename: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
+				var typenameParts = property.managedReferenceFieldTypename.Split(' ');
+				var assembly = Assembly.Load(typenameParts[0]);
+				return assembly.GetType(typenameParts[1]);
+			}
+			return null;
+		}
+
 		#endregion
 
 
