@@ -5,6 +5,9 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 	using UnityEngine;
 
+	/// <summary>
+	/// Base class for concrete implementations of <see cref="CompositeRoot"/>.
+	/// </summary>
 	public abstract class CompositeRootEditor : Editor {
 
 
@@ -17,8 +20,10 @@ namespace CocodriloDog.Core {
 
 		public sealed override void OnInspectorGUI() {
 			if (string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
+				// There is no selected composite object, proceed with the inspector of the root object
 				OnRootInspectorGUI();
 			} else {
+				// There is a selected composite object, draw only it as a property.
 				serializedObject.Update();
 				CDEditorUtility.DrawDisabledField(ScriptProperty);
 				var selectedCompositeProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
@@ -34,7 +39,14 @@ namespace CocodriloDog.Core {
 
 		#region Protected Methods
 
-		public virtual void OnRootInspectorGUI() => base.OnInspectorGUI();
+		/// <summary>
+		/// In subclasses, override this instead of <see cref="OnInspectorGUI"/>.
+		/// </summary>
+		/// <remarks>
+		/// This editor will choose to display this GUI when no <see cref="CompositeObject"/> is selected.
+		/// Otherwise it will render the property drawer of the selected <see cref="CompositeObject"/>.
+		/// </remarks>
+		protected virtual void OnRootInspectorGUI() => base.OnInspectorGUI();
 
 		#endregion
 
