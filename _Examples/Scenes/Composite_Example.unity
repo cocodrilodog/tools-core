@@ -298,25 +298,25 @@ MonoBehaviour:
     - rid: 7857419192532205568
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
-        m_Name: DogMother
+        m_Name: DogMother1
         m_Edit: 1
-        Race: 
+        Race: Non-Root
         Puppies:
         - rid: 7857419192532205570
     - rid: 7857419192532205570
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
-        m_Name: DogMother
+        m_Name: DogMother2
         m_Edit: 1
-        Race: 
+        Race: Non-Root
         Puppies:
         - rid: 7857419192532205571
     - rid: 7857419192532205571
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
-        m_Name: Dog
+        m_Name: Dog3
         m_Edit: 1
-        Race: 
+        Race: Non-Root
 --- !u!1 &506034114
 GameObject:
   m_ObjectHideFlags: 0

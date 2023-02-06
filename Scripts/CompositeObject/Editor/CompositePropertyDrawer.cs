@@ -160,12 +160,8 @@
 
 				}
 			} else {
-				//if (GUI.Button(buttonRect, $"▴ Close")) {
-				//	EditProperty.boolValue = false;
-				//}
-				EditProperty.boolValue = EditorGUI.Foldout(
-					buttonRect, EditProperty.boolValue, (Property.managedReferenceValue as CompositeObject).Name
-				);
+				DrawNextButton($"▴ Close", () => EditProperty.boolValue = false);
+				DrawNextButton($"• {(Property.managedReferenceValue as CompositeObject).Name}");
 			}
 
 			void DrawNextButton(string label, Action action = null) {
@@ -326,7 +322,7 @@
 					SelectCompositeObject(Property.propertyPath);
 				} 
 			} else {
-				if (GUI.Button(rect, "Open ▾")) {					
+				if (GUI.Button(rect, "Edit ▾")) {					
 					EditProperty.boolValue = true;
 				}
 			}
