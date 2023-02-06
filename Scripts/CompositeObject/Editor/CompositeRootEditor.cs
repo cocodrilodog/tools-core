@@ -6,7 +6,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// Base class for concrete implementations of <see cref="CompositeRoot"/>.
+	/// Base class for editors of concrete implementations of <see cref="CompositeRoot"/>.
 	/// </summary>
 	public abstract class CompositeRootEditor : Editor {
 

@@ -123,44 +123,52 @@
 
 			var buttonRect = GetNextPosition();
 
-			// This button will make the inspector to go back to the root
-			DrawButton($"◂ {Property.serializedObject.targetObject.GetType().Name}", () => {
-				SelectCompositeObject(null);
-			});
+			if (SelectedCompositePathProperty != null) {
+				// This button will make the inspector to go back to the root
+				DrawNextButton($"◂ {Property.serializedObject.targetObject.GetType().Name}", () => {
+					SelectCompositeObject(null);
+				});
+				// Analize path parts and create a breadcrum button for each CompositeObject in the path
+				var pathParts = Property.propertyPath.Split('.');
+				for (int i = 0; i < pathParts.Length; i++) {
 
-			// Analize path parts and create a breadcrum button for each CompositeObject in the path
-			var pathParts = Property.propertyPath.Split('.');
-			for (int i = 0; i < pathParts.Length; i++) {
+					// Each path until the i part
+					var partialPath = string.Join('.', pathParts, 0, i + 1);
+					var partialProperty = Property.serializedObject.FindProperty(partialPath);
 
-				// Each path until the i part
-				var partialPath = string.Join('.', pathParts, 0, i + 1);
-				var partialProperty = Property.serializedObject.FindProperty(partialPath);
+					if (partialProperty != null) {
 
-				if (partialProperty != null) {
+						var isManagedReference = partialProperty.propertyType == SerializedPropertyType.ManagedReference;
+						if (isManagedReference) {
 
-					var isManagedReference = partialProperty.propertyType == SerializedPropertyType.ManagedReference;
-					if (isManagedReference) {
+							// Possible composite for each partial path
+							var partialComposite = partialProperty.managedReferenceValue as CompositeObject;
+							if (partialComposite == Property.managedReferenceValue) {
+								// The partialComposite is the main composite object of this property
+								DrawNextButton($"• {partialComposite.Name}");
+							} else {
+								// The partialComposite is an intermediate between the root and the main
+								// composite object of this property
+								DrawNextButton($"◂ {partialComposite.Name}", () => {
+									SelectCompositeObject(partialProperty.propertyPath);
+								});
+							}
 
-						// Possible composite for each partial path
-						var partialComposite = partialProperty.managedReferenceValue as CompositeObject;
-						if (partialComposite == Property.managedReferenceValue) {
-							// The partialComposite is the main composite object of this property
-							DrawButton($"• {partialComposite.Name}");
-						} else {
-							// The partialComposite is an intermediate between the root and the main
-							// composite object of this property
-							DrawButton($"◂ {partialComposite.Name}", () => {
-								SelectCompositeObject(partialProperty.propertyPath);
-							});
 						}
 
 					}
 
 				}
-
+			} else {
+				//if (GUI.Button(buttonRect, $"▴ Close")) {
+				//	EditProperty.boolValue = false;
+				//}
+				EditProperty.boolValue = EditorGUI.Foldout(
+					buttonRect, EditProperty.boolValue, (Property.managedReferenceValue as CompositeObject).Name
+				);
 			}
 
-			void DrawButton(string label, Action action = null) {
+			void DrawNextButton(string label, Action action = null) {
 
 				// Fit the button to the text
 				var content = new GUIContent(label);
@@ -313,8 +321,14 @@
 		}
 
 		private void DrawEditButton(Rect rect) {
-			if (GUI.Button(rect, "Edit ▸")) {
-				SelectCompositeObject(Property.propertyPath);
+			if(SelectedCompositePathProperty != null) {
+				if (GUI.Button(rect, "Edit ▸")) {
+					SelectCompositeObject(Property.propertyPath);
+				} 
+			} else {
+				if (GUI.Button(rect, "Open ▾")) {					
+					EditProperty.boolValue = true;
+				}
 			}
 		}
 

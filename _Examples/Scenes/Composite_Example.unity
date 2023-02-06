@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 437508405}
   - component: {fileID: 437508406}
   m_Layer: 0
-  m_Name: Composite_Example
+  m_Name: CompositeRoot_Example
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 437508403}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 115.086296, y: 248.02165, z: -2.4092474}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -167,7 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c8aa8d52b67ad4982d7ce97ae45a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SelectedCompositePath: SingleDog
+  m_SelectedCompositePath: 
+  OtherProperty: Other Property
+  OtherProperty2: Other Property2
   SingleDog:
     rid: 7857419161603407874
   DogsList:
@@ -180,7 +182,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: DogMother1
-        m_Edit: 1
+        m_Edit: 0
         Race: Single1
         Puppies:
         - rid: 7857419161603407875
@@ -242,6 +244,79 @@ MonoBehaviour:
         m_Name: 1_List_Dog3
         m_Edit: 0
         Race: List3
+--- !u!1 &454542281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 454542282}
+  - component: {fileID: 454542283}
+  m_Layer: 0
+  m_Name: Composite_Example
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &454542282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454542281}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &454542283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454542281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c661afaefffa19408567c75dd776761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OtherProperty: Other Property
+  OtherProperty2: Other Property2
+  SingleDog:
+    rid: 7857419192532205568
+  references:
+    version: 2
+    RefIds:
+    - rid: 7857419192532205568
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: DogMother
+        m_Edit: 1
+        Race: 
+        Puppies:
+        - rid: 7857419192532205570
+    - rid: 7857419192532205570
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: DogMother
+        m_Edit: 1
+        Race: 
+        Puppies:
+        - rid: 7857419192532205571
+    - rid: 7857419192532205571
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      data:
+        m_Name: Dog
+        m_Edit: 1
+        Race: 
 --- !u!1 &506034114
 GameObject:
   m_ObjectHideFlags: 0

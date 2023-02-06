@@ -5,7 +5,7 @@ namespace CocodriloDog.Core.Examples {
 	using UnityEditor;
 	using UnityEngine;
 
-	[CustomEditor(typeof(Composite_Example))]
-	public class Composite_Example_Editor : CompositeRootEditor { }
+	[CustomEditor(typeof(CompositeRoot_Example))]
+	public class CompositeRoot_Example_Editor : CompositeRootEditor { }
 
 }

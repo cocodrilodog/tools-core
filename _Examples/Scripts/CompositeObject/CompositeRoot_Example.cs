@@ -4,9 +4,12 @@ namespace CocodriloDog.Core.Examples {
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	public class Composite_Example : MonoBehaviour {
+	public class CompositeRoot_Example : CompositeRoot {
 
-		[Header("Composite Example (Without Root)")]
+
+		#region Public Fields
+
+		[Header("Composite Example (With Root)")]
 
 		[SerializeField]
 		public string OtherProperty = "Other Property";
@@ -16,6 +19,12 @@ namespace CocodriloDog.Core.Examples {
 
 		[SerializeReference]
 		public Dog SingleDog;
+
+		[SerializeReference]
+		public List<Dog> DogsList;
+
+		#endregion
+
 
 	}
 

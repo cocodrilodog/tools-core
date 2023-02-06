@@ -5,17 +5,36 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// A singleton class used to copy and paste <see cref="Core.CompositeObject"/>s.
+	/// </summary>
+	/// 
+	/// <remarks>
+	/// By using a ScriptableObject as the base class, we leverage the cloning capabilities of 
+	/// <see cref="UnityEngine.Object.Instantiate(UnityEngine.Object)"/>
+	/// </remarks>
 	public class CompositeCopier : ScriptableObject {
 
 
 		#region Public Static Methods
 
+		/// <summary>
+		/// Copies the provided <paramref name="obj"/> and stores a reference to it until it is pasted.
+		/// </summary>
+		/// <param name="obj"></param>
 		public static void Copy(CompositeObject obj) {
 			Instance.CompositeObject = obj;
 		}
 
+		/// <summary>
+		/// The <see cref="Type"/> of the last copied object, Used to validate against the paste target field.
+		/// </summary>
 		public static Type CopiedType => Instance.CompositeObject?.GetType();
 
+		/// <summary>
+		/// Gets a copy of the last copied <see cref="CompositeObject"/>.
+		/// </summary>
+		/// <returns>The copy</returns>
 		public static CompositeObject Paste() {
 			var clone = Instantiate(Instance).CompositeObject;
 			Instance.CompositeObject = null;
