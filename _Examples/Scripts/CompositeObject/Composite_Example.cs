@@ -4,7 +4,15 @@ namespace CocodriloDog.Core.Examples {
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// This example shows this <c>MonoBehaviour</c> that has no <c>CompositeRootEditor</c>.
+	/// <see cref="CompositeObject"/> fields will open and close, but the MonoBehaviour 
+	/// and parent <see cref="CompositeObject"/> inspectors will remain visible all the time.
+	/// </summary>
 	public class Composite_Example : MonoBehaviour {
+
+
+		#region Public Fields
 
 		[Header("Composite Example (Without Root)")]
 
@@ -16,6 +24,9 @@ namespace CocodriloDog.Core.Examples {
 
 		[SerializeReference]
 		public Dog SingleDog;
+
+		#endregion
+
 
 	}
 

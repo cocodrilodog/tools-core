@@ -17,13 +17,16 @@ namespace CocodriloDog.Core.Examples {
 		}
 
 		protected override float GetEditPropertyHeight(SerializedProperty property, GUIContent label) {
+			// Start with the height calculated by the base class
 			var baseHeight = base.GetEditPropertyHeight(property, label);
+			// Add the needed height for this subclass
 			return baseHeight + EditorGUI.GetPropertyHeight(PuppiesProperty) + 5;
 		}
 
 		protected override void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
 			base.OnEditGUI(position, property, label);
-			var rect = GetNextPosition(); // An accurate height is not needed here
+			// Next position is already where it needs to be now
+			var rect = GetNextPosition(); // An accurate height required by the array elements is not needed here
 			EditorGUI.PropertyField(rect, PuppiesProperty, true);
 		}
 

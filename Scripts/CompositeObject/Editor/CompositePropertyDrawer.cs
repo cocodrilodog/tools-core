@@ -160,8 +160,8 @@
 
 				}
 			} else {
-				DrawNextButton($"▴ Close", () => EditProperty.boolValue = false);
-				DrawNextButton($"• {(Property.managedReferenceValue as CompositeObject).Name}");
+				DrawNextButton($" ▴ ", () => EditProperty.boolValue = false);
+				DrawNextButton($"{(Property.managedReferenceValue as CompositeObject).Name}");
 			}
 
 			void DrawNextButton(string label, Action action = null) {

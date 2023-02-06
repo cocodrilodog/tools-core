@@ -4,6 +4,12 @@ namespace CocodriloDog.Core.Examples {
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// This example shows a <c>MonoBehaviour</c> that has a custom <c>CompositeRootEditor</c>.
+	/// If a <see cref="CompositeObject"/> is selected, its property drawer will takeover the 
+	/// entire inspector and will allow to navigate from the root object to deeper levels and 
+	/// vice versa via breadcrums.
+	/// </summary>
 	public class CompositeRoot_Example : CompositeRoot {
 
 
