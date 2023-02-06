@@ -7,12 +7,23 @@ namespace CocodriloDog.Core {
 
 	/// <summary>
 	/// A base <see cref="object"/> class that can be extended to create composite structures
-	/// on top of a <see cref="CompositeRoot"/> which is s <see cref="MonoBehaviour"/>.
+	/// optionally on top of a <see cref="CompositeRoot"/> which is s <see cref="MonoBehaviour"/>.
 	/// </summary>
 	/// 
 	/// <remarks>
-	/// <see cref="CompositeRoot"/> can have child <see cref="CompositeObject"/>s and <see cref="CompositeObject"/>s
-	/// can also have child <see cref="CompositeObject"/>s, hence the composite name.
+	/// <see cref="CompositeObject"/>s can have children <see cref="CompositeObject"/>s hence the name
+	/// "Composite". If they are implemented without a corresponding <see cref="CompositeRoot"/>,
+	/// they will open and close in a similar style as serializable <see cref="object"/>s. It means that 
+	/// all the <see cref="CompositeObject"/> properties their children, grand-children, etc, when opened,
+	/// will be visible always one inside the other.
+	/// 
+	/// On the other hand, when a corresponding <see cref="CompositeRoot"/> and its editor is implemented,
+	/// if a <see cref="CompositeObject"/> is selected, its property drawer will takeover the entire inspector 
+	/// and it will allow to navigate to its children with the "Edit" button and to its parent objects via 
+	/// breadcrums.
+	/// 
+	/// <see cref="CompositeRoot"/>s can also have child <see cref="CompositeObject"/>s, hence the 
+	/// composite name.
 	/// 
 	/// The following steps need to be taken to create a concrete composite system:
 	/// 
@@ -35,14 +46,14 @@ namespace CocodriloDog.Core {
 	///			</description>
 	///		</item>
 	///		<item>
-	///			<term>Extend <see cref="CompositeRoot"/></term>
+	///			<term>Extend <see cref="CompositeRoot"/> (Optional)</term>
 	///			<description>
 	///				Create a concrete extension of <see cref="CompositeRoot"/> that will be the 
-	///				root or first parent of the concrete <see cref="CompositeObject"/> instances. 
+	///				root or first parent of the concrete <see cref="CompositeObject"/> instances.				
 	///			</description>
 	///		</item>
 	///		<item>
-	///			<term>Extend <c>CompositeRootEditor</c></term>
+	///			<term>Extend <c>CompositeRootEditor</c> (Optional)</term>
 	///			<description>
 	///				Create a concrete extension of <c>CompositeRootEditor</c> and make it a <c>CustomEditor</c>
 	///				of the concrete <see cref="CompositeRoot"/> so that it inherits the functionality of
