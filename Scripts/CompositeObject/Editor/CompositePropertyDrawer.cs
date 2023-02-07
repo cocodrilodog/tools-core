@@ -75,10 +75,11 @@
 
 		protected override void InitializePropertiesForOnGUI() {
 			base.InitializePropertiesForOnGUI();
-			// It seems that the properties need to be initialized in both places for it to work correctly.
-			EditProperty = Property.FindPropertyRelative("m_Edit");
+			// It seems that the properties need to be initialized in both places for it to work correctly,
+			// especially whe the property is an array item. (So far only m_Name is failing in arrays)
+			//EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
-			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
+			//SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 		}
 
 		/// <summary>
