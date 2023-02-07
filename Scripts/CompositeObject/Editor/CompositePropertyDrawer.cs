@@ -316,7 +316,7 @@
 				property.serializedObject.Update();
 
 				var compositeObject = Activator.CreateInstance(t) as CompositeObject;
-				compositeObject.Name = t.Name;
+				compositeObject.Name = compositeObject.DefaultName;
 				property.managedReferenceValue = compositeObject;
 
 				property.serializedObject.ApplyModifiedProperties();

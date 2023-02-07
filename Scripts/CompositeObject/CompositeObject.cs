@@ -77,6 +77,11 @@ namespace CocodriloDog.Core {
 			set => m_Name = value;
 		}
 
+		/// <summary>
+		/// Override this if you wawnt to change the default name of the object.
+		/// </summary>
+		public virtual string DefaultName => GetType().Name;
+
 		#endregion
 
 
