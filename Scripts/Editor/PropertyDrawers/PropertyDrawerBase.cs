@@ -51,7 +51,9 @@
 
 		protected GUIContent Label { get; set; }
 
-		protected float FieldHeight { get { return EditorGUIUtility.singleLineHeight + 2; } }
+		protected float FieldHeight => EditorGUIUtility.singleLineHeight + 2;
+
+		protected float SpaceHeight => 10;
 
 		#endregion
 
@@ -59,12 +61,12 @@
 		#region Protected Methods
 
 		/// <summary>
-		/// Gets the next position for a IMGUI control.
+		/// Gets the next position (<c>Rect</c>) for a IMGUI control.
 		/// </summary>
 		/// 
 		/// <remarks>
-		/// This returns rectangles with standard field height and separation. 
-		/// This can be called sequentially and it will return rectangles below one 
+		/// This returns rectangles with standard field height and reserves 2 pixels of separation 
+		/// before the next one. This can be called sequentially and it will return rectangles below one 
 		/// another. It is reset at OnGUI().
 		/// </remarks>
 		/// 
@@ -83,6 +85,48 @@
 			rect.height -= 2;
 			CurrentY += rect.height + 2;
 			CurrentY += postSpace;
+			return rect;
+		}
+
+		/// <summary>
+		/// Gets the next position (<c>Rect</c>) for a IMGUI control with the specified 
+		/// <paramref name="height"/> and doesn't reserve any separation before the next one.
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// This can be called sequentially and it will return rectangles below one 
+		/// another. It is reset at OnGUI().
+		/// </remarks>
+		/// 
+		/// <param name="height">The height</param>
+		/// <returns>The next position</returns>
+		protected Rect GetNextPosition(float height) {
+			Rect rect = Position;
+			rect.y = CurrentY;
+			rect.height = height;
+			CurrentY += rect.height;
+			return rect;
+		}
+
+		/// <summary>
+		/// Gets the next position (<c>Rect</c>) for a IMGUI control with the height for the 
+		/// provided <paramref name="property"/> and reserves 2 extra pixels of separation
+		/// before the next one.
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// This can be called sequentially and it will return rectangles below one 
+		/// another. It is reset at OnGUI().
+		/// </remarks>
+		/// 
+		/// <param name="property">The property</param>
+		/// <returns></returns>
+		protected Rect GetNextPosition(SerializedProperty property) {
+			Rect rect = Position;
+			rect.y = CurrentY;
+			rect.height = EditorGUI.GetPropertyHeight(property);
+			CurrentY += rect.height;
+			CurrentY += 2;
 			return rect;
 		}
 

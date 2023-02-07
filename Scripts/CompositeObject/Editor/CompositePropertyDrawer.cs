@@ -15,7 +15,7 @@
 
 		#region Unity Methods
 
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+		public sealed override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 
 			// Non-edit is one-field height and can be obtained from the base definition.
 			// This is called first to initialize the properties correctly.
@@ -31,7 +31,7 @@
 
 		}
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+		public sealed override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 
 			base.OnGUI(position, property, label);
 
@@ -89,7 +89,7 @@
 		/// <returns>The height</returns>
 		protected virtual float GetEditPropertyHeight(SerializedProperty property, GUIContent label) { 
 			// One-field height for the breadcrums + the name. Subclasses should add extra space for their properties
-			return base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty); 
+			return base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2; 
 		}
 
 		/// <summary>
@@ -178,7 +178,7 @@
 				EditorGUI.EndDisabledGroup();
 
 				// buttonRect += button width, for the next button
-				buttonRect.x += size.x;
+				buttonRect.x += size.x + 2;
 
 			}
 
@@ -255,7 +255,7 @@
 		private void DrawPropertyField(Rect propertyRect, string label, string name) {
 
 			// Label rect
-			var labelWidth = EditorGUIUtility.labelWidth * 0.6f;
+			var labelWidth = Position.width * 0.25f;
 			var labelRect = propertyRect;
 			labelRect.width = labelWidth;
 
