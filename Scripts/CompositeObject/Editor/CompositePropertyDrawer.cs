@@ -44,7 +44,6 @@
 				// Draw non-edit mode
 				OnNonEditGUI(position, property, label);
 			}
-			ContextMenu();
 			EditorGUI.EndProperty();
 
 		}
@@ -281,6 +280,8 @@
 			GUI.Box(fieldRect, name, EditorStyles.objectField);
 			EditorGUI.EndDisabledGroup();
 
+			//ContextMenu(fieldRect);
+
 		}
 
 		private void DrawCreateButton(Rect rect) {
@@ -346,44 +347,44 @@
 			EditorGUI.EndDisabledGroup();
 		}
 
-		private void ContextMenu() {
+		//private void ContextMenu(Rect rect) {
 
-			Event current = Event.current;
+		//	Event current = Event.current;
 
-			if (Position.Contains(current.mousePosition) && current.type == EventType.ContextClick) {
+		//	if (rect.Contains(current.mousePosition) && current.type == EventType.ContextClick) {
 
-				// Save the property for later because it will be used by the GenericMenu which happens later
-				var pendingProperty = Property.Copy(); // Copy, just in case
+		//		// Save the property for later because it will be used by the GenericMenu which happens later
+		//		var pendingProperty = Property.Copy(); // Copy, just in case
 
-				GenericMenu menu = new GenericMenu();
-				if (Property.managedReferenceValue != null) {
-					menu.AddItem(new GUIContent("Copy"), false, () => {
-						CompositeCopier.Copy(pendingProperty.managedReferenceValue as CompositeObject);
-					});
-				} else {
-					menu.AddDisabledItem(new GUIContent("Copy"));
-				}
+		//		GenericMenu menu = new GenericMenu();
+		//		if (Property.managedReferenceValue != null) {
+		//			menu.AddItem(new GUIContent("Copy"), false, () => {
+		//				CompositeCopier.Copy(pendingProperty.managedReferenceValue as CompositeObject);
+		//			});
+		//		} else {
+		//			menu.AddDisabledItem(new GUIContent("Copy"));
+		//		}
 
-				var propertyType = CDEditorUtility.GetManagedReferenceType(pendingProperty);
-				if(propertyType.IsAssignableFrom(CompositeCopier.CopiedType)) {
-					menu.AddItem(new GUIContent("Paste"), false, () => {
-						// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
-						EditorApplication.delayCall += () => {
-							pendingProperty.serializedObject.Update();
-							pendingProperty.managedReferenceValue = CompositeCopier.Paste();
-							pendingProperty.serializedObject.ApplyModifiedProperties();
-						};
-					});
-				} else {
-					menu.AddDisabledItem(new GUIContent("Paste"));
-				}
+		//		var propertyType = CDEditorUtility.GetManagedReferenceType(pendingProperty);
+		//		if(propertyType.IsAssignableFrom(CompositeCopier.CopiedType)) {
+		//			menu.AddItem(new GUIContent("Paste"), false, () => {
+		//				// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
+		//				EditorApplication.delayCall += () => {
+		//					pendingProperty.serializedObject.Update();
+		//					pendingProperty.managedReferenceValue = CompositeCopier.Paste();
+		//					pendingProperty.serializedObject.ApplyModifiedProperties();
+		//				};
+		//			});
+		//		} else {
+		//			menu.AddDisabledItem(new GUIContent("Paste"));
+		//		}
 
-				menu.ShowAsContext();
-				current.Use();
+		//		menu.ShowAsContext();
+		//		current.Use();
 
-			}
+		//	}
 
-		}
+		//}
 
 		#endregion
 

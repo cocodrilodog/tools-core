@@ -16,6 +16,21 @@ namespace CocodriloDog.Core {
 	public class CompositeCopier : ScriptableObject {
 
 
+		#region Public Static Properties
+
+		/// <summary>
+		/// The copied <see cref="CompositeObject"/>.
+		/// </summary>
+		public static CompositeObject CopiedObject => Instance.CompositeObject;
+
+		/// <summary>
+		/// The <see cref="Type"/> of the last copied object, Used to validate against the paste target field.
+		/// </summary>
+		public static Type CopiedType => Instance.CompositeObject?.GetType();
+
+		#endregion
+
+
 		#region Public Static Methods
 
 		/// <summary>
@@ -25,11 +40,6 @@ namespace CocodriloDog.Core {
 		public static void Copy(CompositeObject obj) {
 			Instance.CompositeObject = obj;
 		}
-
-		/// <summary>
-		/// The <see cref="Type"/> of the last copied object, Used to validate against the paste target field.
-		/// </summary>
-		public static Type CopiedType => Instance.CompositeObject?.GetType();
 
 		/// <summary>
 		/// Gets a copy of the last copied <see cref="CompositeObject"/>.
