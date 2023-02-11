@@ -26,6 +26,8 @@ namespace CocodriloDog.Core {
 				// There is a selected composite object, draw only it as a property.
 				serializedObject.Update();
 				CDEditorUtility.DrawDisabledField(ScriptProperty);
+				GUILayout.Button("TEST");
+
 				var selectedCompositeProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
 				if (selectedCompositeProperty != null) {
 					EditorGUILayout.PropertyField(selectedCompositeProperty);
