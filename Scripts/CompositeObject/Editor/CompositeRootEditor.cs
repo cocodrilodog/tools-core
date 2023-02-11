@@ -1,5 +1,6 @@
-namespace CocodriloDog.Core {
+﻿namespace CocodriloDog.Core {
 
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEditor;
@@ -9,6 +10,38 @@ namespace CocodriloDog.Core {
 	/// Base class for editors of concrete implementations of <see cref="CompositeRoot"/>.
 	/// </summary>
 	public abstract class CompositeRootEditor : Editor {
+
+
+		#region Public Static Methods
+
+		public static void SelectCompositeObject(
+			SerializedObject serializedObject,
+			SerializedProperty selectedCompositePathProperty,
+			string newPropertyPath
+			) {
+
+			// Set to non-edit the previosly selected composite object
+			if (!string.IsNullOrEmpty(selectedCompositePathProperty.stringValue)) {
+				var selectedCompositeObjectProperty = serializedObject.FindProperty(selectedCompositePathProperty.stringValue);
+				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = false;
+			}
+
+			// Assign the new value
+			selectedCompositePathProperty.stringValue = newPropertyPath;
+
+			// Set to edit the new selected composite object
+			if (!string.IsNullOrEmpty(selectedCompositePathProperty.stringValue)) {
+				var selectedCompositeObjectProperty = serializedObject.FindProperty(selectedCompositePathProperty.stringValue);
+				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = true;
+			}
+
+			// Set any selected field to be non-selected. Otherwise the text content of a selected field
+			// will remain displayed, even if a new selected text field has other text.
+			GUI.FocusControl(null);
+
+		}
+
+		#endregion
 
 
 		#region Unity Methods
@@ -26,10 +59,9 @@ namespace CocodriloDog.Core {
 				// There is a selected composite object, draw only it as a property.
 				serializedObject.Update();
 				CDEditorUtility.DrawDisabledField(ScriptProperty);
-				GUILayout.Button("TEST");
-
 				var selectedCompositeProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
 				if (selectedCompositeProperty != null) {
+					DrawBreadcrums(selectedCompositeProperty);
 					EditorGUILayout.PropertyField(selectedCompositeProperty);
 				}
 				serializedObject.ApplyModifiedProperties();
@@ -58,6 +90,70 @@ namespace CocodriloDog.Core {
 		private SerializedProperty ScriptProperty { get; set; }
 
 		private SerializedProperty SelectedCompositePathProperty { get; set; }
+
+		#endregion
+
+
+		#region Private Methods
+
+		private void DrawBreadcrums(SerializedProperty property) {
+
+			//var buttonRect = GetNextPosition();
+			GUILayout.BeginHorizontal();
+			if (SelectedCompositePathProperty != null) {
+				// This button will make the inspector to go back to the root
+				DrawNextButton($"◂ {target.GetType().Name}", () => {
+					SelectCompositeObject(serializedObject, SelectedCompositePathProperty, null);
+				});
+				// Analize path parts and create a breadcrum button for each CompositeObject in the path
+				var pathParts = property.propertyPath.Split('.');
+				for (int i = 0; i < pathParts.Length; i++) {
+
+					// Each path until the i part
+					var partialPath = string.Join('.', pathParts, 0, i + 1);
+					var partialProperty = property.serializedObject.FindProperty(partialPath);
+
+					if (partialProperty != null) {
+
+						var isManagedReference = partialProperty.propertyType == SerializedPropertyType.ManagedReference;
+						if (isManagedReference) {
+
+							// Possible composite for each partial path
+							var partialComposite = partialProperty.managedReferenceValue as CompositeObject;
+							if (partialComposite == property.managedReferenceValue) {
+								// The partialComposite is the main composite object of this property
+								DrawNextButton($"• {partialComposite.Name}");
+							} else {
+								// The partialComposite is an intermediate between the root and the main
+								// composite object of this property
+								DrawNextButton($"◂ {partialComposite.Name}", () => {
+									SelectCompositeObject(serializedObject, SelectedCompositePathProperty, partialProperty.propertyPath);
+								});
+							}
+
+						}
+
+					}
+
+				}
+			}
+			GUILayout.EndHorizontal();
+
+			void DrawNextButton(string label, Action action = null) {
+
+				EditorGUI.BeginDisabledGroup(action == null);
+				if (GUILayout.Button(label, GUILayout.ExpandWidth(false))) {
+					action?.Invoke();
+				}
+
+				// Reduce the space between the buttons
+				GUILayout.Space(-3);
+
+				EditorGUI.EndDisabledGroup();
+
+			}
+
+		}
 
 		#endregion
 

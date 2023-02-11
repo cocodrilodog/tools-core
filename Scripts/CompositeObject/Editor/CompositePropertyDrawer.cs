@@ -96,9 +96,20 @@
 		/// <param name="property">The property</param>
 		/// <param name="label">The label</param>
 		/// <returns>The height</returns>
-		protected virtual float GetEditPropertyHeight(SerializedProperty property, GUIContent label) { 
-			// One-field height for the breadcrums + the name. Subclasses should add extra space for their properties
-			return base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2; 
+		protected virtual float GetEditPropertyHeight(SerializedProperty property, GUIContent label) {
+			if (SelectedCompositePathProperty != null) {
+				// There is a root, breadcrums is handled by the root.
+				//
+				// One-field height for the the name. 
+				// Subclasses should add extra space for their properties
+				return base.GetPropertyHeight(property, label); 
+			} else {
+				// There is no root, breadcrums are drawn here.
+				//
+				// One-field height for the breadcrums + the name.
+				// Subclasses should add extra space for their properties
+				return base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2;
+			}
 		}
 
 		/// <summary>
@@ -130,90 +141,30 @@
 
 		private void DrawBreadcrums() {
 
-			var buttonRect = GetNextPosition();
+			if (SelectedCompositePathProperty == null) {
 
-			if (SelectedCompositePathProperty != null) {
-				// This button will make the inspector to go back to the root
-				DrawNextButton($"◂ {Property.serializedObject.targetObject.GetType().Name}", () => {
-					SelectCompositeObject(null);
-				});
-				// Analize path parts and create a breadcrum button for each CompositeObject in the path
-				var pathParts = Property.propertyPath.Split('.');
-				for (int i = 0; i < pathParts.Length; i++) {
-
-					// Each path until the i part
-					var partialPath = string.Join('.', pathParts, 0, i + 1);
-					var partialProperty = Property.serializedObject.FindProperty(partialPath);
-
-					if (partialProperty != null) {
-
-						var isManagedReference = partialProperty.propertyType == SerializedPropertyType.ManagedReference;
-						if (isManagedReference) {
-
-							// Possible composite for each partial path
-							var partialComposite = partialProperty.managedReferenceValue as CompositeObject;
-							if (partialComposite == Property.managedReferenceValue) {
-								// The partialComposite is the main composite object of this property
-								DrawNextButton($"• {partialComposite.Name}");
-							} else {
-								// The partialComposite is an intermediate between the root and the main
-								// composite object of this property
-								DrawNextButton($"◂ {partialComposite.Name}", () => {
-									SelectCompositeObject(partialProperty.propertyPath);
-								});
-							}
-
-						}
-
-					}
-
-				}
-			} else {
+				var buttonRect = GetNextPosition();
 				DrawNextButton($" ▴ ", () => EditProperty.boolValue = false);
 				DrawNextButton($"{(Property.managedReferenceValue as CompositeObject).Name}");
-			}
+				
+				void DrawNextButton(string label, Action action = null) {
 
-			void DrawNextButton(string label, Action action = null) {
+					// Fit the button to the text
+					var content = new GUIContent(label);
+					var size = GUI.skin.button.CalcSize(content);
+					buttonRect.width = size.x;
 
-				// Fit the button to the text
-				var content = new GUIContent(label);
-				var size = GUI.skin.button.CalcSize(content);
-				buttonRect.width = size.x;
+					EditorGUI.BeginDisabledGroup(action == null);
+					if (GUI.Button(buttonRect, content)) {
+						action?.Invoke();
+					}
+					EditorGUI.EndDisabledGroup();
 
-				EditorGUI.BeginDisabledGroup(action == null);
-				if (GUI.Button(buttonRect, content)) {
-					action?.Invoke();
+					// buttonRect += button width, for the next button
+					buttonRect.x += size.x + 2;
+
 				}
-				EditorGUI.EndDisabledGroup();
-
-				// buttonRect += button width, for the next button
-				buttonRect.x += size.x + 2;
-
 			}
-
-		}
-
-		private void SelectCompositeObject(string propertyPath) {
-
-			// Set to non-edit the previosly selected composite object
-			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
-				var selectedCompositeObjectProperty = Property.serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
-				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = false;
-			}
-
-			// Assign the new value
-			SelectedCompositePathProperty.stringValue = propertyPath;
-
-			// Set to edit the new selected composite object
-			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
-				var selectedCompositeObjectProperty = Property.serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
-				selectedCompositeObjectProperty.FindPropertyRelative("m_Edit").boolValue = true;
-			}
-
-			// Set any selected field to be non-selected. Otherwise the text content of a selected field
-			// will remain displayed, even if a new selected text field has other text.
-			GUI.FocusControl(null);
-
 		}
 
 		#endregion
@@ -280,8 +231,6 @@
 			GUI.Box(fieldRect, name, EditorStyles.objectField);
 			EditorGUI.EndDisabledGroup();
 
-			//ContextMenu(fieldRect);
-
 		}
 
 		private void DrawCreateButton(Rect rect) {
@@ -330,7 +279,9 @@
 		private void DrawEditButton(Rect rect) {
 			if(SelectedCompositePathProperty != null) {
 				if (GUI.Button(rect, "Edit ▸")) {
-					SelectCompositeObject(Property.propertyPath);
+					CompositeRootEditor.SelectCompositeObject(
+						Property.serializedObject, SelectedCompositePathProperty, Property.propertyPath
+					);
 				} 
 			} else {
 				if (GUI.Button(rect, "Edit ▾")) {					
@@ -346,45 +297,6 @@
 			}
 			EditorGUI.EndDisabledGroup();
 		}
-
-		//private void ContextMenu(Rect rect) {
-
-		//	Event current = Event.current;
-
-		//	if (rect.Contains(current.mousePosition) && current.type == EventType.ContextClick) {
-
-		//		// Save the property for later because it will be used by the GenericMenu which happens later
-		//		var pendingProperty = Property.Copy(); // Copy, just in case
-
-		//		GenericMenu menu = new GenericMenu();
-		//		if (Property.managedReferenceValue != null) {
-		//			menu.AddItem(new GUIContent("Copy"), false, () => {
-		//				CompositeCopier.Copy(pendingProperty.managedReferenceValue as CompositeObject);
-		//			});
-		//		} else {
-		//			menu.AddDisabledItem(new GUIContent("Copy"));
-		//		}
-
-		//		var propertyType = CDEditorUtility.GetManagedReferenceType(pendingProperty);
-		//		if(propertyType.IsAssignableFrom(CompositeCopier.CopiedType)) {
-		//			menu.AddItem(new GUIContent("Paste"), false, () => {
-		//				// Delay the action, otherwise, the object won't "stick" around due to the GenericMenu timing
-		//				EditorApplication.delayCall += () => {
-		//					pendingProperty.serializedObject.Update();
-		//					pendingProperty.managedReferenceValue = CompositeCopier.Paste();
-		//					pendingProperty.serializedObject.ApplyModifiedProperties();
-		//				};
-		//			});
-		//		} else {
-		//			menu.AddDisabledItem(new GUIContent("Paste"));
-		//		}
-
-		//		menu.ShowAsContext();
-		//		current.Use();
-
-		//	}
-
-		//}
 
 		#endregion
 
