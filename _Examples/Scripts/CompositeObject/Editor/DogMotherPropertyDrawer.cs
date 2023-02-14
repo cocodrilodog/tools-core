@@ -14,20 +14,23 @@ namespace CocodriloDog.Core.Examples {
 		protected override void InitializePropertiesForGetHeight() {
 			base.InitializePropertiesForGetHeight();
 			PuppiesProperty = Property.FindPropertyRelative("Puppies");
+			MaleProperty = Property.FindPropertyRelative("Male");
 		}
 
 		protected override float GetEditPropertyHeight(SerializedProperty property, GUIContent label) {
 			// Start with the height calculated by the base class
-			var baseHeight = base.GetEditPropertyHeight(property, label);
+			var height = base.GetEditPropertyHeight(property, label);
 			// Add the needed height for this subclass
-			return baseHeight + EditorGUI.GetPropertyHeight(PuppiesProperty) + 5;
+			height += EditorGUI.GetPropertyHeight(PuppiesProperty) + 2;
+			height += EditorGUI.GetPropertyHeight(MaleProperty) + 2;
+			return height;
 		}
 
 		protected override void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
 			base.OnEditGUI(position, property, label);
 			// Next position is already where it needs to be now
-			var rect = GetNextPosition(); // An accurate height required by the array elements is not needed here
-			EditorGUI.PropertyField(rect, PuppiesProperty, true);
+			EditorGUI.PropertyField(GetNextPosition(PuppiesProperty), PuppiesProperty, true);
+			EditorGUI.PropertyField(GetNextPosition(MaleProperty), MaleProperty, true);
 		}
 
 		#endregion
@@ -36,6 +39,8 @@ namespace CocodriloDog.Core.Examples {
 		#region Private Properties
 
 		private SerializedProperty PuppiesProperty { get; set; }
+
+		private SerializedProperty MaleProperty { get; set; }
 
 		#endregion
 

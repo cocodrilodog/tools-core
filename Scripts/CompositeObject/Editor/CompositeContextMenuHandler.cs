@@ -23,7 +23,7 @@ namespace CocodriloDog.Core {
 
 		private static void OnContextMenuOpening(GenericMenu menu, SerializedProperty property) {
 			if (property.propertyType == SerializedPropertyType.ManagedReference && // <- The property is a managed reference
-				typeof(CompositeObject).IsAssignableFrom(CDEditorUtility.GetManagedReferenceType(property))) { // <- The property is a CompositeObject
+				typeof(CompositeObject).IsAssignableFrom(CDEditorUtility.GetPropertyType(property))) { // <- The property is a CompositeObject
 				ContextMenu(menu, property);
 			}
 		}
@@ -36,7 +36,7 @@ namespace CocodriloDog.Core {
 		private static void ContextMenu(GenericMenu menu, SerializedProperty property) {
 
 			var pendingProperty = property.Copy(); // Copy, just in case
-			var propertyType = CDEditorUtility.GetManagedReferenceType(pendingProperty);
+			var propertyType = CDEditorUtility.GetPropertyType(pendingProperty);
 			var copyName = "";
 
 			if (property.managedReferenceValue != null) {

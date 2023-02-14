@@ -187,14 +187,121 @@
 		/// </summary>
 		/// <param name="property">The property</param>
 		/// <returns>The <c>Type</c></returns>
-		public static Type GetManagedReferenceType(SerializedProperty property) {
-			if (property.propertyType == SerializedPropertyType.ManagedReference) {
-				// Example of managedReferenceFieldTypename: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
-				var typenameParts = property.managedReferenceFieldTypename.Split(' ');
-				var assembly = Assembly.Load(typenameParts[0]);
-				return assembly.GetType(typenameParts[1]);
+		//public static Type GetManagedReferenceType(SerializedProperty property) {
+		//	if (property.propertyType == SerializedPropertyType.ManagedReference) {
+		//		// Example of managedReferenceFieldTypename: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
+		//		var typenameParts = property.managedReferenceFieldTypename.Split(' ');
+		//		var assembly = Assembly.Load(typenameParts[0]);
+		//		return assembly.GetType(typenameParts[1]);
+		//	}
+		//	return null;
+		//}
+
+		// TODO: Complete this method
+		public static Type GetPropertyType(SerializedProperty property) {
+			switch (property.propertyType) {
+				case SerializedPropertyType.AnimationCurve:	return typeof(AnimationCurve);
+				case SerializedPropertyType.Boolean:		return typeof(bool);
+				case SerializedPropertyType.Bounds:			return typeof(Bounds);
+				case SerializedPropertyType.BoundsInt:		return typeof(Bounds);
+				//case SerializedPropertyType.Character:				return ???;
+				case SerializedPropertyType.Color:			return typeof(Color);
+				//case SerializedPropertyType.Enum:						return ???;
+				//case SerializedPropertyType.ExposedReference:			return ???;
+				//case SerializedPropertyType.FixedBufferSize:			return ???;
+				case SerializedPropertyType.Float:			return typeof(float);
+				case SerializedPropertyType.Gradient:		return typeof(Gradient);
+				case SerializedPropertyType.Hash128:		return typeof(Hash128);
+				case SerializedPropertyType.Integer:		return typeof(int);
+				case SerializedPropertyType.LayerMask:		return typeof(LayerMask);
+				case SerializedPropertyType.Quaternion:		return typeof(Quaternion);
+				case SerializedPropertyType.Rect:			return typeof(Rect);
+				case SerializedPropertyType.RectInt:		return typeof(Rect);
+				case SerializedPropertyType.String:			return typeof(string);
+				case SerializedPropertyType.Vector2:		return typeof(Vector2);
+				case SerializedPropertyType.Vector2Int:		return typeof(Vector2);
+				case SerializedPropertyType.Vector3:		return typeof(Vector3);
+				case SerializedPropertyType.Vector3Int:		return typeof(Vector3);
+				case SerializedPropertyType.Vector4:		return typeof(Vector4);
+				
+				//case SerializedPropertyType.ObjectReference:		return ???;
+
+				case SerializedPropertyType.Generic: {
+						if (property.isArray) {
+							// Array or list
+							//var assembly = Assembly.Load("Assembly-CSharp");
+							//Debug.Log($"*** Looking the type of {property.}");
+							//Debug.Log($"*** Type.GetType(property.type): {Type.GetType(property.type)}");
+							//return assembly.GetType(property.type);
+						} else {
+							// Struct or serialized System.Object class
+						}
+						break;
+					}
+
+				case SerializedPropertyType.ManagedReference: {
+						// Example of managedReferenceFieldTypename: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
+						var typenameParts = property.managedReferenceFieldTypename.Split(' ');
+						var assembly = Assembly.Load(typenameParts[0]);
+						return assembly.GetType(typenameParts[1]);
+					}
+
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Iterates through the direct child properties of the <paramref name="serializedObject"/>, not grandchildren, etc.
+		/// </summary>
+		/// <param name="serializedObject">The <see cref="SerializedObject"/></param>
+		/// <param name="action">The action to perform on each child property</param>
+		public static void IterateChildProperties(SerializedObject serializedObject, Action<SerializedProperty> action) {
+
+			// Get the iterator
+			// Copy to leave the original unchanged
+			var iterator = serializedObject.GetIterator().Copy();
+
+			// Enter children needs to be true the first time
+			bool enterChildren = true;
+
+			// Iterate the child properties
+			while (iterator.NextVisible(enterChildren)) {
+				enterChildren = false;
+				action(iterator);
+			}
+
+		}
+
+		/// <summary>
+		/// Iterates through the direct child properties of the <paramref name="parentProperty"/>, not grandchildren, etc.
+		/// </summary>
+		/// <param name="parentProperty">The parent <see cref="SerializedProperty"/></param>
+		/// <param name="action">The action to perform on each child property</param>
+		public static void IterateChildProperties(SerializedProperty parentProperty, Action<SerializedProperty> action) {
+
+			// Copy to leave the original unchanged
+			var parentCopy = parentProperty.Copy();
+
+			// Get the first property that is not child of the parent property
+			// This must be done before iterating the parent property
+			var endProperty = parentCopy.GetEndProperty();
+
+			// Get the first child as the iterator
+			SerializedProperty iterator = null;
+			foreach (SerializedProperty childProperty in parentCopy) {
+				iterator = childProperty;
+				break;
+			}
+
+			// Iterate the child properties
+			action(iterator);
+			while (iterator.NextVisible(false)) {
+				if (SerializedProperty.EqualContents(iterator, endProperty)) {
+					break;
+				}
+				action(iterator);
+			}
+
 		}
 
 		#endregion

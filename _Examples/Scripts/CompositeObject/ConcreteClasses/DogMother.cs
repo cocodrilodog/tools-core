@@ -14,6 +14,9 @@ namespace CocodriloDog.Core.Examples {
 		[SerializeReference]
 		public List<Dog> Puppies;
 
+		[SerializeReference]
+		public Dog Male;
+
 		#endregion
 
 
