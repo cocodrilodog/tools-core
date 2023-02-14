@@ -50,6 +50,7 @@
 		protected virtual void OnEnable() {
 			ScriptProperty = serializedObject.FindProperty("m_Script");
 			SelectedCompositePathProperty = serializedObject.FindProperty("m_SelectedCompositePath");
+			m_SiblingsControlTexture = Resources.Load("CompositeSiblingsControl") as Texture;
 		}
 
 		public sealed override void OnInspectorGUI() {
@@ -88,6 +89,8 @@
 
 		#region Private Fields
 
+		private Texture m_SiblingsControlTexture;
+
 		/// <summary>
 		/// The button that will activate the siblings menu.
 		/// </summary>
@@ -118,7 +121,7 @@
 			if (SelectedCompositePathProperty != null) {
 
 				// This button will make the inspector to go back to the root
-				DrawNextButton($"◂ {target.GetType().Name}", () => {
+				DrawNextButton($"◂ ", $"{target.GetType().Name}", () => {
 					SelectCompositeObject(serializedObject, SelectedCompositePathProperty, null);
 				});
 
@@ -138,12 +141,12 @@
 							// Composite for this partial path
 							if (partialComposite == property.managedReferenceValue) {
 								// The partialComposite is the main composite object of this property
-								DrawNextButton($"• {partialComposite.Name}", parentProperty, i);
+								DrawNextButton($"• ", $"{partialComposite.Name}", parentProperty, i);
 
 							} else {
 								// The partialComposite is an intermediate between the root and the main
 								// composite object of this property
-								DrawNextButton($"◂ {partialComposite.Name}", parentProperty, i, () => {
+								DrawNextButton($"◂ ", $"{partialComposite.Name}", parentProperty, i, () => {
 									SelectCompositeObject(serializedObject, SelectedCompositePathProperty, partialProperty.propertyPath);
 								});
 							}
@@ -176,9 +179,9 @@
 		/// </summary>
 		/// <param name="label">The label of the button</param>
 		/// <param name="action">The action that the button will perform</param>
-		private void DrawNextButton(string label, Action action = null) {
+		private void DrawNextButton(string prefix, string label, Action action = null) {
 			EditorGUI.BeginDisabledGroup(action == null);
-			if (GUILayout.Button(label, GUILayout.ExpandWidth(false))) {
+			if (GUILayout.Button(prefix + label, GUILayout.ExpandWidth(false))) {
 				action?.Invoke();
 			}
 			// Reduce the space between the buttons
@@ -197,11 +200,11 @@
 		/// </param>
 		/// <param name="buttonID">This identifies the button</param>
 		/// <param name="action">The action that the button will perform</param>
-		private void DrawNextButton(string label, SerializedProperty parentProperty, int buttonID, Action action = null) {
+		private void DrawNextButton(string prefix, string label, SerializedProperty parentProperty, int buttonID, Action action = null) {
 
 			// Draw the button
 			EditorGUI.BeginDisabledGroup(action == null);
-			if (GUILayout.Button(label + "      ", GUILayout.ExpandWidth(false))) {
+			if (GUILayout.Button(prefix + label + "     ", GUILayout.ExpandWidth(false))) {
 				action?.Invoke();
 			}
 
@@ -211,11 +214,11 @@
 				// Create the siblings mouse area
 				var padding = 3;
 				var lastRect = GUILayoutUtility.GetLastRect();
-				lastRect.xMin += lastRect.width - 20;
 				lastRect.xMax -= padding;
+				lastRect.xMin = lastRect.xMax - 14;
 				lastRect.yMin += padding;
 				lastRect.yMax -= padding;
-				GUI.Box(lastRect, new GUIContent(""), EditorStyles.objectField);
+				GUI.DrawTexture(lastRect, m_SiblingsControlTexture);
 
 				// Create the siblings menu
 				if (lastRect.Contains(Event.current.mousePosition)) {
@@ -224,7 +227,7 @@
 						m_SiblingsButtonID = buttonID;
 						m_SiblingsButtonTime = EditorApplication.timeSinceStartup;
 					}
-					if (EditorApplication.timeSinceStartup - m_SiblingsButtonTime > 0.3f) {
+					if (EditorApplication.timeSinceStartup - m_SiblingsButtonTime > 0.1f) {
 						// Wait and show the menu
 						m_SiblingsButtonID = -1;
 						CreateSiblingsMenu(parentProperty);
@@ -245,65 +248,65 @@
 			GUILayout.Space(-3);
 			EditorGUI.EndDisabledGroup();
 
-		}
+			void CreateSiblingsMenu(SerializedProperty parentProperty) {
 
-		private void CreateSiblingsMenu(SerializedProperty parentProperty) {
+				var menu = new GenericMenu();
 
-			var menu = new GenericMenu();
+				if (parentProperty != null) {
+					// Parent property is CompositeObject
+					CDEditorUtility.IterateChildProperties(parentProperty, SiblingPropertyAction);
+				} else {
+					// Parent property is CompositeRoot
+					CDEditorUtility.IterateChildProperties(serializedObject, SiblingPropertyAction);
+				}
 
-			if (parentProperty != null) {
-				// Parent property is CompositeObject
-				CDEditorUtility.IterateChildProperties(parentProperty, SiblingPropertyAction);
-			} else {
-				// Parent property is CompositeRoot
-				CDEditorUtility.IterateChildProperties(serializedObject, SiblingPropertyAction);
-			}
+				// This will receive the siblings of the button's object
+				void SiblingPropertyAction(SerializedProperty siblingProperty) {
 
-			// This will receive the siblings of the button's object
-			void SiblingPropertyAction(SerializedProperty siblingProperty) {
-
-				if (IsCompositeProperty(siblingProperty, out var compositeSibling)) {
-					// Save for later use by the menu
-					var pendingSiblingProperty = siblingProperty.Copy();
-					var on = pendingSiblingProperty.propertyPath == SelectedCompositePathProperty.stringValue;
-					menu.AddItem(new GUIContent(compositeSibling.Name), on, () => SelectSibling(pendingSiblingProperty));
-				} else if (siblingProperty.isArray && siblingProperty.propertyType == SerializedPropertyType.Generic) {
-					// The property is an array or list
-					for (int i = 0; i < siblingProperty.arraySize; i++) {
-						// Get the elements
-						var element = siblingProperty.GetArrayElementAtIndex(i);
-						if (element.propertyType == SerializedPropertyType.ManagedReference) {
-							// It is managed reference
-							compositeSibling = element.managedReferenceValue as CompositeObject;
-							if (compositeSibling != null) {
-								// It is CompositeObject, save for later use by the menu
-								var pendingElement = element.Copy();
-								var on = pendingElement.propertyPath == SelectedCompositePathProperty.stringValue;
-								menu.AddItem(new GUIContent(compositeSibling.Name), on, () => SelectSibling(pendingElement));
+					if (IsCompositeProperty(siblingProperty, out var compositeSibling)) {
+						// Save for later use by the menu
+						var pendingSiblingProperty = siblingProperty.Copy();
+						var on = compositeSibling.Name == label;
+						menu.AddItem(new GUIContent(compositeSibling.Name), on, () => SelectSibling(pendingSiblingProperty));
+					} else if (siblingProperty.isArray && siblingProperty.propertyType == SerializedPropertyType.Generic) {
+						// The property is an array or list
+						for (int i = 0; i < siblingProperty.arraySize; i++) {
+							// Get the elements
+							var element = siblingProperty.GetArrayElementAtIndex(i);
+							if (element.propertyType == SerializedPropertyType.ManagedReference) {
+								// It is managed reference
+								compositeSibling = element.managedReferenceValue as CompositeObject;
+								if (compositeSibling != null) {
+									// It is CompositeObject, save for later use by the menu
+									var pendingElement = element.Copy();
+									var on = compositeSibling.Name == label;
+									menu.AddItem(new GUIContent(compositeSibling.Name), on, () => SelectSibling(pendingElement));
+								} else {
+									// These are managed references, but not CompositeObjects 
+									break;
+								}
 							} else {
-								// These are managed references, but not CompositeObjects 
+								// This is an array of non-managed reference objects
 								break;
 							}
-						} else {
-							// This is an array of non-managed reference objects
-							break;
 						}
 					}
+
+					// Delay the selection to overcome strange menu timing
+					void SelectSibling(SerializedProperty prop) {
+						EditorApplication.delayCall += () => {
+							serializedObject.Update();
+							SelectCompositeObject(serializedObject, SelectedCompositePathProperty, prop.propertyPath);
+							serializedObject.ApplyModifiedProperties();
+						};
+					}
+
 				}
 
-				// Delay the selection to overcome strange menu timing
-				void SelectSibling(SerializedProperty prop) {
-					EditorApplication.delayCall += () => {
-						serializedObject.Update();
-						SelectCompositeObject(serializedObject, SelectedCompositePathProperty, prop.propertyPath);
-						serializedObject.ApplyModifiedProperties();
-					};
-				}
+				// Show the menu
+				menu.ShowAsContext();
 
 			}
-
-			// Show the menu
-			menu.ShowAsContext();
 
 		}
 
