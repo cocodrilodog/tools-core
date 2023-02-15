@@ -29,20 +29,20 @@ namespace CocodriloDog.Core.Examples {
 
 		#region Protected Methods
 
-		protected override void InitializePropertiesForGetHeight() {
-			base.InitializePropertiesForGetHeight();
+		protected override void Edit_InitializePropertiesForGetHeight() {
+			base.Edit_InitializePropertiesForGetHeight();
 			RaceProperty = Property.FindPropertyRelative("Race");
 		}
 
-		protected override float GetEditPropertyHeight(SerializedProperty property, GUIContent label) {
+		protected override float Edit_GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			// Start with the height calculated by the base class
-			var baseHeight = base.GetEditPropertyHeight(property, label);
+			var baseHeight = base.Edit_GetPropertyHeight(property, label);
 			// Add the needed height for this subclass
 			return baseHeight + EditorGUI.GetPropertyHeight(RaceProperty) + 5;
 		}
 
-		protected override void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
-			base.OnEditGUI(position, property, label);
+		protected override void Edit_OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+			base.Edit_OnGUI(position, property, label);
 			// Next position is already where it needs to be now
 			var raceRect = GetNextPosition();
 			EditorGUI.PropertyField(raceRect, RaceProperty);

@@ -21,9 +21,9 @@
 			// This is called first to initialize the properties correctly.
 			var nonEditHeight = base.GetPropertyHeight(property, label);
 
-			if (Property.managedReferenceValue != null && EditProperty.boolValue) {
+			if (CanEdit) {
 				// Return the height for the edit mode
-				return GetEditPropertyHeight(property, label);
+				return Edit_GetPropertyHeight(property, label);
 			} else {
 				// Return the single field height
 				return nonEditHeight;
@@ -36,10 +36,10 @@
 			base.OnGUI(position, property, label);
 
 			label = EditorGUI.BeginProperty(position, label, property);
-			if (Property.managedReferenceValue != null && EditProperty.boolValue) {
+			if (CanEdit) {
 				// Draw edit mode
 				DrawBreadcrums();
-				OnEditGUI(position, property, label);
+				Edit_OnGUI(position, property, label);
 			} else {
 				// Draw non-edit mode
 				OnNonEditGUI(position, property, label);
@@ -59,20 +59,29 @@
 		/// </summary>
 		protected abstract List<Type> CompositeTypes { get; }
 
+		protected SerializedProperty EditProperty { get; set; }
+
+		protected bool CanEdit => Property.managedReferenceValue != null && EditProperty.boolValue;
+
 		#endregion
 
 
 		#region Protected Methods
 
-		protected override void InitializePropertiesForGetHeight() {
+		protected sealed override void InitializePropertiesForGetHeight() {
 			base.InitializePropertiesForGetHeight();
 			// It seems that the properties need to be initialized in both places for it to work correctly.
 			EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
+			if (CanEdit) {
+				Edit_InitializePropertiesForGetHeight();
+			}
 		}
 
-		protected override void InitializePropertiesForOnGUI() {
+		protected virtual void Edit_InitializePropertiesForGetHeight() { }
+
+		protected sealed override void InitializePropertiesForOnGUI() {
 			
 			base.InitializePropertiesForOnGUI();
 
@@ -88,7 +97,13 @@
 			NameProperty = Property.FindPropertyRelative("m_Name");
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 
+			if (CanEdit) {
+				Edit_InitializePropertiesForOnGUI();
+			}
+
 		}
+
+		protected virtual void Edit_InitializePropertiesForOnGUI() { }
 
 		/// <summary>
 		/// Gets the height needed for the property when it is in edit mode.
@@ -96,7 +111,7 @@
 		/// <param name="property">The property</param>
 		/// <param name="label">The label</param>
 		/// <returns>The height</returns>
-		protected virtual float GetEditPropertyHeight(SerializedProperty property, GUIContent label) {
+		protected virtual float Edit_GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			if (SelectedCompositePathProperty != null) {
 				// There is a root, breadcrums is handled by the root.
 				//
@@ -118,7 +133,7 @@
 		/// <param name="position">The position</param>
 		/// <param name="property">The property</param>
 		/// <param name="label">The label</param>
-		protected virtual void OnEditGUI(Rect position, SerializedProperty property, GUIContent label) {
+		protected virtual void Edit_OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			// This base class only handles the name property.
 			EditorGUI.PropertyField(GetNextPosition(), NameProperty);		
 		}
@@ -127,8 +142,6 @@
 
 
 		#region Private Properties
-
-		private SerializedProperty EditProperty { get; set; }
 
 		private SerializedProperty NameProperty { get; set; }
 

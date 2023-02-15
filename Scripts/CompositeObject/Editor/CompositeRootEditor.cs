@@ -219,7 +219,7 @@
 
 		}
 
-		void CreateSiblingsMenu(SerializedProperty parentProperty, string currentSibling) {
+		private void CreateSiblingsMenu(SerializedProperty parentProperty, string currentSibling) {
 
 			var menu = new GenericMenu();
 
