@@ -59,8 +59,6 @@
 		/// </summary>
 		protected abstract List<Type> CompositeTypes { get; }
 
-		protected SerializedProperty EditProperty { get; set; }
-
 		protected bool CanEdit => Property.managedReferenceValue != null && EditProperty.boolValue;
 
 		#endregion
@@ -69,14 +67,17 @@
 		#region Protected Methods
 
 		protected sealed override void InitializePropertiesForGetHeight() {
+			
 			base.InitializePropertiesForGetHeight();
-			// It seems that the properties need to be initialized in both places for it to work correctly.
+			
 			EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
+			
 			if (CanEdit) {
 				Edit_InitializePropertiesForGetHeight();
 			}
+
 		}
 
 		protected virtual void Edit_InitializePropertiesForGetHeight() { }
@@ -142,6 +143,8 @@
 
 
 		#region Private Properties
+
+		private SerializedProperty EditProperty { get; set; }
 
 		private SerializedProperty NameProperty { get; set; }
 
