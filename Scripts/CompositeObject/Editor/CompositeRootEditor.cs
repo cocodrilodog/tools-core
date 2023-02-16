@@ -221,6 +221,7 @@
 
 		private void CreateSiblingsMenu(SerializedProperty parentProperty, string currentSibling) {
 
+			// TODO: When two or more siblings have the same name, they will appear in the menu only once.
 			var menu = new GenericMenu();
 
 			if (parentProperty != null) {
