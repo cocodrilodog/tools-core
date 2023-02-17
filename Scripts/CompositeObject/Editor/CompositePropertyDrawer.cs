@@ -59,7 +59,7 @@
 		/// </summary>
 		protected abstract List<Type> CompositeTypes { get; }
 
-		protected bool CanEdit => Property.managedReferenceValue != null && EditProperty.boolValue;
+		protected bool CanEdit => Property.managedReferenceValue != null && Property.isExpanded;
 
 		#endregion
 
@@ -70,7 +70,7 @@
 			
 			base.InitializePropertiesForGetHeight();
 			
-			EditProperty = Property.FindPropertyRelative("m_Edit");
+			//EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 			
@@ -94,7 +94,7 @@
 			// - m_Edit
 			// - m_SelectedCompositePath
 
-			EditProperty = Property.FindPropertyRelative("m_Edit");
+			//EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
 			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 
@@ -144,8 +144,6 @@
 
 		#region Private Properties
 
-		private SerializedProperty EditProperty { get; set; }
-
 		private SerializedProperty NameProperty { get; set; }
 
 		private SerializedProperty SelectedCompositePathProperty { get; set; }
@@ -160,7 +158,7 @@
 			if (SelectedCompositePathProperty == null) {
 
 				var buttonRect = GetNextPosition();
-				DrawNextButton($" ▴ ", () => EditProperty.boolValue = false);
+				DrawNextButton($" ▴ ", () => Property.isExpanded = false);
 				DrawNextButton($"{(Property.managedReferenceValue as CompositeObject).Name}");
 				
 				void DrawNextButton(string label, Action action = null) {
@@ -300,8 +298,8 @@
 					);
 				} 
 			} else {
-				if (GUI.Button(rect, "Edit ▾")) {					
-					EditProperty.boolValue = true;
+				if (GUI.Button(rect, "Edit ▾")) {
+					Property.isExpanded = true;
 				}
 			}
 		}
