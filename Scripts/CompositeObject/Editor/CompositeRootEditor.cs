@@ -24,7 +24,7 @@
 			// Set to non-edit the previosly selected composite object
 			if (!string.IsNullOrEmpty(selectedCompositePathProperty.stringValue)) {
 				var selectedCompositeObjectProperty = serializedObject.FindProperty(selectedCompositePathProperty.stringValue);
-				selectedCompositeObjectProperty.isExpanded = false;
+				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = false;
 			}
 
 			// Assign the new value
@@ -33,7 +33,7 @@
 			// Set to edit the new selected composite object
 			if (!string.IsNullOrEmpty(selectedCompositePathProperty.stringValue)) {
 				var selectedCompositeObjectProperty = serializedObject.FindProperty(selectedCompositePathProperty.stringValue);
-				selectedCompositeObjectProperty.isExpanded = true;
+				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = true;
 			}
 
 			// Set any selected field to be non-selected. Otherwise the text content of a selected field

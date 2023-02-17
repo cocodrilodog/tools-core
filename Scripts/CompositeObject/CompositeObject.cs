@@ -69,6 +69,13 @@ namespace CocodriloDog.Core {
 
 		#region Public Properties
 
+#if UNITY_EDITOR
+		public bool Edit {
+			get => m_Edit;
+			set => m_Edit = value;
+		}
+#endif
+
 		/// <summary>
 		/// The name of the object
 		/// </summary>
@@ -78,7 +85,7 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// Override this if you want to change the default name of the object.
+		/// Override this if you wawnt to change the default name of the object.
 		/// </summary>
 		public virtual string DefaultName => GetType().Name;
 
@@ -89,6 +96,10 @@ namespace CocodriloDog.Core {
 
 		[SerializeField]
 		private string m_Name;
+
+#if UNITY_EDITOR
+		private bool m_Edit;
+#endif
 
 		#endregion
 

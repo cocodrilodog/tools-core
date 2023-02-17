@@ -59,7 +59,7 @@
 		/// </summary>
 		protected abstract List<Type> CompositeTypes { get; }
 
-		protected bool CanEdit => Property.managedReferenceValue != null && Property.isExpanded;
+		protected bool CanEdit => Property.managedReferenceValue != null && CompositeObject.Edit;
 
 		#endregion
 
@@ -144,6 +144,10 @@
 
 		#region Private Properties
 
+		//private SerializedProperty EditProperty { get; set; }
+
+		private CompositeObject CompositeObject => Property.managedReferenceValue as CompositeObject;
+
 		private SerializedProperty NameProperty { get; set; }
 
 		private SerializedProperty SelectedCompositePathProperty { get; set; }
@@ -158,7 +162,7 @@
 			if (SelectedCompositePathProperty == null) {
 
 				var buttonRect = GetNextPosition();
-				DrawNextButton($" ▴ ", () => Property.isExpanded = false);
+				DrawNextButton($" ▴ ", () => CompositeObject.Edit = false);
 				DrawNextButton($"{(Property.managedReferenceValue as CompositeObject).Name}");
 				
 				void DrawNextButton(string label, Action action = null) {
@@ -298,8 +302,8 @@
 					);
 				} 
 			} else {
-				if (GUI.Button(rect, "Edit ▾")) {
-					Property.isExpanded = true;
+				if (GUI.Button(rect, "Edit ▾")) {					
+					CompositeObject.Edit = true;
 				}
 			}
 		}

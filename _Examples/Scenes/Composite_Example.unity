@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c8aa8d52b67ad4982d7ce97ae45a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SelectedCompositePath: SingleDog.Puppies.Array.data[0].Puppies.Array.data[0]
+  m_SelectedCompositePath: SingleDog.Puppies.Array.data[0].Puppies.Array.data[1]
   OtherProperty: Other Property
   OtherProperty2: Other Property2
   SingleDog:
