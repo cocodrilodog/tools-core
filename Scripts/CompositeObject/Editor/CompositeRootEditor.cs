@@ -139,12 +139,12 @@
 							// Composite for this partial path
 							if (partialComposite == property.managedReferenceValue) {
 								// The partialComposite is the main composite object of this property
-								DrawNextButton($"• ", $"{partialComposite.Name}", parentProperty);
+								DrawNextButton($"• ", $"{partialComposite.DisplayName}", parentProperty);
 
 							} else {
 								// The partialComposite is an intermediate between the root and the main
 								// composite object of this property
-								DrawNextButton($"◂ ", $"{partialComposite.Name}", parentProperty, () => {
+								DrawNextButton($"◂ ", $"{partialComposite.DisplayName}", parentProperty, () => {
 									SelectCompositeObject(serializedObject, SelectedCompositePathProperty, partialProperty.propertyPath);
 								});
 							}
@@ -229,6 +229,8 @@
 
 		private void CreateSiblingsMenu(SerializedProperty parentProperty, string currentSibling) {
 
+			GUI.FocusControl(null);
+
 			// TODO: When two or more siblings have the same name, they will appear in the menu only once.
 			var menu = new GenericMenu();
 
@@ -247,7 +249,7 @@
 					// Save for later use by the menu
 					var pendingSiblingProperty = siblingProperty.Copy();
 					var on = compositeSibling.Name == currentSibling;
-					menu.AddItem(new GUIContent(compositeSibling.Name), on, () => SelectSibling(pendingSiblingProperty));
+					menu.AddItem(new GUIContent(compositeSibling.DisplayName), on, () => SelectSibling(pendingSiblingProperty));
 				} else if (siblingProperty.isArray && siblingProperty.propertyType == SerializedPropertyType.Generic) {
 					// The property is an array or list
 					for (int i = 0; i < siblingProperty.arraySize; i++) {
@@ -260,7 +262,7 @@
 								// It is CompositeObject, save for later use by the menu
 								var pendingElement = element.Copy();
 								var on = compositeSibling.Name == currentSibling;
-								menu.AddItem(new GUIContent(compositeSibling.Name), on, () => SelectSibling(pendingElement));
+								menu.AddItem(new GUIContent(compositeSibling.DisplayName), on, () => SelectSibling(pendingElement));
 							} else {
 								// These are managed references, but not CompositeObjects 
 								break;

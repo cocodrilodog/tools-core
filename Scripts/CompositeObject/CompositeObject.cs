@@ -84,10 +84,17 @@ namespace CocodriloDog.Core {
 			set => m_Name = value;
 		}
 
+		public string DisplayName => Name + NamePostfix;
+
 		/// <summary>
 		/// Override this if you wawnt to change the default name of the object.
 		/// </summary>
 		public virtual string DefaultName => GetType().Name;
+
+		/// <summary>
+		/// Override this to add extra information in the non-edit editor field.
+		/// </summary>
+		public virtual string NamePostfix => "";
 
 		#endregion
 

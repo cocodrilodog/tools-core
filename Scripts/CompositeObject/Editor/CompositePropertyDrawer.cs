@@ -218,15 +218,19 @@
 			} else {
 				// Edit button
 				if (CDEditorUtility.GetElementIndex(Property, out var index)) {
-					DrawPropertyField(propertyRect, $"Element {index}", $"{NameProperty.stringValue}");
+					DrawPropertyField(propertyRect, $"Element {index}", $"{DisplayName()}");
 				} else {
-					DrawPropertyField(propertyRect, $"{Property.displayName}", $"{NameProperty.stringValue}");
+					DrawPropertyField(propertyRect, $"{Property.displayName}", $"{DisplayName()}");
 				}
 				DrawEditButton(firstButtonRect);
 			}
 
 			// Remove button
 			DrawRemoveButton(secondButtonRect);
+
+			string DisplayName() {
+				return (Property.managedReferenceValue as CompositeObject).DisplayName;
+			} 
 
 		}
 
