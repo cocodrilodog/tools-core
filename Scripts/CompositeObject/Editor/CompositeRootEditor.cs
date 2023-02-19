@@ -48,17 +48,9 @@
 		#region Unity Methods
 
 		protected virtual void OnEnable() {
-
 			ScriptProperty = serializedObject.FindProperty("m_Script");
 			SelectedCompositePathProperty = serializedObject.FindProperty("m_SelectedCompositePath");
 			m_SiblingsControlTexture = Resources.Load("CompositeSiblingsControl") as Texture;
-
-			// If there is a selected composite, edit it
-			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
-				var selectedCompositeObjectProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
-				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = true;
-			}
-
 		}
 
 		public sealed override void OnInspectorGUI() {
@@ -76,6 +68,8 @@
 				}
 				serializedObject.ApplyModifiedProperties();
 			}
+			// This ensures the selected CompositeObject is editable.
+			CheckEdit();
 		}
 
 		#endregion
@@ -288,6 +282,13 @@
 			// Show the menu
 			menu.ShowAsContext();
 
+		}
+
+		private void CheckEdit() {
+			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
+				var selectedCompositeObjectProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
+				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = true;
+			}
 		}
 
 		#endregion
