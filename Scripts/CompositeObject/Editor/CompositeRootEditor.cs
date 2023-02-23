@@ -221,7 +221,7 @@
 
 		}
 
-		private void CreateSiblingsMenu(SerializedProperty parentProperty, string currentSibling) {
+		private void CreateSiblingsMenu(SerializedProperty parentProperty, string currentSiblingLabel) {
 
 			GUI.FocusControl(null);
 
@@ -242,7 +242,7 @@
 				if (IsCompositeProperty(siblingProperty, out var compositeSibling)) {
 					// Save for later use by the menu
 					var pendingSiblingProperty = siblingProperty.Copy();
-					var on = compositeSibling.Name == currentSibling;
+					var on = compositeSibling.DisplayName == currentSiblingLabel;
 					menu.AddItem(new GUIContent(compositeSibling.DisplayName), on, () => SelectSibling(pendingSiblingProperty));
 				} else if (siblingProperty.isArray && siblingProperty.propertyType == SerializedPropertyType.Generic) {
 					// The property is an array or list
@@ -255,7 +255,7 @@
 							if (compositeSibling != null) {
 								// It is CompositeObject, save for later use by the menu
 								var pendingElement = element.Copy();
-								var on = compositeSibling.Name == currentSibling;
+								var on = compositeSibling.DisplayName == currentSiblingLabel;
 								menu.AddItem(new GUIContent(compositeSibling.DisplayName), on, () => SelectSibling(pendingElement));
 							} else {
 								// These are managed references, but not CompositeObjects 
