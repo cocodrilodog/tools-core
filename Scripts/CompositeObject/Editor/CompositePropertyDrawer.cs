@@ -144,8 +144,6 @@
 
 		#region Private Properties
 
-		//private SerializedProperty EditProperty { get; set; }
-
 		private CompositeObject CompositeObject => Property.managedReferenceValue as CompositeObject;
 
 		private SerializedProperty NameProperty { get; set; }
