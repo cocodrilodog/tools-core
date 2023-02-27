@@ -226,6 +226,22 @@
 			// Remove button
 			DrawRemoveButton(secondButtonRect);
 
+			// Custom action button
+			if (Property.managedReferenceValue != null && 
+				(Property.managedReferenceValue as CompositeObject).FieldAction != null) {
+
+				var customAction = (Property.managedReferenceValue as CompositeObject).FieldAction;
+
+				var customActionRect = propertyRect;
+				customActionRect.xMin += customActionRect.width - 40;
+				customActionRect.xMax -= 2;
+				customActionRect.yMin += 2;
+				customActionRect.yMax -= 2;
+				if (GUI.Button(customActionRect, customAction.Label)) {
+					customAction.Action();
+				}
+			}
+
 			string DisplayName() {
 				return (Property.managedReferenceValue as CompositeObject).DisplayName;
 			} 

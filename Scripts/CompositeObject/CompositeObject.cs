@@ -70,10 +70,22 @@ namespace CocodriloDog.Core {
 		#region Public Properties
 
 #if UNITY_EDITOR
+
+		/// <summary>
+		/// This flag is used by the editor tools to show the <see cref="CompositeObject"/> exapanded
+		/// (<c>Edit = true</c>) or contracted as a one line field (<c>Edit = false</c>)
+		/// </summary>
 		public bool Edit {
 			get => m_Edit;
 			set => m_Edit = value;
 		}
+
+		/// <summary>
+		/// Override this to show a small button in the right part of the field that would carry on
+		/// the <see cref="CompositeFieldAction.Action"/>.
+		/// </summary>
+		public virtual CompositeFieldAction FieldAction => null;
+
 #endif
 
 		/// <summary>
@@ -111,5 +123,21 @@ namespace CocodriloDog.Core {
 
 
 	}
+
+#if UNITY_EDITOR
+	public class CompositeFieldAction {
+
+
+		#region Public Fields
+
+		public string Label;
+
+		public Action Action;
+
+		#endregion
+
+
+	}
+#endif
 
 }
