@@ -230,16 +230,19 @@
 			if (Property.managedReferenceValue != null && 
 				(Property.managedReferenceValue as CompositeObject).FieldAction != null) {
 
-				var customAction = (Property.managedReferenceValue as CompositeObject).FieldAction;
+				// Get the action
+				var fieldAction = (Property.managedReferenceValue as CompositeObject).FieldAction;
 
-				var customActionRect = propertyRect;
-				customActionRect.xMin += customActionRect.width - 40;
-				customActionRect.xMax -= 2;
-				customActionRect.yMin += 2;
-				customActionRect.yMax -= 2;
-				if (GUI.Button(customActionRect, customAction.Label)) {
-					customAction.Action();
+				// Draw the button
+				var fieldActionRect = propertyRect;
+				fieldActionRect.xMin += fieldActionRect.width - 40;
+				fieldActionRect.xMax -= 2;
+				fieldActionRect.yMin += 2;
+				fieldActionRect.yMax -= 2;
+				if (GUI.Button(fieldActionRect, fieldAction.Label)) {
+					fieldAction.Action();
 				}
+
 			}
 
 			string DisplayName() {
