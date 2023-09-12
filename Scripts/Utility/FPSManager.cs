@@ -1,4 +1,4 @@
-﻿namespace CocodriloDog.Utility {
+﻿namespace CocodriloDog.Core {
 
 	using System;
 	using System.Collections;
@@ -6,6 +6,7 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	// TODO: This may be a good candidate for a `Settings` package
 	public class FPSManager : MonoBehaviour {
 
 

@@ -4,7 +4,6 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 	using UnityEditor;
-	using CocodriloDog.Utility;
 
 	[CustomPropertyDrawer(typeof(HorizontalLineAttribute))]
 	public class HorizontalLineDecoratorDrawer : DecoratorDrawer {

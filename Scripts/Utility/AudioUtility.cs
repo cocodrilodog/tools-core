@@ -1,4 +1,4 @@
-﻿namespace CocodriloDog.Utility {
+﻿namespace CocodriloDog.Core {
 
 	using System.Collections;
 	using System.Collections.Generic;
@@ -12,6 +12,7 @@
 		// Source: https://answers.unity.com/questions/283192/how-to-convert-decibel-number-to-audio-source-volu.html
 		public static float LinearToDecibel(float linear) {
 			float dB;
+			// TODO: Check if this must be "if (linear > 0)" instead
 			if (linear != 0) {
 				dB = 20.0f * Mathf.Log10(linear);
 			} else {

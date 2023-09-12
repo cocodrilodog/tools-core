@@ -1,4 +1,4 @@
-﻿namespace CocodriloDog.Utility {
+﻿namespace CocodriloDog.Core {
 
 	using UnityEngine;
 	using System.Collections;
