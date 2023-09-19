@@ -16,5 +16,12 @@
     "name": "Cocodrilo Dog",
     "email": "contact@cocodrilodog.com",
     "url": "https://www.cocodrilodog.com"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Core Samples",
+      "description": "Contains examples scenes for Cocodrilo Dog Core objects",
+      "path": "Samples~"
+    }
+  ]
 }

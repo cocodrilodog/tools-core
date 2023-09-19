@@ -182,7 +182,7 @@ MonoBehaviour:
     - rid: -2
       type: {class: , ns: , asm: }
     - rid: 7857419161603407874
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: GrandMotherSingle
         Race: Single
@@ -192,7 +192,7 @@ MonoBehaviour:
         Male:
           rid: 7857419345525473281
     - rid: 7857419161603407875
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother1
         Race: Single
@@ -203,12 +203,12 @@ MonoBehaviour:
         Male:
           rid: 7857419345525473280
     - rid: 7857419161603407876
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: Single
     - rid: 7857419161603407997
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: GrandMother1
         Race: List
@@ -219,7 +219,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419161603407998
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother1
         Race: List
@@ -229,12 +229,12 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419161603407999
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652802
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother2
         Race: Single
@@ -245,27 +245,27 @@ MonoBehaviour:
         Male:
           rid: 7857419345525473282
     - rid: 7857419323624652803
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: Single
     - rid: 7857419323624652804
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: Single
     - rid: 7857419323624652806
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy3
         Race: Single
     - rid: 7857419323624652808
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652811
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother2
         Race: List
@@ -275,17 +275,17 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652812
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652813
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652817
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother3
         Race: List
@@ -295,17 +295,17 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652818
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652819
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652827
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: GrandMother2
         Race: List
@@ -316,7 +316,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652828
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother1
         Race: List
@@ -326,7 +326,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652829
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother2
         Race: List
@@ -336,7 +336,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652830
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother3
         Race: List
@@ -346,37 +346,37 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652831
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652832
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652833
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652834
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652835
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652836
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652847
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: GrandMother3
         Race: List
@@ -387,7 +387,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652848
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother1
         Race: List
@@ -397,7 +397,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652849
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother2
         Race: List
@@ -407,7 +407,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652850
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Mother3
         Race: List
@@ -417,57 +417,57 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419323624652851
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652852
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652853
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652854
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652855
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy1
         Race: List
     - rid: 7857419323624652856
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: List
     - rid: 7857419323624652858
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy2
         Race: Single
     - rid: 7857419323624652860
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Puppy3
         Race: Single
     - rid: 7857419345525473280
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Father
         Race: 
     - rid: 7857419345525473281
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: GrandFather
         Race: 
     - rid: 7857419345525473282
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Father
         Race: 
@@ -525,7 +525,7 @@ MonoBehaviour:
     - rid: -2
       type: {class: , ns: , asm: }
     - rid: 7857419192532205568
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: DogMother1
         Race: Non-Root
@@ -534,7 +534,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419192532205570
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: DogMother2
         Race: Non-Root
@@ -543,7 +543,7 @@ MonoBehaviour:
         Male:
           rid: -2
     - rid: 7857419192532205571
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core}
+      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
       data:
         m_Name: Dog3
         Race: Non-Root
