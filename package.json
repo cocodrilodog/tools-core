@@ -20,7 +20,7 @@
   "samples": [
     {
       "displayName": "Core Samples",
-      "description": "Contains examples scenes for Cocodrilo Dog Core objects",
+      "description": "Contains example scenes for Cocodrilo Dog Core objects",
       "path": "Samples~"
     }
   ]
