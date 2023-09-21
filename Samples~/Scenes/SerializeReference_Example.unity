@@ -259,7 +259,7 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 7857419116390121525
-      type: {class: CatMother, ns: CocodriloDog.Core.Examples, asm: Assembly-CSharp}
+      type: {class: CatMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         Name: Beat Boy
         Kittens: []
