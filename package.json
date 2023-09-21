@@ -19,7 +19,7 @@
   },
   "samples": [
     {
-      "displayName": "Core Samples",
+      "displayName": "Examples",
       "description": "Contains example scenes for Cocodrilo Dog Core objects",
       "path": "Samples~"
     }
