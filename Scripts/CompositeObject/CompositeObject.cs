@@ -108,6 +108,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
+		[Tooltip("The name of this CompositeObject")]
 		[SerializeField]
 		private string m_Name;
 
