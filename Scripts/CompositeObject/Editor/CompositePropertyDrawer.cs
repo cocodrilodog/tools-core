@@ -42,7 +42,7 @@
 				Edit_OnGUI(position, property, label);
 			} else {
 				// Draw non-edit mode
-				OnNonEditGUI(position, property, label);
+				NonEdit_OnGUI(position, property, label);
 			}
 			EditorGUI.EndProperty();
 
@@ -139,6 +139,27 @@
 			EditorGUI.PropertyField(GetNextPosition(), NameProperty);		
 		}
 
+		protected virtual void DrawPropertyField(Rect propertyRect, string label, string name) {
+
+			// Label rect
+			var labelWidth = Position.width * 0.25f;
+			var labelRect = propertyRect;
+			labelRect.width = labelWidth;
+
+			// Field rect
+			var fieldRect = propertyRect;
+			fieldRect.xMin += labelWidth + 2;
+
+			// Create a label with the property name
+			EditorGUI.LabelField(labelRect, label);
+
+			// Create a box resembling an Object field
+			EditorGUI.BeginDisabledGroup(true);
+			GUI.Box(fieldRect, name, EditorStyles.objectField);
+			EditorGUI.EndDisabledGroup();
+
+		}
+
 		#endregion
 
 
@@ -153,7 +174,7 @@
 		#endregion
 
 
-		#region Private Methods - Edit Mode
+		#region Private Methods
 
 		private void DrawBreadcrums() {
 
@@ -183,12 +204,7 @@
 			}
 		}
 
-		#endregion
-
-
-		#region Private Methods - Non Edit Mode
-
-		private void OnNonEditGUI(Rect position, SerializedProperty property, GUIContent label) {
+		private void NonEdit_OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 
 			// Main rect
 			var mainRect = GetNextPosition();
@@ -201,7 +217,7 @@
 			// Property rects
 			var propertyRect = mainRect;
 			propertyRect.xMax -= buttonsWidth + 2;
-			
+
 			// Button specific rects
 			var firstButtonRect = buttonsRect;
 			firstButtonRect.width *= 0.5f;
@@ -226,49 +242,9 @@
 			// Remove button
 			DrawRemoveButton(secondButtonRect);
 
-			// Custom action button
-			if (Property.managedReferenceValue != null && 
-				(Property.managedReferenceValue as CompositeObject).FieldAction != null) {
-
-				// Get the action
-				var fieldAction = (Property.managedReferenceValue as CompositeObject).FieldAction;
-
-				// Draw the button
-				var fieldActionRect = propertyRect;
-				fieldActionRect.xMin += fieldActionRect.width - 40;
-				fieldActionRect.xMax -= 2;
-				fieldActionRect.yMin += 2;
-				fieldActionRect.yMax -= 2;
-				if (GUI.Button(fieldActionRect, fieldAction.Label)) {
-					fieldAction.Action();
-				}
-
-			}
-
 			string DisplayName() {
 				return (Property.managedReferenceValue as CompositeObject).DisplayName;
-			} 
-
-		}
-
-		private void DrawPropertyField(Rect propertyRect, string label, string name) {
-
-			// Label rect
-			var labelWidth = Position.width * 0.25f;
-			var labelRect = propertyRect;
-			labelRect.width = labelWidth;
-
-			// Field rect
-			var fieldRect = propertyRect;
-			fieldRect.xMin += labelWidth + 2;
-
-			// Create a label with the property name
-			EditorGUI.LabelField(labelRect, label);
-
-			// Create a box resembling an Object field
-			EditorGUI.BeginDisabledGroup(true);
-			GUI.Box(fieldRect, name, EditorStyles.objectField);
-			EditorGUI.EndDisabledGroup();
+			}
 
 		}
 

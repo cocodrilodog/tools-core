@@ -79,12 +79,6 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// Override this to show a small button in the right part of the field that would carry on
-		/// the <see cref="CompositeFieldAction.Action"/>.
-		/// </summary>
-		public virtual CompositeFieldAction FieldAction => null;
-
-		/// <summary>
 		/// The name of the object
 		/// </summary>
 		public string Name {
@@ -113,20 +107,6 @@ namespace CocodriloDog.Core {
 		private string m_Name;
 
 		private bool m_Edit;
-
-		#endregion
-
-
-	}
-
-	public class CompositeFieldAction {
-
-
-		#region Public Fields
-
-		public string Label;
-
-		public Action Action;
 
 		#endregion
 

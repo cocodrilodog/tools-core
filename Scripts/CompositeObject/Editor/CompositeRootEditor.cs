@@ -75,6 +75,13 @@
 		#endregion
 
 
+		#region Protected Properties
+
+		protected SerializedProperty ScriptProperty { get; private set; }
+
+		#endregion
+
+
 		#region Protected Methods
 
 		/// <summary>
@@ -97,8 +104,6 @@
 
 
 		#region Private Properties
-
-		private SerializedProperty ScriptProperty { get; set; }
 
 		private SerializedProperty SelectedCompositePathProperty { get; set; }
 
