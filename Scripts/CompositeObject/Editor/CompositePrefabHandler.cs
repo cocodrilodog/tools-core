@@ -40,8 +40,8 @@ namespace CocodriloDog.Core {
 				if(property != null) { // The property may be null when the object no longer exists
 					var propertyType = CDEditorUtility.GetPropertyType(property);
 					if (typeof(CompositeObject).IsAssignableFrom(propertyType)) {
-						Debug.Log($"+++{modifications[i].currentValue.target}: {modifications[i].currentValue.propertyPath}");
-						Debug.Log($"property.managedReferenceValue: {property.managedReferenceValue}");
+						//Debug.Log($"+++{modifications[i].currentValue.target}: {modifications[i].currentValue.propertyPath}");
+						//Debug.Log($"property.managedReferenceValue: {property.managedReferenceValue}");
 						var component = modifications[i].currentValue.target as Component;
 						if(component != null) {
 							//Debug.Log($"GetPrefabAssetType(); {PrefabUtility.GetPrefabAssetType(component.gameObject)}");
@@ -63,9 +63,9 @@ namespace CocodriloDog.Core {
 							if (prefabAssetType == PrefabAssetType.Regular) {
 								prefab = PrefabUtility.GetCorrespondingObjectFromOriginalSource(component.gameObject);
 								if (prefab == component.gameObject) {
-									Debug.Log("Target is prefab");
+									//Debug.Log("Target is prefab");
 								} else {
-									Debug.Log("Target is prefab instance");
+									//Debug.Log("Target is prefab instance");
 								}
 							}
 
@@ -75,19 +75,19 @@ namespace CocodriloDog.Core {
 								if(prefabStage != null) {
 									var targetIsPrefabStageRoot = component.gameObject == prefabStage.prefabContentsRoot;
 									if (targetIsPrefabStageRoot) {
-										Debug.Log($"Target is prefab stage root");
+										//Debug.Log($"Target is prefab stage root");
 										prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabStage.assetPath);
 									}
 								}
 							}
 
-							Debug.Log($"Prefab: {prefab}");
-							Debug.Log($"Prefab instances:");
+							//Debug.Log($"Prefab: {prefab}");
+							//Debug.Log($"Prefab instances:");
 
 							if (prefab != null) {
 								var prefabInstances = PrefabUtility.FindAllInstancesOfPrefab(prefab);
 								foreach(var instance in prefabInstances) {
-									Debug.Log($"\t{instance}");
+									//Debug.Log($"\t{instance}");
 								}
 							}
 
