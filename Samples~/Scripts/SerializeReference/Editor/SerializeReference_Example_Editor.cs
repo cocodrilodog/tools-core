@@ -1,5 +1,6 @@
-namespace CocodriloDog.Core.Examples {
+namespace CocodriloDog.Core.Examples.Editor {
 
+	using CocodriloDog.Core.Examples;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEditor;

@@ -1,8 +1,8 @@
 {
   "name": "com.cocodrilodog.core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Cocodrilo Dog Core",
-  "description": "Cocodrilo Dog's core tools for general purpose",
+  "description": "Cocodrilo Dog's core tools for general purpose.",
   "unity": "2019.3",
   "documentationUrl": "https://github.com/cocodrilodog/tools-core",
   "changelogUrl": "https://example.com/changelog.html",
