@@ -96,6 +96,28 @@
 		#endregion
 
 
+		#region Private Static Methods
+
+		/// <summary>
+		/// Checks whether the property corresponds to a CompositeObject and if so, assigns it to 
+		/// <paramref name="compositeObject"/>
+		/// </summary>
+		/// <param name="property">The property</param>
+		/// <param name="compositeObject">The CompositeObject to assign to</param>
+		/// <returns><c>true</c> if the property corresponds to a CompositeObject, otherwise <c>false</c></returns>
+		static private bool IsCompositeProperty(SerializedProperty property, out CompositeObject compositeObject) {
+			var isComposite = property.propertyType == SerializedPropertyType.ManagedReference &&
+				property.managedReferenceValue is CompositeObject;
+			compositeObject = null;
+			if (isComposite) {
+				compositeObject = property.managedReferenceValue as CompositeObject;
+			}
+			return isComposite;
+		}
+
+		#endregion
+
+
 		#region Private Fields
 
 		private Texture m_SiblingsControlTexture;
@@ -138,12 +160,12 @@
 							// Composite for this partial path
 							if (partialComposite == property.managedReferenceValue) {
 								// The partialComposite is the main composite object of this property
-								DrawNextButton($"• ", $"{partialComposite.DisplayName}", parentProperty);
+								DrawNextButton($"• ", partialProperty, parentProperty);
 
 							} else {
 								// The partialComposite is an intermediate between the root and the main
 								// composite object of this property
-								DrawNextButton($"◂ ", $"{partialComposite.DisplayName}", parentProperty, () => {
+								DrawNextButton($"◂ ", partialProperty, parentProperty, () => {
 									SelectCompositeObject(serializedObject, SelectedCompositePathProperty, partialProperty.propertyPath);
 								});
 							}
@@ -159,16 +181,6 @@
 			}
 			GUILayout.EndHorizontal();
 
-		}
-
-		private bool IsCompositeProperty(SerializedProperty property, out CompositeObject compositeObject) {
-			var isComposite = property.propertyType == SerializedPropertyType.ManagedReference &&
-				property.managedReferenceValue is CompositeObject;
-			compositeObject = null;
-			if (isComposite) {
-				compositeObject = property.managedReferenceValue as CompositeObject;
-			}
-			return isComposite;
 		}
 
 		/// <summary>
@@ -190,18 +202,24 @@
 		/// Draws a breadcrums button that can show a <see cref="GenericMenu"/> with the siblings 
 		/// of the <see cref="CompositeObject"/> of the button.
 		/// </summary>
+		/// <param name="prefix">A prefix for the button. For example "•" or "◂".</param>
 		/// <param name="label">The label of the button</param>
 		/// <param name="parentProperty">
 		/// The parent property to iterate over its children and display them in a <see cref="GenericMenu"/>.
 		/// They are the siblings of the button's object.
 		/// </param>
-		/// <param name="buttonID">This identifies the button</param>
 		/// <param name="action">The action that the button will perform</param>
-		private void DrawNextButton(string prefix, string label, SerializedProperty parentProperty, Action action = null) {
+		private void DrawNextButton(string prefix, SerializedProperty currentProperty, SerializedProperty parentProperty, Action action = null) {
+
+			// Create a siblings menu
+			var siblingsMenu = new SiblingsMenu(this, currentProperty, parentProperty);
 
 			// Draw the button
 			EditorGUI.BeginDisabledGroup(action == null);
-			if (GUILayout.Button(prefix + label, GUILayout.ExpandWidth(false))) {
+
+			// Get the the button label from the menu, because it may be a repeated DisplayName that
+			// need to be changed to DisplayName (#)
+			if (GUILayout.Button(prefix + siblingsMenu.ButtonLabel, GUILayout.ExpandWidth(false))) {
 				action?.Invoke();
 			}
 
@@ -216,76 +234,14 @@
 			EditorGUI.EndDisabledGroup();
 
 			if (GUI.Button(siblingsRect, "")) {
-				CreateSiblingsMenu(parentProperty, label);
+				//CreateSiblingsMenu(currentProperty, parentProperty);
+				siblingsMenu.ShowAsContext();
 			}
 
 			// Shrink the rect to the texture size
 			siblingsRect.height = 14;
 			siblingsRect.center = center;
 			GUI.DrawTexture(siblingsRect, m_SiblingsControlTexture);
-
-		}
-
-		private void CreateSiblingsMenu(SerializedProperty parentProperty, string currentSiblingLabel) {
-
-			GUI.FocusControl(null);
-
-			// TODO: When two or more siblings have the same name, they will appear in the menu only once.
-			var menu = new GenericMenu();
-
-			if (parentProperty != null) {
-				// Parent property is CompositeObject
-				CDEditorUtility.IterateChildProperties(parentProperty, SiblingPropertyAction);
-			} else {
-				// Parent property is CompositeRoot
-				CDEditorUtility.IterateChildProperties(serializedObject, SiblingPropertyAction);
-			}
-
-			// This will receive the siblings of the button's object
-			void SiblingPropertyAction(SerializedProperty siblingProperty) {
-
-				if (IsCompositeProperty(siblingProperty, out var compositeSibling)) {
-					// Save for later use by the menu
-					var pendingSiblingProperty = siblingProperty.Copy();
-					var on = compositeSibling.DisplayName == currentSiblingLabel;
-					menu.AddItem(new GUIContent(compositeSibling.DisplayName), on, () => SelectSibling(pendingSiblingProperty));
-				} else if (siblingProperty.isArray && siblingProperty.propertyType == SerializedPropertyType.Generic) {
-					// The property is an array or list
-					for (int i = 0; i < siblingProperty.arraySize; i++) {
-						// Get the elements
-						var element = siblingProperty.GetArrayElementAtIndex(i);
-						if (element.propertyType == SerializedPropertyType.ManagedReference) {
-							// It is managed reference
-							compositeSibling = element.managedReferenceValue as CompositeObject;
-							if (compositeSibling != null) {
-								// It is CompositeObject, save for later use by the menu
-								var pendingElement = element.Copy();
-								var on = compositeSibling.DisplayName == currentSiblingLabel;
-								menu.AddItem(new GUIContent(compositeSibling.DisplayName), on, () => SelectSibling(pendingElement));
-							} else {
-								// These are managed references, but not CompositeObjects 
-								break;
-							}
-						} else {
-							// This is an array of non-managed reference objects
-							break;
-						}
-					}
-				}
-
-				// Delay the selection to overcome strange menu timing
-				void SelectSibling(SerializedProperty prop) {
-					EditorApplication.delayCall += () => {
-						serializedObject.Update();
-						SelectCompositeObject(serializedObject, SelectedCompositePathProperty, prop.propertyPath);
-						serializedObject.ApplyModifiedProperties();
-					};
-				}
-
-			}
-
-			// Show the menu
-			menu.ShowAsContext();
 
 		}
 
@@ -298,6 +254,154 @@
 
 		#endregion
 
+
+		public class SiblingsMenu {
+
+
+			#region public Properties
+
+			public string ButtonLabel => m_ButtonLabel;
+
+			#endregion
+
+
+			#region Public Constructors
+
+			public SiblingsMenu(CompositeRootEditor editor, SerializedProperty currentProperty, SerializedProperty parentProperty) {
+
+				m_Menu = new GenericMenu();
+
+				m_Editor = editor;
+				m_CurrentProperty = currentProperty;
+				m_ParentProperty = parentProperty;
+
+				if (parentProperty != null) {
+					// Parent property is CompositeObject
+					CDEditorUtility.IterateChildProperties(m_ParentProperty, ForEachSibling);
+				} else {
+					// Parent property is CompositeRoot
+					CDEditorUtility.IterateChildProperties(m_Editor.serializedObject, ForEachSibling);
+				}
+
+			}
+
+			#endregion
+
+
+			#region Public Methods
+
+			public void ShowAsContext() {
+				GUI.FocusControl(null);
+				m_Menu.ShowAsContext();
+			}
+
+			#endregion
+
+
+			#region Private Fields
+
+			private CompositeRootEditor m_Editor;
+
+			private SerializedProperty m_CurrentProperty;
+
+			private SerializedProperty m_ParentProperty;
+
+			private Dictionary<string, int> m_SiblingNamesCount = new Dictionary<string, int>();
+
+			private string m_ButtonLabel;
+
+			private GenericMenu m_Menu;
+
+			#endregion
+
+
+			#region Private Methods
+
+			private void ForEachSibling(SerializedProperty siblingProperty) {
+				if (IsCompositeProperty(siblingProperty, out var compositeSibling)) {
+
+					// Save for later use by the menu
+					var pendingSiblingProperty = siblingProperty.Copy();
+					var on = siblingProperty.propertyPath == m_CurrentProperty.propertyPath;
+					var checkedName = CheckRepeatedName(compositeSibling.DisplayName);
+
+					m_Menu.AddItem(new GUIContent(checkedName), on, () => SelectSibling(pendingSiblingProperty));
+
+					if (siblingProperty.propertyPath == m_CurrentProperty.propertyPath) {
+						m_ButtonLabel = checkedName;
+					}
+
+				} else if (siblingProperty.isArray && siblingProperty.propertyType == SerializedPropertyType.Generic) {
+					// The property is an array or list
+					for (int i = 0; i < siblingProperty.arraySize; i++) {
+						
+						// Get the elements
+						var element = siblingProperty.GetArrayElementAtIndex(i);
+						
+						if (element.propertyType == SerializedPropertyType.ManagedReference) {
+							
+							// It is managed reference
+							compositeSibling = element.managedReferenceValue as CompositeObject;
+							
+							if (compositeSibling != null) {
+
+								// It is CompositeObject, save for later use by the menu
+								var pendingElement = element.Copy();
+								var on = element.propertyPath == m_CurrentProperty.propertyPath;
+								var checkedName = CheckRepeatedName(compositeSibling.DisplayName);
+
+								m_Menu.AddItem(new GUIContent(checkedName), on, () => SelectSibling(pendingElement));
+
+								if (element.propertyPath == m_CurrentProperty.propertyPath) {
+									m_ButtonLabel = checkedName;
+								}
+
+							} else {
+								// These are managed references, but not CompositeObjects 
+								break;
+							}
+
+						} else {
+							// This is an array of non-managed reference objects
+							break;
+						}
+
+					}
+				}
+			}
+
+			/// <summary>
+			/// Checks if the name is repeated and if so, appends a counter like "(1)", "(2)", etc.
+			/// </summary>
+			/// <param name="siblingName"></param>
+			/// <param name="names"></param>
+			/// <returns></returns>
+			private string CheckRepeatedName(string siblingName) {
+				if (!m_SiblingNamesCount.ContainsKey(siblingName)) {
+					m_SiblingNamesCount[siblingName] = 1;
+				} else {
+					m_SiblingNamesCount[siblingName]++;
+					siblingName += $" ({m_SiblingNamesCount[siblingName] - 1})";
+				}
+				return siblingName;
+			}
+
+			/// <summary>
+			/// Delay the selection to overcome strange menu timing.
+			/// </summary>
+			/// <param name="prop">The property of the composite object to be selected</param>
+			private void SelectSibling(SerializedProperty prop) {
+				EditorApplication.delayCall += () => {
+					m_Editor.serializedObject.Update();
+					SelectCompositeObject(m_Editor.serializedObject, m_Editor.SelectedCompositePathProperty, prop.propertyPath);
+					m_Editor.serializedObject.ApplyModifiedProperties();
+				};
+			}
+
+			#endregion
+
+
+		}
 
 	}
 
