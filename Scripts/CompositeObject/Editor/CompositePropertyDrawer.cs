@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using UnityEditor;
 	using UnityEngine;
@@ -10,7 +11,8 @@
 	/// <summary>
 	/// Base class for property drawers of <see cref="CompositeObject"/> concrete classes.
 	/// </summary>
-	public abstract class CompositePropertyDrawer : PropertyDrawerBase {
+	[CustomPropertyDrawer(typeof(CompositeObject), true)]
+	public class CompositePropertyDrawer : PropertyDrawerBase {
 
 
 		#region Unity Methods
@@ -54,12 +56,49 @@
 		#region Protected Properties
 
 		/// <summary>
-		/// Implement this in subclasses to obtain a list of possible concrete classes that will appear 
-		/// in a context menu when the user clicks the "Create" button.
+		/// Obtains a list of possible concrete classes that will appear in a context menu when the user
+		/// clicks the "Create" button.
 		/// </summary>
-		protected abstract List<Type> CompositeTypes { get; }
+		protected List<Type> CompositeTypes {
+			get {
 
+				// The concrete composite object
+				var concreteType = CDEditorUtility.GetPropertyType(Property);
+
+				// Create the list
+				var allConcreteSubtypes = new List<Type>();
+
+				// Add the current type, if not abstract
+				if (!concreteType.IsAbstract) {
+					allConcreteSubtypes.Add(concreteType);
+				}
+
+				// Get all the types of the assembly
+				var assemblyTypes = concreteType.Assembly.GetTypes();
+
+				// Find all subtypes that are concrete. This will include grand children, great grand
+				// children, etc., because it is approving all that are assignable to the concreteType
+				var concreteSubtypes = assemblyTypes
+					.Where(t => concreteType.IsAssignableFrom(t) && t != concreteType && !t.IsAbstract)
+					.ToList();
+
+				// Add them to the list
+				allConcreteSubtypes.AddRange(concreteSubtypes);
+				return allConcreteSubtypes;
+
+			}
+		}
+
+		/// <summary>
+		/// <true> when the composite object can enter edit mode.
+		/// </summary>
 		protected bool CanEdit => Property.managedReferenceValue != null && CompositeObject.Edit;
+
+		/// <summary>
+		/// If <true>, derived composite objects will automatically draw all of their properties.
+		/// This can be overriden to <c>false</c> if you want to customize the derived property drawer.
+		/// </summary>
+		protected virtual bool UseDefaultDrawer => true;
 
 		#endregion
 
@@ -113,19 +152,33 @@
 		/// <param name="label">The label</param>
 		/// <returns>The height</returns>
 		protected virtual float Edit_GetPropertyHeight(SerializedProperty property, GUIContent label) {
+			
+			float height = 0;
+			
 			if (SelectedCompositePathProperty != null) {
 				// There is a root, breadcrums is handled by the root.
 				//
 				// One-field height for the the name. 
 				// Subclasses should add extra space for their properties
-				return base.GetPropertyHeight(property, label); 
+				height = base.GetPropertyHeight(property, label);
 			} else {
 				// There is no root, breadcrums are drawn here.
 				//
 				// One-field height for the breadcrums + the name.
 				// Subclasses should add extra space for their properties
-				return base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2;
+				height = base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2;
 			}
+
+			if (UseDefaultDrawer) {
+				CDEditorUtility.IterateChildProperties(Property, p => {
+					if (p.propertyPath != NameProperty.propertyPath) {
+						height += EditorGUI.GetPropertyHeight(p) + 2;
+					}
+				});
+			}
+
+			return height;
+
 		}
 
 		/// <summary>
@@ -136,7 +189,14 @@
 		/// <param name="label">The label</param>
 		protected virtual void Edit_OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			// This base class only handles the name property.
-			EditorGUI.PropertyField(GetNextPosition(), NameProperty);		
+			EditorGUI.PropertyField(GetNextPosition(), NameProperty);
+			if (UseDefaultDrawer) {
+				CDEditorUtility.IterateChildProperties(Property, p => {
+					if (p.propertyPath != NameProperty.propertyPath) {
+						EditorGUI.PropertyField(GetNextPosition(p), p);
+					}
+				});
+			}
 		}
 
 		protected virtual void DrawPropertyField(Rect propertyRect, string label, string name) {

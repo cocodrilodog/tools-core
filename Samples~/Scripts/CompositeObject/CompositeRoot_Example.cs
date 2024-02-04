@@ -10,6 +10,7 @@ namespace CocodriloDog.Core.Examples {
 	/// entire inspector and will allow to navigate from the root object to deeper levels and 
 	/// vice versa via breadcrums.
 	/// </summary>
+	[AddComponentMenu("")]
 	public class CompositeRoot_Example : CompositeRoot {
 
 

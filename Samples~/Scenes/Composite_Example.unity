@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c8aa8d52b67ad4982d7ce97ae45a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SelectedCompositePath: 
+  m_SelectedCompositePath: SingleDog
   OtherProperty: Other Property
   OtherProperty2: Other Property2
   SingleDog:
@@ -185,7 +185,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: GrandMotherSingle
-        Race: Single
+        Race: Single (non-list element)
         Puppies:
         - rid: 7857419161603407875
         - rid: 7857419323624652802
@@ -195,7 +195,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother1
-        Race: Single
+        Race: List Element
         Puppies:
         - rid: 7857419161603407876
         - rid: 7857419323624652804
@@ -206,12 +206,12 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: Single
+        Race: List Element
     - rid: 7857419161603407997
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: GrandMother1
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419161603407998
         - rid: 7857419323624652811
@@ -222,7 +222,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother1
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419161603407999
         - rid: 7857419323624652808
@@ -232,12 +232,12 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652802
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother2
-        Race: Single
+        Race: List Element
         Puppies:
         - rid: 7857419323624652803
         - rid: 7857419323624652858
@@ -248,27 +248,27 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: Single
+        Race: List Element
     - rid: 7857419323624652804
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: Single
+        Race: List Element
     - rid: 7857419323624652806
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy3
-        Race: Single
+        Race: List Element
     - rid: 7857419323624652808
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652811
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother2
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652812
         - rid: 7857419323624652813
@@ -278,17 +278,17 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652813
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652817
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother3
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652818
         - rid: 7857419323624652819
@@ -298,17 +298,17 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652819
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652827
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: GrandMother2
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652828
         - rid: 7857419323624652829
@@ -319,7 +319,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother1
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652831
         - rid: 7857419323624652832
@@ -329,7 +329,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother2
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652833
         - rid: 7857419323624652834
@@ -339,7 +339,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother3
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652835
         - rid: 7857419323624652836
@@ -349,37 +349,37 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652832
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652833
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652834
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652835
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652836
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652847
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: GrandMother3
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652848
         - rid: 7857419323624652849
@@ -390,7 +390,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother1
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652851
         - rid: 7857419323624652852
@@ -400,7 +400,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother2
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652853
         - rid: 7857419323624652854
@@ -410,7 +410,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Mother3
-        Race: List
+        Race: List Element
         Puppies:
         - rid: 7857419323624652855
         - rid: 7857419323624652856
@@ -420,57 +420,57 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652852
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652853
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652854
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652855
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy1
-        Race: List
+        Race: List Element
     - rid: 7857419323624652856
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: List
+        Race: List Element
     - rid: 7857419323624652858
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy2
-        Race: Single
+        Race: List Element
     - rid: 7857419323624652860
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Puppy3
-        Race: Single
+        Race: List Element
     - rid: 7857419345525473280
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Father
-        Race: 
+        Race: Single
     - rid: 7857419345525473281
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: GrandFather
-        Race: 
+        Race: Single
     - rid: 7857419345525473282
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Father
-        Race: 
+        Race: Single
 --- !u!1 &454542281
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,7 +528,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: DogMother1
-        Race: Non-Root
+        Race: Non-Root Grand Mother
         Puppies:
         - rid: 7857419192532205570
         Male:
@@ -537,7 +537,7 @@ MonoBehaviour:
       type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: DogMother2
-        Race: Non-Root
+        Race: Non-Root Child
         Puppies:
         - rid: 7857419192532205571
         Male:
@@ -546,7 +546,7 @@ MonoBehaviour:
       type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Dog3
-        Race: Non-Root
+        Race: Non-Root Grand Child
 --- !u!1 &506034114
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,6 +684,138 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!1 &2076050774
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2076050776}
+  - component: {fileID: 2076050777}
+  m_Layer: 0
+  m_Name: CompositeRoot_Example2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2076050776
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2076050774}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0223124, y: 0.02708739, z: -0.0244236}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2076050777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2076050774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafaa61b2806b148b92959517e9ac49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SelectedCompositePath: 
+  m_MyDrive:
+    rid: 2882064172937641987
+  references:
+    version: 2
+    RefIds:
+    - rid: 2882064172937641987
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Documents
+        m_Files:
+        - rid: 2882064172937641988
+        - rid: 2882064172937641989
+        - rid: 2882064172937641992
+    - rid: 2882064172937641988
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Todo List
+        m_Text: '- Clean the house
+
+          - Buy groceries
+
+          - Take the
+          garbage out'
+    - rid: 2882064172937641989
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Jobs Kit
+        m_Files:
+        - rid: 2882064172937641990
+        - rid: 2882064172937641991
+    - rid: 2882064172937641990
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Curriculum Vitae
+        m_Text: 'I went to school,
+
+          I went to University,
+
+          I
+          created one interactive media company,
+
+          I joined an engineering
+          company
+
+          I co-founded Cocodrilo Dog
+
+          I moved to Australia'
+    - rid: 2882064172937641991
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Cover Letter
+        m_Text: 'Dear recruiter,
+
+
+          I am a game developer, and I love it.
+
+
+          Kind
+          regards,
+
+          Juan'
+    - rid: 2882064172937641992
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Design Concepts
+        m_Files:
+        - rid: 2882064172937641993
+        - rid: 2882064172937641994
+        - rid: 2882064172937641995
+    - rid: 2882064172937641993
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Emotion
+        m_Text: People may forget what you said, but they'll never forget how you
+          made them feel.
+    - rid: 2882064172937641994
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Essential Experience
+        m_Text: To use this lens, stop thinking about your game, and start thinking
+          about the experience of the player.
+    - rid: 2882064172937641995
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Venue
+        m_Text: The places that we play exert tremendous  influence on the design
+          of our games.
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -691,3 +823,4 @@ SceneRoots:
   - {fileID: 506034117}
   - {fileID: 437508405}
   - {fileID: 454542282}
+  - {fileID: 2076050776}

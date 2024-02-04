@@ -10,7 +10,8 @@
 	/// <summary>
 	/// Base class for editors of concrete implementations of <see cref="CompositeRoot"/>.
 	/// </summary>
-	public abstract class CompositeRootEditor : Editor {
+	[CustomEditor(typeof(CompositeRoot), true)]
+	public class CompositeRootEditor : Editor {
 
 
 		#region Public Static Methods
