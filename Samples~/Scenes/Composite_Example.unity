@@ -123,430 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &437508403
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 437508405}
-  - component: {fileID: 437508406}
-  m_Layer: 0
-  m_Name: CompositeRoot_Example
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &437508405
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437508403}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &437508406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437508403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23c8aa8d52b67ad4982d7ce97ae45a5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SelectedCompositePath: SingleDog
-  OtherProperty: Other Property
-  OtherProperty2: Other Property2
-  SingleDog:
-    rid: 7857419161603407874
-  DogsList:
-  - rid: 7857419161603407997
-  - rid: 7857419323624652827
-  - rid: 7857419323624652847
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7857419161603407874
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: GrandMotherSingle
-        Race: Single (non-list element)
-        Puppies:
-        - rid: 7857419161603407875
-        - rid: 7857419323624652802
-        Male:
-          rid: 7857419345525473281
-    - rid: 7857419161603407875
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother1
-        Race: List Element
-        Puppies:
-        - rid: 7857419161603407876
-        - rid: 7857419323624652804
-        - rid: 7857419323624652806
-        Male:
-          rid: 7857419345525473280
-    - rid: 7857419161603407876
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419161603407997
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: GrandMother1
-        Race: List Element
-        Puppies:
-        - rid: 7857419161603407998
-        - rid: 7857419323624652811
-        - rid: 7857419323624652817
-        Male:
-          rid: -2
-    - rid: 7857419161603407998
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother1
-        Race: List Element
-        Puppies:
-        - rid: 7857419161603407999
-        - rid: 7857419323624652808
-        Male:
-          rid: -2
-    - rid: 7857419161603407999
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652802
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother2
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652803
-        - rid: 7857419323624652858
-        - rid: 7857419323624652860
-        Male:
-          rid: 7857419345525473282
-    - rid: 7857419323624652803
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652804
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652806
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy3
-        Race: List Element
-    - rid: 7857419323624652808
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652811
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother2
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652812
-        - rid: 7857419323624652813
-        Male:
-          rid: -2
-    - rid: 7857419323624652812
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652813
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652817
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother3
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652818
-        - rid: 7857419323624652819
-        Male:
-          rid: -2
-    - rid: 7857419323624652818
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652819
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652827
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: GrandMother2
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652828
-        - rid: 7857419323624652829
-        - rid: 7857419323624652830
-        Male:
-          rid: -2
-    - rid: 7857419323624652828
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother1
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652831
-        - rid: 7857419323624652832
-        Male:
-          rid: -2
-    - rid: 7857419323624652829
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother2
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652833
-        - rid: 7857419323624652834
-        Male:
-          rid: -2
-    - rid: 7857419323624652830
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother3
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652835
-        - rid: 7857419323624652836
-        Male:
-          rid: -2
-    - rid: 7857419323624652831
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652832
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652833
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652834
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652835
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652836
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652847
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: GrandMother3
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652848
-        - rid: 7857419323624652849
-        - rid: 7857419323624652850
-        Male:
-          rid: -2
-    - rid: 7857419323624652848
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother1
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652851
-        - rid: 7857419323624652852
-        Male:
-          rid: -2
-    - rid: 7857419323624652849
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother2
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652853
-        - rid: 7857419323624652854
-        Male:
-          rid: -2
-    - rid: 7857419323624652850
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Mother3
-        Race: List Element
-        Puppies:
-        - rid: 7857419323624652855
-        - rid: 7857419323624652856
-        Male:
-          rid: -2
-    - rid: 7857419323624652851
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652852
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652853
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652854
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652855
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy1
-        Race: List Element
-    - rid: 7857419323624652856
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652858
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy2
-        Race: List Element
-    - rid: 7857419323624652860
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Puppy3
-        Race: List Element
-    - rid: 7857419345525473280
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Father
-        Race: Single
-    - rid: 7857419345525473281
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: GrandFather
-        Race: Single
-    - rid: 7857419345525473282
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Father
-        Race: Single
---- !u!1 &454542281
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 454542282}
-  - component: {fileID: 454542283}
-  m_Layer: 0
-  m_Name: Composite_Example
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &454542282
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 454542281}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &454542283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 454542281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c661afaefffa19408567c75dd776761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OtherProperty: Other Property
-  OtherProperty2: Other Property2
-  SingleDog:
-    rid: 7857419192532205568
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7857419192532205568
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: DogMother1
-        Race: Non-Root Grand Mother
-        Puppies:
-        - rid: 7857419192532205570
-        Male:
-          rid: -2
-    - rid: 7857419192532205570
-      type: {class: DogMother, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: DogMother2
-        Race: Non-Root Child
-        Puppies:
-        - rid: 7857419192532205571
-        Male:
-          rid: -2
-    - rid: 7857419192532205571
-      type: {class: Dog, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Dog3
-        Race: Non-Root Grand Child
 --- !u!1 &506034114
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,7 +260,391 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!1 &2076050774
+--- !u!1001 &1403965256
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115637944831159184, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_NonRoot_Example Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 035553567be310e45a30a83108de3dc2, type: 3}
+--- !u!1001 &1643776592
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5295569458777007245, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_Root_Example Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0c595cb0dd1137849805099a6118c5c5, type: 3}
+--- !u!4 &1363061643968937152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9044163716658033315}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1718654347727204841
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2639297778820102303, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_NonRoot_Example
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 15adb3cda9132094a8215ec7d32f8361, type: 3}
+--- !u!1001 &1916400793672968821
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446797688980727553, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7430019274189028416, guid: 2e13999778c691048a7bdc249cec77da,
+        type: 3}
+      propertyPath: m_Name
+      value: NestedPrefabs
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2e13999778c691048a7bdc249cec77da, type: 3}
+--- !u!114 &3632255519515365856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4373253447180859316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96255dcee35e499498362d32f6309d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MyDrive:
+    rid: 2882064677616746555
+  references:
+    version: 2
+    RefIds:
+    - rid: 2882064677616746555
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Documents
+        m_Files:
+          m_List:
+          - rid: 2882064677616746556
+          - rid: 2882064677616746557
+          - rid: 2882064677616746558
+    - rid: 2882064677616746556
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: TODOs
+        m_Text: '- Illustrations
+
+          - 3D Models
+
+          - Animations
+
+          -
+          Music
+
+          - Programming
+
+          - Learn something new'
+    - rid: 2882064677616746557
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Dev
+        m_Files:
+          m_List:
+          - rid: 2882064677616746559
+          - rid: 2882064677616746560
+          - rid: 2882064677616746561
+    - rid: 2882064677616746558
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Design
+        m_Files:
+          m_List:
+          - rid: 2882064677616746562
+          - rid: 2882064677616746563
+          - rid: 2882064677616746564
+    - rid: 2882064677616746559
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: C# Architecture
+        m_Text: "- Decouple and think of reusability\r\n- Actors do things, controllers
+          tell them when to.\r\n- C# events\r\n- Data in ScriptableObject\rs"
+    - rid: 2882064677616746560
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Design Patterns
+        m_Text: "- Factory \r\n- Pool\r\n- Adapter\r\n- Mediator\r\n- Prototype\r\n-
+          Composite\r\n- Observer\r\n- State\r\n- Singleton\r"
+    - rid: 2882064677616746561
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Optimization Techniques
+        m_Text: "- Static batching\r\n- Share materials\r\n- GPU instancing: When
+          they use the same mesh\r\n- Dynamic batching: Last resort, careful with
+          CPU\r\n- Reduce vertex count\r\n- Occlusion culling\r\n- UI optimization\r"
+    - rid: 2882064677616746562
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Emotion
+        m_Text: People may forget what you said, but they'll never forget how you
+          made them feel.
+    - rid: 2882064677616746563
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Venue
+        m_Text: The places that we play exert tremendous influence on the design
+          of our games.
+    - rid: 2882064677616746564
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Fun
+        m_Text: Fun is desirable in nearly every game, though sometimes fun defies
+          analysis.
+--- !u!1 &4373253447180859316
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -692,135 +652,221 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2076050776}
-  - component: {fileID: 2076050777}
+  - component: {fileID: 8829321303061841035}
+  - component: {fileID: 3632255519515365856}
   m_Layer: 0
-  m_Name: CompositeRoot_Example2
+  m_Name: Composite_NonRoot_Example
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2076050776
+--- !u!1001 &8789378312545683861
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1616812372905678084, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_Root_Example
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 92aef5140334a6e46a9e1ef035645507, type: 3}
+--- !u!4 &8829321303061841035
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076050774}
+  m_GameObject: {fileID: 4373253447180859316}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.0223124, y: 0.02708739, z: -0.0244236}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2076050777
+--- !u!1 &9044163716658033315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1363061643968937152}
+  - component: {fileID: 9044163716658033316}
+  m_Layer: 0
+  m_Name: Composite_Root_Example
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &9044163716658033316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076050774}
+  m_GameObject: {fileID: 9044163716658033315}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2fafaa61b2806b148b92959517e9ac49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SelectedCompositePath: 
   m_MyDrive:
-    rid: 2882064172937641987
+    rid: 2882064677616746534
   references:
     version: 2
     RefIds:
-    - rid: 2882064172937641987
+    - rid: 2882064677616746534
       type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Documents
         m_Files:
-        - rid: 2882064172937641988
-        - rid: 2882064172937641989
-        - rid: 2882064172937641992
-    - rid: 2882064172937641988
+          m_List:
+          - rid: 2882064677616746535
+          - rid: 2882064677616746536
+          - rid: 2882064677616746541
+    - rid: 2882064677616746535
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
-        m_Name: Todo List
-        m_Text: '- Clean the house
+        m_Name: TODOs
+        m_Text: '- Illustrations
 
-          - Buy groceries
+          - 3D Models
 
-          - Take the
-          garbage out'
-    - rid: 2882064172937641989
+          - Animations
+
+          -
+          Music
+
+          - Programming
+
+          - Learn something new'
+    - rid: 2882064677616746536
       type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
-        m_Name: Jobs Kit
+        m_Name: Game Dev
         m_Files:
-        - rid: 2882064172937641990
-        - rid: 2882064172937641991
-    - rid: 2882064172937641990
+          m_List:
+          - rid: 2882064677616746538
+          - rid: 2882064677616746540
+          - rid: 2882064677616746537
+    - rid: 2882064677616746537
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
-        m_Name: Curriculum Vitae
-        m_Text: 'I went to school,
-
-          I went to University,
-
-          I
-          created one interactive media company,
-
-          I joined an engineering
-          company
-
-          I co-founded Cocodrilo Dog
-
-          I moved to Australia'
-    - rid: 2882064172937641991
+        m_Name: Optimization Techniques
+        m_Text: "- Static batching\r\n- Share materials\r\n- GPU instancing: When
+          they use the same mesh\r\n- Dynamic batching: Last resort, careful with
+          CPU\r\n- Reduce vertex count\r\n- Occlusion culling\r\n- UI optimization\r"
+    - rid: 2882064677616746538
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
-        m_Name: Cover Letter
-        m_Text: 'Dear recruiter,
-
-
-          I am a game developer, and I love it.
-
-
-          Kind
-          regards,
-
-          Juan'
-    - rid: 2882064172937641992
+        m_Name: C# Architecture
+        m_Text: "- Decouple and think of reusability\r\n- Actors do things, controllers
+          tell them when to.\r\n- C# events\r\n- Data in ScriptableObject\rs"
+    - rid: 2882064677616746540
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Design Patterns
+        m_Text: "- Factory \r\n- Pool\r\n- Adapter\r\n- Mediator\r\n- Prototype\r\n-
+          Composite\r\n- Observer\r\n- State\r\n- Singleton\r"
+    - rid: 2882064677616746541
       type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
-        m_Name: Game Design Concepts
+        m_Name: Game Design
         m_Files:
-        - rid: 2882064172937641993
-        - rid: 2882064172937641994
-        - rid: 2882064172937641995
-    - rid: 2882064172937641993
+          m_List:
+          - rid: 2882064677616746542
+          - rid: 2882064677616746543
+          - rid: 2882064677616746544
+    - rid: 2882064677616746542
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Emotion
         m_Text: People may forget what you said, but they'll never forget how you
           made them feel.
-    - rid: 2882064172937641994
-      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
-      data:
-        m_Name: Essential Experience
-        m_Text: To use this lens, stop thinking about your game, and start thinking
-          about the experience of the player.
-    - rid: 2882064172937641995
+    - rid: 2882064677616746543
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Venue
-        m_Text: The places that we play exert tremendous  influence on the design
+        m_Text: The places that we play exert tremendous influence on the design
           of our games.
+    - rid: 2882064677616746544
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Fun
+        m_Text: Fun is desirable in nearly every game, though sometimes fun defies
+          analysis.
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 506034117}
-  - {fileID: 437508405}
-  - {fileID: 454542282}
-  - {fileID: 2076050776}
+  - {fileID: 8829321303061841035}
+  - {fileID: 1718654347727204841}
+  - {fileID: 1403965256}
+  - {fileID: 1363061643968937152}
+  - {fileID: 8789378312545683861}
+  - {fileID: 1643776592}
+  - {fileID: 1916400793672968821}

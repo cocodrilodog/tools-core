@@ -11,29 +11,30 @@
 	/// Base class for editors of concrete implementations of <see cref="CompositeRoot"/>.
 	/// </summary>
 	[CustomEditor(typeof(CompositeRoot), true)]
-	public class CompositeRootEditor : Editor {
+	public class CompositeRootEditor : UnityEditor.Editor {
 
 
 		#region Public Static Methods
 
 		public static void SelectCompositeObject(
 			SerializedObject serializedObject,
-			SerializedProperty selectedCompositePathProperty,
 			string newPropertyPath
 			) {
 
+			var selectedCompositePath = ((CompositeRoot)serializedObject.targetObject).SelectedCompositePath;
+
 			// Set to non-edit the previosly selected composite object
-			if (!string.IsNullOrEmpty(selectedCompositePathProperty.stringValue)) {
-				var selectedCompositeObjectProperty = serializedObject.FindProperty(selectedCompositePathProperty.stringValue);
+			if (!string.IsNullOrEmpty(selectedCompositePath)) {
+				var selectedCompositeObjectProperty = serializedObject.FindProperty(selectedCompositePath);
 				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = false;
 			}
 
 			// Assign the new value
-			selectedCompositePathProperty.stringValue = newPropertyPath;
+			((CompositeRoot)serializedObject.targetObject).SelectedCompositePath = newPropertyPath;
 
 			// Set to edit the new selected composite object
-			if (!string.IsNullOrEmpty(selectedCompositePathProperty.stringValue)) {
-				var selectedCompositeObjectProperty = serializedObject.FindProperty(selectedCompositePathProperty.stringValue);
+			if (!string.IsNullOrEmpty(newPropertyPath)) {
+				var selectedCompositeObjectProperty = serializedObject.FindProperty(newPropertyPath);
 				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = true;
 			}
 
@@ -50,19 +51,18 @@
 
 		protected virtual void OnEnable() {
 			ScriptProperty = serializedObject.FindProperty("m_Script");
-			SelectedCompositePathProperty = serializedObject.FindProperty("m_SelectedCompositePath");
 			m_SiblingsControlTexture = Resources.Load("CompositeSiblingsControl") as Texture;
 		}
 
 		public sealed override void OnInspectorGUI() {
-			if (string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
+			if (string.IsNullOrEmpty(SelectedCompositePath)) {
 				// There is no selected composite object, proceed with the inspector of the root object
 				OnRootInspectorGUI();
 			} else {
 				// There is a selected composite object, draw only it as a property.
 				serializedObject.Update();
 				CDEditorUtility.DrawDisabledField(ScriptProperty);
-				var selectedCompositeProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
+				var selectedCompositeProperty = serializedObject.FindProperty(SelectedCompositePath);
 				if (selectedCompositeProperty != null) {
 					DrawBreadcrums(selectedCompositeProperty);
 					EditorGUILayout.PropertyField(selectedCompositeProperty);
@@ -128,7 +128,7 @@
 
 		#region Private Properties
 
-		private SerializedProperty SelectedCompositePathProperty { get; set; }
+		private string SelectedCompositePath => ((CompositeRoot)target).SelectedCompositePath;
 
 		#endregion
 
@@ -138,43 +138,42 @@
 		private void DrawBreadcrums(SerializedProperty property) {
 
 			GUILayout.BeginHorizontal();
-			if (SelectedCompositePathProperty != null) {
+
+			if (!string.IsNullOrEmpty(SelectedCompositePath)) {
 
 				// This button will make the inspector to go back to the root
 				DrawNextButton($"◂ ", $"{target.GetType().Name}", () => {
-					SelectCompositeObject(serializedObject, SelectedCompositePathProperty, null);
+					SelectCompositeObject(serializedObject, null);
 				});
 
 				// Analize path parts and create a breadcrum button for each CompositeObject in the path
 				var pathParts = property.propertyPath.Split('.');
 				SerializedProperty parentProperty = null;
+
 				for (int i = 0; i < pathParts.Length; i++) {
 
 					// Each path until the i part
 					var partialPath = string.Join('.', pathParts, 0, i + 1);
 					var partialProperty = property.serializedObject.FindProperty(partialPath);
-					
-					if (partialProperty != null) {
 
+					if (partialProperty != null) {
 						if (IsCompositeProperty(partialProperty, out var partialComposite)) {
 
 							// Composite for this partial path
 							if (partialComposite == property.managedReferenceValue) {
 								// The partialComposite is the main composite object of this property
 								DrawNextButton($"• ", partialProperty, parentProperty);
-
 							} else {
 								// The partialComposite is an intermediate between the root and the main
 								// composite object of this property
 								DrawNextButton($"◂ ", partialProperty, parentProperty, () => {
-									SelectCompositeObject(serializedObject, SelectedCompositePathProperty, partialProperty.propertyPath);
+									SelectCompositeObject(serializedObject, partialProperty.propertyPath);
 								});
 							}
 
 							parentProperty = partialProperty.Copy();
 
 						}
-
 					}
 
 				}
@@ -204,7 +203,7 @@
 		/// of the <see cref="CompositeObject"/> of the button.
 		/// </summary>
 		/// <param name="prefix">A prefix for the button. For example "•" or "◂".</param>
-		/// <param name="label">The label of the button</param>
+		/// <param name="currentProperty">The property that corresponds to the button</param>
 		/// <param name="parentProperty">
 		/// The parent property to iterate over its children and display them in a <see cref="GenericMenu"/>.
 		/// They are the siblings of the button's object.
@@ -213,7 +212,7 @@
 		private void DrawNextButton(string prefix, SerializedProperty currentProperty, SerializedProperty parentProperty, Action action = null) {
 
 			// Create a siblings menu
-			var siblingsMenu = new SiblingsMenu(this, currentProperty, parentProperty);
+			var siblingsMenu = new SiblingsMenu(serializedObject, currentProperty, parentProperty);
 
 			// Draw the button
 			EditorGUI.BeginDisabledGroup(action == null);
@@ -224,7 +223,7 @@
 				action?.Invoke();
 			}
 
-			// Get the rect right after drawing the button
+			// Get the siblings rect right after drawing the button
 			var siblingsRect = GUILayoutUtility.GetLastRect();
 			siblingsRect.x = siblingsRect.xMax;
 			siblingsRect.width = 14;
@@ -235,20 +234,20 @@
 			EditorGUI.EndDisabledGroup();
 
 			if (GUI.Button(siblingsRect, "")) {
-				//CreateSiblingsMenu(currentProperty, parentProperty);
 				siblingsMenu.ShowAsContext();
 			}
 
-			// Shrink the rect to the texture size
-			siblingsRect.height = 14;
-			siblingsRect.center = center;
-			GUI.DrawTexture(siblingsRect, m_SiblingsControlTexture);
+			// Create the up and down icon
+			var iconRect = siblingsRect;
+			iconRect.height = 14;
+			iconRect.center = center;
+			GUI.DrawTexture(iconRect, m_SiblingsControlTexture);
 
 		}
 
 		private void CheckEdit() {
-			if (!string.IsNullOrEmpty(SelectedCompositePathProperty.stringValue)) {
-				var selectedCompositeObjectProperty = serializedObject.FindProperty(SelectedCompositePathProperty.stringValue);
+			if (!string.IsNullOrEmpty(SelectedCompositePath)) {
+				var selectedCompositeObjectProperty = serializedObject.FindProperty(SelectedCompositePath);
 				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = true;
 			}
 		}
@@ -268,11 +267,11 @@
 
 			#region Public Constructors
 
-			public SiblingsMenu(CompositeRootEditor editor, SerializedProperty currentProperty, SerializedProperty parentProperty) {
+			public SiblingsMenu(SerializedObject serializedObject, SerializedProperty currentProperty, SerializedProperty parentProperty) {
 
 				m_Menu = new GenericMenu();
 
-				m_Editor = editor;
+				m_SerializedObject = serializedObject;
 				m_CurrentProperty = currentProperty;
 				m_ParentProperty = parentProperty;
 
@@ -281,7 +280,7 @@
 					CDEditorUtility.IterateChildProperties(m_ParentProperty, ForEachSibling);
 				} else {
 					// Parent property is CompositeRoot
-					CDEditorUtility.IterateChildProperties(m_Editor.serializedObject, ForEachSibling);
+					CDEditorUtility.IterateChildProperties(m_SerializedObject, ForEachSibling);
 				}
 
 			}
@@ -301,7 +300,7 @@
 
 			#region Private Fields
 
-			private CompositeRootEditor m_Editor;
+			private SerializedObject m_SerializedObject;
 
 			private SerializedProperty m_CurrentProperty;
 
@@ -366,6 +365,31 @@
 							// This is an array of non-managed reference objects
 							break;
 						}
+					
+					} 
+				} else if (SystemUtility.IsSubclassOfRawGeneric(CDEditorUtility.GetPropertyType(siblingProperty), typeof(CompositeList<>))) {
+					// The property is a CompositeList<>
+					var internalList = siblingProperty.FindPropertyRelative("m_List");
+					for(int i = 0; i < internalList.arraySize; i++) {
+
+						var element = internalList.GetArrayElementAtIndex(i);
+						compositeSibling = element.managedReferenceValue as CompositeObject;
+
+						// Elements could be null
+						if (compositeSibling != null) {
+
+							// Save for later use by the menu
+							var pendingSiblingProperty = element.Copy();
+							var on = element.propertyPath == m_CurrentProperty.propertyPath;
+							var checkedName = CheckRepeatedName(compositeSibling.DisplayName);
+
+							m_Menu.AddItem(new GUIContent(checkedName), on, () => SelectSibling(pendingSiblingProperty));
+
+							if (element.propertyPath == m_CurrentProperty.propertyPath) {
+								m_ButtonLabel = checkedName;
+							}
+
+						}
 
 					}
 				}
@@ -393,9 +417,9 @@
 			/// <param name="prop">The property of the composite object to be selected</param>
 			private void SelectSibling(SerializedProperty prop) {
 				EditorApplication.delayCall += () => {
-					m_Editor.serializedObject.Update();
-					SelectCompositeObject(m_Editor.serializedObject, m_Editor.SelectedCompositePathProperty, prop.propertyPath);
-					m_Editor.serializedObject.ApplyModifiedProperties();
+					m_SerializedObject.Update();
+					SelectCompositeObject(m_SerializedObject, prop.propertyPath);
+					m_SerializedObject.ApplyModifiedProperties();
 				};
 			}
 

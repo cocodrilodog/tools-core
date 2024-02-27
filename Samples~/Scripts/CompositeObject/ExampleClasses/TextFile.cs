@@ -5,6 +5,9 @@ namespace CocodriloDog.Core.Examples {
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// A file that contains text data.
+	/// </summary>
 	[Serializable]
 	public class TextFile : FileBase {
 

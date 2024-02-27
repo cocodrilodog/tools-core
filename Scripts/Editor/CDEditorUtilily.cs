@@ -8,6 +8,8 @@
 	using UnityEngine.UIElements;
 	using UnityEditor;
 	using UnityEditor.UIElements;
+	using System.Linq;
+	using System.Text.RegularExpressions;
 
 
 	#region Small Types
@@ -181,25 +183,9 @@
 			return index;
 		}
 
-		/// <summary>
-		/// Gets the <c>Type</c> of the <paramref name="property"/>, in case it is a 
-		/// <see cref="SerializedPropertyType.ManagedReference"/>
-		/// </summary>
-		/// <param name="property">The property</param>
-		/// <returns>The <c>Type</c></returns>
-		//public static Type GetManagedReferenceType(SerializedProperty property) {
-		//	if (property.propertyType == SerializedPropertyType.ManagedReference) {
-		//		// Example of managedReferenceFieldTypename: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
-		//		var typenameParts = property.managedReferenceFieldTypename.Split(' ');
-		//		var assembly = Assembly.Load(typenameParts[0]);
-		//		return assembly.GetType(typenameParts[1]);
-		//	}
-		//	return null;
-		//}
-
-		// TODO: Complete this method
 		public static Type GetPropertyType(SerializedProperty property) {
 			switch (property.propertyType) {
+
 				case SerializedPropertyType.AnimationCurve:	return typeof(AnimationCurve);
 				case SerializedPropertyType.Boolean:		return typeof(bool);
 				case SerializedPropertyType.Bounds:			return typeof(Bounds);
@@ -226,28 +212,82 @@
 				
 				//case SerializedPropertyType.ObjectReference:		return ???;
 
-				case SerializedPropertyType.Generic: {
-						if (property.isArray) {
-							// Array or list
-							//var assembly = Assembly.Load("Assembly-CSharp");
-							//Debug.Log($"*** Looking the type of {property.}");
-							//Debug.Log($"*** Type.GetType(property.type): {Type.GetType(property.type)}");
-							//return assembly.GetType(property.type);
-						} else {
-							// Struct or serialized System.Object class
-						}
-						break;
-					}
+				//case SerializedPropertyType.Generic: {
+				//		if (property.isArray) {
+				//			// Array or list
+				//		} else {
+				//			// Struct or serialized System.Object class
+				//		}
+				//		break;
+				//	}
 
 				case SerializedPropertyType.ManagedReference: {
-						// Example of managedReferenceFieldTypename: "Assembly-CSharp CocodriloDog.Core.Examples.Dog"
+						// Example of managedReferenceFieldTypename: "CocodriloDog.Core.Examples CocodriloDog.Core.Examples.Folder"
 						var typenameParts = property.managedReferenceFieldTypename.Split(' ');
 						var assembly = Assembly.Load(typenameParts[0]);
 						return assembly.GetType(typenameParts[1]);
 					}
 
+				default:
+
+					// TODO: This may be the default solution to get the type when the commented cases above happen
+
+					// For all types that are not included before, this is a generic way of getting the type
+					// via propertyPath
+					FieldInfo field = null;
+					object currentObject = property.serializedObject.targetObject;
+
+					// Example of a path: m_MyDrive.m_Files.Array.data[2].m_Files
+					// Example of a path: m_MyDrive.m_Files2.m_List
+					var pathSteps = property.propertyPath.Split('.');
+
+					// TODO: Remove the comments when this has been fully tested
+					//Debug.Log("...");
+					//Debug.Log(property.propertyPath);
+
+					for (int i = 0; i < pathSteps.Length; i++) {
+
+						var step = pathSteps[i];
+
+						if (step == "Array" && pathSteps.Length > i + 1 && pathSteps[i + 1].Contains("data[")) {
+
+							//Debug.Log("	Array treatment");
+
+							var pattern = @"data\[(\d+)\]";
+							var regex = new Regex(pattern);
+							var match = regex.Match(pathSteps[i + 1]);
+
+							if (match.Success) {
+								var intString = match.Groups[1].Value;
+								if (int.TryParse(intString, out int result)) {
+									//Debug.Log($"	Item index: {result}");
+									//Debug.Log($"	Item: {(currentObject as IList)[result]}");
+									currentObject = (currentObject as IList)[result];
+									i++;
+									continue;
+								}
+							}
+						}
+						//Debug.Log($"Pre: step:{step}; currentObject:{currentObject}");
+
+						// Get the field that corresponds to the step
+						var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+						var type = currentObject.GetType();
+						field = type.GetField(step, bindingFlags);
+						while(field == null && type != null) {
+							// If not found, continue with super classes
+							type = type.BaseType;
+							field = type?.GetField(step, bindingFlags);
+						}
+
+						currentObject = field?.GetValue(currentObject);
+						//Debug.Log($"Pos: step:{step}; field:{field}; currentObject:{currentObject}");
+
+					}
+
+					return field?.FieldType;
+
 			}
-			return null;
 		}
 
 		/// <summary>

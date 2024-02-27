@@ -5,25 +5,18 @@ namespace CocodriloDog.Core.Examples {
 	using UnityEngine;
 
 	/// <summary>
-	/// This example shows this <c>MonoBehaviour</c> that has no <c>CompositeRootEditor</c>.
-	/// <see cref="CompositeObject"/> fields will open and close, but the MonoBehaviour 
-	/// and parent <see cref="CompositeObject"/> inspectors will remain visible all the time.
+	/// This shows how to use a <see cref="CompositeObject"/> in a normal MonoBehaviour
+	/// Here, navigation through the composite hierarchy is similar to Unity's default 
+	/// inspector layout, not user friendly for complex data structures.
 	/// </summary>
+	[AddComponentMenu("")]
 	public class Composite_Example : MonoBehaviour {
 
 
-		#region Public Fields
-
-		[Header("Composite Example (Without Root)")]
-
-		[SerializeField]
-		public string OtherProperty = "Other Property";
-
-		[SerializeField]
-		public string OtherProperty2 = "Other Property2";
+		#region Private Fields
 
 		[SerializeReference]
-		public Dog SingleDog;
+		private Folder m_MyDrive;
 
 		#endregion
 

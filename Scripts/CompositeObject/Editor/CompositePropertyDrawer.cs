@@ -6,6 +6,7 @@
 	using System.Linq;
 	using System.Reflection;
 	using UnityEditor;
+	using UnityEditorInternal;
 	using UnityEngine;
 
 	/// <summary>
@@ -109,9 +110,7 @@
 			
 			base.InitializePropertiesForGetHeight();
 			
-			//EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
-			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 			
 			if (CanEdit) {
 				Edit_InitializePropertiesForGetHeight();
@@ -130,12 +129,8 @@
 			//
 			// So far these have failed:
 			// - m_Name
-			// - m_Edit
-			// - m_SelectedCompositePath
 
-			//EditProperty = Property.FindPropertyRelative("m_Edit");
 			NameProperty = Property.FindPropertyRelative("m_Name");
-			SelectedCompositePathProperty = Property.serializedObject.FindProperty("m_SelectedCompositePath");
 
 			if (CanEdit) {
 				Edit_InitializePropertiesForOnGUI();
@@ -154,8 +149,10 @@
 		protected virtual float Edit_GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			
 			float height = 0;
-			
-			if (SelectedCompositePathProperty != null) {
+
+			var compositeRoot = property.serializedObject.targetObject as CompositeRoot;
+
+			if (compositeRoot != null) {
 				// There is a root, breadcrums is handled by the root.
 				//
 				// One-field height for the the name. 
@@ -229,8 +226,6 @@
 
 		private SerializedProperty NameProperty { get; set; }
 
-		private SerializedProperty SelectedCompositePathProperty { get; set; }
-
 		#endregion
 
 
@@ -238,7 +233,9 @@
 
 		private void DrawBreadcrums() {
 
-			if (SelectedCompositePathProperty == null) {
+			var compositeRoot = Property.serializedObject.targetObject as CompositeRoot;
+
+			if (compositeRoot == null) {
 
 				var buttonRect = GetNextPosition();
 				DrawNextButton($" ▴ ", () => CompositeObject.Edit = false);
@@ -300,7 +297,7 @@
 			}
 
 			// Remove button
-			DrawRemoveButton(secondButtonRect);
+			DrawDeleteButton(secondButtonRect);
 
 			string DisplayName() {
 				return (Property.managedReferenceValue as CompositeObject).DisplayName;
@@ -310,7 +307,15 @@
 
 		private void DrawCreateButton(Rect rect) {
 
-			if (GUI.Button(rect, "Create")) {
+			var canCreate = PrefabUtility.GetPrefabInstanceHandle(Property.serializedObject.targetObject) == null;
+			EditorGUI.BeginDisabledGroup(!canCreate);
+
+			var content = new GUIContent(
+				"Create",
+				canCreate ? "" : $"To create {Property.displayName}, open the prefab."
+			);
+
+			if (GUI.Button(rect, content)) {
 
 				// Save the path for later because it will be used by the GenericMenu which happens later
 				var pendingProperty = Property.Copy(); // Copy, just in case
@@ -330,7 +335,7 @@
 				}
 
 			}
-
+			EditorGUI.EndDisabledGroup();
 		}
 
 		void CreateObject(Type t, SerializedProperty property) {
@@ -352,22 +357,32 @@
 		}
 
 		private void DrawEditButton(Rect rect) {
-			if(SelectedCompositePathProperty != null) {
+
+			var compositeRoot = Property.serializedObject.targetObject as CompositeRoot;
+
+			if (compositeRoot != null) {
 				if (GUI.Button(rect, "Edit ▸")) {
-					CompositeRootEditor.SelectCompositeObject(
-						Property.serializedObject, SelectedCompositePathProperty, Property.propertyPath
-					);
+					CompositeRootEditor.SelectCompositeObject(Property.serializedObject, Property.propertyPath);
 				} 
 			} else {
 				if (GUI.Button(rect, "Edit ▾")) {					
 					CompositeObject.Edit = true;
 				}
 			}
+
 		}
 
-		private void DrawRemoveButton(Rect rect) {
-			EditorGUI.BeginDisabledGroup(Property.managedReferenceValue == null);
-			if (GUI.Button(rect, "Remove")) {
+		private void DrawDeleteButton(Rect rect) {
+			var canDelete = PrefabUtility.GetPrefabInstanceHandle(Property.serializedObject.targetObject) == null;
+			EditorGUI.BeginDisabledGroup(
+				Property.managedReferenceValue == null ||
+				!canDelete
+			);
+			var content = new GUIContent(
+				"Delete", 
+				(canDelete || Property.managedReferenceValue == null) ? "" : $"To delete {Property.displayName}, open the prefab."
+			);
+			if (GUI.Button(rect, content)){
 				Property.managedReferenceValue = null;
 			}
 			EditorGUI.EndDisabledGroup();

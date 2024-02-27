@@ -1,0 +1,593 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5924005671879465087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1159984263912465383}
+  - component: {fileID: 3135544585533718943}
+  m_Layer: 0
+  m_Name: Composite_NonRoot_Example
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1159984263912465383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5924005671879465087}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2446797688980727553}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3135544585533718943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5924005671879465087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96255dcee35e499498362d32f6309d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MyDrive:
+    rid: 2882064677616746555
+  references:
+    version: 2
+    RefIds:
+    - rid: 2882064677616746555
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Documents
+        m_Files:
+          m_List:
+          - rid: 2882064677616746556
+          - rid: 2882064677616746557
+          - rid: 2882064677616746558
+    - rid: 2882064677616746556
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: TODOs
+        m_Text: '- Illustrations
+
+          - 3D Models
+
+          - Animations
+
+          -
+          Music
+
+          - Programming
+
+          - Learn something new'
+    - rid: 2882064677616746557
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Dev
+        m_Files:
+          m_List:
+          - rid: 2882064677616746559
+          - rid: 2882064677616746560
+          - rid: 2882064677616746561
+    - rid: 2882064677616746558
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Design
+        m_Files:
+          m_List:
+          - rid: 2882064677616746562
+          - rid: 2882064677616746563
+          - rid: 2882064677616746564
+    - rid: 2882064677616746559
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: C# Architecture
+        m_Text: "- Decouple and think of reusability\r\n- Actors do things, controllers
+          tell them when to.\r\n- C# events\r\n- Data in ScriptableObject\rs"
+    - rid: 2882064677616746560
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Design Patterns
+        m_Text: "- Factory \r\n- Pool\r\n- Adapter\r\n- Mediator\r\n- Prototype\r\n-
+          Composite\r\n- Observer\r\n- State\r\n- Singleton\r"
+    - rid: 2882064677616746561
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Optimization Techniques
+        m_Text: "- Static batching\r\n- Share materials\r\n- GPU instancing: When
+          they use the same mesh\r\n- Dynamic batching: Last resort, careful with
+          CPU\r\n- Reduce vertex count\r\n- Occlusion culling\r\n- UI optimization\r"
+    - rid: 2882064677616746562
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Emotion
+        m_Text: People may forget what you said, but they'll never forget how you
+          made them feel.
+    - rid: 2882064677616746563
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Venue
+        m_Text: The places that we play exert tremendous influence on the design
+          of our games.
+    - rid: 2882064677616746564
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Fun
+        m_Text: Fun is desirable in nearly every game, though sometimes fun defies
+          analysis.
+--- !u!1 &7430019274189028416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2446797688980727553}
+  m_Layer: 0
+  m_Name: NestedPrefabs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2446797688980727553
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430019274189028416}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1159984263912465383}
+  - {fileID: 1431581955580304180}
+  - {fileID: 7089039924220189017}
+  - {fileID: 7916977501748426312}
+  - {fileID: 1546958941293795675}
+  - {fileID: 1166588887771549107}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7787553321448283371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7916977501748426312}
+  - component: {fileID: 9044342858233192310}
+  m_Layer: 0
+  m_Name: Composite_Root_Example
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7916977501748426312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7787553321448283371}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2446797688980727553}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9044342858233192310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7787553321448283371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafaa61b2806b148b92959517e9ac49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MyDrive:
+    rid: 2882064677616746534
+  references:
+    version: 2
+    RefIds:
+    - rid: 2882064677616746534
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Documents
+        m_Files:
+          m_List:
+          - rid: 2882064677616746535
+          - rid: 2882064677616746536
+          - rid: 2882064677616746541
+    - rid: 2882064677616746535
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: TODOs
+        m_Text: '- Illustrations
+
+          - 3D Models
+
+          - Animations
+
+          -
+          Music
+
+          - Programming
+
+          - Learn something new'
+    - rid: 2882064677616746536
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Dev
+        m_Files:
+          m_List:
+          - rid: 2882064677616746538
+          - rid: 2882064677616746540
+          - rid: 2882064677616746537
+    - rid: 2882064677616746537
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Optimization Techniques
+        m_Text: "- Static batching\r\n- Share materials\r\n- GPU instancing: When
+          they use the same mesh\r\n- Dynamic batching: Last resort, careful with
+          CPU\r\n- Reduce vertex count\r\n- Occlusion culling\r\n- UI optimization\r"
+    - rid: 2882064677616746538
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: C# Architecture
+        m_Text: "- Decouple and think of reusability\r\n- Actors do things, controllers
+          tell them when to.\r\n- C# events\r\n- Data in ScriptableObject\rs"
+    - rid: 2882064677616746540
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Design Patterns
+        m_Text: "- Factory \r\n- Pool\r\n- Adapter\r\n- Mediator\r\n- Prototype\r\n-
+          Composite\r\n- Observer\r\n- State\r\n- Singleton\r"
+    - rid: 2882064677616746541
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Design
+        m_Files:
+          m_List:
+          - rid: 2882064677616746542
+          - rid: 2882064677616746543
+          - rid: 2882064677616746544
+    - rid: 2882064677616746542
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Emotion
+        m_Text: People may forget what you said, but they'll never forget how you
+          made them feel.
+    - rid: 2882064677616746543
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Venue
+        m_Text: The places that we play exert tremendous influence on the design
+          of our games.
+    - rid: 2882064677616746544
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Fun
+        m_Text: Fun is desirable in nearly every game, though sometimes fun defies
+          analysis.
+--- !u!1001 &1492974314232230137
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2446797688980727553}
+    m_Modifications:
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5295569458777007245, guid: 0c595cb0dd1137849805099a6118c5c5,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_Root_Example Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0c595cb0dd1137849805099a6118c5c5, type: 3}
+--- !u!4 &1166588887771549107 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 326671858501074250, guid: 0c595cb0dd1137849805099a6118c5c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1492974314232230137}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4851811949035167828
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2446797688980727553}
+    m_Modifications:
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115637944831159184, guid: 035553567be310e45a30a83108de3dc2,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_NonRoot_Example Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 035553567be310e45a30a83108de3dc2, type: 3}
+--- !u!4 &7089039924220189017 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2392621975350049037, guid: 035553567be310e45a30a83108de3dc2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4851811949035167828}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5688823349070566808
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2446797688980727553}
+    m_Modifications:
+    - target: {fileID: 1616812372905678084, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_Root_Example
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 92aef5140334a6e46a9e1ef035645507, type: 3}
+--- !u!4 &1546958941293795675 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6594717120987319491, guid: 92aef5140334a6e46a9e1ef035645507,
+    type: 3}
+  m_PrefabInstance: {fileID: 5688823349070566808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7551311736360825142
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2446797688980727553}
+    m_Modifications:
+    - target: {fileID: 2639297778820102303, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_Name
+      value: Composite_NonRoot_Example
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 15adb3cda9132094a8215ec7d32f8361, type: 3}
+--- !u!4 &1431581955580304180 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8869177766990277122, guid: 15adb3cda9132094a8215ec7d32f8361,
+    type: 3}
+  m_PrefabInstance: {fileID: 7551311736360825142}
+  m_PrefabAsset: {fileID: 0}

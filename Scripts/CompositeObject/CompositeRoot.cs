@@ -1,5 +1,6 @@
 namespace CocodriloDog.Core {
 
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -15,8 +16,8 @@ namespace CocodriloDog.Core {
 		#region Private Fields
 
 		[HideInInspector]
-		[SerializeField]
-		private string m_SelectedCompositePath;
+		[NonSerialized]
+		public string SelectedCompositePath;
 
 		#endregion
 
