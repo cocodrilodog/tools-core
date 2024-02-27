@@ -8,7 +8,7 @@
 	/// <summary>
 	/// A pool for game objects.
 	/// </summary>
-	public class GOPool : MonoBehaviour {
+	public class MonoGOPool : MonoBehaviour {
 
 
 		#region Public Fields
