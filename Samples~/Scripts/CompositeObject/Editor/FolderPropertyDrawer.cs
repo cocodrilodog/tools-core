@@ -1,6 +1,5 @@
 namespace CocodriloDog.Core.Examples.Editor {
 
-	using CocodriloDog.Core.Editor;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEditor;
@@ -56,7 +55,6 @@ namespace CocodriloDog.Core.Examples.Editor {
 
 		private CompositeListPropertyDrawerForPrefab FilesDrawer => 
 			m_FilesDrawer = m_FilesDrawer ?? new CompositeListPropertyDrawerForPrefab(
-				Property.serializedObject, 
 				Property.FindPropertyRelative("m_Files")
 			);
 

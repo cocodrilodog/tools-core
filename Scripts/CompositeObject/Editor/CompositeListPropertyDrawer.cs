@@ -1,4 +1,4 @@
-namespace CocodriloDog.Core.Editor {
+namespace CocodriloDog.Core {
 
 	using System.Collections;
 	using System.Collections.Generic;
@@ -39,7 +39,6 @@ namespace CocodriloDog.Core.Editor {
 
 		private CompositeListPropertyDrawerForPrefab ListDrawer => 
 			m_ListDrawer = m_ListDrawer ?? new CompositeListPropertyDrawerForPrefab(
-				Property.serializedObject, 
 				Property.FindPropertyRelative("m_List"),
 				Property.displayName
 			);

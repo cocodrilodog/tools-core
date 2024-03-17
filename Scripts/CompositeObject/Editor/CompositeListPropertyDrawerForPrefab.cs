@@ -1,4 +1,4 @@
-namespace CocodriloDog.Core.Editor {
+namespace CocodriloDog.Core {
 
 	using System;
 	using System.Collections;
@@ -15,7 +15,7 @@ namespace CocodriloDog.Core.Editor {
 	/// <remarks>
 	/// When working with prefabs that have <see cref="CompositeObject"/> properties, certain changes in the prefab
 	/// instances that are then applied to the prefab may break Unity's prefab serialization system, leading to corrupted 
-	/// data on components that can no be used anymore. For that reason, disabling the add, remove, create, delete functions
+	/// data on components that can not be used anymore. For that reason, disabling the add, remove, create, delete functions
 	/// from prefab instances will keep the components safer in terms of preseerving their healthy serialized data.
 	/// </remarks>
 	public class CompositeListPropertyDrawerForPrefab {
@@ -23,10 +23,10 @@ namespace CocodriloDog.Core.Editor {
 
 		#region Public Constructor
 
-		public CompositeListPropertyDrawerForPrefab(SerializedObject serializedObject, SerializedProperty elements, string label = null) {
-			m_SerializedObject = serializedObject;
+		public CompositeListPropertyDrawerForPrefab(SerializedProperty elements, string label = null) {
+			m_SerializedObject = elements.serializedObject;
 			m_Label = label;
-			m_Lists[elements.propertyPath] = CreateList(serializedObject, elements);
+			m_Lists[elements.propertyPath] = CreateList(elements.serializedObject, elements);
 		}
 
 		#endregion
@@ -91,6 +91,20 @@ namespace CocodriloDog.Core.Editor {
 			}
 		}
 
+		public void DoLayoutList(SerializedProperty elements) {
+			
+			// Reserve layout space
+			// It seems that there is no need to specify a width here
+			GUILayoutUtility.GetRect(0, EditorGUI.GetPropertyHeight(elements));
+			
+			// Get the reserved rect
+			var rect = GUILayoutUtility.GetLastRect();
+			
+			// Use it
+			DoList(rect, elements);
+
+		}
+
 		#endregion
 
 
@@ -115,7 +129,7 @@ namespace CocodriloDog.Core.Editor {
 
 		#region Private Methods
 
-		public ReorderableList CreateList(SerializedObject serializedObject, SerializedProperty elements) {
+		private ReorderableList CreateList(SerializedObject serializedObject, SerializedProperty elements) {
 
 			var propertyType = CDEditorUtility.GetPropertyType(elements);
 			bool isArrayOrListOfCompositeObject = false;

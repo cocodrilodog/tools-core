@@ -16,10 +16,13 @@
 
 		#region Public Static Methods
 
-		public static void SelectCompositeObject(
-			SerializedObject serializedObject,
-			string newPropertyPath
-			) {
+		/// <summary>
+		/// Selects a composite, and makes the inspector to show the property drawer of that object as well
+		/// as updating the breadcrumb buttons, and sibling menus.
+		/// </summary>
+		/// <param name="serializedObject">The <see cref="SerializedObject"/> that corresponds to this <see cref="CompositeRoot"/></param>
+		/// <param name="newPropertyPath">The property path of the <see cref="CompositeObject"/> that will be selected</param>
+		public static void SelectCompositeObject(SerializedObject serializedObject, string newPropertyPath) {
 
 			var selectedCompositePath = ((CompositeRoot)serializedObject.targetObject).SelectedCompositePath;
 
@@ -64,7 +67,7 @@
 				CDEditorUtility.DrawDisabledField(ScriptProperty);
 				var selectedCompositeProperty = serializedObject.FindProperty(SelectedCompositePath);
 				if (selectedCompositeProperty != null) {
-					DrawBreadcrums(selectedCompositeProperty);
+					DrawBreadcrumbs(selectedCompositeProperty);
 					EditorGUILayout.PropertyField(selectedCompositeProperty);
 				}
 				serializedObject.ApplyModifiedProperties();
@@ -135,18 +138,32 @@
 
 		#region Private Methods
 
-		private void DrawBreadcrums(SerializedProperty property) {
+		private void DrawBreadcrumbs(SerializedProperty property) {
 
-			GUILayout.BeginHorizontal();
+			// Collect the breadcrumbs data before drawing the buttons
+			var breadcrumbRows = new List<List<Breadcrumb>>();
+			breadcrumbRows.Add(new List<Breadcrumb>());
+
+			// These numbers don't match the image analyzed in Photoshop, but they work better.
+			var x = 12f;
+			var layoutSpace = 4;
+			var siblingsButtonWidth = 12;
 
 			if (!string.IsNullOrEmpty(SelectedCompositePath)) {
 
-				// This button will make the inspector to go back to the root
-				DrawNextButton($"◂ ", $"{target.GetType().Name}", () => {
-					SelectCompositeObject(serializedObject, null);
-				});
+				// This corresponds to the first button that will make the inspector to go back to the root
+				var breadcrumb = new Breadcrumb();
+				breadcrumb.Prefix = $"◂ ";
+				breadcrumb.Label = target.GetType().Name;
+				breadcrumb.Action = () => SelectCompositeObject(serializedObject, null);
+				breadcrumbRows[breadcrumbRows.Count - 1].Add(breadcrumb);
 
-				// Analize path parts and create a breadcrum button for each CompositeObject in the path
+				// Add the size to the total width
+				Vector2 buttonSize = GUI.skin.button.CalcSize(new GUIContent(breadcrumb.Prefix + breadcrumb.Label));
+				buttonSize.x = Mathf.Ceil(buttonSize.x);
+				x += layoutSpace + buttonSize.x;
+
+				// Analize path parts and create a breadcrumb button for each CompositeObject in the path
 				var pathParts = property.propertyPath.Split('.');
 				SerializedProperty parentProperty = null;
 
@@ -159,27 +176,69 @@
 					if (partialProperty != null) {
 						if (IsCompositeProperty(partialProperty, out var partialComposite)) {
 
+							// This was taken out so that we can get the label of the button beforehand
+							var siblingsMenu = new SiblingsMenu(serializedObject, partialProperty, parentProperty);
+
+							// These are the buttons starting from the second one so they correspond to composite objects
+							breadcrumb = new Breadcrumb();
+							breadcrumb.CurrentProperty = partialProperty;
+							breadcrumb.ParentProperty = parentProperty;
+							breadcrumb.SiblingsMenu = siblingsMenu;
+
+							// Add the size to the total width
+							buttonSize = GUI.skin.button.CalcSize(new GUIContent(breadcrumb.Prefix + breadcrumb.SiblingsMenu.ButtonLabel));
+							buttonSize.x = Mathf.Ceil(buttonSize.x);
+							x += layoutSpace + buttonSize.x + siblingsButtonWidth;
+							
+							// If this button will pass the right limit of the inspector, create a new row of breadcrums
+							// and reset x
+							if (x > EditorGUIUtility.currentViewWidth) {
+								x = 12;
+								breadcrumbRows.Add(new List<Breadcrumb>());
+							}
+
 							// Composite for this partial path
 							if (partialComposite == property.managedReferenceValue) {
 								// The partialComposite is the main composite object of this property
-								DrawNextButton($"• ", partialProperty, parentProperty);
+								breadcrumb.Prefix = $"• ";
 							} else {
 								// The partialComposite is an intermediate between the root and the main
-								// composite object of this property
-								DrawNextButton($"◂ ", partialProperty, parentProperty, () => {
-									SelectCompositeObject(serializedObject, partialProperty.propertyPath);
-								});
+								breadcrumb.Prefix = $"◂ ";
+								breadcrumb.Action = () => SelectCompositeObject(serializedObject, partialProperty.propertyPath);
 							}
 
+							// Add the breadcrumb to the last added row
+							breadcrumbRows[breadcrumbRows.Count - 1].Add(breadcrumb);
 							parentProperty = partialProperty.Copy();
 
 						}
+
 					}
 
 				}
 
+				// Draw the breadcrumb buttons
+				for(int i = 0; i < breadcrumbRows.Count; i++) {
+
+					GUILayout.BeginHorizontal();
+
+					for(int j = 0; j < breadcrumbRows[i].Count; j++) {
+						var b = breadcrumbRows[i][j];
+						if (i == 0 && j == 0) {
+							// The first button uses this overload
+							DrawNextButton(b.Prefix, b.Label, b.Action);
+						} else {
+							// Starting with the second button, the buttons use this overload
+							DrawNextButton(b.Prefix, b.CurrentProperty, b.ParentProperty, b.SiblingsMenu, b.Action);
+						}
+					}
+
+					GUILayout.FlexibleSpace();
+					GUILayout.EndHorizontal();
+
+				}
+
 			}
-			GUILayout.EndHorizontal();
 
 		}
 
@@ -209,10 +268,9 @@
 		/// They are the siblings of the button's object.
 		/// </param>
 		/// <param name="action">The action that the button will perform</param>
-		private void DrawNextButton(string prefix, SerializedProperty currentProperty, SerializedProperty parentProperty, Action action = null) {
+		private void DrawNextButton(string prefix, SerializedProperty currentProperty, SerializedProperty parentProperty, SiblingsMenu siblingsMenu, Action action = null) {
 
-			// Create a siblings menu
-			var siblingsMenu = new SiblingsMenu(serializedObject, currentProperty, parentProperty);
+			GUILayout.BeginHorizontal();
 
 			// Draw the button
 			EditorGUI.BeginDisabledGroup(action == null);
@@ -223,25 +281,19 @@
 				action?.Invoke();
 			}
 
-			// Get the siblings rect right after drawing the button
-			var siblingsRect = GUILayoutUtility.GetLastRect();
-			siblingsRect.x = siblingsRect.xMax;
-			siblingsRect.width = 14;
-			var center = siblingsRect.center;
-
 			// Reduce the space between the buttons
-			GUILayout.Space(14);
+			GUILayout.Space(-3);
 			EditorGUI.EndDisabledGroup();
 
-			if (GUI.Button(siblingsRect, "")) {
+			if (GUILayout.Button("", GUILayout.ExpandWidth(false))) {
 				siblingsMenu.ShowAsContext();
 			}
 
 			// Create the up and down icon
-			var iconRect = siblingsRect;
-			iconRect.height = 14;
-			iconRect.center = center;
+			var iconRect = GUILayoutUtility.GetLastRect();
 			GUI.DrawTexture(iconRect, m_SiblingsControlTexture);
+
+			GUILayout.EndHorizontal();
 
 		}
 
@@ -254,7 +306,9 @@
 
 		#endregion
 
-
+		/// <summary>
+		/// Creates the context menu that will show the siblings of the current composite object, and show it.
+		/// </summary>
 		public class SiblingsMenu {
 
 
@@ -422,6 +476,32 @@
 					m_SerializedObject.ApplyModifiedProperties();
 				};
 			}
+
+			#endregion
+
+
+		}
+
+
+		/// <summary>
+		/// Collects data for each breadcrumb button.
+		/// </summary>
+		public class Breadcrumb {
+
+
+			#region Public Fields
+
+			public string Prefix;
+			
+			public string Label;
+			
+			public SerializedProperty CurrentProperty;
+			
+			public SerializedProperty ParentProperty;
+			
+			public SiblingsMenu SiblingsMenu;
+			
+			public Action Action;
 
 			#endregion
 
