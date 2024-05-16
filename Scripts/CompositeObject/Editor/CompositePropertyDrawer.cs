@@ -16,6 +16,38 @@
 	public class CompositePropertyDrawer : PropertyDrawerBase {
 
 
+		#region Public Static Methods
+
+		/// <summary>
+		/// Returns a cached icon if available. Otherwise loads, caches, and retruns it.
+		/// </summary>
+		/// <remarks>
+		/// This supports caching several icons for different object types because when drawing items
+		/// in a list, this drawer may be reused for the elements of the list.
+		/// </remarks>
+		/// <param name="objectTypeName">The object type name</param>
+		/// <returns>The icon texture</returns>
+		public static Texture GetObjectIcon(Type objectType) {
+			var objectTypeName = objectType?.Name;
+			if (!string.IsNullOrEmpty(objectTypeName)) {
+				// There is a valid object type name
+				if (s_ObjectIcons.ContainsKey(objectTypeName)) {
+					// Is already loaded, so return it
+					return s_ObjectIcons[objectTypeName];
+				} else {
+					// load it for the first time and return it
+					var objectIcon = Resources.Load($"{objectTypeName} Icon") as Texture;
+					if (objectIcon != null) {
+						return s_ObjectIcons[objectTypeName] = objectIcon;
+					}
+				}
+			}
+			return null;
+		}
+
+		#endregion
+
+
 		#region Unity Methods
 
 		public sealed override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
@@ -210,12 +242,30 @@
 			// Create a label with the property name
 			EditorGUI.LabelField(labelRect, label);
 
+			// Search for the object icon
+			Texture objectIcon = GetObjectIcon(Property.managedReferenceValue?.GetType());
+
 			// Create a box resembling an Object field
 			EditorGUI.BeginDisabledGroup(true);
-			GUI.Box(fieldRect, name, EditorStyles.objectField);
+			GUI.Box(fieldRect, objectIcon != null ? $"     {name}" : name, EditorStyles.objectField);
 			EditorGUI.EndDisabledGroup();
 
+			// Draw object icon, if any
+			if(objectIcon != null) {
+				var iconRect = fieldRect;
+				iconRect.position += new Vector2(0, 1);
+				iconRect.size = new Vector2(16, 16);
+				GUI.DrawTexture(iconRect, objectIcon);
+			}
+
 		}
+
+		#endregion
+
+
+		#region Private Static Fields
+
+		private static Dictionary<string, Texture> s_ObjectIcons = new Dictionary<string, Texture>();
 
 		#endregion
 

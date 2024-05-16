@@ -146,14 +146,14 @@
 
 			// These numbers don't match the image analyzed in Photoshop, but they work better.
 			var x = 12f;
-			var layoutSpace = 4;
+			var layoutSpace = 10;
 			var siblingsButtonWidth = 12;
 
 			if (!string.IsNullOrEmpty(SelectedCompositePath)) {
 
 				// This corresponds to the first button that will make the inspector to go back to the root
 				var breadcrumb = new Breadcrumb();
-				breadcrumb.Prefix = $"◂ ";
+				breadcrumb.Prefix = $"";
 				breadcrumb.Label = target.GetType().Name;
 				breadcrumb.Action = () => SelectCompositeObject(serializedObject, null);
 				breadcrumbRows[breadcrumbRows.Count - 1].Add(breadcrumb);
@@ -200,10 +200,15 @@
 							// Composite for this partial path
 							if (partialComposite == property.managedReferenceValue) {
 								// The partialComposite is the main composite object of this property
-								breadcrumb.Prefix = $"• ";
+								breadcrumb.Icon = CompositePropertyDrawer.GetObjectIcon(partialComposite.GetType());
+								if (breadcrumb.Icon != null) {
+									breadcrumb.Prefix = $"    ";
+								} else {
+									breadcrumb.Prefix = $"";
+								}
 							} else {
 								// The partialComposite is an intermediate between the root and the main
-								breadcrumb.Prefix = $"◂ ";
+								breadcrumb.Prefix = $"";
 								breadcrumb.Action = () => SelectCompositeObject(serializedObject, partialProperty.propertyPath);
 							}
 
@@ -229,7 +234,7 @@
 							DrawNextButton(b.Prefix, b.Label, b.Action);
 						} else {
 							// Starting with the second button, the buttons use this overload
-							DrawNextButton(b.Prefix, b.CurrentProperty, b.ParentProperty, b.SiblingsMenu, b.Action);
+							DrawNextButton(b.Icon, b.Prefix, b.SiblingsMenu, !(i == breadcrumbRows.Count - 1 && j == breadcrumbRows[i].Count - 1), b.Action);
 						}
 					}
 
@@ -249,18 +254,24 @@
 		/// <param name="action">The action that the button will perform</param>
 		private void DrawNextButton(string prefix, string label, Action action = null) {
 			EditorGUI.BeginDisabledGroup(action == null);
+
+			GUILayout.Space(-3);
 			if (GUILayout.Button(prefix + label, GUILayout.ExpandWidth(false))) {
 				action?.Invoke();
 			}
 			// Reduce the space between the buttons
 			//GUILayout.Space(-3);
 			EditorGUI.EndDisabledGroup();
+
+			GUILayout.Space(-3);
+			GUILayout.Label("▸");
 		}
 
 		/// <summary>
 		/// Draws a breadcrums button that can show a <see cref="GenericMenu"/> with the siblings 
 		/// of the <see cref="CompositeObject"/> of the button.
 		/// </summary>
+		/// <param name="icon">An optional icon to represent the object.</param>
 		/// <param name="prefix">A prefix for the button. For example "•" or "◂".</param>
 		/// <param name="currentProperty">The property that corresponds to the button</param>
 		/// <param name="parentProperty">
@@ -268,30 +279,45 @@
 		/// They are the siblings of the button's object.
 		/// </param>
 		/// <param name="action">The action that the button will perform</param>
-		private void DrawNextButton(string prefix, SerializedProperty currentProperty, SerializedProperty parentProperty, SiblingsMenu siblingsMenu, Action action = null) {
+		private void DrawNextButton(Texture icon, string prefix, SiblingsMenu siblingsMenu, bool rightTriangle, Action action = null) {
 
 			GUILayout.BeginHorizontal();
 
-			// Draw the button
+			// Draw the main button
 			EditorGUI.BeginDisabledGroup(action == null);
 
+			GUILayout.Space(-3);
 			// Get the the button label from the menu, because it may be a repeated DisplayName that
 			// need to be changed to DisplayName (#)
 			if (GUILayout.Button(prefix + siblingsMenu.ButtonLabel, GUILayout.ExpandWidth(false))) {
 				action?.Invoke();
 			}
 
+			if(icon != null) {
+				var objectIconRect = GUILayoutUtility.GetLastRect();
+				objectIconRect.x += 2;
+				objectIconRect.y += 2;
+				objectIconRect.size = new Vector2(16, 16);
+				GUI.DrawTexture(objectIconRect, icon);
+			}
+
 			// Reduce the space between the buttons
 			GUILayout.Space(-3);
 			EditorGUI.EndDisabledGroup();
 
+			// Draw sibling button
 			if (GUILayout.Button("", GUILayout.ExpandWidth(false))) {
 				siblingsMenu.ShowAsContext();
 			}
 
 			// Create the up and down icon
-			var iconRect = GUILayoutUtility.GetLastRect();
-			GUI.DrawTexture(iconRect, m_SiblingsControlTexture);
+			var siblingsIconRect = GUILayoutUtility.GetLastRect();
+			GUI.DrawTexture(siblingsIconRect, m_SiblingsControlTexture);
+
+			if (rightTriangle) {
+				GUILayout.Space(-3);
+				GUILayout.Label("▸");
+			}
 
 			GUILayout.EndHorizontal();
 
@@ -490,6 +516,8 @@
 
 
 			#region Public Fields
+
+			public Texture Icon;
 
 			public string Prefix;
 			
