@@ -39,8 +39,7 @@ namespace CocodriloDog.Core {
 
 		private CompositeListPropertyDrawerForPrefab ListDrawer => 
 			m_ListDrawer = m_ListDrawer ?? new CompositeListPropertyDrawerForPrefab(
-				Property.FindPropertyRelative("m_List"),
-				Property.displayName
+				Property.FindPropertyRelative("m_List"), true
 			);
 
 		#endregion

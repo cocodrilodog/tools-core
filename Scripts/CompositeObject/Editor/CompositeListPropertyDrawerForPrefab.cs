@@ -23,9 +23,18 @@ namespace CocodriloDog.Core {
 
 		#region Public Constructor
 
-		public CompositeListPropertyDrawerForPrefab(SerializedProperty elements, string label = null) {
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="elements">The property of the list or array of composite objects.</param>
+		/// <param name="isCompositeList">
+		/// An optional flag that is needed when <see cref="CompositeList{T}"/> is used. In this case, 
+		/// since the elements are two levels below the <see cref="CompositeList{T}"/> object, within the 
+		/// <c>m_List</c>, we must use its parent property, the <see cref="CompositeList{T}"/> one.
+		/// </param>
+		public CompositeListPropertyDrawerForPrefab(SerializedProperty elements, bool isCompositeList = false) {
 			m_SerializedObject = elements.serializedObject;
-			m_Label = label;
+			m_IsCompositeList = isCompositeList;
 			m_Lists[elements.propertyPath] = CreateList(elements.serializedObject, elements);
 		}
 
@@ -48,10 +57,29 @@ namespace CocodriloDog.Core {
 			foldoutRect.height = EditorGUIUtility.singleLineHeight + 2;
 			foldoutRect.xMax -= 50;
 
+			GUIContent guiContent = null;
+
+			// This is when CompositeList<> is used. It needs to bypass the m_List property upwards and get the
+			// data from the parent property, the CompositeList<> itself.
+			string parentPath = "";
+			SerializedProperty parentProperty = null;
+
+			if (m_IsCompositeList) {
+				parentPath = elements.propertyPath.Remove(elements.propertyPath.LastIndexOf('.'));
+				parentProperty = elements.serializedObject.FindProperty(parentPath);
+			}
+			
+			if (m_IsCompositeList) {
+				guiContent = new GUIContent(parentProperty.displayName, parentProperty.tooltip);
+			} else {
+				// This is when the Lis<CompositeObject> or CompositeObject[] is used
+				guiContent = new GUIContent(elements.displayName, elements.tooltip);
+			}
+
 			elements.isExpanded = EditorGUI.BeginFoldoutHeaderGroup(
 				foldoutRect,
-				elements.isExpanded, 
-				m_Label?.Length > 0 ? m_Label : elements.displayName
+				elements.isExpanded,
+				guiContent
 			);
 
 			EditorGUI.EndFoldoutHeaderGroup();
@@ -83,7 +111,7 @@ namespace CocodriloDog.Core {
 				if (!CanAddRemove) {
 					EditorGUI.HelpBox(
 						labelRect,
-						$"To add or remove {(m_Label?.Length > 0 ? m_Label : elements.displayName).ToLower()}, open the prefab.", 
+						$"To add or remove {(m_IsCompositeList ? parentProperty.displayName : elements.displayName).ToLower()}, open the prefab.", 
 						MessageType.Info
 					);
 				}
@@ -114,7 +142,7 @@ namespace CocodriloDog.Core {
 
 		private SerializedObject m_SerializedObject;
 
-		private string m_Label;
+		private bool m_IsCompositeList;
 
 		#endregion
 

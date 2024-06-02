@@ -228,7 +228,7 @@
 			}
 		}
 
-		protected virtual void DrawPropertyField(Rect propertyRect, string label, string name) {
+		protected virtual void DrawPropertyField(Rect propertyRect, GUIContent guiContent, string name) {
 
 			// Label rect
 			var labelWidth = Position.width * 0.25f;
@@ -240,7 +240,7 @@
 			fieldRect.xMin += labelWidth + 2;
 
 			// Create a label with the property name
-			EditorGUI.LabelField(labelRect, label);
+			EditorGUI.LabelField(labelRect, guiContent);
 
 			// Search for the object icon
 			Texture objectIcon = GetObjectIcon(Property.managedReferenceValue?.GetType());
@@ -334,14 +334,14 @@
 
 			if (Property.managedReferenceValue == null) {
 				// Create button
-				DrawPropertyField(propertyRect, $"{Property.displayName}", $"Null");
+				DrawPropertyField(propertyRect, new GUIContent(Property.displayName, Property.tooltip), $"Null");
 				DrawCreateButton(firstButtonRect);
 			} else {
 				// Edit button
 				if (CDEditorUtility.GetElementIndex(Property, out var index)) {
 					DrawPropertyField(propertyRect, $"Element {index}", $"{DisplayName()}");
 				} else {
-					DrawPropertyField(propertyRect, $"{Property.displayName}", $"{DisplayName()}");
+					DrawPropertyField(propertyRect, new GUIContent(Property.displayName, Property.tooltip), $"{DisplayName()}");
 				}
 				DrawEditButton(firstButtonRect);
 			}
@@ -353,6 +353,10 @@
 				return (Property.managedReferenceValue as CompositeObject).DisplayName;
 			}
 
+		}
+
+		private void DrawPropertyField(Rect propertyRect, string label, string name) {
+			DrawPropertyField(propertyRect, new GUIContent(label), name);
 		}
 
 		private void DrawCreateButton(Rect rect) {
