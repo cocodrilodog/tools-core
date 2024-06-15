@@ -197,18 +197,20 @@
 								breadcrumbRows.Add(new List<Breadcrumb>());
 							}
 
+							// Set the icon and prefix
+							breadcrumb.Icon = CompositePropertyDrawer.GetObjectIcon(partialComposite.GetType());
+							if (breadcrumb.Icon != null) {
+								breadcrumb.Prefix = $"    ";
+							} else {
+								breadcrumb.Prefix = $"";
+							}
+
 							// Composite for this partial path
 							if (partialComposite == property.managedReferenceValue) {
 								// The partialComposite is the main composite object of this property
-								breadcrumb.Icon = CompositePropertyDrawer.GetObjectIcon(partialComposite.GetType());
-								if (breadcrumb.Icon != null) {
-									breadcrumb.Prefix = $"    ";
-								} else {
-									breadcrumb.Prefix = $"";
-								}
+								// No action to assign.
 							} else {
 								// The partialComposite is an intermediate between the root and the main
-								breadcrumb.Prefix = $"";
 								breadcrumb.Action = () => SelectCompositeObject(serializedObject, partialProperty.propertyPath);
 							}
 
