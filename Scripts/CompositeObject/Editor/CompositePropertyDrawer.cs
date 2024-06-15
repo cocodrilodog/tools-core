@@ -141,14 +141,13 @@
 		protected sealed override void InitializePropertiesForGetHeight() {
 			base.InitializePropertiesForGetHeight();
 			NameProperty = Property.FindPropertyRelative("m_Name");
+			DocumentationCommentProperty = Property.FindPropertyRelative("m_DocumentationComment");
 			if (CanEdit) {
 				Edit_InitializePropertiesForGetHeight();
 			}
 		}
 
-		protected virtual void Edit_InitializePropertiesForGetHeight() {
-			DocumentationCommentProperty = Property.FindPropertyRelative("m_DocumentationComment");
-		}
+		protected virtual void Edit_InitializePropertiesForGetHeight() { }
 
 		protected sealed override void InitializePropertiesForOnGUI() {
 			
@@ -281,7 +280,7 @@
 			fieldRect.xMin += labelWidth + 2;
 
 			// Documentation tooltip
-			if (!string.IsNullOrEmpty(DocumentationCommentProperty.stringValue)) {
+			if (Property.managedReferenceValue != null && !string.IsNullOrEmpty(DocumentationCommentProperty.stringValue)) {
 			
 				var documentationRect = fieldRect;
 				documentationRect.xMax = fieldRect.xMin - 2;
