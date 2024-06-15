@@ -139,18 +139,16 @@
 		#region Protected Methods
 
 		protected sealed override void InitializePropertiesForGetHeight() {
-			
 			base.InitializePropertiesForGetHeight();
-			
 			NameProperty = Property.FindPropertyRelative("m_Name");
-			
 			if (CanEdit) {
 				Edit_InitializePropertiesForGetHeight();
 			}
-
 		}
 
-		protected virtual void Edit_InitializePropertiesForGetHeight() { }
+		protected virtual void Edit_InitializePropertiesForGetHeight() {
+			DocumentationCommentProperty = Property.FindPropertyRelative("m_DocumentationComment");
+		}
 
 		protected sealed override void InitializePropertiesForOnGUI() {
 			
@@ -163,6 +161,7 @@
 			// - m_Name
 
 			NameProperty = Property.FindPropertyRelative("m_Name");
+			DocumentationCommentProperty = Property.FindPropertyRelative("m_DocumentationComment");
 
 			if (CanEdit) {
 				Edit_InitializePropertiesForOnGUI();
@@ -189,13 +188,19 @@
 				//
 				// One-field height for the the name. 
 				// Subclasses should add extra space for their properties
-				height = base.GetPropertyHeight(property, label);
+				height += base.GetPropertyHeight(property, label);
 			} else {
 				// There is no root, breadcrums are drawn here.
 				//
 				// One-field height for the breadcrums + the name.
 				// Subclasses should add extra space for their properties
-				height = base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2;
+				height += base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2;
+			}
+
+			if((Property.managedReferenceValue as CompositeObject).EditDocumentationComment) {
+				height += EditorGUI.GetPropertyHeight(DocumentationCommentProperty) + 2;
+				height += EditorGUIUtility.singleLineHeight + 2;
+				height += 10; // Give dome space before owner and reuse id
 			}
 
 			if (UseDefaultDrawer) {
@@ -217,8 +222,41 @@
 		/// <param name="property">The property</param>
 		/// <param name="label">The label</param>
 		protected virtual void Edit_OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+			
 			// This base class only handles the name property.
-			EditorGUI.PropertyField(GetNextPosition(), NameProperty);
+			var rect = GetNextPosition();
+			var nameRect = rect;
+			nameRect.xMax -= 22;
+			EditorGUI.PropertyField(nameRect, NameProperty);
+
+			// Documentation comment button
+			var documentationRect = rect;
+			documentationRect.xMin = nameRect.xMax + 2;
+
+			var compositeObject = Property.managedReferenceValue as CompositeObject;
+
+			GUIContent documentationGUIContent = null;
+			documentationGUIContent = EditorGUIUtility.IconContent("_Help@2x");
+			if (string.IsNullOrWhiteSpace(DocumentationCommentProperty.stringValue)) {
+				documentationGUIContent.tooltip = "Click to add a documentation comment.";
+			} else {
+				documentationGUIContent.tooltip = DocumentationCommentProperty.stringValue + " (Click to edit)";
+			}
+
+			if (GUI.Button(documentationRect, documentationGUIContent, EditorStyles.iconButton)) {
+				compositeObject.EditDocumentationComment = !compositeObject.EditDocumentationComment;
+			}
+
+			// Documentation comment
+			if (compositeObject.EditDocumentationComment) {
+				EditorGUI.PropertyField(GetNextPosition(DocumentationCommentProperty), DocumentationCommentProperty);
+				if (GUI.Button(GetNextPosition(), "Done")) {
+					compositeObject.EditDocumentationComment = false;
+				}
+				GetNextPosition(10f);
+			}
+
+			// Default drawer
 			if (UseDefaultDrawer) {
 				CDEditorUtility.IterateChildProperties(Property, p => {
 					if (p.propertyPath != NameProperty.propertyPath) {
@@ -226,6 +264,7 @@
 					}
 				});
 			}
+
 		}
 
 		protected virtual void DrawPropertyField(Rect propertyRect, GUIContent guiContent, string name) {
@@ -238,6 +277,19 @@
 			// Field rect
 			var fieldRect = propertyRect;
 			fieldRect.xMin += labelWidth + 2;
+
+			// Documentation tooltip
+			if (!string.IsNullOrEmpty(DocumentationCommentProperty.stringValue)) {
+			
+				var documentationRect = fieldRect;
+				documentationRect.xMax = fieldRect.xMin - 2;
+				documentationRect.xMin = documentationRect.xMax - 20;
+
+				GUIContent documentationGUIContent = EditorGUIUtility.IconContent("_Help@2x");
+				documentationGUIContent.tooltip = DocumentationCommentProperty.stringValue;
+				GUI.Button(documentationRect, documentationGUIContent, EditorStyles.iconButton);
+
+			}
 
 			// Create a label with the property name
 			EditorGUI.LabelField(labelRect, guiContent);
@@ -275,6 +327,8 @@
 		private CompositeObject CompositeObject => Property.managedReferenceValue as CompositeObject;
 
 		private SerializedProperty NameProperty { get; set; }
+
+		private SerializedProperty DocumentationCommentProperty { get; set; }
 
 		#endregion
 

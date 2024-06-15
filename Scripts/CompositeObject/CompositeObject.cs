@@ -29,8 +29,9 @@ namespace CocodriloDog.Core {
 	///		<item>
 	///			<term>Extend <see cref="CompositeObject"/></term>
 	///			<description>
-	///				Create a concrete extension of <see cref="CompositeObject"/>. Any field of this
-	///				class must use the <see cref="SerializeReference"/> attribute for the system to work.
+	///				Create a concrete extension of <see cref="CompositeObject"/>. Any field that is referencing
+	///				a instance of this class must use the <see cref="SerializeReference"/> attribute for the 
+	///				system to work.
 	///			</description>
 	///		</item>
 	///		<item>
@@ -48,7 +49,7 @@ namespace CocodriloDog.Core {
 	///				Optionally, you can create a concrete extension of <c>CompositePropertyDrawer</c> and 
 	///				make it a <c>CustomPropertyDrawer</c> of the concrete <see cref="CompositeObject"/> to 
 	///				draw a customized version. In this case, you'll need to override 
-	///				<c>CompositePropertyDrawer.UseDefaultDrawer</c> to <c>false</c>.
+	///				<c>CompositePropertyDrawer.UseDefaultDrawer</c> for it to return to <c>false</c>.
 	///			</description>
 	///		</item>
 	/// </list>
@@ -60,6 +61,16 @@ namespace CocodriloDog.Core {
 
 		#region Public Properties
 
+
+		/// <summary>
+		/// The name of the object
+		/// </summary>
+		public string Name {
+			get => m_Name;
+			set => m_Name = value;
+		}
+
+#if UNITY_EDITOR
 		/// <summary>
 		/// This flag is used by the editor tools to show the <see cref="CompositeObject"/> exapanded
 		/// (<c>Edit = true</c>) or contracted as a one line field (<c>Edit = false</c>)
@@ -70,12 +81,14 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// The name of the object
+		/// In the inspector, shows the <see cref="m_DocumentationComment"/> property field when is 
+		/// <c>true</c>.
 		/// </summary>
-		public string Name {
-			get => m_Name;
-			set => m_Name = value;
+		public bool EditDocumentationComment {
+			get => m_EditDocumentationComment;
+			set => m_EditDocumentationComment = value;
 		}
+#endif
 
 		/// <summary>
 		/// Override this if you want to change the name that is displayed in the fields
@@ -96,6 +109,15 @@ namespace CocodriloDog.Core {
 		[Tooltip("The name of this CompositeObject")]
 		[SerializeField]
 		private string m_Name;
+
+#if UNITY_EDITOR
+		[TextArea]
+		[SerializeField]
+		private string m_DocumentationComment;
+
+		[NonSerialized]
+		private bool m_EditDocumentationComment;
+#endif
 
 		[NonSerialized]
 		private bool m_Edit;
