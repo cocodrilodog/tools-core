@@ -205,7 +205,8 @@
 
 			if (UseDefaultDrawer) {
 				CDEditorUtility.IterateChildProperties(Property, p => {
-					if (p.propertyPath != NameProperty.propertyPath) {
+					if (p.propertyPath != NameProperty.propertyPath &&
+						p.propertyPath != DocumentationCommentProperty.propertyPath) {
 						height += EditorGUI.GetPropertyHeight(p) + 2;
 					}
 				});
@@ -259,7 +260,8 @@
 			// Default drawer
 			if (UseDefaultDrawer) {
 				CDEditorUtility.IterateChildProperties(Property, p => {
-					if (p.propertyPath != NameProperty.propertyPath) {
+					if (p.propertyPath != NameProperty.propertyPath &&
+						p.propertyPath != DocumentationCommentProperty.propertyPath) {
 						EditorGUI.PropertyField(GetNextPosition(p), p);
 					}
 				});
