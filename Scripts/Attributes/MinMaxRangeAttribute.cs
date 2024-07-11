@@ -6,7 +6,7 @@
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Attribute that allows to edit a <see cref="FloatRange"/> float with a 
+	/// Attribute that allows to edit a <see cref="FloatRange"/> or <see cref="IntRange"/> with a 
 	/// MinMaxSlider.
 	/// </summary>
 	public class MinMaxRangeAttribute : PropertyAttribute {
