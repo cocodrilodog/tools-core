@@ -1,5 +1,5 @@
 namespace CocodriloDog.Core {
-
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
@@ -16,14 +16,15 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		// This is overriden to force OnGUI()
-		public override VisualElement CreatePropertyGUI(SerializedProperty property) => null;
+		public override VisualElement CreatePropertyGUI(SerializedProperty property) {
+			// A great place to clear
+			s_GroupsMap.Clear();
+			return null;
+		}
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 
-			RegisterProperty(property.Copy(), (attribute as UnityEventGroupAttribute).GroupName);
-
-			var group = GetPropertyGroup(property);
-			var indexInGroup = group.GetEntryIndex(property.propertyPath);
+			RegisterProperty(property.Copy(), (attribute as UnityEventGroupAttribute).GroupName, out var group, out var indexInGroup);
 
 			if (indexInGroup == group.SelectedIndex) {
 				var height = base.GetPropertyHeight(property, label);
@@ -39,12 +40,8 @@ namespace CocodriloDog.Core {
 
 			label = EditorGUI.BeginProperty(position, label, property);
 
-			RegisterProperty(property.Copy(), (attribute as UnityEventGroupAttribute).GroupName);
-
-			var group = GetPropertyGroup(property);
-			var indexInGroup = group.GetEntryIndex(property.propertyPath);
+			RegisterProperty(property.Copy(), (attribute as UnityEventGroupAttribute).GroupName, out var group, out var indexInGroup);
 			position.y -= indexInGroup * 1.5f;
-
 
 			if (indexInGroup == group.SelectedIndex) {
 
@@ -79,47 +76,26 @@ namespace CocodriloDog.Core {
 		/// map will hold a reference of each of the event properties, their corresponding groups and the 
 		/// Unity object that they belong to.
 		/// </summary>
-		private static Dictionary<Object, List<Group>> s_GroupsMap = new Dictionary<Object, List<Group>>();
+		private static Dictionary<UnityEngine.Object, List<Group>> s_GroupsMap = new Dictionary<UnityEngine.Object, List<Group>>();
 
 		#endregion
 
 
 		#region Private Static Methods
 
-		[InitializeOnLoadMethod]
-		private static void InitOnLoad() {
-			s_GroupsMap.Clear();
-			Selection.selectionChanged -= Selection_selectionChanged;
-			Selection.selectionChanged += Selection_selectionChanged;
-		}
-
-		private static void Selection_selectionChanged() {
-			s_GroupsMap.Clear();
-		}
-
-		private static void RegisterProperty(SerializedProperty property, string groupName) {
+		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
 			var targetObject = property.serializedObject.targetObject;
 			if (!s_GroupsMap.ContainsKey(targetObject)) {
 				s_GroupsMap[targetObject] = new List<Group>();
 			}
 			var groups = s_GroupsMap[targetObject];
-			var group = groups.FirstOrDefault(g => groupName == g.Name);
-			if (group == null) {
-				group = new Group(groupName);
-				groups.Add(group);
+			var _group = groups.FirstOrDefault(g => groupName == g.Name);
+			if (_group == null) {
+				_group = new Group(groupName);
+				groups.Add(_group);
 			}
-			group.AddEntry(property);
-		}
-
-		private static Group GetPropertyGroup(SerializedProperty property) {
-			var targetObject = property.serializedObject.targetObject;
-			var groups = s_GroupsMap[targetObject];
-			foreach (var group in groups) {
-				if (group.HasEntry(property.propertyPath)) {
-					return group;
-				}
-			}
-			return null;
+			group = _group;
+			index = _group.AddEntry(property);
 		}
 
 		#endregion
@@ -151,30 +127,13 @@ namespace CocodriloDog.Core {
 
 			#region Public Methods
 
-			public void AddEntry(SerializedProperty property) {
+			public int AddEntry(SerializedProperty property) {
 				var entry = m_Entries.FirstOrDefault(e => property.propertyPath == e.Property.propertyPath);
 				if (entry == null) {
 					entry = new Entry(property);
 					m_Entries.Add(entry);
 				}
-			}
-
-			public bool HasEntry(string propertyPath) {
-				foreach(var entry in m_Entries) {
-					if(propertyPath == entry.Property.propertyPath) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			public int GetEntryIndex(string propertyPath) {
-				for (int i = 0; i < m_Entries.Count; i++) {
-					if (propertyPath == m_Entries[i].Property.propertyPath) {
-						return i;
-					}
-				}
-				return -1;
+				return m_Entries.IndexOf(entry);
 			}
 
 			#endregion

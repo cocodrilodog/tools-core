@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98840870e028bab4f9f19026a81f2764, type: 3}
   m_Name: CollisionTags
   m_EditorClassIdentifier: 
-  m_Options: []
+  m_Options:
+  - Player
+  - Ground
