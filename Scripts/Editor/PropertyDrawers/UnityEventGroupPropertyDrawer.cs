@@ -1,4 +1,5 @@
 namespace CocodriloDog.Core {
+
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -16,11 +17,7 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		// This is overriden to force OnGUI()
-		public override VisualElement CreatePropertyGUI(SerializedProperty property) {
-			// A great place to clear
-			s_GroupsMap.Clear();
-			return null;
-		}
+		public override VisualElement CreatePropertyGUI(SerializedProperty property) => null;
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 
@@ -74,21 +71,40 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// Because this property drawer will need data from other properties of the same object, this static
 		/// map will hold a reference of each of the event properties, their corresponding groups and the 
-		/// Unity object that they belong to.
+		/// SerializedObject that they belong to.
 		/// </summary>
-		private static Dictionary<UnityEngine.Object, List<Group>> s_GroupsMap = new Dictionary<UnityEngine.Object, List<Group>>();
+		/// 
+		/// <remarks>
+		/// Using the serializedObject as the key helps to store only the valid serialized properties. Sometimes, 
+		/// the serialized object of a target object is renewed, making the old one and its properties invalid.
+		/// Therefore, is we store the lates serialized object with its properties, we know that it and its properties
+		/// are valid.
+		/// </remarks>
+		private static Dictionary<SerializedObject, List<Group>> s_GroupsMap = new Dictionary<SerializedObject, List<Group>>();
 
 		#endregion
 
 
 		#region Private Static Methods
 
+		[InitializeOnLoadMethod]
+		private static void InitOnLoad() {
+			Selection.selectionChanged -= Selection_selectionChanged;
+			Selection.selectionChanged += Selection_selectionChanged;
+		}
+
+		/// <summary>
+		/// This will keep the size of the map small
+		/// </summary>
+		private static void Selection_selectionChanged() {
+			s_GroupsMap.Clear();
+		}
+
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
-			var targetObject = property.serializedObject.targetObject;
-			if (!s_GroupsMap.ContainsKey(targetObject)) {
-				s_GroupsMap[targetObject] = new List<Group>();
+			if (!s_GroupsMap.ContainsKey(property.serializedObject)) {
+				s_GroupsMap[property.serializedObject] = new List<Group>();
 			}
-			var groups = s_GroupsMap[targetObject];
+			var groups = s_GroupsMap[property.serializedObject];
 			group = groups.FirstOrDefault(g => groupName == g.Name);
 			if (group == null) {
 				group = new Group(groupName);
@@ -100,11 +116,11 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
-		public class Group{
+		public class Group {
 
 
 			#region Public Properties
-			
+
 			public string Name => m_Name;
 
 			public ReadOnlyCollection<Entry> Entries => m_EntriesRO = m_EntriesRO ?? new ReadOnlyCollection<Entry>(m_Entries);
