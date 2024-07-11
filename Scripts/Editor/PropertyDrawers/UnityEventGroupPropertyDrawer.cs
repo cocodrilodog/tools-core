@@ -89,13 +89,12 @@ namespace CocodriloDog.Core {
 				s_GroupsMap[targetObject] = new List<Group>();
 			}
 			var groups = s_GroupsMap[targetObject];
-			var _group = groups.FirstOrDefault(g => groupName == g.Name);
-			if (_group == null) {
-				_group = new Group(groupName);
-				groups.Add(_group);
+			group = groups.FirstOrDefault(g => groupName == g.Name);
+			if (group == null) {
+				group = new Group(groupName);
+				groups.Add(group);
 			}
-			group = _group;
-			index = _group.AddEntry(property);
+			index = group.AddEntry(property);
 		}
 
 		#endregion
