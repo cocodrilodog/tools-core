@@ -37,7 +37,7 @@ namespace CocodriloDog.Core {
 						property.stringValue = null;
 					}
 				} else {
-					EditorGUI.HelpBox(rect, $"No TagGroup with name \"{(attribute as StringOptionsAttribute).GroupName}\" was found.", MessageType.Error);
+					EditorGUI.PropertyField(rect, Property);
 				}
 			} else {
 				EditorGUI.HelpBox(rect, $"{nameof(StringOptionsAttribute)} is only valid for string properties", MessageType.Error);

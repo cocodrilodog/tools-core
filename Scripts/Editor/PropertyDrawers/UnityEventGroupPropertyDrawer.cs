@@ -8,6 +8,7 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 	using UnityEditorInternal;
 	using UnityEngine;
+	using UnityEngine.Events;
 	using UnityEngine.UIElements;
 
 	[CustomPropertyDrawer(typeof(UnityEventGroupAttribute))]
@@ -23,7 +24,9 @@ namespace CocodriloDog.Core {
 
 			RegisterProperty(property.Copy(), (attribute as UnityEventGroupAttribute).GroupName, out var group, out var indexInGroup);
 
-			if (indexInGroup == group.SelectedIndex) {
+			if (indexInGroup == -1) {
+				return (EditorGUIUtility.singleLineHeight + 2) * 2;
+			} else if (indexInGroup == group.SelectedIndex) {
 				var height = base.GetPropertyHeight(property, label);
 				height += EditorGUIUtility.singleLineHeight + 2;
 				return height + group.Entries.Count * 1.5f;
@@ -40,7 +43,9 @@ namespace CocodriloDog.Core {
 			RegisterProperty(property.Copy(), (attribute as UnityEventGroupAttribute).GroupName, out var group, out var indexInGroup);
 			position.y -= indexInGroup * 1.5f;
 
-			if (indexInGroup == group.SelectedIndex) {
+			if (indexInGroup == -1) {
+				EditorGUI.HelpBox(position, $"{property.name}: UnityEventGroup attribute only supports UnityEvent classes.", MessageType.Error);	
+			} else if (indexInGroup == group.SelectedIndex) {
 
 				var contents = new List<GUIContent>();
 				foreach (var entry in group.Entries) {
@@ -145,8 +150,13 @@ namespace CocodriloDog.Core {
 			public int AddEntry(SerializedProperty property) {
 				var entry = m_Entries.FirstOrDefault(e => property.propertyPath == e.Property.propertyPath);
 				if (entry == null) {
-					entry = new Entry(property);
-					m_Entries.Add(entry);
+					var isUnityEvent = SystemUtility.IsSubclassOfRawGeneric(CDEditorUtility.GetPropertyType(property), typeof(UnityEvent<>));
+					if (isUnityEvent) {
+						entry = new Entry(property);
+						m_Entries.Add(entry);
+					} else {
+						return -1;
+					}
 				}
 				return m_Entries.IndexOf(entry);
 			}

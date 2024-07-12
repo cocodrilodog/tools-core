@@ -209,17 +209,12 @@
 				case SerializedPropertyType.Vector3:		return typeof(Vector3);
 				case SerializedPropertyType.Vector3Int:		return typeof(Vector3);
 				case SerializedPropertyType.Vector4:		return typeof(Vector4);
-				
-				//case SerializedPropertyType.ObjectReference:		return ???;
 
-				//case SerializedPropertyType.Generic: {
-				//		if (property.isArray) {
-				//			// Array or list
-				//		} else {
-				//			// Struct or serialized System.Object class
-				//		}
-				//		break;
-				//	}
+				// ObjectReference is better handled in the generic way below. Otherwise when the value is null
+				// the result would lose presicion. Commenting this for future reference
+				//
+				// case SerializedPropertyType.ObjectReference: 
+				//	 return property.objectReferenceValue != null ? property.objectReferenceValue.GetType() : typeof(UnityEngine.Object);
 
 				case SerializedPropertyType.ManagedReference: {
 						// Example of managedReferenceFieldTypename: "CocodriloDog.Core.Examples CocodriloDog.Core.Examples.Folder"
@@ -230,10 +225,8 @@
 
 				default:
 
-					// TODO: This may be the default solution to get the type when the commented cases above happen
-
 					// For all types that are not included before, this is a generic way of getting the type
-					// via propertyPath
+					// via propertyPath with Reflection
 					FieldInfo field = null;
 					object currentObject = property.serializedObject.targetObject;
 
@@ -241,17 +234,12 @@
 					// Example of a path: m_MyDrive.m_Files2.m_List
 					var pathSteps = property.propertyPath.Split('.');
 
-					// TODO: Remove the comments when this has been fully tested
-					//Debug.Log("...");
-					//Debug.Log(property.propertyPath);
-
 					for (int i = 0; i < pathSteps.Length; i++) {
 
 						var step = pathSteps[i];
 
+						// Array treatment
 						if (step == "Array" && pathSteps.Length > i + 1 && pathSteps[i + 1].Contains("data[")) {
-
-							//Debug.Log("	Array treatment");
 
 							var pattern = @"data\[(\d+)\]";
 							var regex = new Regex(pattern);
@@ -260,15 +248,13 @@
 							if (match.Success) {
 								var intString = match.Groups[1].Value;
 								if (int.TryParse(intString, out int result)) {
-									//Debug.Log($"	Item index: {result}");
-									//Debug.Log($"	Item: {(currentObject as IList)[result]}");
 									currentObject = (currentObject as IList)[result];
 									i++;
 									continue;
 								}
 							}
+
 						}
-						//Debug.Log($"Pre: step:{step}; currentObject:{currentObject}");
 
 						// Get the field that corresponds to the step
 						var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -281,7 +267,6 @@
 						}
 
 						currentObject = field?.GetValue(currentObject);
-						//Debug.Log($"Pos: step:{step}; field:{field}; currentObject:{currentObject}");
 
 					}
 
