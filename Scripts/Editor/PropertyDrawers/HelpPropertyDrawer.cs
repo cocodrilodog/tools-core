@@ -26,8 +26,6 @@ namespace CocodriloDog.Core {
 
 			Label = EditorGUI.BeginProperty(Position, Label, Property);
 
-			EditorGUI.PropertyField(GetNextPosition(Property), Property);
-
 			// Find the help method
 			var targetObject = Property.serializedObject.targetObject;
 			var helpAttribute = attribute as HelpAttribute;
@@ -49,11 +47,15 @@ namespace CocodriloDog.Core {
 				m_CurrentCode = (int)method.Invoke(targetObject, parameters);
 				m_CurrentMessage = parameters[0] as string;
 			}
-			
+
+			EditorGUI.BeginDisabledGroup(m_CurrentCode < 0);
+			EditorGUI.PropertyField(GetNextPosition(Property), Property);
+			EditorGUI.EndDisabledGroup();
+
 			// Draw the helpbox
-			if(m_CurrentCode != 0) {
+			if (m_CurrentCode != 0) {
 				var helpRect = GetNextPosition(GetMessageHeight());
-				EditorGUI.HelpBox(helpRect, m_CurrentMessage, (MessageType)m_CurrentCode);
+				EditorGUI.HelpBox(helpRect, m_CurrentMessage, (MessageType)Mathf.Abs(m_CurrentCode));
 				GetNextPosition(2f);
 			}
 

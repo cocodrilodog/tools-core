@@ -26,6 +26,7 @@ namespace CocodriloDog.Core {
 		/// <param name="methodName">
 		/// The name of a method that must have this signature: <c>int SomeMethod(ref string message)</c>
 		/// And it can return 0 for no helpbox, 1 for info helpbox, 2 for warning helpbox, and 3 for error helpbox.
+		/// Returning -1, -2 and -3 would disable the field.
 		/// </param>
 		public HelpAttribute(string methodName) {
 			m_MethodName = methodName;

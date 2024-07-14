@@ -85,7 +85,8 @@ namespace CocodriloDog.Core {
 		/// Therefore, is we store the lates serialized object with its properties, we know that it and its properties
 		/// are valid.
 		/// </remarks>
-		private static Dictionary<SerializedObject, List<Group>> s_GroupsMap = new Dictionary<SerializedObject, List<Group>>();
+		private static Dictionary<SerializedObject, Dictionary<string, List<Group>>> s_GroupsMap = 
+			new Dictionary<SerializedObject, Dictionary<string, List<Group>>>();
 
 		#endregion
 
@@ -106,16 +107,33 @@ namespace CocodriloDog.Core {
 		}
 
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
+
+			// The serialized object may have multiple event owners (System.Object with events, for example)
 			if (!s_GroupsMap.ContainsKey(property.serializedObject)) {
-				s_GroupsMap[property.serializedObject] = new List<Group>();
+				s_GroupsMap[property.serializedObject] = new Dictionary<string, List<Group>>();
 			}
-			var groups = s_GroupsMap[property.serializedObject];
+
+			// The owners of the events held by the serialized object
+			var owners = s_GroupsMap[property.serializedObject];
+			var nameIndex = property.propertyPath.IndexOf(property.name);
+			var ownerPath = property.propertyPath.Substring(0, nameIndex);
+			// ownerPath can be something like "m_SomeMonoBehaviour.m_SomeObject.", so we remove the last . for cleanliness
+			if (ownerPath.Length > 0 && ownerPath[ownerPath.Length - 1] == '.') {
+				ownerPath = ownerPath.Remove(ownerPath.Length - 1);
+			}
+			if (!owners.ContainsKey(ownerPath)) { // Store the owner by its property path, up until the event name
+				owners[ownerPath] = new List<Group>();
+			}
+
+			// The owners can have multiple event groups
+			var groups = owners[ownerPath];
 			group = groups.FirstOrDefault(g => groupName == g.Name);
 			if (group == null) {
 				group = new Group(groupName);
 				groups.Add(group);
 			}
 			index = group.AddEntry(property);
+
 		}
 
 		#endregion
@@ -150,7 +168,9 @@ namespace CocodriloDog.Core {
 			public int AddEntry(SerializedProperty property) {
 				var entry = m_Entries.FirstOrDefault(e => property.propertyPath == e.Property.propertyPath);
 				if (entry == null) {
-					var isUnityEvent = SystemUtility.IsSubclassOfRawGeneric(CDEditorUtility.GetPropertyType(property), typeof(UnityEvent<>));
+					var propertyType = CDEditorUtility.GetPropertyType(property);
+					var isUnityEvent = typeof(UnityEvent).IsAssignableFrom(propertyType) || 
+						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>));
 					if (isUnityEvent) {
 						entry = new Entry(property);
 						m_Entries.Add(entry);
