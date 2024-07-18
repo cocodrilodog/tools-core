@@ -198,7 +198,7 @@
 							}
 
 							// Set the icon and prefix
-							breadcrumb.Icon = CompositePropertyDrawer.GetObjectIcon(partialComposite.GetType());
+							breadcrumb.Icon = CompositeObjectPropertyDrawer.GetObjectIcon(partialComposite.GetType());
 							if (breadcrumb.Icon != null) {
 								breadcrumb.Prefix = $"    ";
 							} else {

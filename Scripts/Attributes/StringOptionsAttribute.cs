@@ -5,8 +5,8 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// An attribute for string fields that will show a popup with a list of tags that are defined 
-	/// in a <see cref="StringOptions"/> asset.
+	/// An attribute for string fields that will show a popup with a list of strings that are defined 
+	/// in a <see cref="StringOptions"/> asset or in a method.
 	/// </summary>
 	public class StringOptionsAttribute : PropertyAttribute {
 
@@ -16,9 +16,12 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// Creates the attribute.
 		/// </summary>
-		/// <param name="groupName">The name of the <see cref="StringOptions"/> asset.</param>
-		public StringOptionsAttribute(string groupName) {
-			m_GroupName = groupName;
+		/// <param name="optionsName">
+		/// The name of a <see cref="StringOptions"/> asset, a <see cref="StringOptions"/> field or a 
+		/// method that returns a list of strings.
+		/// </param>
+		public StringOptionsAttribute(string optionsName) {
+			m_OptionsName = optionsName;
 		}
 
 		#endregion
@@ -30,14 +33,14 @@ namespace CocodriloDog.Core {
 		/// The name of the group. It should be the same name of the <see cref="StringOptions"/> asset or
 		/// the name of a field that references the asset.
 		/// </summary>
-		public string GroupName => m_GroupName;
+		public string OptionsName => m_OptionsName;
 
 		#endregion
 
 
 		#region Private Fields
 
-		private string m_GroupName;
+		private string m_OptionsName;
 
 		#endregion
 

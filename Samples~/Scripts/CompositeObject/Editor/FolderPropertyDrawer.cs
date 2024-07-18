@@ -16,7 +16,7 @@ namespace CocodriloDog.Core.Examples.Editor {
 	/// I am saving it just for reference.
 	/// </remarks>
 	//[CustomPropertyDrawer(typeof(Folder))]
-	public class FolderPropertyDrawer : CompositePropertyDrawer {
+	public class FolderPropertyDrawer : CompositeObjectPropertyDrawer {
 
 
 		#region Protected Properties

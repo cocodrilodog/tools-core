@@ -29,16 +29,7 @@ namespace CocodriloDog.Core {
 			// Find the help method
 			var targetObject = Property.serializedObject.targetObject;
 			var helpAttribute = attribute as HelpAttribute;
-			var type = targetObject.GetType();
-			var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-			var method = type.GetMethod(helpAttribute.MethodName, flags);
-			while (method == null) {
-				type = type.BaseType;
-				if(type == null) {
-					break;
-				}
-				method = type.GetMethod(helpAttribute.MethodName, flags);
-			}
+			var method = CDEditorUtility.GetMethod(targetObject, helpAttribute.MethodName);
 
 			// Get the results
 			m_CurrentCode = 0;

@@ -61,15 +61,12 @@ namespace CocodriloDog.Core {
 
 			// This is when CompositeList<> is used. It needs to bypass the m_List property upwards and get the
 			// data from the parent property, the CompositeList<> itself.
-			string parentPath = "";
 			SerializedProperty parentProperty = null;
+			bool canAddRemove = true;
 
 			if (m_IsCompositeList) {
-				parentPath = elements.propertyPath.Remove(elements.propertyPath.LastIndexOf('.'));
-				parentProperty = elements.serializedObject.FindProperty(parentPath);
-			}
-			
-			if (m_IsCompositeList) {
+				parentProperty = CDEditorUtility.GetParentProperty(elements);
+				canAddRemove = parentProperty.FindPropertyRelative("m_CanAddRemove").boolValue;
 				guiContent = new GUIContent(parentProperty.displayName, parentProperty.tooltip);
 			} else {
 				// This is when the Lis<CompositeObject> or CompositeObject[] is used
@@ -90,7 +87,7 @@ namespace CocodriloDog.Core {
 			sizeRect.width = 48;
 			sizeRect.yMax -= 2;
 
-			EditorGUI.BeginDisabledGroup(!CanAddRemove);
+			EditorGUI.BeginDisabledGroup(!canAddRemove || HasPrefabInstanceHandle);
 			elements.arraySize = EditorGUI.DelayedIntField(sizeRect, elements.arraySize);
 			EditorGUI.EndDisabledGroup();
 
@@ -108,7 +105,7 @@ namespace CocodriloDog.Core {
 				labelRect.yMin = labelRect.yMax;
 				labelRect.yMin -= EditorGUIUtility.singleLineHeight + 2;
 
-				if (!CanAddRemove) {
+				if (HasPrefabInstanceHandle) {
 					EditorGUI.HelpBox(
 						labelRect,
 						$"To add or remove {(m_IsCompositeList ? parentProperty.displayName : elements.displayName).ToLower()}, open the prefab.", 
@@ -150,7 +147,7 @@ namespace CocodriloDog.Core {
 		#region Private Properties
 
 		// If it has no instance handle, it means that it is not governed by a prefab
-		private bool CanAddRemove => PrefabUtility.GetPrefabInstanceHandle(m_SerializedObject.targetObject) == null;
+		private bool HasPrefabInstanceHandle => PrefabUtility.GetPrefabInstanceHandle(m_SerializedObject.targetObject) != null;
 
 		#endregion
 
@@ -176,8 +173,17 @@ namespace CocodriloDog.Core {
 				throw new ArgumentException($"The provided {nameof(elements)} must correspond to an array or list of CompositeObject");
 			}
 
-			var canAddRemove = CanAddRemove;
-			var list = new ReorderableList(serializedObject, elements, true, false, canAddRemove, canAddRemove);
+			// This is when CompositeList<> is used. It needs to get the canAddRemove value from the CompositeList<> itself.
+			bool canAddRemove = true;
+			bool canReorder = true;
+			if (m_IsCompositeList) {
+				var parentProperty = CDEditorUtility.GetParentProperty(elements);
+				canAddRemove = parentProperty.FindPropertyRelative("m_CanAddRemove").boolValue;
+				canReorder = parentProperty.FindPropertyRelative("m_CanReorder").boolValue;
+			}
+
+			var drawAddRemoveButtons = canAddRemove && !HasPrefabInstanceHandle;
+			var list = new ReorderableList(serializedObject, elements, canReorder, false, drawAddRemoveButtons, drawAddRemoveButtons);
 			list.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
 				EditorGUI.PropertyField(rect, elements.GetArrayElementAtIndex(index));
 			};

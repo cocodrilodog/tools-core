@@ -70,6 +70,17 @@ namespace CocodriloDog.Core {
 			set => m_Name = value;
 		}
 
+		/// <summary>
+		/// Enables or disabled the name field in the inspector.
+		/// </summary>
+		/// <remarks>
+		/// This should be called from <c>OnValidate</c>
+		/// </remarks>
+		public bool CanEditName {
+			get => m_CanEditName;
+			set => m_CanEditName = value;
+		}
+
 #if UNITY_EDITOR
 		/// <summary>
 		/// This flag is used by the editor tools to show the <see cref="CompositeObject"/> exapanded
@@ -104,12 +115,22 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Public Constructor
+
+		public CompositeObject() => m_Name = DefaultName;
+
+		#endregion
+
+
 		#region Private Fields
 
 		[Tooltip("The name of this CompositeObject")]
-		[StringOptions("m_NameOptions")]
 		[SerializeField]
 		private string m_Name;
+
+		[HideInInspector]
+		[SerializeField]
+		private bool m_CanEditName = true;
 
 #if UNITY_EDITOR
 		[TextArea]

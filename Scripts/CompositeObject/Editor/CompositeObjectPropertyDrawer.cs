@@ -13,7 +13,7 @@
 	/// Base class for property drawers of <see cref="CompositeObject"/> concrete classes.
 	/// </summary>
 	[CustomPropertyDrawer(typeof(CompositeObject), true)]
-	public class CompositePropertyDrawer : PropertyDrawerBase {
+	public class CompositeObjectPropertyDrawer : PropertyDrawerBase {
 
 
 		#region Public Static Methods
@@ -133,6 +133,21 @@
 		/// </summary>
 		protected virtual bool UseDefaultDrawer => true;
 
+		/// <summary>
+		/// Reference to the target <see cref="CompositeObject"/>.
+		/// </summary>
+		protected CompositeObject CompositeObject => Property.managedReferenceValue as CompositeObject;
+
+		/// <summary>
+		/// The property of the <c>m_Name</c> field
+		/// </summary>
+		protected SerializedProperty NameProperty { get; private set; }
+
+		/// <summary>
+		/// The property of the <c>m_DocumentationComment</c> field
+		/// </summary>
+		protected SerializedProperty DocumentationCommentProperty { get; private set; }
+
 		#endregion
 
 
@@ -227,7 +242,10 @@
 			var rect = GetNextPosition();
 			var nameRect = rect;
 			nameRect.xMax -= 22;
+
+			EditorGUI.BeginDisabledGroup(!CompositeObject.CanEditName);
 			EditorGUI.PropertyField(nameRect, NameProperty);
+			EditorGUI.EndDisabledGroup();
 
 			// Documentation comment button
 			var documentationRect = rect;
@@ -319,17 +337,6 @@
 		#region Private Static Fields
 
 		private static Dictionary<string, Texture> s_ObjectIcons = new Dictionary<string, Texture>();
-
-		#endregion
-
-
-		#region Private Properties
-
-		private CompositeObject CompositeObject => Property.managedReferenceValue as CompositeObject;
-
-		private SerializedProperty NameProperty { get; set; }
-
-		private SerializedProperty DocumentationCommentProperty { get; set; }
 
 		#endregion
 
@@ -482,7 +489,27 @@
 		}
 
 		private void DrawDeleteButton(Rect rect) {
-			var canDelete = PrefabUtility.GetPrefabInstanceHandle(Property.serializedObject.targetObject) == null;
+
+			var canAddRemove = true;
+			var parentProperty = CDEditorUtility.GetParentProperty(Property); ;
+			for(int i = 0; i < 3; i++) {
+
+				var parentType = CDEditorUtility.GetPropertyType(parentProperty);
+				var parentIsCompositeList = SystemUtility.IsSubclassOfRawGeneric(parentType, typeof(CompositeList<>));
+
+				if (parentIsCompositeList) {
+					canAddRemove = parentProperty.FindPropertyRelative("m_CanAddRemove").boolValue;
+					break;
+				}
+
+				parentProperty = CDEditorUtility.GetParentProperty(parentProperty);
+				if(parentProperty == null) {
+					break;
+				}
+
+			}
+
+			var canDelete = canAddRemove && PrefabUtility.GetPrefabInstanceHandle(Property.serializedObject.targetObject) == null;
 			EditorGUI.BeginDisabledGroup(
 				Property.managedReferenceValue == null ||
 				!canDelete

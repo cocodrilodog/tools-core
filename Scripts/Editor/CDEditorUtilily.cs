@@ -276,6 +276,21 @@
 		}
 
 		/// <summary>
+		/// Gets the parent property of the provided <paramref name="property"/> or <c>null</c> if it has no parent
+		/// </summary>
+		/// <param name="property">The property</param>
+		/// <returns>The parent property</returns>
+		public static SerializedProperty GetParentProperty(SerializedProperty property) {
+			var lastDotIndex = property.propertyPath.LastIndexOf('.');
+			if (lastDotIndex >= 0) {
+				string parentPath = property.propertyPath.Remove(lastDotIndex);
+				SerializedProperty parentProperty = property.serializedObject.FindProperty(parentPath);
+				return parentProperty;
+			}
+			return null;
+		}
+
+		/// <summary>
 		/// Iterates through the direct child properties of the <paramref name="serializedObject"/>, not grandchildren, etc.
 		/// </summary>
 		/// <param name="serializedObject">The <see cref="SerializedObject"/></param>
@@ -340,37 +355,29 @@
 		/// <returns>The method.</returns>
 		/// <param name="target">Target.</param>
 		/// <param name="methodName">Method name.</param>
-		public static MethodInfo GetMethod(UnityEngine.Object target, string methodName) {
+		public static MethodInfo GetMethod(object target, string methodName) {
 
-			MethodInfo method = null;
+			MethodInfo method;
+			var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 			// Try to get the method from the current type
 			Type type = target.GetType();
-			method = type.GetMethod(
-				methodName,
-				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-			);
+			method = type.GetMethod(methodName, flags);
 
 			// If not found go ahead with the base classes
-			if (method == null) {
-				while (type.BaseType != null) {
-					type = type.BaseType;
-					method = type.GetMethod(
-						methodName,
-						BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-					);
-					if (method != null) {
-						break;
-					}
+			while (method == null) {
+				type = type.BaseType;
+				if (type == null) {
+					break;
 				}
+				method = type.GetMethod(methodName, flags);
 			}
 
-			// If method with the provided name is not found
-			if (method == null) {
-				throw new InvalidOperationException(
-					string.Format("Didn't find a method named \"{0}\"", methodName)
-				);
-			}
+			// TODO: This check was removed. This must be tested in all tools.
+			//// If method with the provided name is not found
+			//if (method == null) {
+			//	throw new InvalidOperationException($"Didn't find a method named \"{methodName}\"");
+			//}
 
 			return method;
 

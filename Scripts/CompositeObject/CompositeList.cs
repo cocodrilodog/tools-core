@@ -15,6 +15,34 @@ namespace CocodriloDog.Core {
 	where T : CompositeObject {
 
 
+		#region Public Properties
+
+
+		/// <summary>
+		/// Used to enable/disable the ability to add or remove objects in the inspector.
+		/// </summary>
+		/// <remarks>
+		/// This should be called from <c>OnValidate</c>
+		/// </remarks>
+		public bool CanAddRemove {
+			get => m_CanAddRemove;
+			set => m_CanAddRemove = value;
+		}
+
+		/// <summary>
+		/// Used to enable/disable the ability to reorder objects in the inspector.
+		/// </summary>
+		/// <remarks>
+		/// This should be called from <c>OnValidate</c>
+		/// </remarks>
+		public bool CanReorder {
+			get => m_CanReorder;
+			set => m_CanReorder = value;
+		}
+
+		#endregion
+
+
 		#region Public Constructors
 
 		public CompositeList() {
@@ -76,6 +104,14 @@ namespace CocodriloDog.Core {
 
 		[SerializeReference]
 		private List<T> m_List;
+
+		[HideInInspector]
+		[SerializeField]
+		private bool m_CanAddRemove = true;
+
+		[HideInInspector]
+		[SerializeField]
+		private bool m_CanReorder = true;
 
 		#endregion
 

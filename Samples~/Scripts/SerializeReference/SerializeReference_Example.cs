@@ -5,6 +5,7 @@ namespace CocodriloDog.Core.Examples {
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	[AddComponentMenu("")]
 	public class SerializeReference_Example : MonoBehaviour {
 
 		[SerializeReference]

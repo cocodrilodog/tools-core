@@ -10,15 +10,16 @@ namespace CocodriloDog.Core.Examples.Editor {
 	public class SerializeReference_Example_Editor : Editor {
 
 		private void OnEnable() {
+			ScriptProperty = serializedObject.FindProperty("m_Script");
 			CatAProperty = serializedObject.FindProperty("CatA");
 			CatBProperty = serializedObject.FindProperty("CatB");
 		}
 
 		public override void OnInspectorGUI() {
-			//base.OnInspectorGUI();
 			
 			serializedObject.Update();
 
+			CDEditorUtility.DrawDisabledField(ScriptProperty);
 			EditorGUILayout.PropertyField(CatAProperty, true);
 
 			if(GUILayout.Button("Cat A: Null")) {
@@ -66,6 +67,8 @@ namespace CocodriloDog.Core.Examples.Editor {
 			serializedObject.ApplyModifiedProperties();
 
 		}
+
+		private SerializedProperty ScriptProperty { get; set; }
 
 		private SerializedProperty CatAProperty { get; set; }
 
