@@ -43,6 +43,9 @@
 		[UnityEventGroup("EventGroup")]
 		public UnityEvent Event2;
 
+		[UnityEventGroup("LonelyEvent")]
+		public UnityEvent Event3;
+
 		private int HelpHelp(ref string message) {
 			message = "Showing some help!";
 			return -1;

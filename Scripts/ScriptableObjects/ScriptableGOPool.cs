@@ -8,7 +8,7 @@ namespace CocodriloDog.Core {
     /// <summary>
     /// A pool for game objects.
     /// </summary>
-	[CreateAssetMenu(menuName = "Cocodrilo Dog/Core/ScriptableGOPool")]
+	[CreateAssetMenu(menuName = "Cocodrilo Dog/Core/Scriptable GO Pool")]
     public class ScriptableGOPool : ScriptableObject {
 
 

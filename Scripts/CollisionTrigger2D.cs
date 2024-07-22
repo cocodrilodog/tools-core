@@ -7,43 +7,19 @@ namespace CocodriloDog.Core {
 
 	/// <summary>
 	/// Triggers collision events when other <see cref="CollisionTrigger2D"/>s enter and exit this one and have
-	/// <see cref="SelfTags"/> that match the <see cref="OtherTags"/>.
+	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
 	/// </summary>
-	public class CollisionTrigger2D : CollisionTriggerBase<CollisionTrigger2D, Collision2D> {
+	public class CollisionTrigger2D : CollisionTriggerBase<CollisionTrigger2D, Collider2D, Collision2D> {
 
 
 		#region Unity Methods
 
-		private void OnTriggerEnter2D(Collider2D other) {
-			var otherTrigger = other.GetComponentInParent<CollisionTrigger2D>();
-			if (otherTrigger != null && DoOtherTagsMatch(otherTrigger) && EnterTrigger(otherTrigger)) {
-				RaiseTriggerEnter(otherTrigger);
-				m_OnTriggerEnter.Invoke(otherTrigger);
-			}
+		private void OnTriggerStay2D(Collider2D other) {
+			_OnTriggerStay(other);
 		}
 
-		private void OnTriggerExit2D(Collider2D other) {
-			var otherTrigger = other.GetComponentInParent<CollisionTrigger2D>();
-			if (otherTrigger != null && DoOtherTagsMatch(otherTrigger) && ExitTrigger(otherTrigger)) {
-				RaiseTriggerExit(otherTrigger);
-				m_OnTriggerExit.Invoke(otherTrigger);
-			}
-		}
-
-		private void OnCollisionEnter2D(Collision2D collision) {
-			var otherTrigger = collision.collider.GetComponentInParent<CollisionTrigger2D>();
-			if (otherTrigger != null && DoOtherTagsMatch(otherTrigger) && EnterTrigger(otherTrigger)) {
-				RaiseCollisionEnter(collision);
-				m_OnCollisionEnter.Invoke(collision);
-			}
-		}
-
-		private void OnCollisionExit2D(Collision2D collision) {
-			var otherTrigger = collision.collider.GetComponentInParent<CollisionTrigger2D>();
-			if (otherTrigger != null && DoOtherTagsMatch(otherTrigger) && ExitTrigger(otherTrigger)) {
-				RaiseCollisionExit(collision);
-				m_OnCollisionExit.Invoke(collision);
-			}
+		private void OnCollisionStay2D(Collision2D collision) {
+			_OnCollisionStay(collision);
 		}
 
 		#endregion

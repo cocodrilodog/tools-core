@@ -27,9 +27,11 @@ namespace CocodriloDog.Core {
 			if (indexInGroup == -1) {
 				return (EditorGUIUtility.singleLineHeight + 2) * 2;
 			} else if (indexInGroup == group.SelectedIndex) {
-				var height = base.GetPropertyHeight(property, label);
-				height += EditorGUIUtility.singleLineHeight + 2;
-				return height + group.Entries.Count * 1.5f;
+				var height = base.GetPropertyHeight(property, label); // Event height
+				if (group.Entries.Count > 1) { // Add the toolbar height only when there is more than one event in the group
+					height += EditorGUIUtility.singleLineHeight + 2; // The toolbar height
+				}
+				return height + group.Entries.Count * 1.5f; // Small compensation for the short height they use when not drawn
 			} else {
 				return 0;
 			}
@@ -41,12 +43,13 @@ namespace CocodriloDog.Core {
 			label = EditorGUI.BeginProperty(position, label, property);
 
 			RegisterProperty(property.Copy(), (attribute as UnityEventGroupAttribute).GroupName, out var group, out var indexInGroup);
-			position.y -= indexInGroup * 1.5f;
+			position.y -= indexInGroup * 1.5f; // Small compensation for the short height they use when not drawn
 
 			if (indexInGroup == -1) {
 				EditorGUI.HelpBox(position, $"{property.name}: UnityEventGroup attribute only supports UnityEvent classes.", MessageType.Error);	
 			} else if (indexInGroup == group.SelectedIndex) {
 
+				// Toolbar buttons
 				var contents = new List<GUIContent>();
 				foreach (var entry in group.Entries) {
 					var size = entry.Property.FindPropertyRelative("m_PersistentCalls.m_Calls").arraySize;
@@ -54,12 +57,18 @@ namespace CocodriloDog.Core {
 					contents.Add(new GUIContent(text, entry.Property.tooltip));
 				}
 
-				var toolBarRect = position;
-				toolBarRect.height = EditorGUIUtility.singleLineHeight;
-				group.SelectedIndex = GUI.Toolbar(toolBarRect, group.SelectedIndex, contents.ToArray());
+				// Draw the tool bar only when there is more than one event in the group
+				if (group.Entries.Count > 1) {
+					var toolBarRect = position;
+					toolBarRect.height = EditorGUIUtility.singleLineHeight;
+					group.SelectedIndex = GUI.Toolbar(toolBarRect, group.SelectedIndex, contents.ToArray());
+				}
 
+				// Selected event
 				var eventRect = position;
-				eventRect.y += EditorGUIUtility.singleLineHeight + 2;
+				if (group.Entries.Count > 1) { // Move the event down only when there is a toolbar
+					eventRect.y += EditorGUIUtility.singleLineHeight + 2;
+				}
 				base.OnGUI(eventRect, property, label);
 
 			}

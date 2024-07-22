@@ -267,11 +267,17 @@ namespace CocodriloDog.Core {
 
 		public virtual void Enter() { }
 
-		public void RaiseOnEnter() => m_OnEnter.Invoke();
+		public void RaiseOnEnter() {
+			OnEnter?.Invoke();
+			m_OnEnter.Invoke();
+		}
 
 		public virtual void Exit() { }
 
-		public void RaiseOnExit() => m_OnExit.Invoke();
+		public void RaiseOnExit() {
+			OnExit?.Invoke();
+			m_OnExit.Invoke();
+		}
 
 		public virtual void Update() { }
 

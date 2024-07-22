@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98840870e028bab4f9f19026a81f2764, type: 3}
-  m_Name: CollisionTags
+  m_Script: {fileID: 11500000, guid: bef2566a63faef84db9e06b521e56bd7, type: 3}
+  m_Name: ScriptableVector3_Example
   m_EditorClassIdentifier: 
-  m_Options:
-  - Player
-  - Ground
-  - Obstacle
+  m_Value: {x: 0, y: 0, z: 0}

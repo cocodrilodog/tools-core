@@ -5,17 +5,33 @@ namespace CocodriloDog.Core {
     using System.Collections.Generic;
     using UnityEngine;
 
+	/// <summary>
+	/// A ScriptableObject that stores/references a value of type <typeparamref name="T"/>.
+	/// </summary>
+	/// 
+	/// <remarks>
+	/// This is designed to store values or references to objects at a project level so that
+	/// they can be easily retrieved by other objects without relying on a forced 
+	/// singleton pattern.
+	/// </remarks>
+	/// 
+	/// <typeparam name="T">The type to store.</typeparam>
     public class ScriptableValue<T> : ScriptableObject {
 
 
         #region Public Properties
 
+		/// <summary>
+		/// The value that is stored/referenced by this asset.
+		/// </summary>
         public virtual T Value {
             get => m_Value;
             set {
-                var previousValue = m_Value;
-                m_Value = value;
-                OnValueChange?.Invoke(previousValue);
+				if (!value.Equals(m_Value)) {
+					var previousValue = m_Value;
+					m_Value = value;
+					OnValueChange?.Invoke(previousValue);
+				}
             }
         }
 
@@ -31,6 +47,9 @@ namespace CocodriloDog.Core {
 
 		#region Public Events
 
+		/// <summary>
+		/// Raised when the <see cref="Value"/> changes.
+		/// </summary>
 		public ValueChange OnValueChange;
 
 		#endregion
@@ -52,4 +71,5 @@ namespace CocodriloDog.Core {
 
 
     }
+
 }
