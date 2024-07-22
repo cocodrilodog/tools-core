@@ -122,7 +122,7 @@ namespace CocodriloDog.Core {
 						if (collisionTrigger != null && ExitCollisionTrigger(collisionTrigger, collider) &&
 							// This prevents the on exit to be caused by a collider that was deactivated, 
 							// but we are still keeping the colliders count clean.
-							IsColliderEnabledAndActive(collider)) { 
+							IsColliderActiveAndEnabled(collider)) { 
 							if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
 								RaiseCollisionExit(collisionWrap.Collision);
 							} else {
@@ -258,7 +258,7 @@ namespace CocodriloDog.Core {
 			return false;
 		}
 
-		private bool IsColliderEnabledAndActive(T_Collider collider) {
+		private bool IsColliderActiveAndEnabled(T_Collider collider) {
 			if(collider is Collider) {
 				var col = collider as Collider;
 				return col.enabled && col.gameObject.activeInHierarchy;
