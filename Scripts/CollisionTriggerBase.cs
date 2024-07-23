@@ -90,7 +90,7 @@ namespace CocodriloDog.Core {
 			// Add the latest staying colliders
 			foreach (var collider in m_TempStayingColliders) {
 				if (m_StayingColliders.Add(collider)) {
-					Debug.Log($"+ {collider.name}");
+					//Debug.Log($"+ {collider.name}");
 					var collisionTrigger = collider.GetComponentInParent<T_CollisionTrigger>(true);
 					if (collisionTrigger != null && EnterCollisionTrigger(collisionTrigger, collider)) {
 						if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
@@ -116,7 +116,7 @@ namespace CocodriloDog.Core {
 			if (collidersToRemove != null) {
 				foreach (var collider in collidersToRemove) {
 					if (m_StayingColliders.Remove(collider)) {
-						Debug.Log($"- {collider.name}");
+						//Debug.Log($"- {collider.name}");
 						// TODO: This would be the place for granular OnExit
 						var collisionTrigger = collider.GetComponentInParent<T_CollisionTrigger>(true);
 						if (collisionTrigger != null && ExitCollisionTrigger(collisionTrigger, collider) &&
@@ -145,10 +145,15 @@ namespace CocodriloDog.Core {
 
 		protected void _OnCollisionStay(T_Collision other) {
 			var collisionWarp = new CollisionWrap(other);
-			if (m_TempStayingColliders.Add(collisionWarp.Collider)) {
-				// Store the collision info for later usage
-				m_StayingCollisionWraps[collisionWarp.Collider] = collisionWarp;
-			}
+			m_TempStayingColliders.Add(collisionWarp.Collider);
+			// Store the collision info for later usage. Update it always so that it is updated on exit
+			m_StayingCollisionWraps[collisionWarp.Collider] = collisionWarp;
+		}
+
+		private void OnDisable() {
+			m_StayingColliders.Clear();
+			m_StayingCollisionWraps.Clear();
+			m_StayingCollisionTriggers.Clear();
 		}
 
 		private void OnDestroy() {
