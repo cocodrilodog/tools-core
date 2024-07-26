@@ -491,32 +491,31 @@
 		private void DrawDeleteButton(Rect rect) {
 
 			var canAddRemove = true;
-			var parentProperty = CDEditorUtility.GetParentProperty(Property); ;
-			for(int i = 0; i < 3; i++) {
+			var parentProperty = CDEditorUtility.GetParentProperty(Property);
+			if (parentProperty != null) {
+				for (int i = 0; i < 3; i++) {
 
-				var parentType = CDEditorUtility.GetPropertyType(parentProperty);
-				var parentIsCompositeList = SystemUtility.IsSubclassOfRawGeneric(parentType, typeof(CompositeList<>));
+					var parentType = CDEditorUtility.GetPropertyType(parentProperty);
+					var parentIsCompositeList = SystemUtility.IsSubclassOfRawGeneric(parentType, typeof(CompositeList<>));
 
-				if (parentIsCompositeList) {
-					canAddRemove = parentProperty.FindPropertyRelative("m_CanAddRemove").boolValue;
-					break;
+					if (parentIsCompositeList) {
+						canAddRemove = parentProperty.FindPropertyRelative("m_CanAddRemove").boolValue;
+						break;
+					}
+
+					parentProperty = CDEditorUtility.GetParentProperty(parentProperty);
+					if (parentProperty == null) {
+						break;
+					}
+
 				}
-
-				parentProperty = CDEditorUtility.GetParentProperty(parentProperty);
-				if(parentProperty == null) {
-					break;
-				}
-
 			}
-
-			var canDelete = canAddRemove && PrefabUtility.GetPrefabInstanceHandle(Property.serializedObject.targetObject) == null;
-			EditorGUI.BeginDisabledGroup(
-				Property.managedReferenceValue == null ||
-				!canDelete
-			);
+			var thereIsInstanceAndCanBeDeleted = CompositeObject != null ? CompositeObject.CanDeleteInstance : false;
+			var deleteButtonEnabled = canAddRemove && thereIsInstanceAndCanBeDeleted && PrefabUtility.GetPrefabInstanceHandle(Property.serializedObject.targetObject) == null;
+			EditorGUI.BeginDisabledGroup(!deleteButtonEnabled);
 			var content = new GUIContent(
 				"Delete", 
-				(canDelete || Property.managedReferenceValue == null) ? "" : $"To delete {Property.displayName}, open the prefab."
+				(deleteButtonEnabled || Property.managedReferenceValue == null) ? "" : $"To delete {Property.displayName}, open the prefab."
 			);
 			if (GUI.Button(rect, content)){
 				Property.managedReferenceValue = null;

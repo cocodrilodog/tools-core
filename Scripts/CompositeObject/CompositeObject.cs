@@ -81,6 +81,17 @@ namespace CocodriloDog.Core {
 			set => m_CanEditName = value;
 		}
 
+		/// <summary>
+		/// Enables or disables the delete button in the inspector.
+		/// </summary>
+		/// <remarks>
+		/// This should be called from <c>OnValidate</c>
+		/// </remarks>
+		public bool CanDeleteInstance {
+			get => m_CanDeleteInstance;
+			set => m_CanDeleteInstance = value;
+		}
+
 #if UNITY_EDITOR
 		/// <summary>
 		/// This flag is used by the editor tools to show the <see cref="CompositeObject"/> exapanded
@@ -132,7 +143,14 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private bool m_CanEditName = true;
 
+		[HideInInspector]
+		[SerializeField]
+		private bool m_CanDeleteInstance = true;
+
 #if UNITY_EDITOR
+		[NonSerialized]
+		private bool m_Edit;
+
 		[TextArea]
 		[SerializeField]
 		private string m_DocumentationComment;
@@ -140,9 +158,6 @@ namespace CocodriloDog.Core {
 		[NonSerialized]
 		private bool m_EditDocumentationComment;
 #endif
-
-		[NonSerialized]
-		private bool m_Edit;
 
 		#endregion
 
