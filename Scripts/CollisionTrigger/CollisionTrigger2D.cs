@@ -43,16 +43,20 @@ namespace CocodriloDog.Core {
 
 		public override CollisionReaction2D GetReaction(int index) => m_Reactions[index];
 
-		public override bool Raycast(Vector2 origin, Vector2 direction, float maxDistance, string otherTag) {
+		public override bool Raycast(Vector2 origin, Vector2 direction, float maxDistance, params string[] otherTags) {
 			
-			var results = new List<RaycastHit2D>();
-			Physics2D.Raycast(origin, direction, default(ContactFilter2D), results, maxDistance);
+			var hitsInfo = new List<RaycastHit2D>();
+			var filter = new ContactFilter2D();
+			filter.useTriggers = true;
+			Physics2D.Raycast(origin, direction, filter, hitsInfo, maxDistance);
 
-			for(int i = 0; i < results.Count; i++) {
-				if (results[i].collider != null) {
-					var otherTrigger = results[i].collider.GetComponentInParent<CollisionTrigger2D>();
-					if (otherTrigger != null && otherTrigger.ThisTags.Contains(otherTag)) {
-						return true;
+			for(int i = 0; i < hitsInfo.Count; i++) {
+				var otherTrigger = hitsInfo[i].collider.GetComponentInParent<CollisionTrigger2D>();
+				if (otherTrigger != null) {
+					foreach (var otherTag in otherTags) {
+						if (otherTrigger.ThisTags.Contains(otherTag)) {
+							return true;
+						}
 					}
 				}
 			}

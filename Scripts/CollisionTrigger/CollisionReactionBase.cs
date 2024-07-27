@@ -58,13 +58,13 @@ namespace CocodriloDog.Core {
 
 		#region Public Events
 
-		public event Action<T_CollisionTrigger> OnTriggerEnterEv;
-
-		public event Action<T_CollisionTrigger> OnTriggerExitEv;
-
 		public event Action<T_Collision> OnCollisionEnterEv;
 
 		public event Action<T_Collision> OnCollisionExitEv;
+
+		public event Action<T_CollisionTrigger> OnTriggerEnterEv;
+
+		public event Action<T_CollisionTrigger> OnTriggerExitEv;
 
 		#endregion
 
@@ -72,10 +72,10 @@ namespace CocodriloDog.Core {
 		#region Unity Events
 
 		public void OnDestroy() {
-			OnTriggerEnterEv = null;
-			OnTriggerExitEv = null;
 			OnCollisionEnterEv = null;
 			OnCollisionExitEv = null;
+			OnTriggerEnterEv = null;
+			OnTriggerExitEv = null;
 		}
 
 		#endregion
@@ -93,22 +93,6 @@ namespace CocodriloDog.Core {
 
 		[Tooltip(
 			"Raised when another collision trigger with SelfTags that match the " +
-			"OtherTag of this reaction, enters this collision trigger."
-		)]
-		[UnityEventGroup("TriggerEvents")]
-		[SerializeField]
-		private UnityEvent<T_CollisionTrigger> m_OnTriggerEnter;
-
-		[Tooltip(
-			"Raised when another collision trigger with SelfTags that match the " +
-			"OtherTag of this reaction exits this collision trigger."
-		)]
-		[UnityEventGroup("TriggerEvents")]
-		[SerializeField]
-		private UnityEvent<T_CollisionTrigger> m_OnTriggerExit;
-
-		[Tooltip(
-			"Raised when another collision trigger with SelfTags that match the " +
 			"OtherTag of this reaction enters this collision trigger."
 		)]
 		[UnityEventGroup("CollisionEvents")]
@@ -122,6 +106,22 @@ namespace CocodriloDog.Core {
 		[UnityEventGroup("CollisionEvents")]
 		[SerializeField]
 		private UnityEvent<T_Collision> m_OnCollisionExit;
+
+		[Tooltip(
+			"Raised when another collision trigger with SelfTags that match the " +
+			"OtherTag of this reaction, enters this collision trigger."
+		)]
+		[UnityEventGroup("TriggerEvents")]
+		[SerializeField]
+		private UnityEvent<T_CollisionTrigger> m_OnTriggerEnter;
+
+		[Tooltip(
+			"Raised when another collision trigger with SelfTags that match the " +
+			"OtherTag of this reaction exits this collision trigger."
+		)]
+		[UnityEventGroup("TriggerEvents")]
+		[SerializeField]
+		private UnityEvent<T_CollisionTrigger> m_OnTriggerExit;
 
 		#endregion
 

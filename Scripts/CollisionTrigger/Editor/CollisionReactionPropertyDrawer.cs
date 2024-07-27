@@ -20,29 +20,29 @@ namespace CocodriloDog.Core {
 
 		protected override void Edit_InitializePropertiesForGetHeight() {
 			base.Edit_InitializePropertiesForGetHeight();
-			OtherTagProperty = Property.FindPropertyRelative("m_OtherTag");
-			OnTriggerEnterProperty = Property.FindPropertyRelative("m_OnTriggerEnter");
-			OnTriggerExitProperty = Property.FindPropertyRelative("m_OnTriggerExit");
-			OnCollisionEnterProperty = Property.FindPropertyRelative("m_OnCollisionEnter");
-			OnCollisionExitProperty = Property.FindPropertyRelative("m_OnCollisionExit");
+			OtherTagProperty			= Property.FindPropertyRelative("m_OtherTag");
+			OnCollisionEnterProperty	= Property.FindPropertyRelative("m_OnCollisionEnter");
+			OnCollisionExitProperty		= Property.FindPropertyRelative("m_OnCollisionExit");
+			OnTriggerEnterProperty		= Property.FindPropertyRelative("m_OnTriggerEnter");
+			OnTriggerExitProperty		= Property.FindPropertyRelative("m_OnTriggerExit");
 		}
 
 		protected override void Edit_InitializePropertiesForOnGUI() {
 			base.Edit_InitializePropertiesForOnGUI();
-			OtherTagProperty = Property.FindPropertyRelative("m_OtherTag");
-			OnTriggerEnterProperty = Property.FindPropertyRelative("m_OnTriggerEnter");
-			OnTriggerExitProperty = Property.FindPropertyRelative("m_OnTriggerExit");
-			OnCollisionEnterProperty = Property.FindPropertyRelative("m_OnCollisionEnter");
-			OnCollisionExitProperty = Property.FindPropertyRelative("m_OnCollisionExit");
+			OtherTagProperty			= Property.FindPropertyRelative("m_OtherTag");
+			OnCollisionEnterProperty	= Property.FindPropertyRelative("m_OnCollisionEnter");
+			OnCollisionExitProperty		= Property.FindPropertyRelative("m_OnCollisionExit");
+			OnTriggerEnterProperty		= Property.FindPropertyRelative("m_OnTriggerEnter");
+			OnTriggerExitProperty		= Property.FindPropertyRelative("m_OnTriggerExit");
 		}
 
 		protected override float Edit_GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			var height = base.Edit_GetPropertyHeight(property, label);
 			height += EditorGUI.GetPropertyHeight(OtherTagProperty) + 2;
-			height += EditorGUI.GetPropertyHeight(OnTriggerEnterProperty) + 2;
-			height += EditorGUI.GetPropertyHeight(OnTriggerExitProperty) + 2;
 			height += EditorGUI.GetPropertyHeight(OnCollisionEnterProperty) + 2;
 			height += EditorGUI.GetPropertyHeight(OnCollisionExitProperty) + 2;
+			height += EditorGUI.GetPropertyHeight(OnTriggerEnterProperty) + 2;
+			height += EditorGUI.GetPropertyHeight(OnTriggerExitProperty) + 2;
 			return height;
 		}
 
@@ -59,10 +59,10 @@ namespace CocodriloDog.Core {
 				NameProperty.stringValue = OtherTagProperty.stringValue;
 			}
 
-			EditorGUI.PropertyField(GetNextPosition(OnTriggerEnterProperty), OnTriggerEnterProperty);
-			EditorGUI.PropertyField(GetNextPosition(OnTriggerExitProperty), OnTriggerExitProperty);
 			EditorGUI.PropertyField(GetNextPosition(OnCollisionEnterProperty), OnCollisionEnterProperty);
 			EditorGUI.PropertyField(GetNextPosition(OnCollisionExitProperty), OnCollisionExitProperty);
+			EditorGUI.PropertyField(GetNextPosition(OnTriggerEnterProperty), OnTriggerEnterProperty);
+			EditorGUI.PropertyField(GetNextPosition(OnTriggerExitProperty), OnTriggerExitProperty);
 
 		}
 

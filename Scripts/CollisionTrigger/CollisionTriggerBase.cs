@@ -94,7 +94,7 @@ namespace CocodriloDog.Core {
 			return otherCollisioning != null;
 		}
 
-		public abstract bool Raycast(T_Vector origin, T_Vector direction, float maxDistance, string otherTag);
+		public abstract bool Raycast(T_Vector origin, T_Vector direction, float maxDistance, params string[] otherTags);
 
 		#endregion
 
