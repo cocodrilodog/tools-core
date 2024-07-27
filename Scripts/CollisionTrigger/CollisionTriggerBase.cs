@@ -12,8 +12,8 @@ namespace CocodriloDog.Core {
 	/// Triggers collision events when other <see cref="T_CollisionTrigger"/>s enter and exit this one and have
 	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
 	/// </summary>
-	public abstract class CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction> : CompositeRoot
-		where T_CollisionTrigger : CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction>
+	public abstract class CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector> : CompositeRoot
+		where T_CollisionTrigger : CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector>
 		where T_Collider : Component
 		where T_Collision : class
 		where T_CollisionReaction : CollisionReactionBase<T_CollisionTrigger, T_Collision> {
@@ -75,19 +75,26 @@ namespace CocodriloDog.Core {
 		/// game object, otherwise <c>false</c>.
 		/// </summary>
 		/// <param name="otherTrigger">Other collision trigger</param>
-		/// <returns></returns>
+		/// <returns>
+		/// <c>true</c> if there <paramref name="otherTrigger"/> is collisioning with this one, <c>false</c> otherwise.
+		/// </returns>
 		public bool IsOtherStaying(T_CollisionTrigger otherTrigger) => m_StayingCollisionTriggers.ContainsKey(otherTrigger);
 
 		/// <summary>
 		/// Returns <c>true</c> if there is any collision trigger with self tag <paramref name="otherTag"/>
 		/// collisioning with this trigger.
 		/// </summary>
-		/// <param name="otherTag"></param>
-		/// <returns></returns>
+		/// <param name="otherTag">Other collision tag.</param>
+		/// <returns>
+		/// <c>true</c> if there <paramref name="otherTrigger"/> with a ThisTag like <paramref name="otherTag"/> is 
+		/// collisioning with this one, <c>false</c> otherwise.
+		/// </returns>
 		public bool IsOtherStaying(string otherTag) {
 			var otherCollisioning = m_StayingCollisionTriggers.Keys.FirstOrDefault(t => t.ThisTags.Contains(otherTag));
 			return otherCollisioning != null;
 		}
+
+		public abstract bool Raycast(T_Vector origin, T_Vector direction, float maxDistance, string otherTag);
 
 		#endregion
 
@@ -99,7 +106,7 @@ namespace CocodriloDog.Core {
 			// Add the latest staying colliders
 			foreach (var collider in m_TempStayingColliders) {
 				if (m_StayingColliders.Add(collider)) {
-					if (m_DebugColliderCount) {
+					if (m_DebugCollidersCount) {
 						Debug.Log($"{name}: + {collider.name}");
 					}
 					var collisionTrigger = collider.GetComponentInParent<T_CollisionTrigger>(true);
@@ -123,7 +130,7 @@ namespace CocodriloDog.Core {
 			if (collidersToRemove != null) {
 				foreach (var collider in collidersToRemove) {
 					if (m_StayingColliders.Remove(collider)) {
-						if (m_DebugColliderCount) {
+						if (m_DebugCollidersCount) {
 							Debug.Log($"{name}: - {collider.name}");
 						}
 						// TODO: This would be the place for granular OnExit
@@ -185,14 +192,14 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private StringOptions m_TagOptions;
 
+		//[HideInInspector]
+		[SerializeField]
+		private bool m_DebugCollidersCount;
+
 		[Tooltip("A set of tags for this trigger to be identified by other triggers.")]
 		[StringOptions("m_TagOptions")]
 		[SerializeField]
 		private List<string> m_ThisTags;
-
-		[HideInInspector]
-		[SerializeField]
-		private bool m_DebugColliderCount;
 
 		#endregion
 
@@ -239,19 +246,23 @@ namespace CocodriloDog.Core {
 		/// <c>true</c> when the <paramref name="collisionTrigger"/> enters for the first time, <c>false</c> otherwise
 		/// </returns>
 		private bool TryEnterCollisionTrigger(T_CollisionTrigger collisionTrigger, T_Collider collider) {
-			var reaction = GetMatchingReaction(collisionTrigger);
-			if (reaction != null) {
-				if (!m_StayingCollisionTriggers.ContainsKey(collisionTrigger)) {
-					m_StayingCollisionTriggers[collisionTrigger] = new HashSet<T_Collider> { collider };
-					if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
-						reaction.RaiseCollisionEnter(collisionWrap.Collision);
-					} else {
-						reaction.RaiseTriggerEnter(collisionTrigger);
+			if (!m_StayingCollisionTriggers.ContainsKey(collisionTrigger)) {
+				m_StayingCollisionTriggers[collisionTrigger] = new HashSet<T_Collider> { collider };
+				var reaction = GetMatchingReaction(collisionTrigger);
+				if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
+					if (m_DebugCollidersCount) {
+						Debug.Log($"{name}: Collision: ++ {collider.name}");
 					}
-					return true;
+					reaction?.RaiseCollisionEnter(collisionWrap.Collision);
+				} else {
+					if (m_DebugCollidersCount) {
+						Debug.Log($"{name}: Trigger: ++ {collider.name}");
+					}
+					reaction?.RaiseTriggerEnter(collisionTrigger);
 				}
-				m_StayingCollisionTriggers[collisionTrigger].Add(collider);
+				return true;
 			}
+			m_StayingCollisionTriggers[collisionTrigger].Add(collider);
 			return false;
 		}
 
@@ -278,20 +289,24 @@ namespace CocodriloDog.Core {
 		/// <c>true</c> when the last collider of the <paramref name="collisionTrigger"/> exits, <c>false</c> otherwise.
 		/// </returns>
 		private bool TryExitCollisionTrigger(T_CollisionTrigger collisionTrigger, T_Collider collider) {
-			var reaction = GetMatchingReaction(collisionTrigger);
-			if (reaction != null) {
-				if (m_StayingCollisionTriggers.ContainsKey(collisionTrigger)) {
-					m_StayingCollisionTriggers[collisionTrigger].Remove(collider);
-					if (m_StayingCollisionTriggers[collisionTrigger].Count == 0) {
-						m_StayingCollisionTriggers.Remove(collisionTrigger);
-						// This prevents the on exit to be caused by a collider that was deactivated, 
-						// but we are still keeping the colliders count clean by removing it anyway
-						if (IsColliderActiveAndEnabled(collider)) {
-							if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
-								reaction.RaiseCollisionExit(collisionWrap.Collision);
-							} else {
-								reaction.RaiseTriggerExit(collisionTrigger);
+			if (m_StayingCollisionTriggers.ContainsKey(collisionTrigger)) {
+				m_StayingCollisionTriggers[collisionTrigger].Remove(collider);
+				if (m_StayingCollisionTriggers[collisionTrigger].Count == 0) {
+					m_StayingCollisionTriggers.Remove(collisionTrigger);
+					var reaction = GetMatchingReaction(collisionTrigger);
+					// This prevents the on exit to be caused by a collider that was deactivated, 
+					// but we are still keeping the colliders count clean by removing it anyway
+					if (IsColliderActiveAndEnabled(collider)) {
+						if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
+							if (m_DebugCollidersCount) {
+								Debug.Log($"{name}: Collision: -- {collider.name}");
 							}
+							reaction?.RaiseCollisionExit(collisionWrap.Collision);
+						} else {
+							if (m_DebugCollidersCount) {
+								Debug.Log($"{name}: Trigger:  -- {collider.name}");
+							}
+							reaction?.RaiseTriggerExit(collisionTrigger);
 						}
 					}
 					return true;

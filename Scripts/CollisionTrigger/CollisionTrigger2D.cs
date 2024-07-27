@@ -11,7 +11,7 @@ namespace CocodriloDog.Core {
 	/// Triggers collision events when other <see cref="CollisionTrigger2D"/>s enter and exit this one and have
 	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
 	/// </summary>
-	public class CollisionTrigger2D : CollisionTriggerBase<CollisionTrigger2D, Collider2D, Collision2D, CollisionReaction2D> {
+	public class CollisionTrigger2D : CollisionTriggerBase<CollisionTrigger2D, Collider2D, Collision2D, CollisionReaction2D, Vector2> {
 
 
 		#region Public Methods
@@ -42,6 +42,24 @@ namespace CocodriloDog.Core {
 		public override CollisionReaction2D GetReaction(string otherTag) => m_Reactions.FirstOrDefault(r => r.OtherTag == otherTag);
 
 		public override CollisionReaction2D GetReaction(int index) => m_Reactions[index];
+
+		public override bool Raycast(Vector2 origin, Vector2 direction, float maxDistance, string otherTag) {
+			
+			var results = new List<RaycastHit2D>();
+			Physics2D.Raycast(origin, direction, default(ContactFilter2D), results, maxDistance);
+
+			for(int i = 0; i < results.Count; i++) {
+				if (results[i].collider != null) {
+					var otherTrigger = results[i].collider.GetComponentInParent<CollisionTrigger2D>();
+					if (otherTrigger != null && otherTrigger.ThisTags.Contains(otherTag)) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+
+		}
 
 		#endregion
 

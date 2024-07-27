@@ -11,7 +11,7 @@ namespace CocodriloDog.Core {
 	/// Triggers collision events when other <see cref="CollisionTrigger"/>s enter and exit this one and have
 	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
 	/// </summary>
-	public class CollisionTrigger : CollisionTriggerBase<CollisionTrigger, Collider, Collision, CollisionReaction> {
+	public class CollisionTrigger : CollisionTriggerBase<CollisionTrigger, Collider, Collision, CollisionReaction, Vector3> {
 
 
 		#region Public Methods
@@ -42,6 +42,22 @@ namespace CocodriloDog.Core {
 		public override CollisionReaction GetReaction(string otherTag) => m_Reactions.FirstOrDefault(r => r.OtherTag == otherTag);
 
 		public override CollisionReaction GetReaction(int index) => m_Reactions[index];
+
+		// TODO: Test this
+		public override bool Raycast(Vector3 origin, Vector3 direction, float maxDistance, string otherTag) {
+
+			Physics.Raycast(origin, direction, out var hitInfo, maxDistance);
+			
+			if (hitInfo.collider != null) {
+				var otherTrigger = hitInfo.collider.GetComponentInParent<CollisionTrigger>();
+				if (otherTrigger != null && otherTrigger.ThisTags.Contains(otherTag)) {
+					return true;
+				}
+			}
+
+			return false;
+
+		}
 
 		#endregion
 
