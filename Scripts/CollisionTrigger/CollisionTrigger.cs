@@ -9,7 +9,7 @@ namespace CocodriloDog.Core {
 
 	/// <summary>
 	/// Triggers collision events when other <see cref="CollisionTrigger"/>s enter and exit this one and have
-	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
+	/// <see cref="ThisTags"/> that match the <see cref="OtherTag"/> of the reactions.
 	/// </summary>
 	public class CollisionTrigger : CollisionTriggerBase<CollisionTrigger, Collider, Collision, CollisionReaction, Vector3> {
 
@@ -49,7 +49,7 @@ namespace CocodriloDog.Core {
 			var hitsInfo = Physics.RaycastAll(origin, direction, maxDistance);
 
 			for (int i = 0; i < hitsInfo.Length; i++) {
-				var otherTrigger = hitsInfo[i].collider.GetComponentInParent<CollisionTrigger2D>();
+				var otherTrigger = hitsInfo[i].collider.GetComponentInParent<CollisionTrigger>();
 				if (otherTrigger != null) {
 					foreach (var otherTag in otherTags) {
 						if (otherTrigger.ThisTags.Contains(otherTag)) {
@@ -68,13 +68,13 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
-		private void OnTriggerStay(Collider other) {
-			_OnTriggerStay(other);
-		}
+		private void OnTriggerEnter(Collider other) => _OnTriggerEnter(other);
 
-		private void OnCollisionStay(Collision collision) {
-			_OnCollisionStay(collision);
-		}
+		private void OnTriggerExit(Collider other) => _OnTriggerExit(other);
+
+		private void OnCollisionEnter(Collision other) => _OnCollisionEnter(other);
+
+		private void OnCollisionExit(Collision other) => _OnCollisionExit(other);
 
 		private void OnValidate() {
 			for (int i = 0; i < m_Reactions.Count; i++) {

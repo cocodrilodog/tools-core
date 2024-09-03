@@ -59,9 +59,16 @@ namespace CocodriloDog.Core {
 
 				// Draw the tool bar only when there is more than one event in the group
 				if (group.Entries.Count > 1) {
+
 					var toolBarRect = position;
 					toolBarRect.height = EditorGUIUtility.singleLineHeight;
+					
+					EditorGUI.BeginChangeCheck();
 					group.SelectedIndex = GUI.Toolbar(toolBarRect, group.SelectedIndex, contents.ToArray());
+					if (EditorGUI.EndChangeCheck()) {
+						GUI.FocusControl(null);
+					}
+
 				}
 
 				// Selected event

@@ -5,7 +5,7 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 	using UnityEngine;
 
-	[CustomPropertyDrawer(typeof(ComponentOptions))]
+	[CustomPropertyDrawer(typeof(ComponentOptionsAttribute))]
 	public class ComponentOptionsPropertyDrawer : PropertyDrawerBase {
 
 
@@ -21,7 +21,7 @@ namespace CocodriloDog.Core {
 			var options = new List<Object> { gameObject };
 			for(int i = 0; i < gameObject.GetComponentCount(); i++) {
 				var component = gameObject.GetComponentAtIndex(i);
-				var exludeTypes = new List<string>((attribute as ComponentOptions).ExludeTypes);
+				var exludeTypes = new List<string>((attribute as ComponentOptionsAttribute).ExludeTypes);
 				if (!exludeTypes.Contains(component.GetType().Name)) {
 					options.Add(component);
 				}

@@ -679,8 +679,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TagOptions: {fileID: 11400000, guid: b79b7cc4ef2a2794081328ad48abf150, type: 2}
-  m_ThisTags: []
-  m_DebugColliderCount: 0
+  m_ThisTags:
+  - Block1
   m_Reactions:
     m_List:
     - rid: 3134690603350360068
@@ -693,41 +693,11 @@ MonoBehaviour:
     - rid: 3134690603350360068
       type: {class: CollisionReaction, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
       data:
-        m_Name: WhiteBox
+        m_Name: Block2
         m_CanEditName: 0
         m_CanDeleteInstance: 0
         m_DocumentationComment: 
-        m_OtherTag: WhiteBox
-        m_OnTriggerEnter:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 107807164}
-              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
-              m_MethodName: Log
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: OnTriggerEnter! - WhiteBox
-                m_BoolArgument: 0
-              m_CallState: 2
-        m_OnTriggerExit:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 107807164}
-              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
-              m_MethodName: Log
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: OnTriggerExit! - WhiteBox
-                m_BoolArgument: 0
-              m_CallState: 2
+        m_OtherTag: Block2
         m_OnCollisionEnter:
           m_PersistentCalls:
             m_Calls:
@@ -740,7 +710,7 @@ MonoBehaviour:
                 m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
                 m_IntArgument: 0
                 m_FloatArgument: 0
-                m_StringArgument: OnCollisionEnter! - WhiteBox
+                m_StringArgument: 'Block1: OnCollisionEnter! - Block2'
                 m_BoolArgument: 0
               m_CallState: 2
         m_OnCollisionExit:
@@ -755,47 +725,47 @@ MonoBehaviour:
                 m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
                 m_IntArgument: 0
                 m_FloatArgument: 0
-                m_StringArgument: OnCollisionExit! - WhiteBox
+                m_StringArgument: 'Block1: OnCollisionExit! - Block2'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnTriggerEnter! - Block2'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerExit:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnTriggerExit! - Block2'
                 m_BoolArgument: 0
               m_CallState: 2
     - rid: 3134690603350360069
       type: {class: CollisionReaction, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
       data:
-        m_Name: SecondGreenSphere
+        m_Name: Sphere2_2
         m_CanEditName: 0
         m_CanDeleteInstance: 0
         m_DocumentationComment: 
-        m_OtherTag: SecondGreenSphere
-        m_OnTriggerEnter:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 107807164}
-              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
-              m_MethodName: Log
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: OnTriggerEnter! - SecondGreenSphere
-                m_BoolArgument: 0
-              m_CallState: 2
-        m_OnTriggerExit:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 107807164}
-              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
-              m_MethodName: Log
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: OnTriggerExit! - SecondGreenSphere
-                m_BoolArgument: 0
-              m_CallState: 2
+        m_OtherTag: Sphere2_2
         m_OnCollisionEnter:
           m_PersistentCalls:
             m_Calls:
@@ -808,7 +778,7 @@ MonoBehaviour:
                 m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
                 m_IntArgument: 0
                 m_FloatArgument: 0
-                m_StringArgument: OnCollisionEnter! - SecondGreenSphere
+                m_StringArgument: 'Block1: OnCollisionEnter! - Sphere2_2'
                 m_BoolArgument: 0
               m_CallState: 2
         m_OnCollisionExit:
@@ -823,7 +793,37 @@ MonoBehaviour:
                 m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
                 m_IntArgument: 0
                 m_FloatArgument: 0
-                m_StringArgument: OnCollisionExit! - SecondGreenSphere
+                m_StringArgument: 'Block1: OnCollisionExit! - Sphere2_2'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnTriggerEnter! - Sphere2_2'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerExit:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnTriggerExit! - Sphere2_2'
                 m_BoolArgument: 0
               m_CallState: 2
 --- !u!1 &360800804
@@ -1051,15 +1051,83 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TagOptions: {fileID: 11400000, guid: b79b7cc4ef2a2794081328ad48abf150, type: 2}
   m_ThisTags:
-  - SecondGreenSphere
-  m_DebugColliderCount: 0
+  - Sphere2_2
   m_Reactions:
-    m_List: []
+    m_List:
+    - rid: 7981382444336807938
     m_CanAddRemove: 1
     m_CanReorder: 1
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7981382444336807938
+      type: {class: CollisionReaction, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
+      data:
+        m_Name: Block1
+        m_CanEditName: 0
+        m_CanDeleteInstance: 0
+        m_DocumentationComment: 
+        m_OtherTag: Block1
+        m_OnCollisionEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Sphere2_2: OnCollisionEnter! - Block1'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnCollisionExit:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Sphere2_2: OnCollisionExit! - Block1'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Sphere2_2: OnTriggerEnter! - Block1'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerExit:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 107807164}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Sphere2_2: OnTriggerExit! - Block1'
+                m_BoolArgument: 0
+              m_CallState: 2
 --- !u!1 &454730717
 GameObject:
   m_ObjectHideFlags: 0
@@ -1521,8 +1589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TagOptions: {fileID: 11400000, guid: b79b7cc4ef2a2794081328ad48abf150, type: 2}
   m_ThisTags:
-  - WhiteBox
-  m_DebugColliderCount: 0
+  - Block2
   m_Reactions:
     m_List: []
     m_CanAddRemove: 1

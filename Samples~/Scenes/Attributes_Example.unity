@@ -248,15 +248,37 @@ MonoBehaviour:
   MinMaxRange:
     m_MinValue: 1.4395393
     m_MaxValue: 4.03071
+  MinMaxRanges:
+  - m_MinValue: 3.3979468
+    m_MaxValue: 5.148403
+  - m_MinValue: 1.7504557
+    m_MaxValue: 5.611758
+  - m_MinValue: 4.067237
+    m_MaxValue: 6.5899515
+  CreateAsset: {fileID: 0}
   SomeStringOptions: {fileID: 11400000, guid: 13b263da615d5f84aaec84a75904382d, type: 2}
-  ChooseAString: Option2
-  ChooseAString2: OptionC
-  ChooseAString3: February
-  Help: 
+  StringOptions_FieldReferencedAsset: Option1
+  StringOptions_ResourcesAssets: OptionA
+  StringOptions_Method: January
+  StringOptions_MissingSource: 
+  StringOptions_List:
+  - Option1
+  - Option2
+  - Option3
+  m_HelpValue: -2
+  Help: A field with help info
+  Helps:
+  - A field with help info
+  - A field with help info
+  m_ShowHiddenString: 1
+  m_HiddenString: Hidden String
   Event1:
     m_PersistentCalls:
       m_Calls: []
   Event2:
+    m_PersistentCalls:
+      m_Calls: []
+  Event3:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &711085311

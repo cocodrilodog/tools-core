@@ -92,7 +92,7 @@ namespace CocodriloDog.Core {
 		private string m_OtherTag;
 
 		[Tooltip(
-			"Raised when another collision trigger with SelfTags that match the " +
+			"Raised when another collision trigger with ThisTags that match the " +
 			"OtherTag of this reaction enters this collision trigger."
 		)]
 		[UnityEventGroup("CollisionEvents")]
@@ -100,7 +100,7 @@ namespace CocodriloDog.Core {
 		private UnityEvent<T_Collision> m_OnCollisionEnter;
 
 		[Tooltip(
-			"Raised when another collision trigger with SelfTags that match the " +
+			"Raised when another collision trigger with ThisTags that match the " +
 			"OtherTags of this reaction exits this collision trigger."
 		)]
 		[UnityEventGroup("CollisionEvents")]
@@ -108,7 +108,7 @@ namespace CocodriloDog.Core {
 		private UnityEvent<T_Collision> m_OnCollisionExit;
 
 		[Tooltip(
-			"Raised when another collision trigger with SelfTags that match the " +
+			"Raised when another collision trigger with ThisTags that match the " +
 			"OtherTag of this reaction, enters this collision trigger."
 		)]
 		[UnityEventGroup("TriggerEvents")]
@@ -116,7 +116,7 @@ namespace CocodriloDog.Core {
 		private UnityEvent<T_CollisionTrigger> m_OnTriggerEnter;
 
 		[Tooltip(
-			"Raised when another collision trigger with SelfTags that match the " +
+			"Raised when another collision trigger with ThisTags that match the " +
 			"OtherTag of this reaction exits this collision trigger."
 		)]
 		[UnityEventGroup("TriggerEvents")]

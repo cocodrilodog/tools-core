@@ -35,6 +35,9 @@ namespace CocodriloDog.Core {
 		/// <returns>The list</returns>
 		public List<T_CollisionTrigger> OtherStaying => m_StayingCollisionTriggers.Keys.ToList();
 
+		/// <summary>
+		/// The number of reactions that this collision trigger has.
+		/// </summary>
 		public abstract int ReactionsCount { get; }
 
 		#endregion
@@ -101,73 +104,123 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
-		private void FixedUpdate() {
-
-			// Add the latest staying colliders
-			foreach (var collider in m_TempStayingColliders) {
-				if (m_StayingColliders.Add(collider)) {
-					if (m_DebugCollidersCount) {
-						Debug.Log($"{name}: + {collider.name}");
-					}
-					var collisionTrigger = collider.GetComponentInParent<T_CollisionTrigger>(true);
-					if (collisionTrigger != null) {
-						TryEnterCollisionTrigger(collisionTrigger, collider);
-					}
-					// TODO: This would be the place for granular OnEnter
-				}
-			}
-
-			// Mark the ones that are not staying anymore
-			List<T_Collider> collidersToRemove = null;
-			foreach (var collider in m_StayingColliders) {
-				if (!m_TempStayingColliders.Contains(collider)) {
-					collidersToRemove = collidersToRemove ?? new List<T_Collider>();
-					collidersToRemove.Add(collider);
-				}
-			}
-
-			// Remove them, if any
-			if (collidersToRemove != null) {
-				foreach (var collider in collidersToRemove) {
-					if (m_StayingColliders.Remove(collider)) {
-						if (m_DebugCollidersCount) {
-							Debug.Log($"{name}: - {collider.name}");
-						}
-						// TODO: This would be the place for granular OnExit
-						var collisionTrigger = collider.GetComponentInParent<T_CollisionTrigger>(true);
-						if (collisionTrigger != null) {
-							TryExitCollisionTrigger(collisionTrigger, collider);
-						}
-						// Remove the associated collition data, if any
-						m_StayingCollisionWraps.Remove(collider);
+		protected void _OnTriggerEnter(T_Collider other) {
+			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
+			if (otherCollisionTrigger != null) {
+				var reaction = GetMatchingReaction(otherCollisionTrigger);
+				if (reaction != null) {
+					if (!m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
+						m_StayingCollisionTriggers[otherCollisionTrigger] = new List<T_Collider>();
+						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
+						reaction.RaiseTriggerEnter(otherCollisionTrigger);
+					} else {
+						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
 					}
 				}
 			}
-
-			m_TempStayingColliders.Clear();
-
 		}
 
-		protected void _OnTriggerStay(T_Collider other) {
-			m_TempStayingColliders.Add(other);
+		protected void _OnTriggerExit(T_Collider other) {
+			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
+			if (otherCollisionTrigger != null) {
+				var reaction = GetMatchingReaction(otherCollisionTrigger);
+				if (reaction != null) {
+					m_StayingCollisionTriggers[otherCollisionTrigger].Remove(other);
+					if (m_StayingCollisionTriggers[otherCollisionTrigger].Count == 0) {
+						m_StayingCollisionTriggers.Remove(otherCollisionTrigger);
+						reaction.RaiseTriggerExit(otherCollisionTrigger);
+					}
+				}
+			}
 		}
 
-		protected void _OnCollisionStay(T_Collision other) {
-			var collisionWarp = new CollisionWrap(other);
-			m_TempStayingColliders.Add(collisionWarp.Collider);
-			// Store the collision info for later usage. Update it always so that it is updated on exit
-			m_StayingCollisionWraps[collisionWarp.Collider] = collisionWarp;
+		protected void _OnCollisionEnter(T_Collision collision) {
+			var other = GetColliderFromCollision(collision);
+			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
+			if (otherCollisionTrigger != null) {
+				var reaction = GetMatchingReaction(otherCollisionTrigger);
+				if (reaction != null) {
+					if (!m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
+						m_StayingCollisionTriggers[otherCollisionTrigger] = new List<T_Collider>();
+						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
+						reaction.RaiseCollisionEnter(collision);
+					} else {
+						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
+					}
+				}
+			}
+		}
+
+		protected void _OnCollisionExit(T_Collision collision) {
+			var other = GetColliderFromCollision(collision);
+			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
+			if (otherCollisionTrigger != null) {
+				var reaction = GetMatchingReaction(otherCollisionTrigger);
+				if (reaction != null) {
+					m_StayingCollisionTriggers[otherCollisionTrigger].Remove(other);
+					if (m_StayingCollisionTriggers[otherCollisionTrigger].Count == 0) {
+						m_StayingCollisionTriggers.Remove(otherCollisionTrigger);
+						reaction.RaiseCollisionExit(collision);
+					}
+				}
+			}
+		}
+
+		private void Update() {
+
+			// Remove the disabled colliders from the list / dictionary
+			List<KeyValuePair<T_CollisionTrigger, List<T_Collider>>> stayingCollisionTriggerCollidersToRemove = null;
+
+			// Each list set
+			foreach (var stayingCollisionTriggerColliders in m_StayingCollisionTriggers) {
+
+				List<T_Collider> collidersToRemove = null;
+
+				// Each collider. If the collider is disabled, mark it for removal
+				foreach (var collider in stayingCollisionTriggerColliders.Value) {
+					if (!IsColliderActiveAndEnabled(collider)) {
+						collidersToRemove = collidersToRemove ?? new List<T_Collider>();
+						collidersToRemove.Add(collider);
+					}
+				}
+
+				// Remove the collider from the list
+				if (collidersToRemove != null) {
+					foreach (var collider in collidersToRemove) {
+						stayingCollisionTriggerColliders.Value.Remove(collider);
+					}
+				}
+
+				// If the list set is empty, mark it for removal
+				if (stayingCollisionTriggerColliders.Value.Count == 0) {
+					stayingCollisionTriggerCollidersToRemove =
+						stayingCollisionTriggerCollidersToRemove ?? new List<KeyValuePair<T_CollisionTrigger, List<T_Collider>>>();
+					stayingCollisionTriggerCollidersToRemove.Add(stayingCollisionTriggerColliders);
+				}
+
+			}
+
+			// Remove the list set
+			if (stayingCollisionTriggerCollidersToRemove != null) {
+				foreach (var stayingCollisionTriggerColliders in stayingCollisionTriggerCollidersToRemove) {
+					m_StayingCollisionTriggers.Remove(stayingCollisionTriggerColliders.Key);
+				}
+			}
+
 		}
 
 		private void OnDisable() {
-			m_StayingColliders.Clear();
-			m_StayingCollisionWraps.Clear();
-			m_StayingCollisionTriggers.Clear();
+			// Clear the data only when the game object is disabled, which will turn off the children
+			// colliders. If the component is disabled, the only thing that will happen is that the 
+			// Update won't be called for a while.
+			if (!gameObject.activeInHierarchy) {
+				m_StayingCollisionTriggers.Clear();
+			}
 		}
 
 		private void OnDestroy() {
-			foreach(var reaction in Reactions) {
-				if(reaction != null) {
+			foreach (var reaction in Reactions) {
+				if (reaction != null) {
 					reaction.OnDestroy();
 				}
 			}
@@ -188,13 +241,10 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields - Serialized
 
-		[Tooltip("The tag options that will be used in Self Tag and Other Tags.")]
+		[Tooltip("The tag options that will be used in Self Tag and Reactions.")]
+		[CreateAsset]
 		[SerializeField]
 		private StringOptions m_TagOptions;
-
-		//[HideInInspector]
-		[SerializeField]
-		private bool m_DebugCollidersCount;
 
 		[Tooltip("A set of tags for this trigger to be identified by other triggers.")]
 		[StringOptions("m_TagOptions")]
@@ -207,116 +257,16 @@ namespace CocodriloDog.Core {
 		#region Private Fields - Non Serialized
 
 		[NonSerialized]
-		private HashSet<T_Collider> m_TempStayingColliders = new HashSet<T_Collider>();
-
-		[NonSerialized]
-		private Dictionary<T_Collider, CollisionWrap> m_StayingCollisionWraps = new Dictionary<T_Collider, CollisionWrap>();
-
-		[NonSerialized]
-		private HashSet<T_Collider> m_StayingColliders = new HashSet<T_Collider>();
-
-		[NonSerialized]
-		Dictionary<T_CollisionTrigger, HashSet<T_Collider>> m_StayingCollisionTriggers =
-			new Dictionary<T_CollisionTrigger, HashSet<T_Collider>>();
+		Dictionary<T_CollisionTrigger, List<T_Collider>> m_StayingCollisionTriggers =
+			new Dictionary<T_CollisionTrigger, List<T_Collider>>();
 
 		#endregion
 
 
 		#region Private Methods
 
-		/// <summary>
-		/// Tries to enter the <paramref name="collisionTrigger"/> given that the collision was triggered
-		/// by the <paramref name="collider"/>. 
-		/// </summary>
-		/// 
-		/// <remarks>
-		/// If this is the first time that the <paramref name="collisionTrigger"/> is trying to enter, it will enter and it
-		/// will start counting the colliders that belong to the <paramref name="collisionTrigger"/>. It will then search 
-		/// for a reaction whose tag is equal to any of the <see cref="m_ThisTags"/> of the entering <paramref name="collisionTrigger"/>.
-		/// 
-		/// If a reaction is found, it will raise an <c>OnCollisionEnter</c> when there is a <see cref="CollisionWrap"/>
-		/// for the provided <paramref name="collider"/>. If a reaction was found, but there is no <see cref="CollisionWrap"/>
-		/// for the <paramref name="collider"/>, then <c>OnTriggerEnter</c> is raised.
-		/// </remarks>
-		/// 
-		/// <param name="collisionTrigger">The collision trigger.</param>
-		/// <param name="collider">The collider that triggered the process.</param>
-		/// 
-		/// <returns>
-		/// <c>true</c> when the <paramref name="collisionTrigger"/> enters for the first time, <c>false</c> otherwise
-		/// </returns>
-		private bool TryEnterCollisionTrigger(T_CollisionTrigger collisionTrigger, T_Collider collider) {
-			if (!m_StayingCollisionTriggers.ContainsKey(collisionTrigger)) {
-				m_StayingCollisionTriggers[collisionTrigger] = new HashSet<T_Collider> { collider };
-				var reaction = GetMatchingReaction(collisionTrigger);
-				if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
-					if (m_DebugCollidersCount) {
-						Debug.Log($"{name}: Collision: ++ {collider.name}");
-					}
-					reaction?.RaiseCollisionEnter(collisionWrap.Collision);
-				} else {
-					if (m_DebugCollidersCount) {
-						Debug.Log($"{name}: Trigger: ++ {collider.name}");
-					}
-					reaction?.RaiseTriggerEnter(collisionTrigger);
-				}
-				return true;
-			}
-			m_StayingCollisionTriggers[collisionTrigger].Add(collider);
-			return false;
-		}
-
-		/// <summary>
-		/// Tries to exit the <paramref name="collisionTrigger"/> given that the exit was triggered
-		/// by the <paramref name="collider"/>. 
-		/// </summary>
-		/// 
-		/// <remarks>
-		/// If this is the last collider that is belongs to the <paramref name="collisionTrigger"/>, this will 
-		/// stop counting its colliders, and the <paramref name="collisionTrigger"/> will exit. It will then search for a
-		/// reaction whose tag is equal to any of the <see cref="m_ThisTags"/> of the exiting <paramref name="collisionTrigger"/>.
-		/// 
-		/// If a reaction is found and the involded <paramref name="collider"/> is active and enabled, it will raise an 
-		/// <c>OnCollisionExit</c> when there is a <see cref="CollisionWrap"/> for the provided <paramref name="collider"/>.
-		/// If a reaction was found and the <paramref name="collider"/> is active and enabled, but there is no 
-		/// <see cref="CollisionWrap"/> for the <paramref name="collider"/>, then <c>OnTriggerExit</c> is raised.
-		/// </remarks>
-		/// 
-		/// <param name="collisionTrigger">The collision trigger.</param>
-		/// <param name="collider">The collider that belongs to the collision trigger.</param>
-		/// 
-		/// <returns>
-		/// <c>true</c> when the last collider of the <paramref name="collisionTrigger"/> exits, <c>false</c> otherwise.
-		/// </returns>
-		private bool TryExitCollisionTrigger(T_CollisionTrigger collisionTrigger, T_Collider collider) {
-			if (m_StayingCollisionTriggers.ContainsKey(collisionTrigger)) {
-				m_StayingCollisionTriggers[collisionTrigger].Remove(collider);
-				if (m_StayingCollisionTriggers[collisionTrigger].Count == 0) {
-					m_StayingCollisionTriggers.Remove(collisionTrigger);
-					var reaction = GetMatchingReaction(collisionTrigger);
-					// This prevents the on exit to be caused by a collider that was deactivated, 
-					// but we are still keeping the colliders count clean by removing it anyway
-					if (IsColliderActiveAndEnabled(collider)) {
-						if (m_StayingCollisionWraps.TryGetValue(collider, out var collisionWrap)) {
-							if (m_DebugCollidersCount) {
-								Debug.Log($"{name}: Collision: -- {collider.name}");
-							}
-							reaction?.RaiseCollisionExit(collisionWrap.Collision);
-						} else {
-							if (m_DebugCollidersCount) {
-								Debug.Log($"{name}: Trigger:  -- {collider.name}");
-							}
-							reaction?.RaiseTriggerExit(collisionTrigger);
-						}
-					}
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private T_CollisionReaction GetMatchingReaction(T_CollisionTrigger otherTrigger) {
-			foreach (var otherTag in otherTrigger.m_ThisTags) {
+		private T_CollisionReaction GetMatchingReaction(T_CollisionTrigger otherCollisionTrigger) {
+			foreach (var otherTag in otherCollisionTrigger.m_ThisTags) {
 				foreach(var reaction in Reactions) {
 					if(reaction.OtherTag == otherTag) {
 						return reaction;
@@ -328,45 +278,26 @@ namespace CocodriloDog.Core {
 
 		private bool IsColliderActiveAndEnabled(T_Collider collider) {
 			if(collider is Collider) {
-				var col = collider as Collider;
-				return col.enabled && col.gameObject.activeInHierarchy;
+				var _collider = collider as Collider;
+				return _collider.enabled && _collider.gameObject.activeInHierarchy;
 			} else if (collider is Collider2D) {
-				var col = collider as Collider2D;
-				return col.enabled && col.gameObject.activeInHierarchy;
+				var _collider = collider as Collider2D;
+				return _collider.enabled && _collider.gameObject.activeInHierarchy;
 			}
 			return false;
 		}
 
-		#endregion
-
-
-		#region CollisionWrap
-
-		/// <summary>
-		/// Wrapper class for <see cref="T_Collision"/> that helps to get the corresponding <see cref="Collider"/>.
-		/// </summary>
-		public class CollisionWrap {
-
-			public CollisionWrap(T_Collision collision) => m_Collision = collision;
-
-			private T_Collision m_Collision;
-
-			public T_Collider Collider {
-				get {
-					if (m_Collision is Collision) {
-						return (m_Collision as Collision).collider as T_Collider;
-					} else if (m_Collision is Collision2D) {
-						return (m_Collision as Collision2D).collider as T_Collider;
-					}
-					return null;
-				}
+		private T_Collider GetColliderFromCollision(T_Collision collision) {
+			if (collision is Collision) {
+				return (collision as Collision).collider as T_Collider;
+			} else if (collision is Collision2D) {
+				return (collision as Collision2D).collider as T_Collider;
 			}
-
-			public T_Collision Collision => m_Collision;
-
+			return null;
 		}
 
 		#endregion
+
 
 	}
 

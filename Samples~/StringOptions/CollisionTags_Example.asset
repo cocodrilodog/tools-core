@@ -15,5 +15,6 @@ MonoBehaviour:
   m_Options:
   - Player
   - Ground
-  - WhiteBox
-  - SecondGreenSphere
+  - Block1
+  - Block2
+  - Sphere2_2

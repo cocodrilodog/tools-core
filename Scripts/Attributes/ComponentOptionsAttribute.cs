@@ -4,13 +4,13 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	public class ComponentOptions : PropertyAttribute {
+	public class ComponentOptionsAttribute : PropertyAttribute {
 
 		public string[] ExludeTypes => m_ExcludeTypes;
 
-		public ComponentOptions() { }
+		public ComponentOptionsAttribute() { }
 
-		public ComponentOptions(params string[] excludeTypes) => m_ExcludeTypes = excludeTypes;
+		public ComponentOptionsAttribute(params string[] excludeTypes) => m_ExcludeTypes = excludeTypes;
 
 		private string[] m_ExcludeTypes;
 	

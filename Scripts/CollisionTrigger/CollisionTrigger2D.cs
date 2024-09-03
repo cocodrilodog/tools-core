@@ -9,7 +9,7 @@ namespace CocodriloDog.Core {
 
 	/// <summary>
 	/// Triggers collision events when other <see cref="CollisionTrigger2D"/>s enter and exit this one and have
-	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
+	/// <see cref="ThisTags"/> that match the <see cref="OtherTag"/> of the reactions.
 	/// </summary>
 	public class CollisionTrigger2D : CollisionTriggerBase<CollisionTrigger2D, Collider2D, Collision2D, CollisionReaction2D, Vector2> {
 
@@ -70,13 +70,13 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
-		private void OnTriggerStay2D(Collider2D other) {
-			_OnTriggerStay(other);
-		}
+		private void OnTriggerEnter2D(Collider2D other) => _OnTriggerEnter(other);
 
-		private void OnCollisionStay2D(Collision2D collision) {
-			_OnCollisionStay(collision);
-		}
+		private void OnTriggerExit2D(Collider2D other) => _OnTriggerExit(other);
+
+		private void OnCollisionEnter2D(Collision2D other) => _OnCollisionEnter(other);
+
+		private void OnCollisionExit2D(Collision2D other) => _OnCollisionExit(other);
 
 		private void OnValidate() {
 			for (int i = 0; i < m_Reactions.Count; i++) {
