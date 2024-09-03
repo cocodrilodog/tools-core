@@ -124,7 +124,9 @@ namespace CocodriloDog.Core {
 			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
 			if (otherCollisionTrigger != null) {
 				var reaction = GetMatchingReaction(otherCollisionTrigger);
-				if (reaction != null) {
+				// Checking the key handles edge cases when the m_StayingCollisionTriggers is cleared
+				// prior to OnTriggerExit
+				if (reaction != null && m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
 					m_StayingCollisionTriggers[otherCollisionTrigger].Remove(other);
 					if (m_StayingCollisionTriggers[otherCollisionTrigger].Count == 0) {
 						m_StayingCollisionTriggers.Remove(otherCollisionTrigger);
@@ -156,7 +158,9 @@ namespace CocodriloDog.Core {
 			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
 			if (otherCollisionTrigger != null) {
 				var reaction = GetMatchingReaction(otherCollisionTrigger);
-				if (reaction != null) {
+				// Checking the key handles edge cases when the m_StayingCollisionTriggers is cleared
+				// prior to OnCollisionExit
+				if (reaction != null && m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
 					m_StayingCollisionTriggers[otherCollisionTrigger].Remove(other);
 					if (m_StayingCollisionTriggers[otherCollisionTrigger].Count == 0) {
 						m_StayingCollisionTriggers.Remove(otherCollisionTrigger);
