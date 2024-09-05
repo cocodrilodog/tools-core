@@ -5,7 +5,7 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 	using UnityEngine;
 
-	[CustomPropertyDrawer(typeof(ScriptableGetterBase), true)]
+	[CustomPropertyDrawer(typeof(ScriptableFieldBase), true)]
 	public class ScriptableGetterPropertyDrawer : PropertyDrawerBase {
 
 

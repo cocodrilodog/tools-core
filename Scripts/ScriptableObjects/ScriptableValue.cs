@@ -27,10 +27,19 @@ namespace CocodriloDog.Core {
         public virtual T Value {
             get => m_Value;
             set {
-				if (!value.Equals(m_Value)) {
-					var previousValue = m_Value;
-					m_Value = value;
-					OnValueChange?.Invoke(previousValue);
+				if (typeof(object).IsAssignableFrom(typeof(T))) { // Reference type
+					var valueAsObject = value as object;
+					if (valueAsObject != (m_Value as object)) {
+						var previousValue = m_Value;
+						m_Value = value;
+						OnValueChange?.Invoke(previousValue);
+					}
+				} else { // Value type
+					if (!value.Equals(m_Value)) {
+						var previousValue = m_Value;
+						m_Value = value;
+						OnValueChange?.Invoke(previousValue);
+					}
 				}
             }
         }

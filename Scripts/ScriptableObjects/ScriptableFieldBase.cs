@@ -4,7 +4,7 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	public abstract class ScriptableGetterBase {
+	public abstract class ScriptableFieldBase {
 
 
 		#region Public Properties
