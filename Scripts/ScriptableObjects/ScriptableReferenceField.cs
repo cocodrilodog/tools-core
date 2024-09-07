@@ -33,10 +33,10 @@ namespace CocodriloDog.Core {
 				if (UseAsset && m_Asset != null) {
 					m_Asset.Value = value; // This triggers the asset value change event
 				} else {
-					var prevValue = Value;
+					var previousValue = Value;
 					m_Value = value;
-					if (m_Value != prevValue) {
-						_OnValueChange?.Invoke(prevValue);
+					if (m_Value != previousValue) {
+						_OnValueChange?.Invoke(previousValue);
 					}
 				}
 			}
