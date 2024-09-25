@@ -2,27 +2,23 @@ namespace CocodriloDog.Core {
 
 	using System;
 	using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
+	using System.Collections.Generic;
+	using UnityEngine;
 
 	/// <summary>
-	/// A ScriptableObject that stores/references a value of type <typeparamref name="T"/>.
+	/// An object that stores a value of type <typeparamref name="T"/> and that raised 
+	/// <see cref="OnValueChange"/> when the stored value changes
 	/// </summary>
 	/// 
-	/// <remarks>
-	/// This is designed to store values or references to objects at a project level so that
-	/// they can be easily retrieved by other objects without relying on a forced 
-	/// singleton pattern.
-	/// </remarks>
-	/// 
 	/// <typeparam name="T">The type to store.</typeparam>
-    public class ScriptableValue<T> : ScriptableObject {
+	[Serializable]
+	public class ObservableValue<T> {
 
 
 		#region Public Properties
 
 		/// <summary>
-		/// The value that is stored/referenced by this asset.
+		/// The value that is stored by this object.
 		/// </summary>
 		public virtual T Value {
 			get => m_Value;
@@ -79,17 +75,10 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
-		#region Unity Methods
-
-		private void OnDestroy() => OnValueChange = null;
-
-		#endregion
-
-
 		#region Private Fields - Serialized
 
 		[SerializeField]
-        private T m_Value;
+		private T m_Value;
 
 		#endregion
 
