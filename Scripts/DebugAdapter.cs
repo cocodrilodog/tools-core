@@ -4,6 +4,9 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// Allows to call the <see cref="Debug.Log(object)"/> method from a Unity event.
+	/// </summary>
 	public class DebugAdapter : MonoBehaviour {
 
 
