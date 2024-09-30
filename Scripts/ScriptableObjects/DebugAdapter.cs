@@ -4,10 +4,8 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	/// <summary>
-	/// Allows to call the <see cref="Debug.Log(object)"/> method from a Unity event.
-	/// </summary>
-	public class DebugAdapter : MonoBehaviour {
+	[CreateAssetMenu(menuName = "Cocodrilo Dog/Core/Debug Adapter")]
+	public class DebugAdapter : ScriptableObject {
 
 
 		#region Public Methods
@@ -17,7 +15,7 @@ namespace CocodriloDog.Core {
 		public void Log(bool message) => Debug.Log(message);
 
 		public void Log(float message) => Debug.Log(message);
-		
+
 		public void Log(int message) => Debug.Log(message);
 
 		#endregion
