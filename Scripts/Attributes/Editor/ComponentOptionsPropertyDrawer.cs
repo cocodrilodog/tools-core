@@ -19,8 +19,10 @@ namespace CocodriloDog.Core {
 
 			var gameObject = (Property.serializedObject.targetObject as MonoBehaviour).gameObject;
 			var options = new List<Object> { gameObject };
-			for(int i = 0; i < gameObject.GetComponentCount(); i++) {
-				var component = gameObject.GetComponentAtIndex(i);
+
+			var components = gameObject.GetComponents<Component>();
+			for(int i = 0; i < components.Length; i++) {
+				var component = components[i];
 				var exludeTypes = new List<string>((attribute as ComponentOptionsAttribute).ExludeTypes);
 				if (!exludeTypes.Contains(component.GetType().Name)) {
 					options.Add(component);
