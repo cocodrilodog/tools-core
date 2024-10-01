@@ -5,6 +5,6 @@ namespace CocodriloDog.Core {
     using UnityEngine;
 
     [CreateAssetMenu(menuName = "Cocodrilo Dog/Core/Scriptable Int")]
-    public class ScriptableInt : ScriptableValue<float> { }
+    public class ScriptableInt : ScriptableValue<int> { }
 
 }
