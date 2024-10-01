@@ -336,8 +336,19 @@ namespace CocodriloDog.Core {
 				Debug.LogWarning($"Has no state with name {name}");
 				return;
 			}
-			Machine.SetState(Machine.States.FirstOrDefault(s => s.Name == name));
+			// Wait for one frame to handle edge case:
+			// - Certain state may transition to another one on Enter()
+			// - If that Enter() calls TransitionToState and the code is executed immediatly,
+			// another Exit() and Enter() will be called before the original m_OnEnter event
+			// is fired, potentially breaking the logic.
+			Machine.StartCoroutine(Transition());
+			IEnumerator Transition() {
+				yield return null;
+				Machine.SetState(Machine.States.FirstOrDefault(s => s.Name == name));
+			}
 		}
+
+
 
 		#endregion
 
