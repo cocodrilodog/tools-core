@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d58905c2aa104934fb50af277ad6e7eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 7bae7204dbf22624f9de69f95e25ffde, type: 3}
   m_Name: ScriptableResettable2_Example
   m_EditorClassIdentifier: 
   m_ResetOnEditMode: 1
-  SomeString: Default String 2
-  SomeFloat: 1232
-  SomePosition: {x: 42, y: 52, z: 62}
+  SomeString: Default Value 2
+  SomeFloat: 21
+  SomePosition: {x: 22, y: 23, z: 24}
   Another: {fileID: 11400000, guid: 5bdaef178bc312f4994558a3f00a074f, type: 2}
