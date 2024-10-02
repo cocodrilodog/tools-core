@@ -16,7 +16,7 @@ namespace CocodriloDog.Core {
 	/// </remarks>
 	/// 
 	/// <typeparam name="T">The type to store.</typeparam>
-    public class ScriptableValue<T> : ScriptableObject {
+    public class ScriptableValue<T> : ScriptableResettable {
 
 
 		#region Public Properties

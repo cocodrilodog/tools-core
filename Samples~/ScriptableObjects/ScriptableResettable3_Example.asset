@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59ef2bc3b28dec248b09170ea2d0e40a, type: 3}
-  m_Name: RotationSpeed
+  m_Script: {fileID: 11500000, guid: d58905c2aa104934fb50af277ad6e7eb, type: 3}
+  m_Name: ScriptableResettable3_Example
   m_EditorClassIdentifier: 
   m_ResetOnEditMode: 1
-  m_Value: 90
+  SomeString: Default String 3
+  SomeFloat: 1233
+  SomePosition: {x: 43, y: 53, z: 63}
+  Another: {fileID: 11400000, guid: 85f5a3d527e95b744bbba771ff2b45c8, type: 2}

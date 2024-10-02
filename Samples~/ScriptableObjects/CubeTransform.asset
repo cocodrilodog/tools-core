@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 140b3f34b6dab854a87fc61ebc258fb2, type: 3}
   m_Name: CubeTransform
   m_EditorClassIdentifier: 
+  m_ResetOnEditMode: 1
   m_Value: {fileID: 0}
