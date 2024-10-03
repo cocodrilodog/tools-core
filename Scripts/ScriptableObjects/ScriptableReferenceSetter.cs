@@ -32,6 +32,7 @@ namespace CocodriloDog.Core {
 			"A ScriptableReference asset that will receive a value of a this game object or any of its " +
 			"components at runtime, so that other objects can read it from the asset."
 		)]
+		[CreateAsset]
 		[SerializeField]
         private ScriptableReference m_Destination;
 
