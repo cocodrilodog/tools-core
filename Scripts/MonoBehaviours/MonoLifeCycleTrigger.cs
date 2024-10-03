@@ -1,5 +1,6 @@
 namespace CocodriloDog.Core {
 
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -11,17 +12,55 @@ namespace CocodriloDog.Core {
 	public class MonoLifeCycleTrigger : MonoBehaviour {
 
 
+		#region Public Events
+
+		public event Action OnAwakeEv;		// added Ev for consistency
+
+		public event Action OnStartEv;		// added Ev for consistency
+
+		public event Action OnDestroyEv;	// added Ev to break the conflict with OnDestroy
+
+		public event Action OnEnableEv;		// added Ev to break the conflict with OnEnable
+
+		public event Action OnDisableEv;	// added Ev to break the conflict with OnDisable
+
+		#endregion
+
+
 		#region Unity Methods
 
-		private void Awake() => OnAwake.Invoke();
+		private void Awake() {
+			OnAwakeEv?.Invoke();
+			m_OnAwake.Invoke();
+		}
 
-		private void OnEnable() => OnEnableUE.Invoke();
+		private void OnEnable() {
+			OnEnableEv?.Invoke();
+			m_OnEnable.Invoke();
+		}
 
-		private void Start() => OnStart.Invoke();
+		private void Start() {
+			OnStartEv?.Invoke();
+			m_OnStart.Invoke();
+		}
 
-		private void OnDisable() => OnDisableUE.Invoke();
+		private void OnDisable() {
+			OnDisableEv?.Invoke();
+			m_OnDisable.Invoke();
+		}
 
-		private void OnDestroy() => OnDestroyUE.Invoke();
+		private void OnDestroy() {
+
+			OnDestroyEv?.Invoke();
+			m_OnDestroy.Invoke();
+
+			OnAwakeEv = null;
+			OnStartEv = null;
+			OnDestroyEv = null;
+			OnEnableEv = null;
+			OnDisableEv = null;
+
+		}
 
 		#endregion
 
@@ -30,23 +69,23 @@ namespace CocodriloDog.Core {
 
 		[UnityEventGroup("Main")]
 		[SerializeField]
-		private UnityEvent OnAwake;
+		private UnityEvent m_OnAwake;
 
 		[UnityEventGroup("Main")]
 		[SerializeField]
-		private UnityEvent OnStart;
+		private UnityEvent m_OnStart;
 
 		[UnityEventGroup("Main")]
 		[SerializeField]
-		private UnityEvent OnDestroyUE;
+		private UnityEvent m_OnDestroy;
 
 		[UnityEventGroup("EnableDisable")]
 		[SerializeField]
-		private UnityEvent OnEnableUE;
+		private UnityEvent m_OnEnable;
 
 		[UnityEventGroup("EnableDisable")]
 		[SerializeField]
-		private UnityEvent OnDisableUE;
+		private UnityEvent m_OnDisable;
 
 		#endregion
 

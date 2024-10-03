@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f1b76d339b9d0f4a8525b871780763a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnAwake:
+  m_OnAwake:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
@@ -271,10 +271,10 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Awake
+          m_StringArgument: OnAwake
           m_BoolArgument: 0
         m_CallState: 2
-  OnStart:
+  m_OnStart:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
@@ -286,10 +286,10 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Start
+          m_StringArgument: OnStart
           m_BoolArgument: 0
         m_CallState: 2
-  OnDestroyUE:
+  m_OnDestroy:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
@@ -304,7 +304,7 @@ MonoBehaviour:
           m_StringArgument: OnDestroy
           m_BoolArgument: 0
         m_CallState: 2
-  OnEnableUE:
+  m_OnEnable:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
@@ -319,7 +319,7 @@ MonoBehaviour:
           m_StringArgument: OnEnable
           m_BoolArgument: 0
         m_CallState: 2
-  OnDisableUE:
+  m_OnDisable:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
