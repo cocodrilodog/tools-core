@@ -90,6 +90,7 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private T m_Value;
 
+		[CreateAsset]
 		[SerializeField]
 		private ScriptableValue<T> m_Asset;
 
