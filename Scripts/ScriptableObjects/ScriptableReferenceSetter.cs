@@ -14,9 +14,23 @@ namespace CocodriloDog.Core {
     public class ScriptableReferenceSetter : MonoBehaviour {
 
 
+		#region Public Methods
+
+		/// <summary>
+		/// Sets the reference value.
+		/// </summary>
+		public void SetValue() => m_Destination.Value = m_ObjectToReference;
+
+		#endregion
+
+
 		#region Unity Methods
 
-		private void Awake() => m_Destination.Value = m_ObjectToReference;
+		private void Awake() {
+			if (m_SetValueOnAwake) {
+				SetValue();
+			}
+		}
 
 		#endregion
 
@@ -35,6 +49,10 @@ namespace CocodriloDog.Core {
 		[CreateAsset]
 		[SerializeField]
         private ScriptableReference m_Destination;
+
+		[Tooltip("Sets the reference value on Awake.")]
+		[SerializeField]
+		private bool m_SetValueOnAwake = true;
 
 		#endregion
 
