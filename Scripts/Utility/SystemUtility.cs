@@ -11,6 +11,27 @@ namespace CocodriloDog.Core {
 		#region Public Static Methods
 
 		/// <summary>
+		/// Checks whether an object is array or list.
+		/// </summary>
+		/// <param name="obj">The object</param>
+		/// <returns>Whether an object is array or list.</returns>
+		public static bool IsArrayOrList(object obj) {
+			if (obj == null) {
+				return false;
+			}
+			Type type = obj.GetType();
+			// Check if it's an array
+			if (type.IsArray) {
+				return true;
+			}
+			// Check if it's a List<>
+			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>)) {
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
 		/// Checks whether a type is subclass of a generic type
 		/// </summary>
 		/// <param name="type">The type to check, for example <c>FileList</c></param>

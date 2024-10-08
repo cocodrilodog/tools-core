@@ -26,10 +26,25 @@ namespace CocodriloDog.Core {
 
 			Label = EditorGUI.BeginProperty(Position, Label, Property);
 
-			// Find the hide method
-			var targetObject = Property.serializedObject.targetObject;
+			object targetObject = null;
+			MethodInfo method = null;
 			var hideAttribute = attribute as HideAttribute;
-			var method = CDEditorUtility.GetMethod(targetObject, hideAttribute.MethodName);
+
+			// Find the help method
+			// First look in the parent property to support system objects
+
+			// Try to get the parent property, which will be used to look for asset or method
+			var parentProperty = CDEditorUtility.GetNonArrayOrListParentProperty(Property);
+
+			if (parentProperty != null) {
+				targetObject = CDEditorUtility.GetPropertyValue(parentProperty);
+				method = CDEditorUtility.GetMethod(targetObject, hideAttribute.MethodName);
+			}
+			// Resort to the serializedObject.targetObject
+			if (method == null) {
+				targetObject = Property.serializedObject.targetObject;
+				method = CDEditorUtility.GetMethod(targetObject, hideAttribute.MethodName);
+			}
 
 			// Get the results
 			m_Hide = false;

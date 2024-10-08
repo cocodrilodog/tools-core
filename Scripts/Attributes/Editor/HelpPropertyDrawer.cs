@@ -26,10 +26,25 @@ namespace CocodriloDog.Core {
 
 			Label = EditorGUI.BeginProperty(Position, Label, Property);
 
-			// Find the help method
-			var targetObject = Property.serializedObject.targetObject;
+			object targetObject = null;
+			MethodInfo method = null;
 			var helpAttribute = attribute as HelpAttribute;
-			var method = CDEditorUtility.GetMethod(targetObject, helpAttribute.MethodName);
+
+			// Find the help method
+			// First look in the parent property to support system objects
+
+			// Try to get the parent property, which will be used to look for asset or method
+			SerializedProperty parentProperty = CDEditorUtility.GetNonArrayOrListParentProperty(Property);
+
+			if (parentProperty != null) {
+				targetObject = CDEditorUtility.GetPropertyValue(parentProperty);
+				method = CDEditorUtility.GetMethod(targetObject, helpAttribute.MethodName);
+			}
+			// Resort to the serializedObject.targetObject
+			if (method == null) {
+				targetObject = Property.serializedObject.targetObject;
+				method = CDEditorUtility.GetMethod(targetObject, helpAttribute.MethodName);
+			}
 
 			// Get the results
 			m_CurrentCode = 0;

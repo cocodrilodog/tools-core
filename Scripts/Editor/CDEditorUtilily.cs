@@ -1,4 +1,4 @@
-﻿namespace CocodriloDog.Core { //TODO: Move this to Utility
+﻿namespace CocodriloDog.Core {
 
 	using System;
 	using System.Reflection;
@@ -183,6 +183,21 @@
 			return index;
 		}
 
+		/// <summary>
+		/// Gets the value of the provided <paramref name="property"/>.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <returns>The value</returns>
+		public static object GetPropertyValue(SerializedProperty property) {
+			GetPropertyValueAndType(property, out var value, out var _);
+			return value;
+		}
+
+		/// <summary>
+		/// Gets the type of the provided <paramref name="property"/>.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <returns>The type</returns>
 		public static Type GetPropertyType(SerializedProperty property) {
 			switch (property.propertyType) {
 
@@ -223,56 +238,71 @@
 						return assembly.GetType(typenameParts[1]);
 					}
 
-				default:
-
-					// For all types that are not included before, this is a generic way of getting the type
-					// via propertyPath with Reflection
-					FieldInfo field = null;
-					object currentObject = property.serializedObject.targetObject;
-
-					// Example of a path: m_MyDrive.m_Files.Array.data[2].m_Files
-					// Example of a path: m_MyDrive.m_Files2.m_List
-					var pathSteps = property.propertyPath.Split('.');
-
-					for (int i = 0; i < pathSteps.Length; i++) {
-
-						var step = pathSteps[i];
-
-						// Array treatment
-						if (step == "Array" && pathSteps.Length > i + 1 && pathSteps[i + 1].Contains("data[")) {
-
-							var pattern = @"data\[(\d+)\]";
-							var regex = new Regex(pattern);
-							var match = regex.Match(pathSteps[i + 1]);
-
-							if (match.Success) {
-								var intString = match.Groups[1].Value;
-								if (int.TryParse(intString, out int result)) {
-									currentObject = (currentObject as IList)[result];
-									i++;
-									continue;
-								}
-							}
-
-						}
-
-						// Get the field that corresponds to the step
-						var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-						var type = currentObject.GetType();
-						field = type.GetField(step, bindingFlags);
-						while(field == null && type != null) {
-							// If not found, continue with super classes
-							type = type.BaseType;
-							field = type?.GetField(step, bindingFlags);
-						}
-
-						currentObject = field?.GetValue(currentObject);
-
+				default: {
+						// For all types that are not included before, this is a generic way of getting the type
+						// via propertyPath with Reflection
+						GetPropertyValueAndType(property, out var _, out var type);
+						return type;
 					}
 
-					return field?.FieldType;
+			}
+		}
+
+		/// <summary>
+		/// Gets the <paramref name="value"/> and <paramref name="type"/> of the given <paramref name="property"/>.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="type">The type.</param>
+		public static void GetPropertyValueAndType(SerializedProperty property, out object value, out Type type) {
+
+			// Start with the target object
+			FieldInfo field = null;
+			object currentObject = property.serializedObject.targetObject;
+
+			// Example of a path: m_MyDrive.m_Files.Array.data[2].m_Files
+			// Example of a path: m_MyDrive.m_Files2.m_List
+			var pathSteps = property.propertyPath.Split('.');
+
+			for (int i = 0; i < pathSteps.Length; i++) {
+
+				var step = pathSteps[i];
+
+				// Array treatment
+				if (step == "Array" && pathSteps.Length > i + 1 && pathSteps[i + 1].Contains("data[")) {
+
+					var pattern = @"data\[(\d+)\]";
+					var regex = new Regex(pattern);
+					var match = regex.Match(pathSteps[i + 1]);
+
+					if (match.Success) {
+						var intString = match.Groups[1].Value;
+						if (int.TryParse(intString, out int result)) {
+							currentObject = (currentObject as IList)[result];
+							i++;
+							continue;
+						}
+					}
+
+				}
+
+				// Get the field that corresponds to the step
+				var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+				var t = currentObject.GetType();
+				field = t.GetField(step, bindingFlags);
+				while (field == null && t != null) {
+					// If not found, continue with super classes
+					t = t.BaseType;
+					field = t?.GetField(step, bindingFlags);
+				}
+
+				currentObject = field?.GetValue(currentObject);
 
 			}
+
+			value = currentObject;
+			type = field?.FieldType;
+
 		}
 
 		/// <summary>
@@ -289,6 +319,27 @@
 			}
 			return null;
 		}
+
+		/// <summary>
+		/// Gets the parent property of the provided <paramref name="property"/>, skipping arrays or lists
+		/// or <c>null</c> if it has no parent
+		/// </summary>
+		/// <param name="property">The property</param>
+		/// <returns>The parent property</returns>
+		public static SerializedProperty GetNonArrayOrListParentProperty(SerializedProperty property) {
+			var parentProperty = GetParentProperty(property);
+			if (parentProperty != null) {
+				if (IsArrayElement(property)) {
+					// Move two more steps up on a path like this one:
+					// "SomeObject.SomeList.Array"
+					// ".data[0]" is already discarded by the first step up
+					parentProperty = GetParentProperty(parentProperty);
+					parentProperty = GetParentProperty(parentProperty);
+				}
+			}
+			return parentProperty;
+		}
+
 
 		/// <summary>
 		/// Iterates through the direct child properties of the <paramref name="serializedObject"/>, not grandchildren, etc.

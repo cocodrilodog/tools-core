@@ -261,17 +261,41 @@ MonoBehaviour:
   StringOptions_ResourcesAssets: OptionA
   StringOptions_Method: January
   StringOptions_MissingSource: 
-  StringOptions_List:
+  StringOptions_ListAsset:
   - Option1
   - Option2
   - Option3
-  m_HelpValue: -2
-  Help: A field with help info
-  Helps:
-  - A field with help info
-  - A field with help info
-  m_ShowHiddenString: 1
-  m_HiddenString: Hidden String
+  StringOptions_ListMethod:
+  - January
+  - February
+  - March
+  HelpValue: 2
+  StringWithHelp: A string with help
+  StringsWithHelp:
+  - A string with help 1
+  - A string with help 2
+  - A string with help 3
+  ShowHiddenString: 0
+  HiddenString: Hidden String
+  SomeObject:
+    SomeNestedStringOptions: {fileID: 11400000, guid: 13b263da615d5f84aaec84a75904382d,
+      type: 2}
+    StringOptions_FieldReferencedAsset: Option1
+    StringOptions_Method: 
+    StringOptions_MissingSource: 
+    StringOptions_ListAsset:
+    - Option1
+    - Option2
+    - Option3
+    StringOptions_ListMethod:
+    - Monday
+    - Tuesday
+    - Wednesday
+    ShowHiddenObject: 1
+    HiddenObject: {fileID: 0}
+    HelpValue: 3
+    IntWithHelp: 0
+    IntsWithHelp: 010000000200000003000000
   Event1:
     m_PersistentCalls:
       m_Calls: []
