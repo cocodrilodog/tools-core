@@ -24,7 +24,11 @@ namespace CocodriloDog.Core {
 			CDEditorUtility.DrawDisabledField(m_ScriptProperty);
 			EditorGUILayout.PropertyField(m_ResetOnEditModeProperty);
 			EditorGUILayout.LabelField(m_ValueProperty.displayName);
-			m_ValueProperty.stringValue = EditorGUILayout.TextArea(m_ValueProperty.stringValue);
+
+			GUIStyle wordWrappedStyle = new GUIStyle(EditorStyles.textArea);
+			wordWrappedStyle.wordWrap = true;
+
+			m_ValueProperty.stringValue = EditorGUILayout.TextArea(m_ValueProperty.stringValue, wordWrappedStyle);
 
 			serializedObject.ApplyModifiedProperties();
 
