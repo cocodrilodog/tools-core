@@ -88,6 +88,22 @@ namespace CocodriloDog.Core {
 		public T_State GetState(string name) => m_States.FirstOrDefault(s => name == s.Name);
 
 		/// <summary>
+		/// Gets the index of the specified <paramref name="state"/>
+		/// </summary>
+		/// <typeparam name="T">The type of the state.</typeparam>
+		/// <param name="state">The state.</param>
+		/// <returns></returns>
+		protected int IndexOfState<T>(T state) where T : T_State {
+			if (state == null) {
+				throw new ArgumentNullException(nameof(state), "The provided state can not be null");
+			}
+			if (!m_States.Contains(state)) {
+				throw new ArgumentException("The provided state is not on this state machine", nameof(state));
+			}
+			return m_States.IndexOf(state);
+		}
+
+		/// <summary>
 		/// Iterates through the list of states and invokes an <paramref name="action"/> for each one.
 		/// </summary>
 		/// <param name="action">The action.</param>
@@ -124,6 +140,21 @@ namespace CocodriloDog.Core {
 
 
 		#region Protected Properties
+
+		/// <summary>
+		/// Returns the current active state.
+		/// </summary>
+		protected T_State CurrentState {
+			get {
+				Initialize();
+				return m_CurrentState;
+			}
+		}
+
+		#endregion
+
+
+		#region Protected Methods
 
 		/// <summary>
 		/// Adds a state of type <typeparamref name="T"/>.
@@ -178,16 +209,6 @@ namespace CocodriloDog.Core {
 			}
 			m_States[index] = state;
 			state.SetMachine(this as T_Machine);
-		}
-
-		/// <summary>
-		/// Returns the current active state.
-		/// </summary>
-		protected T_State CurrentState {
-			get {
-				Initialize();
-				return m_CurrentState;
-			}
 		}
 
 		#endregion
