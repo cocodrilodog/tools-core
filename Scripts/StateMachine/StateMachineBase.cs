@@ -93,7 +93,7 @@ namespace CocodriloDog.Core {
 		/// <typeparam name="T">The type of the state.</typeparam>
 		/// <param name="state">The state.</param>
 		/// <returns></returns>
-		protected int IndexOfState<T>(T state) where T : T_State {
+		public int IndexOfState<T>(T state) where T : T_State {
 			if (state == null) {
 				throw new ArgumentNullException(nameof(state), "The provided state can not be null");
 			}
