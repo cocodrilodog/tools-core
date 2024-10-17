@@ -5,7 +5,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// Allows to choose a component that is attached on the current game object, from a list of options.
+	/// Allows to choose a component that is attached to the current game object, from a list of options.
 	/// </summary>
 	public class ComponentOptionsAttribute : PropertyAttribute {
 
