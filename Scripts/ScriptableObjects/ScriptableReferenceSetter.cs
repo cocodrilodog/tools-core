@@ -22,7 +22,7 @@ namespace CocodriloDog.Core {
 		public void SetValue() => m_Destination.Value = m_ObjectToReference;
 
 		/// <summary>
-		/// On the value to null on the <see cref="ScriptableReference"/> asset.
+		/// Sets the value to null on the <see cref="ScriptableReference"/> asset.
 		/// </summary>
 		public void SetToNull() => m_Destination.Value = null;
 

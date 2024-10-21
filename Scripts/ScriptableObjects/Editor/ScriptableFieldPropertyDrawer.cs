@@ -27,17 +27,42 @@ namespace CocodriloDog.Core {
 			buttonRect.xMin = fieldRect.xMax + 2;
 			buttonRect.width = 20;
 
+			// Modify this for the icon to look good
+			var buttonStyle = new GUIStyle(GUI.skin.button);
+			buttonStyle.padding = new RectOffset(1, 1, 1, 1);
+			var iconSize = EditorGUIUtility.GetIconSize();
+			EditorGUIUtility.SetIconSize(new Vector2(12, 12));
+
 			if (useAssetAssetProperty.boolValue) {
+
 				EditorGUI.PropertyField(fieldRect, assetProperty, Label);
-				if (GUI.Button(buttonRect, new GUIContent("A", "Switch to value mode"))) {
+
+				//// Using the system icon
+				//var assetIcon = EditorGUIUtility.IconContent("ScriptableObject Icon");
+				//assetIcon.tooltip = "Turn off asset mode";
+				
+				// This texture looks better
+				var texture = Resources.Load($"AssetModeOnIcon") as Texture;
+				var assetIcon = new GUIContent(texture, "Turn off asset mode");
+
+				if (GUI.Button(buttonRect, assetIcon, buttonStyle)) {
 					useAssetAssetProperty.boolValue = false;
 				}
+
 			} else {
+
 				EditorGUI.PropertyField(fieldRect, valueProperty, Label);
-				if (GUI.Button(buttonRect, new GUIContent("V", "Switch to asset mode"))) {
+
+				var texture = Resources.Load($"AssetModeOffIcon") as Texture;
+				var assetIcon = new GUIContent(texture, "Turn on asset mode");
+
+				if (GUI.Button(buttonRect, assetIcon, buttonStyle)) {
 					useAssetAssetProperty.boolValue = true;
 				}
+
 			}
+
+			EditorGUIUtility.SetIconSize(iconSize);
 
 			EditorGUI.EndProperty();
 
