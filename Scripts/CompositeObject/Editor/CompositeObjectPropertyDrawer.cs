@@ -89,40 +89,6 @@
 		#region Protected Properties
 
 		/// <summary>
-		/// Obtains a list of possible concrete classes that will appear in a context menu when the user
-		/// clicks the "Create" button.
-		/// </summary>
-		protected List<Type> CompositeTypes {
-			get {
-
-				// The concrete composite object
-				var concreteType = CDEditorUtility.GetPropertyType(Property);
-
-				// Create the list
-				var allConcreteSubtypes = new List<Type>();
-
-				// Add the current type, if not abstract
-				if (!concreteType.IsAbstract) {
-					allConcreteSubtypes.Add(concreteType);
-				}
-
-				// Get all the types of the assembly
-				var assemblyTypes = concreteType.Assembly.GetTypes();
-
-				// Find all subtypes that are concrete. This will include grand children, great grand
-				// children, etc., because it is approving all that are assignable to the concreteType
-				var concreteSubtypes = assemblyTypes
-					.Where(t => concreteType.IsAssignableFrom(t) && t != concreteType && !t.IsAbstract)
-					.ToList();
-
-				// Add them to the list
-				allConcreteSubtypes.AddRange(concreteSubtypes);
-				return allConcreteSubtypes;
-
-			}
-		}
-
-		/// <summary>
 		/// <true> when the composite object can enter edit mode.
 		/// </summary>
 		protected bool CanEdit => Property.managedReferenceValue != null && CompositeObject.Edit;
@@ -435,11 +401,12 @@
 
 				// Save the path for later because it will be used by the GenericMenu which happens later
 				var pendingProperty = Property.Copy(); // Copy, just in case
+				var types = SystemUtility.GetConcreteDerivedTypes(CDEditorUtility.GetPropertyType(pendingProperty));
 
 				// Show the menu only when there are more than one types
-				if (CompositeTypes.Count > 1) {
+				if (types.Count > 1) {
 					var menu = new GenericMenu();
-					foreach (var type in CompositeTypes) {
+					foreach (var type in types) {
 						menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), false, () => {
 							CreateObject(type, pendingProperty);
 						});
@@ -447,7 +414,7 @@
 					menu.ShowAsContext();
 				} else {
 					// When there is only one type, create the object immediatly
-					CreateObject(CompositeTypes[0], pendingProperty);
+					CreateObject(types[0], pendingProperty);
 				}
 
 			}

@@ -3,6 +3,7 @@ namespace CocodriloDog.Core {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using UnityEngine;
 
 	public static class SystemUtility {
@@ -46,6 +47,37 @@ namespace CocodriloDog.Core {
 				type = type.BaseType;
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Gets the non-abstract types derived from the provided <paramref name="type"/>. If the 
+		/// <paramref name="type"/> is concrete, it will be included in the list.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns>The list of concrete derived types.</returns>
+		public static List<Type> GetConcreteDerivedTypes(Type type) {
+
+			// Create the list
+			var allConcreteSubtypes = new List<Type>();
+
+			// Add the current type, if not abstract
+			if (!type.IsAbstract) {
+				allConcreteSubtypes.Add(type);
+			}
+
+			// Get all the types of the assembly
+			var assemblyTypes = type.Assembly.GetTypes();
+
+			// Find all subtypes that are concrete. This will include grand children, great grand
+			// children, etc., because it is approving all that are assignable to the concreteType
+			var concreteSubtypes = assemblyTypes
+				.Where(t => type.IsAssignableFrom(t) && t != type && !t.IsAbstract)
+				.ToList();
+
+			// Add them to the list
+			allConcreteSubtypes.AddRange(concreteSubtypes);
+			return allConcreteSubtypes;
+
 		}
 
 		#endregion
