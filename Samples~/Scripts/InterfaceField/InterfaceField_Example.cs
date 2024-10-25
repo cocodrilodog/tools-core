@@ -40,7 +40,7 @@ namespace CocodriloDog.Core.Examples {
 
 		[Tooltip("A scriptable referencee")]
 		[SerializeField]
-		private ScriptableInterfaceField<IAnyInterface, InterfaceField<IAnyInterface>> m_AnyScriptableInterfaceObject;
+		private ScriptableInterfaceField<IAnyInterface> m_AnyScriptableInterfaceObject;
 
 		#endregion
 

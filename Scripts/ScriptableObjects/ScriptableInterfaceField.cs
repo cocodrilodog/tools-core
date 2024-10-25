@@ -10,12 +10,10 @@ namespace CocodriloDog.Core {
 	/// and returns either the object from the scene or the value of the <see cref="ScriptableReference"/> asset, 
 	/// depending on <see cref="ScriptableFieldBase.UseAsset"/>.
 	/// </summary>
-	/// <typeparam name="TValue">The type of object expected.</typeparam>
+	/// <typeparam name="T">The type of object expected.</typeparam>
 	/// <typeparam name="TField">The type of the <see cref="InterfaceField{T}"/></typeparam>
 	[Serializable]
-	public class ScriptableInterfaceField<TValue, TField> : ScriptableFieldBase 
-		where TValue : class
-		where TField : InterfaceField<TValue> {
+	public class ScriptableInterfaceField<T> : ScriptableFieldBase where T : class {
 
 
 		#region Public Properties
@@ -24,10 +22,10 @@ namespace CocodriloDog.Core {
 		/// Gets and sets either the object from the scene or the value of the <see cref="ScriptableReference"/>
 		/// asset, depending on <see cref="ScriptableFieldBase.UseAsset"/>.
 		/// </summary>
-		public TValue Value {
+		public T Value {
 			get {
 				if (UseAsset && m_Asset != null) {
-					return m_Asset.Value as TValue;
+					return m_Asset.Value as T;
 				} else {
 					return m_Value.Value;
 				}
@@ -50,7 +48,7 @@ namespace CocodriloDog.Core {
 
 		#region Pubic Delegates
 
-		public delegate void ValueChange(TValue previousValue);
+		public delegate void ValueChange(T previousValue);
 
 		#endregion
 
@@ -64,7 +62,7 @@ namespace CocodriloDog.Core {
 			add {
 				lock (this) {
 					_OnValueChange += value;
-					m_AssetEventHandlers[value] = pv => value?.Invoke(pv as TValue);
+					m_AssetEventHandlers[value] = pv => value?.Invoke(pv as T);
 					m_Asset.OnValueChange += m_AssetEventHandlers[value];
 				}
 			}
@@ -82,7 +80,7 @@ namespace CocodriloDog.Core {
 		#region Private Fields - Serialized
 
 		[SerializeField]
-		private TField m_Value;
+		private InterfaceField<T> m_Value;
 
 		[CreateAsset]
 		[SerializeField]
