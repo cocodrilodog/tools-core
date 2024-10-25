@@ -402,16 +402,6 @@ namespace CocodriloDog.Core.Examples {
 		#region Private Properties
 
 		/// <summary>
-		/// Create a nice getter of the serialized subcomponent and use it to get
-		/// the reference to the component rather than using the field. This will
-		/// give the code consistency and good presentation.
-		/// </summary>
-		/// <value>Some other subcomponent.</value>
-		private Rigidbody SomeOtherSubcomponent {
-			get { return m_SomeOtherSubcomponent; }
-		}
-
-		/// <summary>
 		/// Use this pattern to obtain components via <see cref="Component.GetComponent{T}"/>,
 		/// <see cref="Component.GetComponentInChildren{T}"/>, etc.
 		/// </summary>

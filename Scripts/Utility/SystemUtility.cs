@@ -15,12 +15,21 @@ namespace CocodriloDog.Core {
 		/// Checks whether an object is array or list.
 		/// </summary>
 		/// <param name="obj">The object</param>
-		/// <returns>Whether an object is array or list.</returns>
+		/// <returns>Whether the object is array or list.</returns>
 		public static bool IsArrayOrList(object obj) {
 			if (obj == null) {
 				return false;
 			}
-			Type type = obj.GetType();
+			return IsArrayOrList(obj.GetType());
+			
+		}
+
+		/// <summary>
+		/// Checks whether a type is array or list.
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <returns>Whether the type is array or list.</returns>
+		public static bool IsArrayOrList(Type type) {
 			// Check if it's an array
 			if (type.IsArray) {
 				return true;
@@ -33,11 +42,45 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
+		/// Returns the element type of the provided <paramref name="arrayOrListType"/>
+		/// </summary>
+		/// <param name="arrayOrListType">An Array or List type.</param>
+		/// <returns>The type of the elements of the array or list.</returns>
+		public static Type GetElementType(Type arrayOrListType) {
+
+			if (arrayOrListType == null) {
+				throw new ArgumentNullException(nameof(arrayOrListType));
+			}
+
+			// If it's an array, get its element type
+			if (arrayOrListType.IsArray) {
+				return arrayOrListType.GetElementType();
+			}
+
+			// If it's a List
+			if (arrayOrListType.IsGenericType) {
+
+				// Get the generic type definition
+				var genericTypeDef = arrayOrListType.GetGenericTypeDefinition();
+
+				if (genericTypeDef == typeof(List<>)) {
+					// Return the type argument of the generic type
+					return arrayOrListType.GetGenericArguments()[0];
+				}
+
+			}
+
+			// If it's not an array or a List, return null
+			return null;
+
+		}
+
+		/// <summary>
 		/// Checks whether a type is subclass of a generic type
 		/// </summary>
 		/// <param name="type">The type to check, for example <c>FileList</c></param>
 		/// <param name="genericType">A generic type, for example <c>CompositeList&lt;&gt;</c></param>
-		/// <returns></returns>
+		/// <returns><c>true</c> a <paramref name="type"/> is subclass of <paramref name="genericType"/></returns>
 		public static bool IsSubclassOfRawGeneric(Type type, Type genericType) {
 			while (type != null && type != typeof(object)) {
 				var current = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
