@@ -16,6 +16,9 @@ namespace CocodriloDog.Core {
 
 		#region Public Properties
 
+		/// <summary>
+		/// The <typeparamref name="T"/> value.
+		/// </summary>
 		public T Value {
 			get => m_Value as T;
 			set => m_Value = value as UnityEngine.Object;

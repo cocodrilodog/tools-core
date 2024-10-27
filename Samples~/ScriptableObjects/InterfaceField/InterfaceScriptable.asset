@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 140b3f34b6dab854a87fc61ebc258fb2, type: 3}
-  m_Name: InterfaceObject
+  m_Script: {fileID: 11500000, guid: 00d1d759cff81d8479eb8e6c601e19f1, type: 3}
+  m_Name: InterfaceScriptable
   m_EditorClassIdentifier: 
-  m_ResetOnEditMode: 0
-  m_Value: {fileID: 0}
+  m_SomeProperty: This is SomeProperty scriptable
+  m_SomeMethodText: This is SomeMethod scriptable

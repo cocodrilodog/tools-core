@@ -154,6 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AnyInterfaceObject:
     m_Value: {fileID: 747147346}
+  m_AnyInterfaceObject2:
+    m_Value: {fileID: 11400000, guid: 203b7633f5d91834ab324483d8a3b4c4, type: 2}
   m_AnyInterfaceObjects:
   - m_Value: {fileID: 508463887}
   - m_Value: {fileID: 1321912797}
@@ -192,7 +194,7 @@ GameObject:
   - component: {fileID: 508463886}
   - component: {fileID: 508463887}
   m_Layer: 0
-  m_Name: InterfaceObject
+  m_Name: InterfaceMono_Element1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,7 +240,7 @@ GameObject:
   - component: {fileID: 747147347}
   - component: {fileID: 747147346}
   m_Layer: 0
-  m_Name: InterfaceObject
+  m_Name: InterfaceMono_Single
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -422,7 +424,7 @@ GameObject:
   - component: {fileID: 1259633840}
   - component: {fileID: 1259633839}
   m_Layer: 0
-  m_Name: InterfaceObject
+  m_Name: InterfaceMono_ScriptableRef
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -470,8 +472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308bd0763a5f168489690b6e1bbb00c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SomeProperty: This is SomeProperty scriptable
-  m_SomeMethodText: This is SomeMethod scriptable
+  m_SomeProperty: This is SomeProperty scriptable ref
+  m_SomeMethodText: This is SomeMethod scriptable ref
 --- !u!1 &1321912795
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,7 +485,7 @@ GameObject:
   - component: {fileID: 1321912796}
   - component: {fileID: 1321912797}
   m_Layer: 0
-  m_Name: InterfaceObject
+  m_Name: InterfaceMono_Element2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

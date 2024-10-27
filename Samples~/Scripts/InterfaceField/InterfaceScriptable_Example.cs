@@ -4,21 +4,8 @@ namespace CocodriloDog.Core.Examples {
 	using System.Collections.Generic;
 	using UnityEngine;
 
-
-	#region Small Types
-
-	public interface IAnyInterface {
-
-		string SomeProperty { get; }
-		
-		void SomeMethod();
-
-	}
-
-	#endregion
-
-
-	public class InterfaceObject_Example : MonoBehaviour, IAnyInterface {
+	[CreateAssetMenu(menuName = "Cocodrilo Dog/Core/Examples/Interface Scriptable Example")]
+	public class InterfaceScriptable_Example : ScriptableObject, IAnyInterface {
 
 
 		#region Public Properties

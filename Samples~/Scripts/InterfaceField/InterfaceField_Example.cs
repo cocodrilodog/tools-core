@@ -14,6 +14,9 @@ namespace CocodriloDog.Core.Examples {
 			Debug.Log(m_AnyInterfaceObject.Value.SomeProperty);
 			m_AnyInterfaceObject.Value.SomeMethod();
 
+			Debug.Log(m_AnyInterfaceObject2.Value.SomeProperty);
+			m_AnyInterfaceObject2.Value.SomeMethod();
+
 			Debug.Log(m_AnyInterfaceObjects[0].Value.SomeProperty);
 			m_AnyInterfaceObjects[0].Value.SomeMethod();
 
@@ -33,6 +36,10 @@ namespace CocodriloDog.Core.Examples {
 		[Tooltip("A single instance")]
 		[SerializeField]
 		private InterfaceField<IAnyInterface> m_AnyInterfaceObject;
+
+		[Tooltip("Another single instance")]
+		[SerializeField]
+		private InterfaceField<IAnyInterface> m_AnyInterfaceObject2;
 
 		[Tooltip("A single list")]
 		[SerializeField]

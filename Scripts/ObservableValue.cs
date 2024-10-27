@@ -6,7 +6,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// An object that stores a value of type <typeparamref name="T"/> and that raised 
+	/// An object that stores a value of type <typeparamref name="T"/> and that raises 
 	/// <see cref="OnValueChange"/> when the stored value changes
 	/// </summary>
 	/// 
