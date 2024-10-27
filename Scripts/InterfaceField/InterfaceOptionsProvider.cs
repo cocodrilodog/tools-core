@@ -4,6 +4,7 @@ namespace CocodriloDog.Core {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading;
 	using UnityEditor;
 	using UnityEditor.Experimental.GraphView;
 	using UnityEngine;
@@ -28,7 +29,11 @@ namespace CocodriloDog.Core {
 		#region Public Methods
 
 		public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context) {
-			
+
+			// Display progress bar, in case it is a long wait
+			const string progressTitle = "Building Search Tree";
+			EditorUtility.DisplayProgressBar(progressTitle, "Please wait...", 0);
+
 			// Create the entries list
 			var entries = new List<SearchTreeEntry> {
 				new SearchTreeGroupEntry(new GUIContent("Search Results"), 0)
@@ -40,12 +45,13 @@ namespace CocodriloDog.Core {
 
 			if (sceneObjects.Count > 0) {
 				entries.Add(new SearchTreeGroupEntry(new GUIContent("Scene"), 1));
-				foreach (var sceneObject in sceneObjects) {
-					var icon = AssetPreview.GetMiniThumbnail(sceneObject);
-					entries.Add(new SearchTreeEntry(new GUIContent(sceneObject.name, icon)) {
+				for (int i = 0; i < sceneObjects.Count; i++) {
+					var icon = AssetPreview.GetMiniThumbnail(sceneObjects[i]);
+					entries.Add(new SearchTreeEntry(new GUIContent(sceneObjects[i].name, icon)) {
 						level = 2,
-						userData = sceneObject
+						userData = sceneObjects[i]
 					});
+					EditorUtility.DisplayProgressBar(progressTitle, "Searching in the scene...", 0.33f * i / sceneObjects.Count);
 				}
 			}
 
@@ -53,8 +59,8 @@ namespace CocodriloDog.Core {
 			var prefabGUIDs = AssetDatabase.FindAssets("t:" + typeof(GameObject).Name);
 			if (prefabGUIDs.Length > 0) {
 				entries.Add(new SearchTreeGroupEntry(new GUIContent("Assets"), 1));
-				foreach (var guid in prefabGUIDs) {
-					var path = AssetDatabase.GUIDToAssetPath(guid);
+				for (int i = 0; i < prefabGUIDs.Length; i++) {
+					var path = AssetDatabase.GUIDToAssetPath(prefabGUIDs[i]);
 					var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 					if(prefab.TryGetComponent(m_InterfaceType, out var component)) {
 						var icon = AssetPreview.GetMiniThumbnail(component);
@@ -63,15 +69,15 @@ namespace CocodriloDog.Core {
 							userData = component
 						});
 					}
+					EditorUtility.DisplayProgressBar(progressTitle, "Searching for prefab assets...", 0.33f * i / prefabGUIDs.Length + 0.33f);
 				}
 			}
 
-			// TODO: This seems to be very slow
 			// Search for scriptable objects in the assets folder
 			var scriptableObjectGUIDs = AssetDatabase.FindAssets("t:" + typeof(ScriptableObject).Name);
 			if (scriptableObjectGUIDs.Length > 0) {
-				foreach (var guid in scriptableObjectGUIDs) {
-					var path = AssetDatabase.GUIDToAssetPath(guid);
+				for (int i = 0; i < scriptableObjectGUIDs.Length; i++) {
+					var path = AssetDatabase.GUIDToAssetPath(scriptableObjectGUIDs[i]);
 					var scriptableObject = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
 					if (m_InterfaceType.IsAssignableFrom(scriptableObject.GetType())) {
 						var icon = AssetPreview.GetMiniThumbnail(scriptableObject);
@@ -80,6 +86,7 @@ namespace CocodriloDog.Core {
 							userData = scriptableObject
 						});
 					}
+					EditorUtility.DisplayProgressBar(progressTitle, "Searching for ScriptableObject assets...", 0.33f * i / scriptableObjectGUIDs.Length + 0.66f);
 				}
 			}
 
@@ -90,7 +97,12 @@ namespace CocodriloDog.Core {
 				userData = null
 			});
 
+			// Clear progress bar
+			EditorUtility.DisplayProgressBar(progressTitle, "Done!", 1);
+			EditorUtility.ClearProgressBar();
+
 			return entries;
+
 		}
 
 		public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context) {

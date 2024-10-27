@@ -32,7 +32,7 @@ namespace CocodriloDog.Core {
 				// Draw the label and get the rect excluding the label
 				var fieldRect = EditorGUI.PrefixLabel(Position, GUIUtility.GetControlID(FocusType.Passive), Label);
 
-				// TODO: Override the picker functionality (Currently there are no options displayed in the window)
+				// Override the picker functionality
 				PickObject(fieldRect, interfaceType);
 
 				// Handle drag and drop (This overrides the default behaviour)
@@ -63,17 +63,11 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		private bool m_IsDraggingValidObject;
-
 		/// <summary>
-		/// This is used to keep track of the dragged object, if it is part of an array or list.
-		/// If this index coincides with the field under the cursor, the blue overlay is drawn. 
+		/// Using property path validates the actual property that should become highlighted. Otherwise
+		/// all the fields in the inspector will be highlighted while there is a valid dragged object.
 		/// </summary>
-		/// <remarks>
-		/// This prevents all the elements of the list to be highlighted concurrently when a dragged 
-		/// object approaches one of the fields in the list.
-		/// </remarks>
-		private int m_DraggingElementIndex = -1;
+		private string m_ValidDragPropertyPath;
 
 		#endregion
 
@@ -115,8 +109,7 @@ namespace CocodriloDog.Core {
 
 					// Validate the area
 					if (!fieldRect.Contains(evt.mousePosition) || UnityEditor.DragAndDrop.objectReferences.Length > 1) {
-						m_IsDraggingValidObject = false;
-						m_DraggingElementIndex = -1;
+						m_ValidDragPropertyPath = null;
 						return;
 					}
 
@@ -138,27 +131,17 @@ namespace CocodriloDog.Core {
 					if (draggedObject != null && interfaceType.IsAssignableFrom(draggedObject.GetType())) {
 						// The drag is valid
 						UnityEditor.DragAndDrop.visualMode = DragAndDropVisualMode.Link;
-						m_IsDraggingValidObject = true;
-						if (CDEditorUtility.IsArrayElement(Property)) {
-							m_DraggingElementIndex = CDEditorUtility.GetElementIndex(Property);
-						} else {
-							m_DraggingElementIndex = -1;
-						}
+						m_ValidDragPropertyPath = Property.propertyPath;
 						// Accept the drag
 						if (evt.type == EventType.DragPerform) {
 							UnityEditor.DragAndDrop.AcceptDrag();
 							var valueProperty = Property.FindPropertyRelative("m_Value");
 							valueProperty.objectReferenceValue = draggedObject;
-							m_IsDraggingValidObject = false;
-							m_DraggingElementIndex = -1;
+							m_ValidDragPropertyPath = null;
 						}
-						evt.Use();
-					} else {
-						// Reject the drag operation
-						UnityEditor.DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-						m_IsDraggingValidObject = false;
-						m_DraggingElementIndex = -1;
-					}
+					} 
+
+					evt.Use();
 
 					break;
 			}
@@ -176,22 +159,16 @@ namespace CocodriloDog.Core {
 
 		private void DrawBlueOverlay(Rect fieldRect) {
 
-			//TODO: In the example scene, the last field is left blue some times.
 			var color = new Color(0.2f, 0.65f, 1.0f, 0.4f);
 			var boxRect = fieldRect;
 			//boxRect.xMin += 1;
 			boxRect.xMax -= 20; // <- This is the only modification that looks good. I left the others commented for reference
-			//boxRect.yMin += 1;
-			//boxRect.yMax -= 2;
+								//boxRect.yMin += 1;
+								//boxRect.yMax -= 2;
 
-			if (m_IsDraggingValidObject) {
-				if (CDEditorUtility.IsArrayElement(Property)) {
-					if (CDEditorUtility.GetElementIndex(Property) == m_DraggingElementIndex) {
-						EditorGUI.DrawRect(boxRect, color);
-					}
-				} else {
-					EditorGUI.DrawRect(boxRect, color);
-				}
+			if (UnityEditor.DragAndDrop.visualMode == DragAndDropVisualMode.Link && 
+				Property.propertyPath == m_ValidDragPropertyPath) {
+				EditorGUI.DrawRect(boxRect, color);
 			}
 
 		}
