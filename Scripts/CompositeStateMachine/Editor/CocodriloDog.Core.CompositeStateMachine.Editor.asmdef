@@ -1,5 +1,5 @@
 {
-    "name": "CocodriloDog.Core.StateMachine.Editor",
+    "name": "CocodriloDog.Core.CompositeStateMachine.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:1968ec4f31de017459aaaed17aa6b6e0",
