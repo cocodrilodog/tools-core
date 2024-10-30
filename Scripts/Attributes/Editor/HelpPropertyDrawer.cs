@@ -13,11 +13,20 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+
 			var height = base.GetPropertyHeight(property, label);
-			if (m_CurrentCode != 0) {
+
+			var type = CDEditorUtility.GetPropertyType(Property);
+			if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
+				var listProperty = Property.FindPropertyRelative("m_List");
+				height = EditorGUI.GetPropertyHeight(listProperty, Label);
+			}
+			if (m_ShouldDrawHelp) {
 				height += GetMessageHeight();
 			}
+
 			return height;
+
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
@@ -47,21 +56,45 @@ namespace CocodriloDog.Core {
 			}
 
 			// Get the results
-			m_CurrentCode = 0;
+			var currentCode = 0;
 			var parameters = new object[] { null };
 			if (method != null) {
-				m_CurrentCode = (int)method.Invoke(targetObject, parameters);
+				currentCode = (int)method.Invoke(targetObject, parameters);
 				m_CurrentMessage = parameters[0] as string;
 			}
 
-			EditorGUI.BeginDisabledGroup(m_CurrentCode < 0);
-			EditorGUI.PropertyField(GetNextPosition(Property), Property);
+			// Draw the property field
+			var isList = false;
+			var isExpandedList = false;
+
+			EditorGUI.BeginDisabledGroup(currentCode < 0);
+			var type = CDEditorUtility.GetPropertyType(Property);
+			if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
+				// Draw the ListWrapper property
+				var listProperty = Property.FindPropertyRelative("m_List");
+				isList = true;
+				isExpandedList = listProperty.isExpanded;
+				EditorGUI.PropertyField(GetNextPosition(listProperty), listProperty, new GUIContent(Property.displayName));
+			} else {
+				// Draw the normal property
+				EditorGUI.PropertyField(GetNextPosition(Property), Property);
+			}
 			EditorGUI.EndDisabledGroup();
 
+			// Define whether to show the help box or not
+			m_ShouldDrawHelp = false;
+			if (isList) {
+				if (isExpandedList && currentCode != 0) {
+					m_ShouldDrawHelp = true;
+				}
+			} else if (currentCode != 0) {
+				m_ShouldDrawHelp = true;
+			}
+
 			// Draw the helpbox
-			if (m_CurrentCode != 0) {
+			if (m_ShouldDrawHelp) {
 				var helpRect = GetNextPosition(GetMessageHeight());
-				EditorGUI.HelpBox(helpRect, m_CurrentMessage, (MessageType)Mathf.Abs(m_CurrentCode));
+				EditorGUI.HelpBox(helpRect, m_CurrentMessage, (MessageType)Mathf.Abs(currentCode));
 				GetNextPosition(2f);
 			}
 
@@ -74,7 +107,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		private int m_CurrentCode;
+		private bool m_ShouldDrawHelp;
 
 		private string m_CurrentMessage;
 

@@ -20,15 +20,19 @@
 		[CreateAsset]
 		public StringOptions CreateAsset;
 
+		// TODO: Add support for lists
+		[CreateAsset]
+		public List<StringOptions> CreateManyAssets;
+
 		public StringOptions SomeStringOptions;
 
-		[StringOptions("SomeStringOptions")] // From the SomeStringOptions field
+		[StringOptions(nameof(SomeStringOptions))] // From the SomeStringOptions field
 		public string StringOptions_FieldReferencedAsset;
 
 		[StringOptions("StringOptions2_Example")] // From asset named StringOptions2_Example in a Resurces folder
 		public string StringOptions_ResourcesAssets;
 
-		[StringOptions("GetStringOptions")] // From the method below
+		[StringOptions(nameof(GetStringOptions))] // From the method below
 		public string StringOptions_Method;
 
 		private List<string> GetStringOptions() => new List<string> { "January", "February", "March" };
@@ -36,22 +40,21 @@
 		[StringOptions("SomeMissingSource")] // From missing source
 		public string StringOptions_MissingSource;
 
-		[StringOptions("SomeStringOptions")] // From the SomeStringOptions field
+		[StringOptions(nameof(SomeStringOptions))] // From the SomeStringOptions field
 		public List<string> StringOptions_ListAsset;
 
-		[StringOptions("GetStringOptions")] // From the GetStringOptions method
+		[StringOptions(nameof(GetStringOptions))] // From the GetStringOptions method
 		public List<string> StringOptions_ListMethod;
 
 		[Range(-3, 3)]
 		public int HelpValue;
 
-		[Help("StringsHelp")]
+		[Help(nameof(StringsHelp))]
 		public string StringWithHelp = "A string with help";
 
-		// TODO: This is not looking good and may benefit from the ListWrapper<T> mentioned
-		// below so that the help is for the list and not for each item.
+		// TODO: Show warning when using in a normal list
 		[Help("StringsHelp")]
-		public List<string> StringsWithHelp;
+		public ListWrapper<string> StringsWithHelp;
 
 		private int StringsHelp(ref string message) {
 			message = "Showing some help!";
@@ -60,13 +63,12 @@
 
 		public bool ShowHiddenString;
 
-		[Hide("HideString", 1)]
+		[Hide(nameof(HideString), 1)]
 		public string HiddenString = "Hidden String";
 
-		// TODO: List property drawers are not allowed. It may be needed to create
-		// ListWrapper<T> as a wrapper for the list. Similar to CompositeList
-		//[Hide("HideString", 1)]
-		//public List<string> HiddenStrings = new List<string>();
+		// TODO: Show warning when using in a normal list
+		[Hide(nameof(HideString), 1)]
+		public ListWrapper<string> HiddenStrings = new ListWrapper<string>();
 
 		private bool HideString() => !ShowHiddenString;
 
@@ -97,11 +99,11 @@
 
 		public StringOptions SomeNestedStringOptions;
 
-		[StringOptions("SomeNestedStringOptions")] // From the SomeNestedStringOptions field
+		[StringOptions(nameof(SomeNestedStringOptions))] // From the SomeNestedStringOptions field
 		//[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
 		public string StringOptions_FieldReferencedAsset;
 
-		[StringOptions("GetNestedStringOptions")] // From the method below
+		[StringOptions(nameof(GetNestedStringOptions))] // From the method below
 		//[StringOptions("GetStringOptions")] // From the method from the root serialized object
 		public string StringOptions_Method;
 
@@ -110,29 +112,32 @@
 		[StringOptions("SomeMissingSource")] // From missing source
 		public string StringOptions_MissingSource;
 
-		[StringOptions("SomeNestedStringOptions")] // From the SomeNestedStringOptions field
+		[StringOptions(nameof(SomeNestedStringOptions))] // From the SomeNestedStringOptions field
 		//[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
 		public List<string> StringOptions_ListAsset;
 
-		[StringOptions("GetNestedStringOptions")] // From the GetNestedStringOptions method
+		[StringOptions(nameof(GetNestedStringOptions))] // From the GetNestedStringOptions method
 		//[StringOptions("GetStringOptions")] // From the method from the root serialized object
 		public List<string> StringOptions_ListMethod;
 
 		public bool ShowHiddenObject;
 
-		[Hide("HideObject", 1)]
+		[Hide(nameof(HideObject), 1)]
 		public UnityEngine.Object HiddenObject;
+
+		[Hide(nameof(HideObject), 1)]
+		public ListWrapper<UnityEngine.Object> HiddenObjects;
 
 		private bool HideObject() => !ShowHiddenObject;
 
 		[Range(-3, 3)]
 		public int HelpValue;
 
-		[Help("IntHelp")]
+		[Help(nameof(IntHelp))]
 		public int IntWithHelp;
 
-		[Help("IntHelp")]
-		public List<int> IntsWithHelp;
+		[Help(nameof(IntHelp))]
+		public ListWrapper<int> IntsWithHelp;
 
 		private int IntHelp(ref string message) {
 			message = "Showing some integral help!";

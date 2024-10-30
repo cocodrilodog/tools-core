@@ -6,46 +6,22 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// Wrapper for a <see cref="List{CompositeObject}"/> that is automatically drawn in the inspector
-	/// by <c>CompositeListPropertyDrawer</c>, which handles Unity's prefab errors.
+	/// Wrapper for lists that work correctly with <see cref="HelpAttribute"/>, and <see cref="HideAttribute"/>.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// 
+	/// <typeparam name="T">Any type</typeparam>
+	/// 
+	/// <remarks>
+	/// Unity does not support property drawers for lists, only for the elements. This is a workaround for lists
+	/// to work properly with the attributes mentioned above.
+	/// </remarks>
 	[Serializable]
-	public class CompositeList<T> : IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable
-	where T : CompositeObject {
-
-
-		#region Public Properties
-
-
-		/// <summary>
-		/// Used to enable/disable the ability to add or remove objects in the inspector.
-		/// </summary>
-		/// <remarks>
-		/// This should be called from <c>OnValidate</c>
-		/// </remarks>
-		public bool CanAddRemove {
-			get => m_CanAddRemove;
-			set => m_CanAddRemove = value;
-		}
-
-		/// <summary>
-		/// Used to enable/disable the ability to reorder objects in the inspector.
-		/// </summary>
-		/// <remarks>
-		/// This should be called from <c>OnValidate</c>
-		/// </remarks>
-		public bool CanReorder {
-			get => m_CanReorder;
-			set => m_CanReorder = value;
-		}
-
-		#endregion
+	public class ListWrapper<T> : IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable {
 
 
 		#region Public Constructors
 
-		public CompositeList() {
+		public ListWrapper() {
 			m_List = new List<T>();
 		}
 
@@ -103,16 +79,8 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		[SerializeReference]
+		[SerializeField]
 		private List<T> m_List;
-
-		[HideInInspector]
-		[SerializeField]
-		private bool m_CanAddRemove = true;
-
-		[HideInInspector]
-		[SerializeField]
-		private bool m_CanReorder = true;
 
 		#endregion
 

@@ -16,7 +16,15 @@ namespace CocodriloDog.Core {
 			if (m_Hide) {
 				return 0;
 			} else {
-				return base.GetPropertyHeight(property, label);
+				var defaultHeight = base.GetPropertyHeight(property, label);
+				var type = CDEditorUtility.GetPropertyType(Property);
+				if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
+					var listProperty = Property.FindPropertyRelative("m_List");
+					return EditorGUI.GetPropertyHeight(listProperty, Label);
+				} else {
+					return defaultHeight;
+				}
+
 			}
 		}
 
@@ -53,7 +61,15 @@ namespace CocodriloDog.Core {
 			}
 			if (!m_Hide) {
 				EditorGUI.indentLevel += hideAttribute.IndentDelta;
-				EditorGUI.PropertyField(GetNextPosition(Property), Property); ;
+				var type = CDEditorUtility.GetPropertyType(Property);
+				if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
+					// Draw the ListWrapper property
+					var listProperty = Property.FindPropertyRelative("m_List");
+					EditorGUI.PropertyField(GetNextPosition(listProperty), listProperty, new GUIContent(Property.displayName));
+				} else {
+					// Draw the normal property
+					EditorGUI.PropertyField(GetNextPosition(Property), Property);
+				}
 				EditorGUI.indentLevel -= hideAttribute.IndentDelta;
 			}
 

@@ -8,40 +8,42 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	[CustomPropertyDrawer(typeof(CreateAssetAttribute))]
-	public class CreateAssetPropertyDrawer : PropertyDrawer {
+	public class CreateAssetPropertyDrawer : PropertyDrawerBase {
 
 
 		#region Unity Methods
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 
-			label = EditorGUI.BeginProperty(position, label, property);
+			base.OnGUI(position, property, label);
+
+			label = EditorGUI.BeginProperty(Position, Label, Property);
 
 			// Pending creation command
-			if (m_CreateAssetCommand != null) {
-				if (m_CreateAssetCommand.Asset != null) {
-					// Assign the created asset to the property
-					property.objectReferenceValue = m_CreateAssetCommand.Asset;
-					property.serializedObject.ApplyModifiedProperties();
-				}
+			if (m_CreateAssetCommand != null && m_CreateAssetCommand.Asset != null) {
+				// Assign the created asset to the property
+				Property.objectReferenceValue = m_CreateAssetCommand.Asset;
 				m_CreateAssetCommand = null;
 			}
 
 			// Check if the property is null
-			if (property.objectReferenceValue == null) {
+			if (Property.objectReferenceValue == null) {
 
 				// Draw a smaller property field 
 				var width = 60;
-				var fieldRect = position;
+				var fieldRect = Position;
 				fieldRect.xMax -= width + 2;
-				EditorGUI.PropertyField(fieldRect, property, label);
+				EditorGUI.PropertyField(fieldRect, Property, Label);
 
 				// Create a button next to the property field
-				var buttonRect = new Rect(position.xMax - width, position.y, width, position.height);
+				var buttonRect = new Rect(Position.xMax - width, Position.y, width, Position.height);
 				if (GUI.Button(buttonRect, "Create")) {
-					
+
 					// Get the type of the ScriptableObject
-					Type objectType = fieldInfo.FieldType.GetElementType() ?? fieldInfo.FieldType;
+					var objectType = CDEditorUtility.GetPropertyType(Property);
+					if (SystemUtility.IsArrayOrList(objectType)) {
+						objectType = SystemUtility.GetElementType(objectType);
+					}
 
 					// Collect options
 					List<Type> types = SystemUtility.GetConcreteDerivedTypes(objectType);
@@ -67,7 +69,7 @@ namespace CocodriloDog.Core {
 				}
 
 			} else {
-				EditorGUI.PropertyField(position, property, label);
+				EditorGUI.PropertyField(Position, Property, Label);
 			}
 
 			EditorGUI.EndProperty();
