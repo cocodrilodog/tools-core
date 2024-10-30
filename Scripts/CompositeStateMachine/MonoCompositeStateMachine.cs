@@ -9,9 +9,9 @@ namespace CocodriloDog.Core {
 
 	/// <summary>
 	/// Intermediate non-generic class created to support a base editor for all subclasses of
-	/// <see cref="StateMachineBase{T_State, T_Machine}"/>.
+	/// <see cref="MonoCompositeStateMachine{T_State, T_Machine}"/>.
 	/// </summary>
-	public abstract class StateMachineBase : CompositeRoot { }
+	public abstract class MonoCompositeStateMachine : CompositeRoot { }
 
 	/// <summary>
 	/// Base class to create state machines that use <see cref="CompositeObject"/>s as base class for
@@ -19,9 +19,9 @@ namespace CocodriloDog.Core {
 	/// </summary>
 	/// <typeparam name="T_State">The type of the state</typeparam>
 	/// <typeparam name="T_Machine">The type of the state machine</typeparam>
-	public abstract class StateMachineBase<T_State, T_Machine> : StateMachineBase
-		where T_Machine : StateMachineBase<T_State, T_Machine>
-		where T_State : StateBase<T_State, T_Machine> {
+	public abstract class MonoCompositeStateMachine<T_State, T_Machine> : MonoCompositeStateMachine
+		where T_Machine : MonoCompositeStateMachine<T_State, T_Machine>
+		where T_State : CompositeState<T_State, T_Machine> {
 
 
 		#region Public Properties
@@ -281,7 +281,7 @@ namespace CocodriloDog.Core {
 	/// Intermediate non-generic class created to support a base property drawer for all subclasses.
 	/// </summary>
 	[Serializable]
-	public class StateBase : CompositeObject {
+	public class CompositeState : CompositeObject {
 
 
 		#region Public Methods
@@ -342,9 +342,9 @@ namespace CocodriloDog.Core {
 	}
 
 	[Serializable]
-	public class StateBase<T_State, T_Machine> : StateBase
-				where T_Machine : StateMachineBase<T_State, T_Machine>
-				where T_State : StateBase<T_State, T_Machine> {
+	public class CompositeState<T_State, T_Machine> : CompositeState
+				where T_Machine : MonoCompositeStateMachine<T_State, T_Machine>
+				where T_State : CompositeState<T_State, T_Machine> {
 
 
 		#region Public Methods

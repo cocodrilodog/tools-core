@@ -5,8 +5,8 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 	using UnityEditor;
 
-	[CustomEditor(typeof(StateMachineBase), true)]
-	public class StateMachineBaseEditor : CompositeRootEditor {
+	[CustomEditor(typeof(MonoCompositeStateMachine), true)]
+	public class MonoCompositeStateMachineEditor : CompositeRootEditor {
 
 
 		#region Unity Methods

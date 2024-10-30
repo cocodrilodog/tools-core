@@ -5,8 +5,8 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 	using UnityEngine;
 
-	[CustomPropertyDrawer(typeof(StateBase), true)]
-	public class StateBasePropertyDrawer : CompositeObjectPropertyDrawer {
+	[CustomPropertyDrawer(typeof(CompositeState), true)]
+	public class CompositeStatePropertyDrawer : CompositeObjectPropertyDrawer {
 
 
 		#region Protected Properties

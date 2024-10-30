@@ -11,7 +11,7 @@ namespace CocodriloDog.Core {
 	/// A state machine that transitions to the different states if the current state has a transition
 	/// state to the target state defined in the <see cref="State.m_Transitions"/> list.
 	/// </summary>
-	public class FlowStateMachine : StateMachineBase<FlowStateMachine.State, FlowStateMachine> {
+	public class FlowStateMachine : MonoCompositeStateMachine<FlowStateMachine.State, FlowStateMachine> {
 
 
 		#region Public Methods
@@ -33,7 +33,7 @@ namespace CocodriloDog.Core {
 		/// The state class for the <see cref="FlowStateMachine"/>.
 		/// </summary>
 		[Serializable]
-		public class State : StateBase<State, FlowStateMachine> {
+		public class State : CompositeState<State, FlowStateMachine> {
 
 			public override void Enter() {
 				if (m_Duration > 0) {
