@@ -19,6 +19,13 @@ namespace CocodriloDog.Core {
 	public class ListWrapper<T> : IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable {
 
 
+		#region Public Properties
+
+		public List<T> List => m_List;
+
+		#endregion
+
+
 		#region Public Constructors
 
 		public ListWrapper() {

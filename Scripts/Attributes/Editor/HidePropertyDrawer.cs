@@ -65,7 +65,7 @@ namespace CocodriloDog.Core {
 				if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
 					// Draw the ListWrapper property
 					var listProperty = Property.FindPropertyRelative("m_List");
-					EditorGUI.PropertyField(GetNextPosition(listProperty), listProperty, new GUIContent(Property.displayName));
+					EditorGUI.PropertyField(GetNextPosition(listProperty), listProperty, new GUIContent(Property.displayName, Property.tooltip));
 				} else {
 					// Draw the normal property
 					EditorGUI.PropertyField(GetNextPosition(Property), Property);

@@ -74,7 +74,7 @@ namespace CocodriloDog.Core {
 				var listProperty = Property.FindPropertyRelative("m_List");
 				isList = true;
 				isExpandedList = listProperty.isExpanded;
-				EditorGUI.PropertyField(GetNextPosition(listProperty), listProperty, new GUIContent(Property.displayName));
+				EditorGUI.PropertyField(GetNextPosition(listProperty), listProperty, new GUIContent(Property.displayName, Property.tooltip));
 			} else {
 				// Draw the normal property
 				EditorGUI.PropertyField(GetNextPosition(Property), Property);
