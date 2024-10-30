@@ -95,6 +95,7 @@ namespace CocodriloDog.Core {
 				});
 
 				SearchWindow.Open(context, optionsProvider);
+
 			}
 
 		}

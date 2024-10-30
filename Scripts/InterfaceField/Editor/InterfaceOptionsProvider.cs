@@ -69,7 +69,7 @@ namespace CocodriloDog.Core {
 							userData = component
 						});
 					}
-					EditorUtility.DisplayProgressBar(progressTitle, "Searching for prefab assets...", 0.33f * i / prefabGUIDs.Length + 0.33f);
+					EditorUtility.DisplayProgressBar(progressTitle, "Searching on prefab assets...", 0.33f * i / prefabGUIDs.Length + 0.33f);
 				}
 			}
 
@@ -86,7 +86,7 @@ namespace CocodriloDog.Core {
 							userData = scriptableObject
 						});
 					}
-					EditorUtility.DisplayProgressBar(progressTitle, "Searching for ScriptableObject assets...", 0.33f * i / scriptableObjectGUIDs.Length + 0.66f);
+					EditorUtility.DisplayProgressBar(progressTitle, "Searching on ScriptableObject assets...", 0.33f * i / scriptableObjectGUIDs.Length + 0.66f);
 				}
 			}
 
@@ -116,8 +116,10 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
+		[NonSerialized]
 		private Type m_InterfaceType;
 
+		[NonSerialized]
 		private Action<UnityEngine.Object> m_OnSelectEntry;
 
 		#endregion
