@@ -71,9 +71,7 @@
 		/// <param name="delay">Delay.</param>
 		/// <param name="reuseID">The id to reuse the action.</param>
 		public static void DelayedAction(Action action, float delay, string reuseID) {
-			if (!m_DelayedActionInfosID.ContainsKey(reuseID)) {
-				m_DelayedActionInfosID[reuseID] = new DelayedActionInfo();
-			}
+			m_DelayedActionInfosID.TryAdd(reuseID, new DelayedActionInfo());
 			var actionInfo = m_DelayedActionInfosID[reuseID];
 			actionInfo.Action = action;
 			actionInfo.Delay = delay;

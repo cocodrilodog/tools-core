@@ -85,6 +85,7 @@ namespace CocodriloDog.Core {
 
 			if (property.contentHash != m_previousProperty) {
 				s_EventChanged = true;
+				Debug.Log("CD: EVENT CHANGED");
 			} 
 			m_previousProperty = property.contentHash;
 
@@ -160,6 +161,7 @@ namespace CocodriloDog.Core {
 								s_EventChanged = false;
 							} else {
 								s_GroupsMap.Clear();
+								Debug.Log("CD: CLEAR");
 							}
 						};
 						CDEditorUtility.DelayedAction(action, 0.5f, "UnityEventGroup");
