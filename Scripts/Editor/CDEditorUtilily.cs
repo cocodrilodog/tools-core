@@ -57,7 +57,27 @@
 			actionInfo.Action = action;
 			actionInfo.Delay = delay;
 			actionInfo.Time = EditorApplication.timeSinceStartup;
-			DelayedActionInfos.Add(actionInfo);
+			m_DelayedActionInfos.Add(actionInfo);
+		}
+
+		/// <summary>
+		/// Performs an <paramref name="action"/> after the <paramref name="delay"/> identified by <paramref name="reuseID"/>
+		/// </summary>
+		/// <remarks>
+		/// This overload make subsequent calls with the same <paramref name="reuseID"/> to reuse the current one, making
+		/// it the only to be triggered.
+		/// </remarks>
+		/// <param name="action">Action.</param>
+		/// <param name="delay">Delay.</param>
+		/// <param name="reuseID">The id to reuse the action.</param>
+		public static void DelayedAction(Action action, float delay, string reuseID) {
+			if (!m_DelayedActionInfosID.ContainsKey(reuseID)) {
+				m_DelayedActionInfosID[reuseID] = new DelayedActionInfo();
+			}
+			var actionInfo = m_DelayedActionInfosID[reuseID];
+			actionInfo.Action = action;
+			actionInfo.Delay = delay;
+			actionInfo.Time = EditorApplication.timeSinceStartup;
 		}
 
 		#endregion
@@ -440,8 +460,10 @@
 		#region Event Handlers
 
 		private static void EditorApplication_Update() {
+
+			// Non-ID delayed actions
 			List<DelayedActionInfo> actionsToRemove = null;
-			foreach(var actionInfo in DelayedActionInfos) {
+			foreach(var actionInfo in m_DelayedActionInfos) {
 				double elapsed = EditorApplication.timeSinceStartup - actionInfo.Time;
 				if (elapsed >= actionInfo.Delay) {
 					actionInfo.Action();
@@ -451,9 +473,27 @@
 			}
 			if (actionsToRemove != null) {
 				foreach (var actionInfo in actionsToRemove) {
-					DelayedActionInfos.Remove(actionInfo);
+					m_DelayedActionInfos.Remove(actionInfo);
 				}
 			}
+
+			// ID delayed actions
+			List<string> actionIDsToRemove = null;
+			foreach (var actionID in m_DelayedActionInfosID.Keys) {
+				var actionInfo = m_DelayedActionInfosID[actionID];
+				double elapsed = EditorApplication.timeSinceStartup - actionInfo.Time;
+				if (elapsed >= actionInfo.Delay) {
+					actionInfo.Action();
+					actionIDsToRemove = actionIDsToRemove ?? new List<string>();
+					actionIDsToRemove.Add(actionID);
+				}
+			}
+			if (actionIDsToRemove != null) {
+				foreach (var actionID in actionIDsToRemove) {
+					m_DelayedActionInfosID.Remove(actionID);
+				}
+			}
+
 		}
 
 		#endregion
@@ -461,7 +501,9 @@
 
 		#region Private Static Fields
 
-		private static List<DelayedActionInfo> m_DelayedActionInfos;
+		private static List<DelayedActionInfo> m_DelayedActionInfos = new List<DelayedActionInfo>();
+
+		private static Dictionary<string, DelayedActionInfo> m_DelayedActionInfosID = new Dictionary<string, DelayedActionInfo>();
 
 		private static GUIStyle m_HorizontalLineStyle;
 
@@ -469,9 +511,6 @@
 
 
 		#region Private Properties
-
-		private static List<DelayedActionInfo> DelayedActionInfos => 
-			m_DelayedActionInfos = m_DelayedActionInfos ?? new List<DelayedActionInfo>();
 
 		private static GUIStyle HorizontalLineStyle {
 			get {

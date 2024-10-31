@@ -76,13 +76,21 @@ namespace CocodriloDog.Core {
 				if (group.Entries.Count > 1) { // Move the event down only when there is a toolbar
 					eventRect.y += EditorGUIUtility.singleLineHeight + 2;
 				}
+
 				base.OnGUI(eventRect, property, label);
 
 			}
 
 			EditorGUI.EndProperty();
 
+			if (property.contentHash != m_previousProperty) {
+				s_EventChanged = true;
+			} 
+			m_previousProperty = property.contentHash;
+
 		}
+
+		private uint m_previousProperty;
 
 		#endregion
 
@@ -104,6 +112,12 @@ namespace CocodriloDog.Core {
 		private static Dictionary<SerializedObject, Dictionary<string, List<Group>>> s_GroupsMap = 
 			new Dictionary<SerializedObject, Dictionary<string, List<Group>>>();
 
+		/// <summary>
+		/// Since the <see cref="s_GroupsMap"/> is being reset when any property of any object changes, this flag prevents
+		/// it from being reset when the change was caused by the event property, which would othewise make it harder to use.
+		/// </summary>
+		private static bool s_EventChanged;
+
 		#endregion
 
 
@@ -111,16 +125,49 @@ namespace CocodriloDog.Core {
 
 		[InitializeOnLoadMethod]
 		private static void InitOnLoad() {
+
+			s_EventChanged = false;
+			s_GroupsMap.Clear();
+
 			Selection.selectionChanged -= Selection_selectionChanged;
 			Selection.selectionChanged += Selection_selectionChanged;
+
+			ObjectChangeEvents.changesPublished -= ObjectChangeEvents_changesPublished;
+			ObjectChangeEvents.changesPublished += ObjectChangeEvents_changesPublished;
+
 		}
 
 		/// <summary>
 		/// This will keep the size of the map small
 		/// </summary>
 		private static void Selection_selectionChanged() {
+			s_EventChanged = false;
 			s_GroupsMap.Clear();
 		}
+
+		/// <summary>
+		/// This prevents errors when an array on the serializedObject changes.
+		/// </summary>
+		/// <param name="stream"></param>
+		private static void ObjectChangeEvents_changesPublished(ref ObjectChangeEventStream stream) {
+			for (int i = 0; i < stream.length; ++i) {
+				switch (stream.GetEventType(i)) {
+					case ObjectChangeKind.ChangeGameObjectOrComponentProperties:
+						// Here we give time to the s_EventChanged before reading it because sometimes
+						// this method is invoked before the m_EventChanged flag is set to true.
+						Action action = () => {
+							if (s_EventChanged) {
+								s_EventChanged = false;
+							} else {
+								s_GroupsMap.Clear();
+							}
+						};
+						CDEditorUtility.DelayedAction(action, 0.5f, "UnityEventGroup");
+						break;
+				}
+			}
+		}
+
 
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
 
