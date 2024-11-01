@@ -67,6 +67,7 @@ namespace CocodriloDog.Core {
 					group.SelectedIndex = GUI.Toolbar(toolBarRect, group.SelectedIndex, contents.ToArray());
 					if (EditorGUI.EndChangeCheck()) {
 						GUI.FocusControl(null);
+						Debug.Log("CD: Changed group");
 					}
 
 				}
