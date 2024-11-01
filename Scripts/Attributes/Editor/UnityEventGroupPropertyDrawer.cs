@@ -111,8 +111,8 @@ namespace CocodriloDog.Core {
 		/// Therefore, is we store the lates serialized object with its properties, we know that it and its properties
 		/// are valid.
 		/// </remarks>
-		private static Dictionary<SerializedObject, Dictionary<string, List<Group>>> s_GroupsMap = 
-			new Dictionary<SerializedObject, Dictionary<string, List<Group>>>();
+		private static Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>> s_GroupsMap = 
+			new Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>>();
 
 		/// <summary>
 		/// Since the <see cref="s_GroupsMap"/> is being reset when any property of any object changes, this flag prevents
@@ -135,8 +135,8 @@ namespace CocodriloDog.Core {
 			Selection.selectionChanged -= Selection_selectionChanged;
 			Selection.selectionChanged += Selection_selectionChanged;
 
-			ObjectChangeEvents.changesPublished -= ObjectChangeEvents_changesPublished;
-			ObjectChangeEvents.changesPublished += ObjectChangeEvents_changesPublished;
+			//ObjectChangeEvents.changesPublished -= ObjectChangeEvents_changesPublished;
+			//ObjectChangeEvents.changesPublished += ObjectChangeEvents_changesPublished;
 
 		}
 
@@ -153,42 +153,50 @@ namespace CocodriloDog.Core {
 		/// This prevents errors when an array on the serializedObject changes.
 		/// </summary>
 		/// <param name="stream"></param>
-		private static void ObjectChangeEvents_changesPublished(ref ObjectChangeEventStream stream) {
-			for (int i = 0; i < stream.length; ++i) {
-				switch (stream.GetEventType(i)) {
-					case ObjectChangeKind.ChangeGameObjectOrComponentProperties:
-						// Here we give time to the s_EventChanged before reading it because sometimes
-						// this method is invoked before the m_EventChanged flag is set to true.
-						Action action = () => {
-							if (s_EventChanged) {
-								s_EventChanged = false;
-							} else {
-								s_GroupsMap.Clear();
-								Debug.Log("CD: ObjectChangeEvents_changesPublished(...) s_GroupsMap.Clear()");
-							}
-						};
-						CDEditorUtility.DelayedAction(action, 0.5f, "UnityEventGroup");
-						break;
-				}
-			}
-		}
+		//private static void ObjectChangeEvents_changesPublished(ref ObjectChangeEventStream stream) {
+		//	for (int i = 0; i < stream.length; ++i) {
+		//		switch (stream.GetEventType(i)) {
+		//			case ObjectChangeKind.ChangeGameObjectOrComponentProperties:
+		//				// Here we give time to the s_EventChanged before reading it because sometimes
+		//				// this method is invoked before the m_EventChanged flag is set to true.
+		//				Action action = () => {
+		//					if (s_EventChanged) {
+		//						s_EventChanged = false;
+		//					} else {
+		//						s_GroupsMap.Clear();
+		//						Debug.Log("CD: ObjectChangeEvents_changesPublished(...) s_GroupsMap.Clear()");
+		//					}
+		//				};
+		//				CDEditorUtility.DelayedAction(action, 0.5f, "UnityEventGroup");
+		//				break;
+		//		}
+		//	}
+		//}
 
 
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
 
 			// The serialized object may have multiple event owners (System.Object with events, for example)
-			if (!s_GroupsMap.ContainsKey(property.serializedObject)) {
-				s_GroupsMap[property.serializedObject] = new Dictionary<string, List<Group>>();
+			if (!s_GroupsMap.ContainsKey(property.serializedObject.targetObject)) {
+				// Using the serializedObject as the key is better than using the target object because Unityrenews the
+				// serialized object and disposes the previous one for many different reasons, and trying to use disposed data
+				// like previous property entries, cause errors.
+				s_GroupsMap[property.serializedObject.targetObject] = new Dictionary<string, List<Group>>();
 				Debug.Log("CD: RegisterProperty(...) Created onwners dictionary");
 			}
 
 			// The owners of the events held by the serialized object
-			var owners = s_GroupsMap[property.serializedObject];
+			var owners = s_GroupsMap[property.serializedObject.targetObject];
 			var nameIndex = property.propertyPath.IndexOf(property.name);
 			var ownerPath = property.propertyPath.Substring(0, nameIndex);
+
 			// ownerPath can be something like "m_SomeMonoBehaviour.m_SomeObject.", so we remove the last . for cleanliness
 			if (ownerPath.Length > 0 && ownerPath[ownerPath.Length - 1] == '.') {
 				ownerPath = ownerPath.Remove(ownerPath.Length - 1);
+			}
+			// This make it more clear
+			if (ownerPath == "") {
+				ownerPath = "root";
 			}
 			if (!owners.ContainsKey(ownerPath)) { // Store the owner by its property path, up until the event name
 				owners[ownerPath] = new List<Group>();
@@ -203,7 +211,7 @@ namespace CocodriloDog.Core {
 				Debug.Log($"\t\tCD: RegisterProperty(...) Created group: {groupName}");
 				groups.Add(group);
 			}
-			index = group.AddEntry(property);
+			index = group.AddEntry(property.serializedObject, property.propertyPath);
 
 		}
 
@@ -236,15 +244,15 @@ namespace CocodriloDog.Core {
 
 			#region Public Methods
 
-			public int AddEntry(SerializedProperty property) {
-				var entry = m_Entries.FirstOrDefault(e => property.propertyPath == e.Property.propertyPath);
+			public int AddEntry(SerializedObject serializedObject, string propertyPath) {
+				var entry = m_Entries.FirstOrDefault(e => propertyPath == e.Property.propertyPath);
 				if (entry == null) {
-					var propertyType = CDEditorUtility.GetPropertyType(property);
+					var propertyType = CDEditorUtility.GetPropertyType(serializedObject.FindProperty(propertyPath));
 					var isUnityEvent = typeof(UnityEvent).IsAssignableFrom(propertyType) || 
 						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>));
 					if (isUnityEvent) {
-						entry = new Entry(property);
-						Debug.Log($"\t\t\tCD: AddEntry(...) Added property entry[{m_Entries.Count}]: {property.propertyPath}");
+						entry = new Entry(serializedObject, propertyPath);
+						Debug.Log($"\t\t\tCD: AddEntry(...) Added property entry[{m_Entries.Count}]: {propertyPath}");
 						m_Entries.Add(entry);
 					} else {
 						return -1;
@@ -276,15 +284,16 @@ namespace CocodriloDog.Core {
 
 			#region Public Properties
 
-			public SerializedProperty Property => m_Property;
+			public SerializedProperty Property => m_SerializedObject.FindProperty(m_PropertyPath);
 
 			#endregion
 
 
 			#region Constructor
 
-			public Entry(SerializedProperty property) {
-				m_Property = property;
+			public Entry(SerializedObject serializedObject, string property) {
+				m_SerializedObject = serializedObject;
+				m_PropertyPath = property;
 			}
 
 			#endregion
@@ -292,7 +301,9 @@ namespace CocodriloDog.Core {
 
 			#region Private Fields
 
-			private SerializedProperty m_Property;
+			private SerializedObject m_SerializedObject;
+
+			private string m_PropertyPath;
 
 			#endregion
 
