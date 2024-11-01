@@ -111,8 +111,8 @@ namespace CocodriloDog.Core {
 		/// Therefore, is we store the lates serialized object with its properties, we know that it and its properties
 		/// are valid.
 		/// </remarks>
-		private static Dictionary<SerializedObject, Dictionary<string, List<Group>>> s_GroupsMap = 
-			new Dictionary<SerializedObject, Dictionary<string, List<Group>>>();
+		private static Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>> s_GroupsMap = 
+			new Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>>();
 
 		/// <summary>
 		/// Since the <see cref="s_GroupsMap"/> is being reset when any property of any object changes, this flag prevents
@@ -177,13 +177,13 @@ namespace CocodriloDog.Core {
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
 
 			// The serialized object may have multiple event owners (System.Object with events, for example)
-			if (!s_GroupsMap.ContainsKey(property.serializedObject)) {
-				s_GroupsMap[property.serializedObject] = new Dictionary<string, List<Group>>();
+			if (!s_GroupsMap.ContainsKey(property.serializedObject.targetObject)) {
+				s_GroupsMap[property.serializedObject.targetObject] = new Dictionary<string, List<Group>>();
 				Debug.Log("CD: RegisterProperty(...) Created onwners dictionary");
 			}
 
 			// The owners of the events held by the serialized object
-			var owners = s_GroupsMap[property.serializedObject];
+			var owners = s_GroupsMap[property.serializedObject.targetObject];
 			var nameIndex = property.propertyPath.IndexOf(property.name);
 			var ownerPath = property.propertyPath.Substring(0, nameIndex);
 			// ownerPath can be something like "m_SomeMonoBehaviour.m_SomeObject.", so we remove the last . for cleanliness
