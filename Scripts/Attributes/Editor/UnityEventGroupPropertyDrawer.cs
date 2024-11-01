@@ -67,7 +67,7 @@ namespace CocodriloDog.Core {
 					group.SelectedIndex = GUI.Toolbar(toolBarRect, group.SelectedIndex, contents.ToArray());
 					if (EditorGUI.EndChangeCheck()) {
 						GUI.FocusControl(null);
-						Debug.Log("CD: Changed group");
+						Debug.Log("CD: OnGUI() Changed group");
 					}
 
 				}
@@ -86,7 +86,7 @@ namespace CocodriloDog.Core {
 
 			if (property.contentHash != m_previousProperty) {
 				s_EventChanged = true;
-				Debug.Log("CD: EVENT CHANGED");
+				Debug.Log("CD: OnGUI() Event Changed");
 			} 
 			m_previousProperty = property.contentHash;
 
@@ -164,7 +164,7 @@ namespace CocodriloDog.Core {
 								s_EventChanged = false;
 							} else {
 								s_GroupsMap.Clear();
-								Debug.Log("CD: ObjectChangeEvents_changesPublished() s_GroupsMap.Clear()");
+								Debug.Log("CD: ObjectChangeEvents_changesPublished(...) s_GroupsMap.Clear()");
 							}
 						};
 						CDEditorUtility.DelayedAction(action, 0.5f, "UnityEventGroup");
@@ -179,6 +179,7 @@ namespace CocodriloDog.Core {
 			// The serialized object may have multiple event owners (System.Object with events, for example)
 			if (!s_GroupsMap.ContainsKey(property.serializedObject)) {
 				s_GroupsMap[property.serializedObject] = new Dictionary<string, List<Group>>();
+				Debug.Log("CD: RegisterProperty(...) Created onwners dictionary");
 			}
 
 			// The owners of the events held by the serialized object
@@ -191,6 +192,7 @@ namespace CocodriloDog.Core {
 			}
 			if (!owners.ContainsKey(ownerPath)) { // Store the owner by its property path, up until the event name
 				owners[ownerPath] = new List<Group>();
+				Debug.Log($"\tCD: RegisterProperty(...) Created onwner: {ownerPath}");
 			}
 
 			// The owners can have multiple event groups
@@ -198,6 +200,7 @@ namespace CocodriloDog.Core {
 			group = groups.FirstOrDefault(g => groupName == g.Name);
 			if (group == null) {
 				group = new Group(groupName);
+				Debug.Log($"\t\tCD: RegisterProperty(...) Created group: {groupName}");
 				groups.Add(group);
 			}
 			index = group.AddEntry(property);
@@ -241,6 +244,7 @@ namespace CocodriloDog.Core {
 						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>));
 					if (isUnityEvent) {
 						entry = new Entry(property);
+						Debug.Log($"\t\t\tCD: AddEntry(...) Added property entry[{m_Entries.Count}]: {property.propertyPath}");
 						m_Entries.Add(entry);
 					} else {
 						return -1;
