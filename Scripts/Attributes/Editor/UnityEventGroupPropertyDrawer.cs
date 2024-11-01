@@ -129,6 +129,7 @@ namespace CocodriloDog.Core {
 
 			s_EventChanged = false;
 			s_GroupsMap.Clear();
+			Debug.Log("CD: InitOnLoad() s_GroupsMap.Clear()");
 
 			Selection.selectionChanged -= Selection_selectionChanged;
 			Selection.selectionChanged += Selection_selectionChanged;
@@ -144,6 +145,7 @@ namespace CocodriloDog.Core {
 		private static void Selection_selectionChanged() {
 			s_EventChanged = false;
 			s_GroupsMap.Clear();
+			Debug.Log("CD: Selection_selectionChanged() s_GroupsMap.Clear()");
 		}
 
 		/// <summary>
@@ -161,7 +163,7 @@ namespace CocodriloDog.Core {
 								s_EventChanged = false;
 							} else {
 								s_GroupsMap.Clear();
-								Debug.Log("CD: CLEAR");
+								Debug.Log("CD: ObjectChangeEvents_changesPublished() s_GroupsMap.Clear()");
 							}
 						};
 						CDEditorUtility.DelayedAction(action, 0.5f, "UnityEventGroup");
