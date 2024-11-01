@@ -52,9 +52,10 @@ namespace CocodriloDog.Core {
 				// Toolbar buttons
 				var contents = new List<GUIContent>();
 				foreach (var entry in group.Entries) {
-					var size = entry.Property.FindPropertyRelative("m_PersistentCalls.m_Calls").arraySize;
-					var text = size > 0 ? $"{entry.Property.displayName} ({size})" : entry.Property.displayName;
-					contents.Add(new GUIContent(text, entry.Property.tooltip));
+					var groupEventProperty = property.serializedObject.FindProperty(entry.PropertyPath);
+					var size = groupEventProperty.FindPropertyRelative("m_PersistentCalls.m_Calls").arraySize;
+					var text = size > 0 ? $"{groupEventProperty.displayName} ({size})" : groupEventProperty.displayName;
+					contents.Add(new GUIContent(text, groupEventProperty.tooltip));
 				}
 
 				// Draw the tool bar only when there is more than one event in the group
@@ -245,13 +246,13 @@ namespace CocodriloDog.Core {
 			#region Public Methods
 
 			public int AddEntry(SerializedObject serializedObject, string propertyPath) {
-				var entry = m_Entries.FirstOrDefault(e => propertyPath == e.Property.propertyPath);
+				var entry = m_Entries.FirstOrDefault(e => propertyPath == e.PropertyPath);
 				if (entry == null) {
 					var propertyType = CDEditorUtility.GetPropertyType(serializedObject.FindProperty(propertyPath));
 					var isUnityEvent = typeof(UnityEvent).IsAssignableFrom(propertyType) || 
 						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>));
 					if (isUnityEvent) {
-						entry = new Entry(serializedObject, propertyPath);
+						entry = new Entry(propertyPath);
 						Debug.Log($"\t\t\tCD: AddEntry(...) Added property entry[{m_Entries.Count}]: {propertyPath}");
 						m_Entries.Add(entry);
 					} else {
@@ -284,24 +285,21 @@ namespace CocodriloDog.Core {
 
 			#region Public Properties
 
-			public SerializedProperty Property => m_SerializedObject.FindProperty(m_PropertyPath);
+			public string PropertyPath => m_PropertyPath;
 
 			#endregion
 
 
 			#region Constructor
 
-			public Entry(SerializedObject serializedObject, string property) {
-				m_SerializedObject = serializedObject;
-				m_PropertyPath = property;
+			public Entry(string propertyPath) {
+				m_PropertyPath = propertyPath;
 			}
 
 			#endregion
 
 
 			#region Private Fields
-
-			private SerializedObject m_SerializedObject;
 
 			private string m_PropertyPath;
 
