@@ -28,10 +28,10 @@ namespace CocodriloDog.Core {
 				return (EditorGUIUtility.singleLineHeight + 2) * 2;
 			} else if (indexInGroup == group.SelectedIndex) {
 				var height = base.GetPropertyHeight(property, label); // Event height
-				if (group.Entries.Count > 1) { // Add the toolbar height only when there is more than one event in the group
+				if (group.EventPaths.Count > 1) { // Add the toolbar height only when there is more than one event in the group
 					height += EditorGUIUtility.singleLineHeight + 2; // The toolbar height
 				}
-				return height + group.Entries.Count * 1.5f; // Small compensation for the short height they use when not drawn
+				return height + group.EventPaths.Count * 1.5f; // Small compensation for the short height they use when not drawn
 			} else {
 				return 0;
 			}
@@ -51,15 +51,15 @@ namespace CocodriloDog.Core {
 
 				// Toolbar buttons
 				var contents = new List<GUIContent>();
-				foreach (var entry in group.Entries) {
-					var groupEventProperty = property.serializedObject.FindProperty(entry.PropertyPath);
+				foreach (var path in group.EventPaths) {
+					var groupEventProperty = property.serializedObject.FindProperty(path);
 					var size = groupEventProperty.FindPropertyRelative("m_PersistentCalls.m_Calls").arraySize;
 					var text = size > 0 ? $"{groupEventProperty.displayName} ({size})" : groupEventProperty.displayName;
 					contents.Add(new GUIContent(text, groupEventProperty.tooltip));
 				}
 
 				// Draw the tool bar only when there is more than one event in the group
-				if (group.Entries.Count > 1) {
+				if (group.EventPaths.Count > 1) {
 
 					var toolBarRect = position;
 					toolBarRect.height = EditorGUIUtility.singleLineHeight;
@@ -75,7 +75,7 @@ namespace CocodriloDog.Core {
 
 				// Selected event
 				var eventRect = position;
-				if (group.Entries.Count > 1) { // Move the event down only when there is a toolbar
+				if (group.EventPaths.Count > 1) { // Move the event down only when there is a toolbar
 					eventRect.y += EditorGUIUtility.singleLineHeight + 2;
 				}
 
@@ -85,15 +85,15 @@ namespace CocodriloDog.Core {
 
 			EditorGUI.EndProperty();
 
-			if (property.contentHash != m_previousProperty) {
+			if (property.contentHash != m_previousPropertyContentHash) {
 				s_EventChanged = true;
 				Debug.Log("CD: OnGUI() Event Changed");
 			} 
-			m_previousProperty = property.contentHash;
+			m_previousPropertyContentHash = property.contentHash;
 
 		}
 
-		private uint m_previousProperty;
+		private uint m_previousPropertyContentHash;
 
 		#endregion
 
@@ -177,11 +177,8 @@ namespace CocodriloDog.Core {
 
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
 
-			// The serialized object may have multiple event owners (System.Object with events, for example)
+			// The target object may have multiple event owners (System.Object with events, for example)
 			if (!s_GroupsMap.ContainsKey(property.serializedObject.targetObject)) {
-				// Using the serializedObject as the key is better than using the target object because Unityrenews the
-				// serialized object and disposes the previous one for many different reasons, and trying to use disposed data
-				// like previous property entries, cause errors.
 				s_GroupsMap[property.serializedObject.targetObject] = new Dictionary<string, List<Group>>();
 				Debug.Log("CD: RegisterProperty(...) Created onwners dictionary");
 			}
@@ -212,7 +209,7 @@ namespace CocodriloDog.Core {
 				Debug.Log($"\t\tCD: RegisterProperty(...) Created group: {groupName}");
 				groups.Add(group);
 			}
-			index = group.AddEntry(property.serializedObject, property.propertyPath);
+			index = group.AddEventPath(property.serializedObject, property.propertyPath);
 
 		}
 
@@ -226,7 +223,7 @@ namespace CocodriloDog.Core {
 
 			public string Name => m_Name;
 
-			public ReadOnlyCollection<Entry> Entries => m_EntriesRO = m_EntriesRO ?? new ReadOnlyCollection<Entry>(m_Entries);
+			public ReadOnlyCollection<string> EventPaths => m_EventPathsRO = m_EventPathsRO ?? new ReadOnlyCollection<string>(m_EventPaths);
 
 			public int SelectedIndex {
 				get => m_SelectedIndex;
@@ -245,21 +242,22 @@ namespace CocodriloDog.Core {
 
 			#region Public Methods
 
-			public int AddEntry(SerializedObject serializedObject, string propertyPath) {
-				var entry = m_Entries.FirstOrDefault(e => propertyPath == e.PropertyPath);
-				if (entry == null) {
-					var propertyType = CDEditorUtility.GetPropertyType(serializedObject.FindProperty(propertyPath));
+			public int AddEventPath(SerializedObject serializedObject, string eventPropertyPath) {
+				if (!m_EventPaths.Contains(eventPropertyPath)) {
+
+					var propertyType = CDEditorUtility.GetPropertyType(serializedObject.FindProperty(eventPropertyPath));
 					var isUnityEvent = typeof(UnityEvent).IsAssignableFrom(propertyType) || 
 						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>));
+
 					if (isUnityEvent) {
-						entry = new Entry(propertyPath);
-						Debug.Log($"\t\t\tCD: AddEntry(...) Added property entry[{m_Entries.Count}]: {propertyPath}");
-						m_Entries.Add(entry);
+						Debug.Log($"\t\t\tCD: AddEventPath(...) Added event path [{m_EventPaths.Count}]: {eventPropertyPath}");
+						m_EventPaths.Add(eventPropertyPath);
 					} else {
 						return -1;
 					}
+
 				}
-				return m_Entries.IndexOf(entry);
+				return m_EventPaths.IndexOf(eventPropertyPath);
 			}
 
 			#endregion
@@ -271,42 +269,42 @@ namespace CocodriloDog.Core {
 
 			private int m_SelectedIndex;
 
-			private List<Entry> m_Entries = new List<Entry>();
+			private List<string> m_EventPaths = new List<string>();
 
-			private ReadOnlyCollection<Entry> m_EntriesRO;
-
-			#endregion
-
-
-		}
-
-		public class Entry {
-
-
-			#region Public Properties
-
-			public string PropertyPath => m_PropertyPath;
-
-			#endregion
-
-
-			#region Constructor
-
-			public Entry(string propertyPath) {
-				m_PropertyPath = propertyPath;
-			}
-
-			#endregion
-
-
-			#region Private Fields
-
-			private string m_PropertyPath;
+			private ReadOnlyCollection<string> m_EventPathsRO;
 
 			#endregion
 
 
 		}
+
+		//public class Entry {
+
+
+		//	#region Public Properties
+
+		//	public string PropertyPath => m_PropertyPath;
+
+		//	#endregion
+
+
+		//	#region Constructor
+
+		//	public Entry(string propertyPath) {
+		//		m_PropertyPath = propertyPath;
+		//	}
+
+		//	#endregion
+
+
+		//	#region Private Fields
+
+		//	private string m_PropertyPath;
+
+		//	#endregion
+
+
+		//}
 
 	}
 
