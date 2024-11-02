@@ -11,7 +11,7 @@ namespace CocodriloDog.Core {
 	/// class.
 	/// </summary>
 	[AddComponentMenu("")]
-	public class RotationMachine_Example : StateMachineBase<RotationMachine_Example.State, RotationMachine_Example> {
+	public class RotationMachine_Example : MonoCompositeStateMachine<RotationMachine_Example.State, RotationMachine_Example> {
 
 
 		#region Public Properties
@@ -67,7 +67,7 @@ namespace CocodriloDog.Core {
 		#region States
 
 		[Serializable]
-		public abstract class State : StateBase<State, RotationMachine_Example> {
+		public abstract class State : CompositeState<State, RotationMachine_Example> {
 
 			[SerializeField]
 			protected Color m_Color;

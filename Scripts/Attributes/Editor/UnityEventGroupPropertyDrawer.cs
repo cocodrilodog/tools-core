@@ -63,7 +63,8 @@ namespace CocodriloDog.Core {
 
 					var toolBarRect = position;
 					toolBarRect.height = EditorGUIUtility.singleLineHeight;
-					
+					toolBarRect.xMin += EditorGUI.indentLevel * 15;
+
 					EditorGUI.BeginChangeCheck();
 					group.SelectedIndex = GUI.Toolbar(toolBarRect, group.SelectedIndex, contents.ToArray());
 					if (EditorGUI.EndChangeCheck()) {
@@ -85,15 +86,7 @@ namespace CocodriloDog.Core {
 
 			EditorGUI.EndProperty();
 
-			if (property.contentHash != m_previousPropertyContentHash) {
-				s_EventChanged = true;
-				Debug.Log("CD: OnGUI() Event Changed");
-			} 
-			m_previousPropertyContentHash = property.contentHash;
-
 		}
-
-		private uint m_previousPropertyContentHash;
 
 		#endregion
 
@@ -115,12 +108,6 @@ namespace CocodriloDog.Core {
 		private static Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>> s_GroupsMap = 
 			new Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>>();
 
-		/// <summary>
-		/// Since the <see cref="s_GroupsMap"/> is being reset when any property of any object changes, this flag prevents
-		/// it from being reset when the change was caused by the event property, which would othewise make it harder to use.
-		/// </summary>
-		private static bool s_EventChanged;
-
 		#endregion
 
 
@@ -129,15 +116,11 @@ namespace CocodriloDog.Core {
 		[InitializeOnLoadMethod]
 		private static void InitOnLoad() {
 
-			s_EventChanged = false;
 			s_GroupsMap.Clear();
 			Debug.Log("CD: InitOnLoad() s_GroupsMap.Clear()");
 
 			Selection.selectionChanged -= Selection_selectionChanged;
 			Selection.selectionChanged += Selection_selectionChanged;
-
-			//ObjectChangeEvents.changesPublished -= ObjectChangeEvents_changesPublished;
-			//ObjectChangeEvents.changesPublished += ObjectChangeEvents_changesPublished;
 
 		}
 
@@ -145,41 +128,14 @@ namespace CocodriloDog.Core {
 		/// This will keep the size of the map small
 		/// </summary>
 		private static void Selection_selectionChanged() {
-			s_EventChanged = false;
 			s_GroupsMap.Clear();
 			Debug.Log("CD: Selection_selectionChanged() s_GroupsMap.Clear()");
 		}
 
-		/// <summary>
-		/// This prevents errors when an array on the serializedObject changes.
-		/// </summary>
-		/// <param name="stream"></param>
-		//private static void ObjectChangeEvents_changesPublished(ref ObjectChangeEventStream stream) {
-		//	for (int i = 0; i < stream.length; ++i) {
-		//		switch (stream.GetEventType(i)) {
-		//			case ObjectChangeKind.ChangeGameObjectOrComponentProperties:
-		//				// Here we give time to the s_EventChanged before reading it because sometimes
-		//				// this method is invoked before the m_EventChanged flag is set to true.
-		//				Action action = () => {
-		//					if (s_EventChanged) {
-		//						s_EventChanged = false;
-		//					} else {
-		//						s_GroupsMap.Clear();
-		//						Debug.Log("CD: ObjectChangeEvents_changesPublished(...) s_GroupsMap.Clear()");
-		//					}
-		//				};
-		//				CDEditorUtility.DelayedAction(action, 0.5f, "UnityEventGroup");
-		//				break;
-		//		}
-		//	}
-		//}
-
-
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
 
 			// The target object may have multiple event owners (System.Object with events, for example)
-			if (!s_GroupsMap.ContainsKey(property.serializedObject.targetObject)) {
-				s_GroupsMap[property.serializedObject.targetObject] = new Dictionary<string, List<Group>>();
+			if (s_GroupsMap.TryAdd(property.serializedObject.targetObject, new Dictionary<string, List<Group>>())) {
 				Debug.Log("CD: RegisterProperty(...) Created onwners dictionary");
 			}
 
@@ -188,7 +144,7 @@ namespace CocodriloDog.Core {
 			var nameIndex = property.propertyPath.IndexOf(property.name);
 			var ownerPath = property.propertyPath.Substring(0, nameIndex);
 
-			// ownerPath can be something like "m_SomeMonoBehaviour.m_SomeObject.", so we remove the last . for cleanliness
+			// ownerPath can be something like "m_SomeObject.", so we remove the last . for cleanliness
 			if (ownerPath.Length > 0 && ownerPath[ownerPath.Length - 1] == '.') {
 				ownerPath = ownerPath.Remove(ownerPath.Length - 1);
 			}
@@ -196,8 +152,8 @@ namespace CocodriloDog.Core {
 			if (ownerPath == "") {
 				ownerPath = "root";
 			}
-			if (!owners.ContainsKey(ownerPath)) { // Store the owner by its property path, up until the event name
-				owners[ownerPath] = new List<Group>();
+			// Store the owner by its property path, up until before the event name
+			if (owners.TryAdd(ownerPath, new List<Group>())) { 
 				Debug.Log($"\tCD: RegisterProperty(...) Created onwner: {ownerPath}");
 			}
 
@@ -277,34 +233,6 @@ namespace CocodriloDog.Core {
 
 
 		}
-
-		//public class Entry {
-
-
-		//	#region Public Properties
-
-		//	public string PropertyPath => m_PropertyPath;
-
-		//	#endregion
-
-
-		//	#region Constructor
-
-		//	public Entry(string propertyPath) {
-		//		m_PropertyPath = propertyPath;
-		//	}
-
-		//	#endregion
-
-
-		//	#region Private Fields
-
-		//	private string m_PropertyPath;
-
-		//	#endregion
-
-
-		//}
 
 	}
 

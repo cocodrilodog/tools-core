@@ -94,6 +94,7 @@ namespace CocodriloDog.Core {
 			// Draw the helpbox
 			if (m_ShouldDrawHelp) {
 				var helpRect = GetNextPosition(GetMessageHeight());
+				helpRect.xMin += EditorGUI.indentLevel * 15;
 				EditorGUI.HelpBox(helpRect, m_CurrentMessage, (MessageType)Mathf.Abs(currentCode));
 				GetNextPosition(2f);
 			}

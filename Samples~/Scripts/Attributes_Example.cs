@@ -91,9 +91,6 @@
 			Debug.Log("Button Method Invoked!");
 		}
 
-		[Tooltip("SomeObject")]
-		public SomeObject SomeObject;
-
 		[Space]
 
 		[Tooltip("Event1")]
@@ -108,6 +105,8 @@
 		[UnityEventGroup("LonelyEvent")]
 		public UnityEvent Event3;
 
+		[Tooltip("SomeObject")]
+		public SomeObject SomeObject;
 
 	}
 
@@ -171,6 +170,18 @@
 			message = "Showing some integral help!";
 			return HelpValue;
 		}
+
+		[Tooltip("ObjEvent1")]
+		[UnityEventGroup("ObjEventGroup")]
+		public UnityEvent<Vector3> ObjEvent1;
+
+		[Tooltip("ObjEvent2")]
+		[UnityEventGroup("ObjEventGroup")]
+		public UnityEvent ObjEvent2;
+
+		[Tooltip("ObjEvent3")]
+		[UnityEventGroup("ObjLonelyEvent")]
+		public UnityEvent ObjEvent3;
 
 	}
 
