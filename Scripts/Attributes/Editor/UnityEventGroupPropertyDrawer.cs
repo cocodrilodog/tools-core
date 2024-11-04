@@ -65,12 +65,7 @@ namespace CocodriloDog.Core {
 					toolBarRect.height = EditorGUIUtility.singleLineHeight;
 					toolBarRect.xMin += EditorGUI.indentLevel * 15;
 
-					EditorGUI.BeginChangeCheck();
 					group.SelectedIndex = GUI.Toolbar(toolBarRect, group.SelectedIndex, contents.ToArray());
-					if (EditorGUI.EndChangeCheck()) {
-						GUI.FocusControl(null);
-						Debug.Log("CD: OnGUI() Changed group");
-					}
 
 				}
 
@@ -96,15 +91,8 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// Because this property drawer will need data from other properties of the same object, this static
 		/// map will hold a reference of each of the event properties, their corresponding groups and the 
-		/// SerializedObject that they belong to.
+		/// UnityEngine.Object that they belong to.
 		/// </summary>
-		/// 
-		/// <remarks>
-		/// Using the serializedObject as the key helps to store only the valid serialized properties. Sometimes, 
-		/// the serialized object of a target object is renewed, making the old one and its properties invalid.
-		/// Therefore, is we store the lates serialized object with its properties, we know that it and its properties
-		/// are valid.
-		/// </remarks>
 		private static Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>> s_GroupsMap = 
 			new Dictionary<UnityEngine.Object, Dictionary<string, List<Group>>>();
 
@@ -117,7 +105,6 @@ namespace CocodriloDog.Core {
 		private static void InitOnLoad() {
 
 			s_GroupsMap.Clear();
-			Debug.Log("CD: InitOnLoad() s_GroupsMap.Clear()");
 
 			Selection.selectionChanged -= Selection_selectionChanged;
 			Selection.selectionChanged += Selection_selectionChanged;
@@ -129,15 +116,12 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		private static void Selection_selectionChanged() {
 			s_GroupsMap.Clear();
-			Debug.Log("CD: Selection_selectionChanged() s_GroupsMap.Clear()");
 		}
 
 		private static void RegisterProperty(SerializedProperty property, string groupName, out Group group, out int index) {
 
 			// The target object may have multiple event owners (System.Object with events, for example)
-			if (s_GroupsMap.TryAdd(property.serializedObject.targetObject, new Dictionary<string, List<Group>>())) {
-				Debug.Log("CD: RegisterProperty(...) Created onwners dictionary");
-			}
+			s_GroupsMap.TryAdd(property.serializedObject.targetObject, new Dictionary<string, List<Group>>());
 
 			// The owners of the events held by the serialized object
 			var owners = s_GroupsMap[property.serializedObject.targetObject];
@@ -153,16 +137,13 @@ namespace CocodriloDog.Core {
 				ownerPath = "root";
 			}
 			// Store the owner by its property path, up until before the event name
-			if (owners.TryAdd(ownerPath, new List<Group>())) { 
-				Debug.Log($"\tCD: RegisterProperty(...) Created onwner: {ownerPath}");
-			}
+			owners.TryAdd(ownerPath, new List<Group>());
 
 			// The owners can have multiple event groups
 			var groups = owners[ownerPath];
 			group = groups.FirstOrDefault(g => groupName == g.Name);
 			if (group == null) {
 				group = new Group(groupName);
-				Debug.Log($"\t\tCD: RegisterProperty(...) Created group: {groupName}");
 				groups.Add(group);
 			}
 			index = group.AddEventPath(property.serializedObject, property.propertyPath);
@@ -206,7 +187,6 @@ namespace CocodriloDog.Core {
 						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>));
 
 					if (isUnityEvent) {
-						Debug.Log($"\t\t\tCD: AddEventPath(...) Added event path [{m_EventPaths.Count}]: {eventPropertyPath}");
 						m_EventPaths.Add(eventPropertyPath);
 					} else {
 						return -1;
