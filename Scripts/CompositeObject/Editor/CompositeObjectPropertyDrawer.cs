@@ -252,6 +252,15 @@
 
 		}
 
+		/// <summary>
+		/// Draws the property field on non-edit mode.
+		/// </summary>
+		/// <remarks>
+		/// Override this to enhance or modify the drawing behaviour.
+		/// </remarks>
+		/// <param name="propertyRect">The property rect</param>
+		/// <param name="guiContent">The GUIContent, used to create the label of the property.</param>
+		/// <param name="name">The name of the object to display inside the field box.</param>
 		protected virtual void DrawPropertyField(Rect propertyRect, GUIContent guiContent, string name) {
 
 			// Label rect
@@ -283,9 +292,7 @@
 			Texture objectIcon = GetObjectIcon(Property.managedReferenceValue?.GetType());
 
 			// Create a box resembling an Object field
-			EditorGUI.BeginDisabledGroup(true);
-			GUI.Box(fieldRect, objectIcon != null ? $"     {name}" : name, EditorStyles.objectField);
-			EditorGUI.EndDisabledGroup();
+			DrawPropertyFieldBox(fieldRect, objectIcon, name);
 
 			// Draw object icon, if any
 			if(objectIcon != null) {
@@ -295,6 +302,21 @@
 				GUI.DrawTexture(iconRect, objectIcon);
 			}
 
+		}
+
+		/// <summary>
+		/// Draws the box inside the property field.
+		/// </summary>
+		/// <remarks>
+		/// Override this to enhance or modify the drawing behaviour.
+		/// </remarks>
+		/// <param name="boxRect">The Rect for the box.</param>
+		/// <param name="objectIcon">The icon of the box, if any.</param>
+		/// <param name="name">The name to be displayed on the box.</param>
+		protected virtual void DrawPropertyFieldBox(Rect boxRect, Texture objectIcon, string name) {
+			EditorGUI.BeginDisabledGroup(true);
+			GUI.Box(boxRect, objectIcon != null ? $"     {name}" : name, EditorStyles.objectField);
+			EditorGUI.EndDisabledGroup();
 		}
 
 		#endregion
