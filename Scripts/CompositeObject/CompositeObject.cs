@@ -42,6 +42,14 @@ namespace CocodriloDog.Core {
 	///			</description>
 	///		</item>
 	///		<item>
+	///			<term>Optional, but recommended: Use <see cref="CompositeList{T}"/> for lists.</term>
+	///			<description>
+	///				When using <see cref="CompositeObject"/> lists, it is better to use <see cref="CompositeList{T}"/>
+	///				instead of normal lists or arrays, because <see cref="CompositeList{T}"/> handles the modification
+	///				of prefabs, which prevents data corruption.
+	///			</description>
+	///		</item>
+	///		<item>
 	///			<term>Optional: Extend <c>CompositePropertyDrawer</c></term>
 	///			<description>
 	///				The default property drawer for composite objects allows the user to create, edit, 
@@ -71,7 +79,18 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// Enables or disabled the name field in the inspector.
+		/// Enables or disables the edit button in the inspector.
+		/// </summary>
+		/// <remarks>
+		/// This should be called from <c>OnValidate</c>
+		/// </remarks>
+		public bool CanEnterEdit {
+			get => m_CanEnterEdit;
+			set => m_CanEnterEdit = value;
+		}
+
+		/// <summary>
+		/// Enables or disables the name field in the inspector.
 		/// </summary>
 		/// <remarks>
 		/// This should be called from <c>OnValidate</c>
@@ -138,6 +157,10 @@ namespace CocodriloDog.Core {
 		[Tooltip("The name of this CompositeObject")]
 		[SerializeField]
 		private string m_Name;
+
+		[HideInInspector]
+		[SerializeField]
+		private bool m_CanEnterEdit = true;
 
 		[HideInInspector]
 		[SerializeField]

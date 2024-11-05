@@ -465,6 +465,7 @@
 
 			var compositeRoot = Property.serializedObject.targetObject as CompositeRoot;
 
+			EditorGUI.BeginDisabledGroup(!CompositeObject.CanEnterEdit);
 			if (compositeRoot != null) {
 				if (GUI.Button(rect, "Edit ▸")) {
 					CompositeRootEditor.SelectCompositeObject(Property.serializedObject, Property.propertyPath);
@@ -474,6 +475,7 @@
 					CompositeObject.Edit = true;
 				}
 			}
+			EditorGUI.EndDisabledGroup();
 
 		}
 
