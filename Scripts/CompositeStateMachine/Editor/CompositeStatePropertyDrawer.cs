@@ -48,7 +48,7 @@ namespace CocodriloDog.Core {
 					p.propertyPath != DocumentationCommentProperty.propertyPath &&
 					p.propertyPath != OnEnterProperty.propertyPath &&
 					p.propertyPath != OnExitProperty.propertyPath) {
-					EditorGUI.PropertyField(GetNextPosition(p), p);
+					EditorGUI.PropertyField(GetNextPosition(p), p, true);
 				}
 			});
 			EditorGUI.PropertyField(GetNextPosition(OnEnterProperty), OnEnterProperty);

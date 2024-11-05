@@ -245,7 +245,8 @@
 				CDEditorUtility.IterateChildProperties(Property, p => {
 					if (p.propertyPath != NameProperty.propertyPath &&
 						p.propertyPath != DocumentationCommentProperty.propertyPath) {
-						EditorGUI.PropertyField(GetNextPosition(p), p);
+						EditorGUI.PropertyField(GetNextPosition(p), p, true);
+						Debug.Log("Here");
 					}
 				});
 			}
