@@ -29,7 +29,7 @@ namespace CocodriloDog.Core {
 			CDEditorUtility.IterateChildProperties(Property, p => {
 				if (p.propertyPath != NameProperty.propertyPath &&
 					p.propertyPath != DocumentationCommentProperty.propertyPath) {
-					height += EditorGUI.GetPropertyHeight(p) + 2;
+					height += GetChildPropertyHeight(p);
 				}
 			});
 			return height;
@@ -48,7 +48,7 @@ namespace CocodriloDog.Core {
 					p.propertyPath != DocumentationCommentProperty.propertyPath &&
 					p.propertyPath != OnEnterProperty.propertyPath &&
 					p.propertyPath != OnExitProperty.propertyPath) {
-					EditorGUI.PropertyField(GetNextPosition(p), p, true);
+					DrawChildProperty(p);
 				}
 			});
 			EditorGUI.PropertyField(GetNextPosition(OnEnterProperty), OnEnterProperty);

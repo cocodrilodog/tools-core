@@ -128,6 +128,12 @@
 			}
 		}
 
+		/// <summary>
+		/// Called in <see cref="InitializePropertiesForGetHeight"/> when in edit mode.
+		/// </summary>
+		/// <remarks>
+		/// Override this for properties to be ready for the <c>GetHeight()</c> call.
+		/// </remarks>
 		protected virtual void Edit_InitializePropertiesForGetHeight() { }
 
 		protected sealed override void InitializePropertiesForOnGUI() {
@@ -149,6 +155,12 @@
 
 		}
 
+		/// <summary>
+		/// Called in <see cref="InitializePropertiesForOnGUI"/> when in edit mode.
+		/// </summary>
+		/// <remarks>
+		/// Override this for properties to be ready for the <c>OnGUI()</c> call.
+		/// </remarks>
 		protected virtual void Edit_InitializePropertiesForOnGUI() { }
 
 		/// <summary>
@@ -187,13 +199,25 @@
 				CDEditorUtility.IterateChildProperties(Property, p => {
 					if (p.propertyPath != NameProperty.propertyPath &&
 						p.propertyPath != DocumentationCommentProperty.propertyPath) {
-						height += EditorGUI.GetPropertyHeight(p) + 2;
+						height += GetChildPropertyHeight(p);
 					}
 				});
 			}
 
 			return height;
 
+		}
+
+		/// <summary>
+		/// Returns the height used by the child property.
+		/// </summary>
+		/// <remarks>
+		/// Override this to modify specific property heights.
+		/// </remarks>
+		/// <param name="property">The property</param>
+		/// <returns>The height</returns>
+		protected virtual float GetChildPropertyHeight(SerializedProperty property) {
+			return EditorGUI.GetPropertyHeight(property) + 2;
 		}
 
 		/// <summary>
@@ -204,7 +228,7 @@
 		/// <param name="label">The label</param>
 		protected virtual void Edit_OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			
-			// This base class only handles the name property.
+			// Name property.
 			var rect = GetNextPosition();
 			var nameRect = rect;
 			nameRect.xMax -= 22;
@@ -245,12 +269,22 @@
 				CDEditorUtility.IterateChildProperties(Property, p => {
 					if (p.propertyPath != NameProperty.propertyPath &&
 						p.propertyPath != DocumentationCommentProperty.propertyPath) {
-						EditorGUI.PropertyField(GetNextPosition(p), p, true);
-						Debug.Log("Here");
+						DrawChildProperty(p);
 					}
 				});
 			}
 
+		}
+
+		/// <summary>
+		/// Draws each child property.
+		/// </summary>
+		/// <remarks>
+		/// Override this to modify the way specific properties are drawn.
+		/// </remarks>
+		/// <param name="property">The child property.</param>
+		protected virtual void DrawChildProperty(SerializedProperty property) {
+			EditorGUI.PropertyField(GetNextPosition(property), property, true);
 		}
 
 		/// <summary>
