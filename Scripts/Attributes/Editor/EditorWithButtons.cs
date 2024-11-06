@@ -8,6 +8,10 @@ namespace CocodriloDog.Core {
 	/// <summary>
 	/// An editor that can have buttons, by using the <see cref="ButtonAttribute"/> on methods.
 	/// </summary>
+	/// <remarks>
+	/// It also implements <see cref="DrawProperty(UnityEditor.SerializedProperty)"/> so that specific
+	/// properties can be overriden in subclasses.
+	/// </remarks>
 	[CustomEditor(typeof(MonoBehaviour), true)]
 	public class EditorWithButtons : Editor {
 
@@ -28,7 +32,7 @@ namespace CocodriloDog.Core {
 				if (p.propertyPath == "m_Script") {
 					CDEditorUtility.DrawDisabledField(p);
 				} else {
-					EditorGUILayout.PropertyField(p);
+					DrawProperty(p);
 				}
 				if(m_MethodsWithButton.TryGetValue(index, out var method)){
 					if (GUILayout.Button(ObjectNames.NicifyVariableName(method.Name))) {
@@ -48,6 +52,22 @@ namespace CocodriloDog.Core {
 		#region Protected Properties
 
 		protected Dictionary<int, MethodInfo> MethodsWithButton => m_MethodsWithButton;
+
+		#endregion
+
+
+		#region Protected Methods
+
+		/// <summary>
+		/// Draws each of the properties of this object.
+		/// </summary>
+		/// <remarks>
+		/// Override this to modify the drawing of specific properties.
+		/// </remarks>
+		/// <param name="property">The property</param>
+		protected virtual void DrawProperty(SerializedProperty property) {
+			EditorGUILayout.PropertyField(property);
+		}
 
 		#endregion
 
