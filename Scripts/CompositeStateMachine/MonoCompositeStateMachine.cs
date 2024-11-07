@@ -132,9 +132,12 @@ namespace CocodriloDog.Core {
 
 		protected virtual void Update() => m_CurrentState.Update();
 
-		protected virtual void FixedUpdate() => m_CurrentState.Update();
+		protected virtual void FixedUpdate() => m_CurrentState.FixedUpdate();
 
-		protected virtual void OnDestroy() => ForEachState(s => s.OnDestroy());
+		protected virtual void OnDestroy() {
+			SetState(null); // This will exit the current state
+			ForEachState(s => s.OnDestroy());
+		}
 
 		#endregion
 
@@ -300,9 +303,19 @@ namespace CocodriloDog.Core {
 			m_OnExit.Invoke();
 		}
 
+		#endregion
+
+
+		#region Unity Methods
+
 		public virtual void Update() { }
 
 		public virtual void FixedUpdate() { }
+
+		public virtual void OnDestroy() {
+			OnEnter = null;
+			OnExit = null;
+		}
 
 		#endregion
 
@@ -312,16 +325,6 @@ namespace CocodriloDog.Core {
 		public event Action OnEnter;
 
 		public event Action OnExit;
-
-		#endregion
-
-
-		#region Internal Methods
-
-		internal void OnDestroy() {
-			OnEnter = null;
-			OnExit = null;
-		}
 
 		#endregion
 
