@@ -19,7 +19,7 @@ namespace CocodriloDog.Core {
 		public float Speed {
 			get => m_Speed;
 			set => m_Speed = value;
-		}
+		} 
 
 		#endregion
 

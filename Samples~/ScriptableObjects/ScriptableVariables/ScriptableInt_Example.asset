@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e345bb3b30a0f41b92bf5470d4ab93, type: 3}
   m_Name: ScriptableInt_Example
   m_EditorClassIdentifier: 
+  m_ResetOnEditMode: 1
   m_Value: 0
+  m_DocumentationComment: Example of a ScriptableInt object.

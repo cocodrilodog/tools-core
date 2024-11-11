@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10e53aa1c613e194f93403286a5eb630, type: 3}
   m_Name: ScriptableString_Example
   m_EditorClassIdentifier: 
+  m_ResetOnEditMode: 1
   m_Value: 
+  m_DocumentationComment: Example of a ScriptableString object.

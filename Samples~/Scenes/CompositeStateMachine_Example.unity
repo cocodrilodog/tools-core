@@ -1234,7 +1234,9 @@ MonoBehaviour:
       type: {class: FlowStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
       data:
         m_Name: Stop
+        m_CanEnterEdit: 1
         m_CanEditName: 1
+        m_CanDeleteInstance: 1
         m_DocumentationComment: 
         m_OnEnter:
           m_PersistentCalls:
@@ -1273,7 +1275,9 @@ MonoBehaviour:
       type: {class: FlowStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
       data:
         m_Name: Play
+        m_CanEnterEdit: 1
         m_CanEditName: 1
+        m_CanDeleteInstance: 1
         m_DocumentationComment: 
         m_OnEnter:
           m_PersistentCalls:
@@ -1361,7 +1365,9 @@ MonoBehaviour:
       type: {class: FlowStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
       data:
         m_Name: Pause
+        m_CanEnterEdit: 1
         m_CanEditName: 1
+        m_CanDeleteInstance: 1
         m_DocumentationComment: 
         m_OnEnter:
           m_PersistentCalls:
@@ -1675,7 +1681,9 @@ MonoBehaviour:
       type: {class: RotationMachine_Example/Red, ns: CocodriloDog.Core, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Red
+        m_CanEnterEdit: 1
         m_CanEditName: 0
+        m_CanDeleteInstance: 1
         m_DocumentationComment: 
         m_OnEnter:
           m_PersistentCalls:
@@ -1688,7 +1696,9 @@ MonoBehaviour:
       type: {class: RotationMachine_Example/Green, ns: CocodriloDog.Core, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Green
+        m_CanEnterEdit: 1
         m_CanEditName: 0
+        m_CanDeleteInstance: 1
         m_DocumentationComment: 
         m_OnEnter:
           m_PersistentCalls:
@@ -1701,7 +1711,9 @@ MonoBehaviour:
       type: {class: RotationMachine_Example/Blue, ns: CocodriloDog.Core, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Blue
+        m_CanEnterEdit: 1
         m_CanEditName: 0
+        m_CanDeleteInstance: 1
         m_DocumentationComment: 
         m_OnEnter:
           m_PersistentCalls:

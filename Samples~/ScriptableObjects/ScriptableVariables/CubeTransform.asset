@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ResetOnEditMode: 1
   m_Value: {fileID: 0}
+  m_DocumentationComment: Reference to the cube transform in the ScriptableReference_Example
+    scene

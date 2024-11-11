@@ -72,7 +72,7 @@ namespace CocodriloDog.Core {
 			"return to the ones before Unity entered play mode."
 		)]
 		[SerializeField]
-		private bool m_ResetOnEditMode;
+		private bool m_ResetOnEditMode = true;
 
 		#endregion
 

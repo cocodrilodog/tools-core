@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ResetOnEditMode: 1
   m_Value: 90
+  m_DocumentationComment: Rotation value for the cube transform in the ScriptableReference_Example
+    scene

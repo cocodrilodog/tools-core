@@ -6,42 +6,36 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	[CustomEditor(typeof(ScriptableString))]
-	public class ScriptableStringEditor : Editor {
+	public class ScriptableStringEditor : ScriptableValueEditor {
 
 
 		#region Unity Methods
 
-		private void OnEnable() {
-			m_ScriptProperty = serializedObject.FindProperty("m_Script");
-			m_ResetOnEditModeProperty = serializedObject.FindProperty("m_ResetOnEditMode");
+		protected override void OnEnable() {
+			base.OnEnable();
 			m_ValueProperty = serializedObject.FindProperty("m_Value");
 		}
 
-		public override void OnInspectorGUI() {
+		#endregion
 
-			serializedObject.Update();
 
-			CDEditorUtility.DrawDisabledField(m_ScriptProperty);
-			EditorGUILayout.PropertyField(m_ResetOnEditModeProperty);
-			EditorGUILayout.LabelField(m_ValueProperty.displayName);
+		#region Protected Methods
 
-			GUIStyle wordWrappedStyle = new GUIStyle(EditorStyles.textArea);
-			wordWrappedStyle.wordWrap = true;
-
-			m_ValueProperty.stringValue = EditorGUILayout.TextArea(m_ValueProperty.stringValue, wordWrappedStyle);
-
-			serializedObject.ApplyModifiedProperties();
-
+		protected override void DrawProperty(SerializedProperty property) {
+			if (property.propertyPath == m_ValueProperty.propertyPath) {
+				EditorGUILayout.LabelField(m_ValueProperty.displayName);
+				GUIStyle wordWrappedStyle = new GUIStyle(EditorStyles.textArea);
+				wordWrappedStyle.wordWrap = true;
+				m_ValueProperty.stringValue = EditorGUILayout.TextArea(m_ValueProperty.stringValue, wordWrappedStyle);
+			} else {
+				base.DrawProperty(property);
+			}
 		}
 
 		#endregion
 
 
 		#region Private Fields
-
-		private SerializedProperty m_ScriptProperty;
-
-		private SerializedProperty m_ResetOnEditModeProperty;
 
 		private SerializedProperty m_ValueProperty;
 

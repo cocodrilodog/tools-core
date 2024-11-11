@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef2566a63faef84db9e06b521e56bd7, type: 3}
   m_Name: ScriptableVector3_Example
   m_EditorClassIdentifier: 
+  m_ResetOnEditMode: 1
   m_Value: {x: 0, y: 0, z: 0}
+  m_DocumentationComment: Example of a ScriptableVector3 object.

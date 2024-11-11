@@ -372,8 +372,6 @@ namespace CocodriloDog.Core {
 			}
 		}
 
-
-
 		#endregion
 
 

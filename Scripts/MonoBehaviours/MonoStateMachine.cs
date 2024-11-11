@@ -15,13 +15,6 @@
 		where T_Machine : MonoStateMachine<T_State, T_Machine> {
 
 
-		#region Public Events
-
-		public event Action OnStateChange;
-
-		#endregion
-
-
 		#region Unity Methods
 
 		protected virtual void Start() {
@@ -29,7 +22,7 @@
 		}
 
 		protected virtual void OnDestroy() {
-			OnStateChange = null;
+			State = null;
 		}
 
 		#endregion
@@ -39,20 +32,16 @@
 
 		protected virtual T_State State {
 			get {
+				// In case the state is read before Start
 				if(m_State == null) {
 					State = DefaultState;
 				}
 				return m_State; 
 			}
 			set {
-				if(m_State != null) {
-					m_State.Exit();
-				}
+				m_State?.Exit();
 				m_State = value;
-				// Invoke this before entering the next state because the Enter() of the next state
-				// may set a different state
-				OnStateChange?.Invoke();
-				m_State.Enter();
+				m_State?.Enter();
 			}
 		}
 
@@ -78,9 +67,9 @@
 
 		#region Public Methods
 
-		public abstract void Enter();
+		public virtual void Enter() { }
 
-		public abstract void Exit();
+		public virtual void Exit() { }
 
 		#endregion
 

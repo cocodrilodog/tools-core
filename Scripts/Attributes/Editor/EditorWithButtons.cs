@@ -12,8 +12,7 @@ namespace CocodriloDog.Core {
 	/// It also implements <see cref="DrawProperty(UnityEditor.SerializedProperty)"/> so that specific
 	/// properties can be overriden in subclasses.
 	/// </remarks>
-	[CustomEditor(typeof(MonoBehaviour), true)]
-	public class EditorWithButtons : Editor {
+	public abstract class EditorWithButtons : Editor {
 
 
 		#region Unity Methods
