@@ -404,7 +404,7 @@
 
 			// Iterate the child properties
 			action(iterator);
-			while (iterator.NextVisible(false)) {
+			while (iterator != null && iterator.NextVisible(false)) {
 				if (SerializedProperty.EqualContents(iterator, endProperty)) {
 					break;
 				}

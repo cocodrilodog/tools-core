@@ -1,4 +1,5 @@
 ﻿namespace CocodriloDog.Core.Examples {
+
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -87,8 +88,13 @@
 		private bool HideString() => !ShowHiddenString;
 
 		[Button(17)]
-		public void ButtonMethod() {
-			Debug.Log("Button Method Invoked!");
+		public void ButtonMethod1() {
+			Debug.Log("Button Method 1 Invoked!");
+		}
+
+		[Button(17)]
+		public void ButtonMethod2() {
+			Debug.Log("Button Method 2 Invoked!");
 		}
 
 		[Space]

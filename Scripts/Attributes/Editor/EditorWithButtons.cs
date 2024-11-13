@@ -33,9 +33,11 @@ namespace CocodriloDog.Core {
 				} else {
 					DrawProperty(p);
 				}
-				if(m_MethodsWithButton.TryGetValue(index, out var method)){
-					if (GUILayout.Button(ObjectNames.NicifyVariableName(method.Name))) {
-						method.Invoke(target, null);
+				if(m_MethodsWithButton.TryGetValue(index, out var methods)){
+					foreach(var method in methods) {
+						if (GUILayout.Button(ObjectNames.NicifyVariableName(method.Name))) {
+							method.Invoke(target, null);
+						}
 					}
 				}
 				index++;
@@ -50,7 +52,7 @@ namespace CocodriloDog.Core {
 
 		#region Protected Properties
 
-		protected Dictionary<int, MethodInfo> MethodsWithButton => m_MethodsWithButton;
+		protected Dictionary<int, List<MethodInfo>> MethodsWithButton => m_MethodsWithButton;
 
 		#endregion
 
@@ -73,7 +75,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		private Dictionary<int, MethodInfo> m_MethodsWithButton;
+		private Dictionary<int, List<MethodInfo>> m_MethodsWithButton;
 
 		#endregion
 
@@ -83,7 +85,7 @@ namespace CocodriloDog.Core {
 		private void SetMethodsWithButton() {
 
 			// Store methods that have ButtonAttribute here
-			var methods = new Dictionary<int, MethodInfo>();
+			var methods = new Dictionary<int, List<MethodInfo>>();
 
 			// Get all methods of the target object
 			MethodInfo[] allMethods = target.GetType()
@@ -91,9 +93,12 @@ namespace CocodriloDog.Core {
 
 			// If the method has the ButtonAttribute, store it
 			foreach (MethodInfo method in allMethods) {
-				ButtonAttribute buttonAttribute = (ButtonAttribute)System.Attribute.GetCustomAttribute(method, typeof(ButtonAttribute));
+				var buttonAttribute = System.Attribute.GetCustomAttribute(method, typeof(ButtonAttribute)) as ButtonAttribute;
 				if (buttonAttribute != null) {
-					methods[buttonAttribute.Index] = method;
+					// The attribute may be used more than once with the same index, so we store
+					// the methods in a list
+					methods.TryAdd(buttonAttribute.Index, new List<MethodInfo>());
+					methods[buttonAttribute.Index].Add(method);
 				}
 			}
 

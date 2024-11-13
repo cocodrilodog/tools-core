@@ -42,14 +42,14 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		[Tooltip("The game object or component that will be assigned to the ScriptableReference asset on Awake")]
+		[Tooltip("The game object or component that will be assigned to the ScriptableReference asset on Awake or later on.")]
 		[ComponentOptions(nameof(ScriptableReferenceSetter))]
 		[SerializeField]
 		private Object m_ObjectToReference;
 
 		[Tooltip(
 			"A ScriptableReference asset that will receive a value of a this game object or any of its " +
-			"components at runtime, so that other objects can read it from the asset."
+			"components at runtime, so that other objects can get it from the asset."
 		)]
 		[CreateAsset]
 		[SerializeField]

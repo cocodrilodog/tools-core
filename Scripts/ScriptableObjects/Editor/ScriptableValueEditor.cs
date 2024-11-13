@@ -70,6 +70,7 @@ namespace CocodriloDog.Core {
 						if (GUILayout.Button(helpIcon, EditorStyles.iconButton, GUILayout.Height(16))) {
 							scriptableValue.EditDocumentationComment = true;
 						}
+						GUILayout.FlexibleSpace();
 					}
 					EditorGUILayout.EndVertical();
 				}
