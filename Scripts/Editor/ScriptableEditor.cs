@@ -6,6 +6,6 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	[CustomEditor(typeof(ScriptableObject), true)]
-	public class ScriptableEditorWithButtons : EditorWithButtons { }
+	public class ScriptableEditor : CDEditor { }
 
 }

@@ -6,6 +6,6 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	[CustomEditor(typeof(MonoBehaviour), true)]
-	public class MonoEditorWithButtons : EditorWithButtons { }
+	public class MonoEditor : CDEditor { }
 
 }

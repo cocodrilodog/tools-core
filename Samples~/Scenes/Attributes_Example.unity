@@ -330,6 +330,15 @@ MonoBehaviour:
     m_List:
     - Hidden String 1
     - Hidden String 2
+  Event1:
+    m_PersistentCalls:
+      m_Calls: []
+  Event2:
+    m_PersistentCalls:
+      m_Calls: []
+  Event3:
+    m_PersistentCalls:
+      m_Calls: []
   SomeObject:
     SomeNestedStringOptions: {fileID: 11400000, guid: 13b263da615d5f84aaec84a75904382d,
       type: 2}
@@ -354,15 +363,48 @@ MonoBehaviour:
     IntWithHelp: 0
     IntsWithHelp:
       m_List: 010000000200000003000000
-  Event1:
-    m_PersistentCalls:
-      m_Calls: []
-  Event2:
-    m_PersistentCalls:
-      m_Calls: []
-  Event3:
-    m_PersistentCalls:
-      m_Calls: []
+    ObjEvent1:
+      m_PersistentCalls:
+        m_Calls: []
+    ObjEvent2:
+      m_PersistentCalls:
+        m_Calls: []
+    ObjEvent3:
+      m_PersistentCalls:
+        m_Calls: []
+  SomeCDObject:
+    SomeNestedStringOptions: {fileID: 11400000, guid: 13b263da615d5f84aaec84a75904382d,
+      type: 2}
+    StringOptions_FieldReferencedAsset: Option1
+    StringOptions_Method: 
+    StringOptions_MissingSource: 
+    StringOptions_ListAsset:
+    - Option1
+    - Option2
+    - Option3
+    StringOptions_ListMethod:
+    - Monday
+    - Tuesday
+    - Wednesday
+    ShowHiddenObject: 1
+    HiddenObject: {fileID: 0}
+    HiddenObjects:
+      m_List:
+      - {fileID: 0}
+      - {fileID: 0}
+    HelpValue: 3
+    IntWithHelp: 0
+    IntsWithHelp:
+      m_List: 010000000200000003000000
+    ObjEvent1:
+      m_PersistentCalls:
+        m_Calls: []
+    ObjEvent2:
+      m_PersistentCalls:
+        m_Calls: []
+    ObjEvent3:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!4 &711085311
 Transform:
   m_ObjectHideFlags: 0

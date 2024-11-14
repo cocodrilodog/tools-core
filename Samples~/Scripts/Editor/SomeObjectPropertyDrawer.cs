@@ -9,7 +9,7 @@ namespace CocodriloDog.Core.Examples {
 	/// This tests how to override the drawing of individual child properties.
 	/// </summary>
 	[CustomPropertyDrawer(typeof(SomeObject))]
-	public class SomeObjectPropertyDrawer : SystemObjectPropertyDrawer {
+	public class SomeObjectPropertyDrawer : CDObjectPropertyDrawer {
 
 
 		#region Protected Methods
@@ -27,7 +27,7 @@ namespace CocodriloDog.Core.Examples {
 		protected override float GetChildPropertyHeight(SerializedProperty property) {
 			if (property.propertyPath == m_StringOptions_MissingSource_Property.propertyPath) {
 				var height = EditorGUI.GetPropertyHeight(property) + 2; // Property height
-				height += GetHelpBoxHeight();
+				height += GetHelpBoxHeight() + 2; // Help box height
 				height += EditorGUIUtility.singleLineHeight + 2; // Button height
 				return height;
 			} else {
@@ -36,7 +36,11 @@ namespace CocodriloDog.Core.Examples {
 		}
 
 		protected override void DrawChildProperty(SerializedProperty property) {
-			if(property.propertyPath == m_StringOptions_MissingSource_Property.propertyPath) {
+			
+			// Unity bug, sometimes I receive a value of 1 here
+			m_Width = Position.width > 1 ? Position.width : m_Width;
+			
+			if (property.propertyPath == m_StringOptions_MissingSource_Property.propertyPath) {
 
 				// Draw the property
 				EditorGUI.PropertyField(GetNextPosition(property), property);
@@ -47,16 +51,10 @@ namespace CocodriloDog.Core.Examples {
 				helpRect.xMin += EditorGUI.indentLevel * 15;
 				EditorGUI.HelpBox(helpRect, m_HelpMessage, MessageType.Info);
 
-				// Draw a button
-				var buttonRect = GetNextPosition(1);
-				buttonRect.xMin += EditorGUI.indentLevel * 15;
-				if (GUI.Button(buttonRect, "A Button")) {
-					Debug.Log("A Button was clicked!");
-				}
-
 			} else {
 				base.DrawChildProperty(property);
 			}
+
 		}
 
 		#endregion
@@ -66,10 +64,10 @@ namespace CocodriloDog.Core.Examples {
 
 		private SerializedProperty m_StringOptions_MissingSource_Property;
 
-		private string m_HelpMessage = "This tests how to draw individual child properties by using a " +
-			"property drawer that inherits from SystemObjectPropertyDrawer, in this case: SomeObjectPropertyDrawer." +
-			"\nThe [Button] attribute is not supported in System.Object derivative classes, so the " +
-			"button below is drawn by SomeObjectPropertyDrawer.";
+		private string m_HelpMessage = "This help box tests how to draw individual child properties by using a " +
+			"property drawer that inherits from CDObjectPropertyDrawer, in this case: SomeObjectPropertyDrawer.";
+
+		private float m_Width;
 
 		#endregion
 
@@ -79,7 +77,7 @@ namespace CocodriloDog.Core.Examples {
 		public float GetHelpBoxHeight() {
 			return EditorStyles.helpBox.CalcHeight(
 				new GUIContent(m_HelpMessage),
-				Position.width // Start with the width of the property
+				m_Width // Start with the width of the property
 				- EditorGUI.indentLevel * 15 // Subtract the indent 
 				- 32 // Subtract the icon and space
 			);

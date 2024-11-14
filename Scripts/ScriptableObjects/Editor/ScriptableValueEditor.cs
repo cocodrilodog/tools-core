@@ -7,7 +7,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine.UIElements;
 
 	[CustomEditor(typeof(ScriptableValue<>), true)]
-	public class ScriptableValueEditor : ScriptableEditorWithButtons {
+	public class ScriptableValueEditor : ScriptableEditor {
 
 
 		#region Unity Methods

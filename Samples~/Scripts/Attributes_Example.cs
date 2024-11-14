@@ -114,6 +114,9 @@
 		[Tooltip("SomeObject")]
 		public SomeObject SomeObject;
 
+		[Tooltip("SomeCDObject")]
+		public SomeCDObject SomeCDObject;
+
 	}
 
 	// Test the attributes in a nested system object
@@ -139,6 +142,19 @@
 		[StringOptions("SomeMissingSource")] // From missing source
 		public string StringOptions_MissingSource;
 
+		// For the ButtonAttribute to work in System.Object, the object must be drawn by CDObjectPropertyDrawer
+		// of a child class. In this case, I implemented SomeObjectPropertyDrawer.
+		// Alternatively, the object may inherit from CDObject, which supports the ButtonAttribute by default.
+		[Button(3)]
+		public void FindMissingResource() {
+			Debug.Log("Finding missing resource...");
+		}
+
+		[Button(3)]
+		public void TryAgain() {
+			Debug.Log("Trying again...");
+		}
+
 		[Tooltip("StringOptions_ListAsset")]
 		[StringOptions(nameof(SomeNestedStringOptions))] // From the SomeNestedStringOptions field
 		//[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
@@ -147,6 +163,92 @@
 		[Tooltip("StringOptions_ListMethod")]
 		[StringOptions(nameof(GetNestedStringOptions))] // From the GetNestedStringOptions method
 		//[StringOptions("GetStringOptions")] // From the method from the root serialized object
+		public List<string> StringOptions_ListMethod;
+
+		public bool ShowHiddenObject;
+
+		[Tooltip("HiddenObject")]
+		[Hide(nameof(HideObject), 1)]
+		public UnityEngine.Object HiddenObject;
+
+		[Tooltip("HiddenObjects")]
+		[Hide(nameof(HideObject), 1)]
+		public ListWrapper<UnityEngine.Object> HiddenObjects;
+
+		private bool HideObject() => !ShowHiddenObject;
+
+		[Range(-3, 3)]
+		public int HelpValue;
+
+		[Tooltip("IntWithHelp")]
+		[Help(nameof(IntHelp))]
+		public int IntWithHelp;
+
+		[Tooltip("IntsWithHelp")]
+		[Help(nameof(IntHelp))]
+		public ListWrapper<int> IntsWithHelp;
+
+		private int IntHelp(ref string message) {
+			message = "Showing some integral help!";
+			return HelpValue;
+		}
+
+		[Tooltip("ObjEvent1")]
+		[UnityEventGroup("ObjEventGroup")]
+		public UnityEvent<Vector3> ObjEvent1;
+
+		[Tooltip("ObjEvent2")]
+		[UnityEventGroup("ObjEventGroup")]
+		public UnityEvent ObjEvent2;
+
+		[Tooltip("ObjEvent3")]
+		[UnityEventGroup("ObjLonelyEvent")]
+		public UnityEvent ObjEvent3;
+
+	}
+
+	// Test the CDObject which uses the CDObjectPropertyDrawer by hence supports the ButtonAttribute.
+	[Serializable]
+	public class SomeCDObject : CDObject {
+
+		[Tooltip("SomeNestedStringOptions")]
+		public StringOptions SomeNestedStringOptions;
+
+		[Tooltip("StringOptions_FieldReferencedAsset")]
+		[StringOptions(nameof(SomeNestedStringOptions))] // From the SomeNestedStringOptions field
+														 //[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
+		public string StringOptions_FieldReferencedAsset;
+
+		[Tooltip("StringOptions_Method")]
+		[StringOptions(nameof(GetNestedStringOptions))] // From the method below
+														//[StringOptions("GetStringOptions")] // From the method from the root serialized object
+		public string StringOptions_Method;
+
+		private List<string> GetNestedStringOptions() => new List<string> { "Monday", "Tuesday", "Wednesday" };
+
+		[Tooltip("StringOptions_MissingSource")]
+		[StringOptions("SomeMissingSource")] // From missing source
+		public string StringOptions_MissingSource;
+
+		// This class inherits from CDObject, which supports the ButtonAttribute by default.
+		[Button(3)]
+		public void FindMissingResource() {
+			Debug.Log("Finding missing resource...");
+		}
+
+		[Button(3)]
+		public void TryAgain() {
+			Debug.Log("Trying again...");
+		}
+
+		[Tooltip("StringOptions_ListAsset")]
+		[StringOptions(nameof(SomeNestedStringOptions))] // From the SomeNestedStringOptions field
+														 //[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
+		public List<string> StringOptions_ListAsset;
+
+		[Tooltip("StringOptions_ListMethod")]
+		[StringOptions(nameof(GetNestedStringOptions))] // From the GetNestedStringOptions method
+														//[StringOptions("GetStringOptions")] // From the method from the root serialized object
 		public List<string> StringOptions_ListMethod;
 
 		public bool ShowHiddenObject;

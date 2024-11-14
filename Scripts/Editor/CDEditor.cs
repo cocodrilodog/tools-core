@@ -6,13 +6,11 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// An editor that can have buttons, by using the <see cref="ButtonAttribute"/> on methods.
-	/// </summary>
-	/// <remarks>
-	/// It also implements <see cref="DrawProperty(UnityEditor.SerializedProperty)"/> so that specific
+	/// An editor that supports the <see cref="ButtonAttribute"/> and implements 
+	/// <see cref="DrawProperty(UnityEditor.SerializedProperty)"/> so that individual
 	/// properties can be overriden in subclasses.
-	/// </remarks>
-	public abstract class EditorWithButtons : Editor {
+	/// </summary>
+	public abstract class CDEditor : Editor {
 
 
 		#region Unity Methods
@@ -33,7 +31,7 @@ namespace CocodriloDog.Core {
 				} else {
 					DrawProperty(p);
 				}
-				if(m_MethodsWithButton.TryGetValue(index, out var methods)){
+				if(m_MethodsWithButtonByIndex.TryGetValue(index, out var methods)){
 					foreach(var method in methods) {
 						if (GUILayout.Button(ObjectNames.NicifyVariableName(method.Name))) {
 							method.Invoke(target, null);
@@ -52,7 +50,7 @@ namespace CocodriloDog.Core {
 
 		#region Protected Properties
 
-		protected Dictionary<int, List<MethodInfo>> MethodsWithButton => m_MethodsWithButton;
+		protected Dictionary<int, List<MethodInfo>> MethodsWithButton => m_MethodsWithButtonByIndex;
 
 		#endregion
 
@@ -75,7 +73,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		private Dictionary<int, List<MethodInfo>> m_MethodsWithButton;
+		private Dictionary<int, List<MethodInfo>> m_MethodsWithButtonByIndex;
 
 		#endregion
 
@@ -85,7 +83,7 @@ namespace CocodriloDog.Core {
 		private void SetMethodsWithButton() {
 
 			// Store methods that have ButtonAttribute here
-			var methods = new Dictionary<int, List<MethodInfo>>();
+			var methodWithButtonByIndex = new Dictionary<int, List<MethodInfo>>();
 
 			// Get all methods of the target object
 			MethodInfo[] allMethods = target.GetType()
@@ -97,12 +95,12 @@ namespace CocodriloDog.Core {
 				if (buttonAttribute != null) {
 					// The attribute may be used more than once with the same index, so we store
 					// the methods in a list
-					methods.TryAdd(buttonAttribute.Index, new List<MethodInfo>());
-					methods[buttonAttribute.Index].Add(method);
+					methodWithButtonByIndex.TryAdd(buttonAttribute.Index, new List<MethodInfo>());
+					methodWithButtonByIndex[buttonAttribute.Index].Add(method);
 				}
 			}
 
-			m_MethodsWithButton = methods;
+			m_MethodsWithButtonByIndex = methodWithButtonByIndex;
 
 		}
 
