@@ -131,6 +131,10 @@
 		//[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
 		public string StringOptions_FieldReferencedAsset;
 
+		[Tooltip("StringOptions_ResourcesAssets")]
+		[StringOptions("StringOptions2_Example")] // From asset named StringOptions2_Example in a Resurces folder
+		public string StringOptions_ResourcesAssets;
+
 		[Tooltip("StringOptions_Method")]
 		[StringOptions(nameof(GetNestedStringOptions))] // From the method below
 		//[StringOptions("GetStringOptions")] // From the method from the root serialized object
@@ -216,12 +220,16 @@
 
 		[Tooltip("StringOptions_FieldReferencedAsset")]
 		[StringOptions(nameof(SomeNestedStringOptions))] // From the SomeNestedStringOptions field
-														 //[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
+		//[StringOptions("SomeStringOptions")] // From the SomeStringOptions field on he root serialized object
 		public string StringOptions_FieldReferencedAsset;
+
+		[Tooltip("StringOptions_ResourcesAssets")]
+		[StringOptions("StringOptions2_Example")] // From asset named StringOptions2_Example in a Resurces folder
+		public string StringOptions_ResourcesAssets;
 
 		[Tooltip("StringOptions_Method")]
 		[StringOptions(nameof(GetNestedStringOptions))] // From the method below
-														//[StringOptions("GetStringOptions")] // From the method from the root serialized object
+		//[StringOptions("GetStringOptions")] // From the method from the root serialized object
 		public string StringOptions_Method;
 
 		private List<string> GetNestedStringOptions() => new List<string> { "Monday", "Tuesday", "Wednesday" };

@@ -343,7 +343,8 @@ MonoBehaviour:
     SomeNestedStringOptions: {fileID: 11400000, guid: 13b263da615d5f84aaec84a75904382d,
       type: 2}
     StringOptions_FieldReferencedAsset: Option1
-    StringOptions_Method: 
+    StringOptions_ResourcesAssets: OptionA
+    StringOptions_Method: Monday
     StringOptions_MissingSource: 
     StringOptions_ListAsset:
     - Option1
@@ -376,7 +377,8 @@ MonoBehaviour:
     SomeNestedStringOptions: {fileID: 11400000, guid: 13b263da615d5f84aaec84a75904382d,
       type: 2}
     StringOptions_FieldReferencedAsset: Option1
-    StringOptions_Method: 
+    StringOptions_ResourcesAssets: OptionA
+    StringOptions_Method: Monday
     StringOptions_MissingSource: 
     StringOptions_ListAsset:
     - Option1

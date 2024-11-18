@@ -328,7 +328,10 @@
 		private void CheckEdit() {
 			if (!string.IsNullOrEmpty(SelectedCompositePath)) {
 				var selectedCompositeObjectProperty = serializedObject.FindProperty(SelectedCompositePath);
-				(selectedCompositeObjectProperty.managedReferenceValue as CompositeObject).Edit = true;
+				var selectedCompositeObject = (selectedCompositeObjectProperty.managedReferenceValue as CompositeObject);
+				if (selectedCompositeObject != null) {
+					selectedCompositeObject.Edit = true;
+				}
 			}
 		}
 

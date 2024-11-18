@@ -276,6 +276,7 @@
 
 			// Start with the target object
 			FieldInfo field = null;
+			type = null;
 			object currentObject = property.serializedObject.targetObject;
 
 			// Example of a path: m_MyDrive.m_Files.Array.data[2].m_Files
@@ -286,7 +287,7 @@
 
 				var step = pathSteps[i];
 
-				// Array treatment
+				// Array element treatment
 				if (step == "Array" && pathSteps.Length > i + 1 && pathSteps[i + 1].Contains("data[")) {
 
 					var pattern = @"data\[(\d+)\]";
@@ -296,30 +297,48 @@
 					if (match.Success) {
 						var intString = match.Groups[1].Value;
 						if (int.TryParse(intString, out int result)) {
+
+							// Get the element type, according to the array or list type
+							// Here we know that the field type is an array or list.
+							type = SystemUtility.GetElementType(field.FieldType);
+
+							// Get the object at the index in ...data[index]
 							currentObject = (currentObject as IList)[result];
+
+							// Get the concrete type of the instance, if possible.
+							if (currentObject != null) {
+								type = currentObject.GetType();
+							}
+
+							// skip the .data[...] step, since we already processed it here.
 							i++;
-							continue;
+
 						}
 					}
 
-				}
+				} else { // Non-array treatment
 
-				// Get the field that corresponds to the step
-				var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-				var t = currentObject.GetType();
-				field = t.GetField(step, bindingFlags);
-				while (field == null && t != null) {
-					// If not found, continue with super classes
-					t = t.BaseType;
-					field = t?.GetField(step, bindingFlags);
-				}
+					// Get the field that corresponds to the step
+					var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+					var t = currentObject.GetType();
 
-				currentObject = field?.GetValue(currentObject);
+					// Look for the field inside the current type
+					field = t.GetField(step, bindingFlags);
+					while (field == null && t != null) {
+						// If not found, continue with super classes
+						t = t.BaseType;
+						field = t?.GetField(step, bindingFlags);
+					}
+
+					// Look for the object inside the current object
+					currentObject = field?.GetValue(currentObject);
+					type = currentObject != null ? currentObject.GetType() : field?.FieldType;
+				
+				}
 
 			}
 
 			value = currentObject;
-			type = field?.FieldType;
 
 		}
 

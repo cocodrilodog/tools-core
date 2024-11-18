@@ -196,10 +196,29 @@
 			}
 
 			if (UseDefaultDrawer) {
+
+				// Get the type to get the methods with button later
+				if (m_Type == null) {
+					m_Type = CDEditorUtility.GetPropertyType(Property);
+				}
+
+				// Iterate the properties
+				var index = 0;
 				CDEditorUtility.IterateChildProperties(Property, p => {
 					if (p.propertyPath != NameProperty.propertyPath &&
 						p.propertyPath != DocumentationCommentProperty.propertyPath) {
+
+						// Add the property height
 						height += GetChildPropertyHeight(p);
+
+						// Add the height of the buttons of the methods with button
+						var methodsWithButtonByIndex = MethodsWithButtonUtility.GetMethodsWithButtonByIndex(m_Type);
+						if (methodsWithButtonByIndex.TryGetValue(index, out var methods)) {
+							foreach (var method in methods) {
+								height += EditorGUIUtility.singleLineHeight + 2;
+							}
+						}
+
 					}
 				});
 			}
@@ -266,10 +285,31 @@
 
 			// Default drawer
 			if (UseDefaultDrawer) {
+
+				CDEditorUtility.GetPropertyValueAndType(Property, out var value, out m_Type);
+				var methodsWithButtonByIndex = MethodsWithButtonUtility.GetMethodsWithButtonByIndex(m_Type);
+				var index = 0;
+
 				CDEditorUtility.IterateChildProperties(Property, p => {
 					if (p.propertyPath != NameProperty.propertyPath &&
 						p.propertyPath != DocumentationCommentProperty.propertyPath) {
+
+						// Draw the child property
 						DrawChildProperty(p);
+
+						// Draw method buttons if they are on this index
+						if (methodsWithButtonByIndex.TryGetValue(index, out var methods)) {
+							foreach (var method in methods) {
+								var buttonRect = GetNextPosition(1);
+								buttonRect.xMin += EditorGUI.indentLevel * 15;
+								if (GUI.Button(buttonRect, ObjectNames.NicifyVariableName(method.Name))) {
+									method.Invoke(value, null);
+								}
+							}
+						}
+
+						index++;
+
 					}
 				});
 			}
@@ -360,6 +400,13 @@
 		#region Private Static Fields
 
 		private static Dictionary<string, Texture> s_ObjectIcons = new Dictionary<string, Texture>();
+
+		#endregion
+
+
+		#region Private Fields
+
+		private Type m_Type;
 
 		#endregion
 

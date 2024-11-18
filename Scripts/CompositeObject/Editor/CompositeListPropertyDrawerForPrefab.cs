@@ -159,7 +159,7 @@ namespace CocodriloDog.Core {
 			var propertyType = CDEditorUtility.GetPropertyType(elements);
 			bool isArrayOrListOfCompositeObject = false;
 
-			if (propertyType.IsArray && typeof(CompositeObject).IsAssignableFrom(typeof(CompositeObject))) {
+			if (propertyType.IsArray) {
 				isArrayOrListOfCompositeObject = true;
 			}
 

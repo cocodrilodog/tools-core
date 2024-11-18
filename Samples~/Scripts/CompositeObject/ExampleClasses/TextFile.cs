@@ -21,6 +21,16 @@ namespace CocodriloDog.Core.Examples {
 		#endregion
 
 
+		#region Private Methods
+
+		[Button]
+		private void LogContent() {
+			Debug.Log(m_Text);
+		}
+
+		#endregion
+
+
 	}
 
 }

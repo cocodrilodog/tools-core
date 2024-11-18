@@ -41,11 +41,10 @@ namespace CocodriloDog.Core {
 					height += GetChildPropertyHeight(p);
 
 					// Add the height of the buttons of the methods with button
-					if (s_MethodsWithButtonByType.TryGetValue(m_Type, out var methodsWithButtonByIndex)) {
-						if (methodsWithButtonByIndex.TryGetValue(index, out var methods)) {
-							foreach (var method in methods) {
-								height += EditorGUIUtility.singleLineHeight + 2;
-							}
+					var methodsWithButtonByIndex = MethodsWithButtonUtility.GetMethodsWithButtonByIndex(m_Type);
+					if (methodsWithButtonByIndex.TryGetValue(index, out var methods)) {
+						foreach (var method in methods) {
+							height += EditorGUIUtility.singleLineHeight + 2;
 						}
 					}
 
@@ -63,39 +62,23 @@ namespace CocodriloDog.Core {
 			
 			base.OnGUI(position, property, label);
 
-			// Collect the methods with button attribute
-			CDEditorUtility.GetPropertyValueAndType(Property, out var value, out var m_Type);
-			if(s_MethodsWithButtonByType.TryAdd(m_Type, new Dictionary<int, List<MethodInfo>>())) {
-
-				// Store methods that have ButtonAttribute here
-				var methodsWithButtonByIndex = new Dictionary<int, List<MethodInfo>>();
-
-				// Get all methods of the target object
-				MethodInfo[] allMethods = m_Type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-
-				// If the method has the ButtonAttribute, store it
-				foreach (MethodInfo method in allMethods) {
-					var buttonAttribute = System.Attribute.GetCustomAttribute(method, typeof(ButtonAttribute)) as ButtonAttribute;
-					if (buttonAttribute != null) {
-						// The attribute may be used more than once with the same index, so we store
-						// the methods in a list
-						methodsWithButtonByIndex.TryAdd(buttonAttribute.Index, new List<MethodInfo>());
-						methodsWithButtonByIndex[buttonAttribute.Index].Add(method);
-					}
-				}
-
-				s_MethodsWithButtonByType[m_Type] = methodsWithButtonByIndex; 
-
-			}
-
 			// Draw the object property with its children
-			Property.isExpanded = EditorGUI.PropertyField(GetNextPosition(1), Property, label, false);
+			Property.isExpanded = EditorGUI.PropertyField(GetNextPosition(1), Property, label, false); // Exclude default childen
+			
+			// Draw children differently
 			EditorGUI.indentLevel++;
 			if (Property.isExpanded) {
+
+				CDEditorUtility.GetPropertyValueAndType(Property, out var value, out m_Type);
+				var methodsWithButtonByIndex = MethodsWithButtonUtility.GetMethodsWithButtonByIndex(m_Type);
 				var index = 0;
+				
 				CDEditorUtility.IterateChildProperties(Property, p => {
+					
+					// Draw the child property
 					DrawChildProperty(p);
-					var methodsWithButtonByIndex = s_MethodsWithButtonByType[m_Type];
+					
+					// Draw method buttons if they are on this index
 					if (methodsWithButtonByIndex.TryGetValue(index, out var methods)) {
 						foreach (var method in methods) {
 							var buttonRect = GetNextPosition(1);
@@ -105,7 +88,9 @@ namespace CocodriloDog.Core {
 							}
 						}
 					}
+
 					index++;
+
 				});
 			}
 			EditorGUI.indentLevel--;
@@ -124,14 +109,6 @@ namespace CocodriloDog.Core {
 		protected virtual void DrawChildProperty(SerializedProperty property) {
 			EditorGUI.PropertyField(GetNextPosition(property), property, true);
 		}
-
-		#endregion
-
-
-		#region Private Static Fields
-
-		private static Dictionary<Type, Dictionary<int, List<MethodInfo>>> s_MethodsWithButtonByType =
-			new Dictionary<Type, Dictionary<int, List<MethodInfo>>>();
 
 		#endregion
 

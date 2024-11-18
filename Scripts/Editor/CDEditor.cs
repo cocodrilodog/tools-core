@@ -16,7 +16,7 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		protected virtual void OnEnable() {
-			SetMethodsWithButton();
+			m_MethodsWithButtonByIndex = MethodsWithButtonUtility.GetMethodsWithButtonByIndex(target.GetType());
 		}
 
 		public override void OnInspectorGUI() {
@@ -48,13 +48,6 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
-		#region Protected Properties
-
-		protected Dictionary<int, List<MethodInfo>> MethodsWithButton => m_MethodsWithButtonByIndex;
-
-		#endregion
-
-
 		#region Protected Methods
 
 		/// <summary>
@@ -74,35 +67,6 @@ namespace CocodriloDog.Core {
 		#region Private Fields
 
 		private Dictionary<int, List<MethodInfo>> m_MethodsWithButtonByIndex;
-
-		#endregion
-
-
-		#region Private Methods
-
-		private void SetMethodsWithButton() {
-
-			// Store methods that have ButtonAttribute here
-			var methodWithButtonByIndex = new Dictionary<int, List<MethodInfo>>();
-
-			// Get all methods of the target object
-			MethodInfo[] allMethods = target.GetType()
-				.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-
-			// If the method has the ButtonAttribute, store it
-			foreach (MethodInfo method in allMethods) {
-				var buttonAttribute = System.Attribute.GetCustomAttribute(method, typeof(ButtonAttribute)) as ButtonAttribute;
-				if (buttonAttribute != null) {
-					// The attribute may be used more than once with the same index, so we store
-					// the methods in a list
-					methodWithButtonByIndex.TryAdd(buttonAttribute.Index, new List<MethodInfo>());
-					methodWithButtonByIndex[buttonAttribute.Index].Add(method);
-				}
-			}
-
-			m_MethodsWithButtonByIndex = methodWithButtonByIndex;
-
-		}
 
 		#endregion
 

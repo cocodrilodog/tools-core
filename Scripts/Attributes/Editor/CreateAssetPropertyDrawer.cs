@@ -41,9 +41,6 @@ namespace CocodriloDog.Core {
 
 					// Get the type of the ScriptableObject
 					var objectType = CDEditorUtility.GetPropertyType(Property);
-					if (SystemUtility.IsArrayOrList(objectType)) {
-						objectType = SystemUtility.GetElementType(objectType);
-					}
 
 					// Collect options
 					List<Type> types = SystemUtility.GetConcreteDerivedTypes(objectType);

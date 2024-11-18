@@ -22,11 +22,8 @@ namespace CocodriloDog.Core {
 			// Get the type of the property
 			var propertyType = CDEditorUtility.GetPropertyType(Property);
 			
-			// Get the InterfaceField<T> type and handle if the property is an array or list
-			var fieldType = SystemUtility.IsArrayOrList(propertyType) ? SystemUtility.GetElementType(propertyType) : propertyType;
-			
 			// Get the interface type
-			var interfaceType = fieldType.GetGenericArguments()[0];
+			var interfaceType = propertyType.GetGenericArguments()[0];
 			if (interfaceType.IsInterface) {
 
 				// Draw the label and get the rect excluding the label
