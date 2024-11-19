@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ResetOnEditMode: 1
   m_Value: 0
-  m_DocumentationComment: Example of a ScriptableInt object.
+  m_DocumentationComment:
+    m_Comment: Example of a ScriptableInt

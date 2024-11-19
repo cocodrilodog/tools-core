@@ -6,7 +6,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	[CustomEditor(typeof(ScriptableString))]
-	public class ScriptableStringEditor : ScriptableValueEditor {
+	public class ScriptableStringEditor : ScriptableEditor {
 
 
 		#region Unity Methods
@@ -24,7 +24,7 @@ namespace CocodriloDog.Core {
 		protected override void DrawProperty(SerializedProperty property) {
 			if (property.propertyPath == m_ValueProperty.propertyPath) {
 				EditorGUILayout.LabelField(m_ValueProperty.displayName);
-				GUIStyle wordWrappedStyle = new GUIStyle(EditorStyles.textArea);
+				var wordWrappedStyle = new GUIStyle(EditorStyles.textArea);
 				wordWrappedStyle.wordWrap = true;
 				m_ValueProperty.stringValue = EditorGUILayout.TextArea(m_ValueProperty.stringValue, wordWrappedStyle);
 			} else {

@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ResetOnEditMode: 1
   m_Value: {x: 0, y: 0, z: 0}
-  m_DocumentationComment: Example of a ScriptableVector3 object.
+  m_DocumentationComment:
+    m_Comment: Example of a ScriptableVector3

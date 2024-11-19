@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ResetOnEditMode: 1
   m_Value: 90
-  m_DocumentationComment: Rotation value for the cube transform in the ScriptableReference_Example
-    scene
+  m_DocumentationComment:
+    m_Comment: A rotation speed for the CubeRotator game object in the ScriptableReference_Example
+      scene

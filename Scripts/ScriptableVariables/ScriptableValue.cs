@@ -16,7 +16,7 @@ namespace CocodriloDog.Core {
 	/// </remarks>
 	/// 
 	/// <typeparam name="T">The type to store.</typeparam>
-	public abstract class ScriptableValue<T> : ScriptableValue {
+	public abstract class ScriptableValue<T> : ScriptableResettable {
 
 
 		#region Public Properties
@@ -91,11 +91,8 @@ namespace CocodriloDog.Core {
 		[SerializeField]
         private T m_Value;
 
-#if UNITY_EDITOR
-		[TextArea(2, 10)]
 		[SerializeField]
-		private string m_DocumentationComment = "...";
-#endif
+		private DocumentationComment m_DocumentationComment;
 
 		#endregion
 
@@ -104,41 +101,6 @@ namespace CocodriloDog.Core {
 
 		[NonSerialized]
 		private bool m_RaiseChangeEvent = true;
-
-		#endregion
-
-
-	}
-
-	/// <summary>
-	/// Base class for <see cref="ScriptableValue{T}"/> for editor usage concerning the documentation
-	/// comment.
-	/// </summary>
-	public abstract class ScriptableValue : ScriptableResettable {
-
-
-		#region Public Properties
-
-#if UNITY_EDITOR
-		/// <summary>
-		/// In the inspector, shows the <see cref="m_DocumentationComment"/> property field when is 
-		/// <c>true</c>.
-		/// </summary>
-		public bool EditDocumentationComment {
-			get => m_EditDocumentationComment;
-			set => m_EditDocumentationComment = value;
-		}
-#endif
-
-		#endregion
-
-
-		#region Private Fields
-
-#if UNITY_EDITOR
-		[NonSerialized]
-		private bool m_EditDocumentationComment;
-#endif
 
 		#endregion
 

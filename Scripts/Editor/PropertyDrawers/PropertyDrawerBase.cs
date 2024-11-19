@@ -11,7 +11,7 @@
 	public class PropertyDrawerBase : PropertyDrawer {
 
 
-		#region Public Methods
+		#region Unity Methods
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			float height = base.GetPropertyHeight(property, label);
@@ -20,11 +20,6 @@
 			InitializePropertiesForGetHeight();
 			return height;
 		}
-
-		#endregion
-
-
-		#region Unity Methods
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			CurrentY = position.y;
