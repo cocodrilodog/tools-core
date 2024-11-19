@@ -108,12 +108,16 @@ namespace CocodriloDog.Core {
 				allConcreteSubtypes.Add(type);
 			}
 
-			// Get all the types of the assembly
-			var assemblyTypes = type.Assembly.GetTypes();
+			// Get all loaded types
+			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+			var allTypes = new List<Type>();
+			foreach(var assembly in assemblies) {
+				allTypes.AddRange(assembly.GetTypes());
+			}
 
 			// Find all subtypes that are concrete. This will include grand children, great grand
 			// children, etc., because it is approving all that are assignable to the concreteType
-			var concreteSubtypes = assemblyTypes
+			var concreteSubtypes = allTypes
 				.Where(t => type.IsAssignableFrom(t) && t != type && !t.IsAbstract)
 				.ToList();
 
