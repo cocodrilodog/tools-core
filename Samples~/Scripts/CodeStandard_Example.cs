@@ -63,6 +63,8 @@
 //		Fields
 //		Properties
 //		Methods
+//
+// Support Classes
 
 namespace CocodriloDog.Core.Examples {
 
@@ -81,13 +83,19 @@ namespace CocodriloDog.Core.Examples {
 	/// Interfaces start with I
 	/// </summary>
 	public interface ISomeInterface {
+						
 		void MethodA();
+						// <- One space between class members
 		void MethodB();
+
 	}
 
 	public struct SomeStruct {
+
 		public float Number;
+
 		public float OtherNumber;
+
 	}
 
 	public enum SomeEnum {
@@ -98,6 +106,42 @@ namespace CocodriloDog.Core.Examples {
 	public delegate void SomeDelegate();
 
 	#endregion
+
+
+	/// <summary>
+	/// Alternatively, if an interface is more complex and the developer still wants to keep it in the
+	/// same file, it won't be inside a Small types region, but rather have its own standard regions:
+	/// Properties, Methods, Events, etc.
+	/// </summary>
+	public interface IBiggerInterface {
+
+
+		#region Properties
+
+		float Property1 { get; }
+
+		float Property2 { get; }
+
+		#endregion
+
+
+		#region Methods
+
+		void MethodA();
+		
+		void MethodB();
+
+		#endregion
+
+
+		#region Events
+
+		event Action OnSomething;
+
+		#endregion
+
+
+	}
 
 
 	public class CodeStandard_Example : MonoBehaviour {
@@ -143,8 +187,6 @@ namespace CocodriloDog.Core.Examples {
 
 		// Optionally, use headers to differentiate type of fields. In this example
 		// we use "References", "Values" and "Subcomponents"
-		//
-		// References would normally be objects that are outside of this object.
 		[Header("References")]
 
 		/// <summary>
@@ -154,17 +196,16 @@ namespace CocodriloDog.Core.Examples {
 		public GameObject SomeReference;
 
 		/// <summary>
-		/// Public fields under "References" are usually objects that are outside
-		/// of this object as oposed to contained or owned by this object
+		/// In this example, public fields under "References" are objects that are outside
+		/// of this object as opposed to contained or owned by this object
 		/// </summary>
 		[SerializeField]
 		public Renderer SomeOtherReference;
 
-		// Values are value type fields.
 		[Header("Values")]
 
 		/// <summary>
-		/// Public fields of value type should be grouped under "Values" category
+		/// In this example public fields of value type are grouped under "Values" category
 		/// </summary>
 		[SerializeField]
 		public float SomeValue;
@@ -172,7 +213,7 @@ namespace CocodriloDog.Core.Examples {
 		/// <summary>
 		/// All fields must have <c>SerializeField</c> or <c>NonSerialized</c>. 
 		/// This prevents unintended behaviour when changing from public to private 
-		/// and viceversa.
+		/// and viceversa and gives the code clarity of intention.
 		/// </summary>
 		[SerializeField]
 		public string SomeOtherValue;
@@ -201,9 +242,10 @@ namespace CocodriloDog.Core.Examples {
 		#endregion
 
 
-		#region Constructors
+		#region Public Constructors
 
 		// Place here any constructor
+		// They may be either public, protected or private
 
 		#endregion
 
@@ -352,22 +394,20 @@ namespace CocodriloDog.Core.Examples {
 
 		#region Private Fields - Serialized
 
-		// Subcomponents would normally be components that are children of this 
+		// In this example, subcomponents are components that are children of this 
 		// object.
 		[Header("Subcomponents")]
 
 		/// <summary>
-		/// Create private serialized fields for subcomponents. Subcomponents are
-		/// usually components that are contained within the object and a part of 
-		/// their core functionality.
+		/// Create private serialized fields for Unity object references.
 		/// </summary>
 		[SerializeField]
 		private Transform m_SomeSubcomponent;
 
 		/// <summary>
 		/// It is a good practice to declare the subcomponents as serializable variables
-		/// rather thatn obtaining them via <see cref="Component.GetComponentInChildren{T}"/>
-		/// because the user will know what is there and what is missing.
+		/// rather than obtaining them via <see cref="Component.GetComponentInChildren{T}"/>
+		/// because the user will know what is it there and what is missing.
 		/// </summary>
 		[SerializeField]
 		private Rigidbody m_SomeOtherSubcomponent;
@@ -378,7 +418,7 @@ namespace CocodriloDog.Core.Examples {
 		#region Private Fields - Non Serialized
 
 		/// <summary>
-		/// When obtaining sibling a component via <see cref="Component.GetComponent{T}"/>
+		/// When obtaining a sibling component via <see cref="Component.GetComponent{T}"/>
 		/// it can be cached in a non - serialized field and obtained with a counterpart
 		/// property like <see cref="CachedComponent"/>
 		/// </summary>
@@ -427,27 +467,76 @@ namespace CocodriloDog.Core.Examples {
 		#endregion
 
 
+		#region Support Classes
+
+		/// <summary>
+		/// Support classes, nested or not nested, can go in the last part of the file.
+		/// </summary>
+		[Serializable]
+		public class SomeNestedClass {
+
+			public int Value;
+
+			public SomeNestedClass() {
+				Value = UnityEngine.Random.Range(0, 100);
+			}
+
+		}
+
+		#endregion
+
+
 	}
 
+
+	#region Support Classes
+
 	/// <summary>
-	/// Companion classes can go here and implement the same code standard.
+	/// Support classes, nested or not nested, can go in the last part of the file.
 	/// </summary>
 	[Serializable]
-	public class SomeClass {
+	public class SomeSupportClass {
+
+		public int Value;
+
+		public SomeSupportClass() {
+			Value = UnityEngine.Random.Range(0, 100);
+		}
+
+	}
+
+	#endregion
+
+
+	/// <summary>
+	/// If a support class is more complex, instead of writing it inside a Support Classes region, it
+	/// can have its own standard regions: Public Fields, Public Methods, etc.
+	/// </summary>
+	[Serializable]
+	public class SomeBiggerSupportClass {
 		
 		
 		#region Public Fields
 		
 		public int Value;
-		
+
+		public int Value1;
+
 		#endregion
 
 
 		#region Constructors
 
-		public SomeClass() {
+		public SomeBiggerSupportClass() {
 			Value = UnityEngine.Random.Range(0, 100);
 		}
+
+		#endregion
+
+
+		#region Public Methods
+
+		public void DoSomething() { }
 
 		#endregion
 
