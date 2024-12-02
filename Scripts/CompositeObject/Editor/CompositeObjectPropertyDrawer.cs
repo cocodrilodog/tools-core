@@ -173,7 +173,7 @@
 			
 			float height = 0;
 
-			var compositeRoot = property.serializedObject.targetObject as CompositeRoot;
+			var compositeRoot = property.serializedObject.targetObject as ICompositeRoot;
 
 			if (compositeRoot != null) {
 				// There is a root, breadcrums is handled by the root.
@@ -415,7 +415,7 @@
 
 		private void DrawBreadcrums() {
 
-			var compositeRoot = Property.serializedObject.targetObject as CompositeRoot;
+			var compositeRoot = Property.serializedObject.targetObject as ICompositeRoot;
 
 			if (compositeRoot == null) {
 
@@ -545,7 +545,7 @@
 
 		private void DrawEditButton(Rect rect) {
 
-			var compositeRoot = Property.serializedObject.targetObject as CompositeRoot;
+			var compositeRoot = Property.serializedObject.targetObject as ICompositeRoot;
 
 			EditorGUI.BeginDisabledGroup(!CompositeObject.CanEnterEdit);
 			if (compositeRoot != null) {

@@ -7,11 +7,11 @@
 	using UnityEditor;
 	using UnityEngine;
 
+
 	/// <summary>
-	/// Base class for editors of concrete implementations of <see cref="CompositeRoot"/>.
+	/// Base class for editors of concrete implementations of <see cref="ICompositeRoot"/>.
 	/// </summary>
-	[CustomEditor(typeof(CompositeRoot), true)]
-	public class CompositeRootEditor : UnityEditor.Editor {
+	public class CompositeRootEditor : Editor {
 
 
 		#region Public Static Methods
@@ -20,11 +20,11 @@
 		/// Selects a composite, and makes the inspector to show the property drawer of that object as well
 		/// as updating the breadcrumb buttons, and sibling menus.
 		/// </summary>
-		/// <param name="serializedObject">The <see cref="SerializedObject"/> that corresponds to this <see cref="CompositeRoot"/></param>
+		/// <param name="serializedObject">The <see cref="SerializedObject"/> that corresponds to this <see cref="ICompositeRoot"/></param>
 		/// <param name="newPropertyPath">The property path of the <see cref="CompositeObject"/> that will be selected</param>
 		public static void SelectCompositeObject(SerializedObject serializedObject, string newPropertyPath) {
 
-			var selectedCompositePath = ((CompositeRoot)serializedObject.targetObject).SelectedCompositePath;
+			var selectedCompositePath = ((ICompositeRoot)serializedObject.targetObject).SelectedCompositePath;
 
 			// Set to non-edit the previosly selected composite object
 			if (!string.IsNullOrEmpty(selectedCompositePath)) {
@@ -33,7 +33,7 @@
 			}
 
 			// Assign the new value
-			((CompositeRoot)serializedObject.targetObject).SelectedCompositePath = newPropertyPath;
+			((ICompositeRoot)serializedObject.targetObject).SelectedCompositePath = newPropertyPath;
 
 			// Set to edit the new selected composite object
 			if (!string.IsNullOrEmpty(newPropertyPath)) {
@@ -131,7 +131,7 @@
 
 		#region Private Properties
 
-		private string SelectedCompositePath => ((CompositeRoot)target).SelectedCompositePath;
+		private string SelectedCompositePath => ((ICompositeRoot)target).SelectedCompositePath;
 
 		#endregion
 
@@ -159,7 +159,7 @@
 				breadcrumbRows[breadcrumbRows.Count - 1].Add(breadcrumb);
 
 				// Add the size to the total width
-				Vector2 buttonSize = GUI.skin.button.CalcSize(new GUIContent(breadcrumb.Prefix + breadcrumb.Label));
+				var buttonSize = GUI.skin.button.CalcSize(new GUIContent(breadcrumb.Prefix + breadcrumb.Label));
 				buttonSize.x = Mathf.Ceil(buttonSize.x);
 				x += layoutSpace + buttonSize.x;
 

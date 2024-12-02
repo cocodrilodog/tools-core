@@ -8,17 +8,17 @@ namespace CocodriloDog.Core {
 	/// <summary>
 	/// A base <see cref="object"/> class that can be extended to create composite and polymorphic 
 	/// structures optionally (and preferrably) on top of a MonoBehaviour or optionally on top of a 
-	/// <see cref="CompositeRoot"/> which is derived from <see cref="MonoBehaviour"/>.
+	/// <see cref="ICompositeRoot"/> which is derived from <see cref="MonoBehaviour"/>.
 	/// </summary>
 	/// 
 	/// <remarks>
 	/// <see cref="CompositeObject"/>s can have children <see cref="CompositeObject"/>s hence the name
-	/// "Composite". If they are implemented without a corresponding <see cref="CompositeRoot"/>,
+	/// "Composite". If they are implemented without a corresponding <see cref="ICompositeRoot"/>,
 	/// they will open and close in a similar style as serializable <see cref="object"/>s. It means that 
 	/// all the <see cref="CompositeObject"/> properties their children, grand-children, etc, when opened,
 	/// will be visible always one inside the other (too noisy!).
 	/// 
-	/// On the other hand, when a corresponding <see cref="CompositeRoot"/> is implemented, if a 
+	/// On the other hand, when a corresponding <see cref="ICompositeRoot"/> is implemented, if a 
 	/// <see cref="CompositeObject"/> is selected, its property drawer will takeover the entire inspector 
 	/// and it will allow to navigate to its children with the "Edit" button and to its parent and sibling
 	/// objects via breadcrums.
@@ -35,9 +35,9 @@ namespace CocodriloDog.Core {
 	///			</description>
 	///		</item>
 	///		<item>
-	///			<term>Optional, but recommended: Extend <see cref="CompositeRoot"/> </term>
+	///			<term>Optional, but recommended: Extend <see cref="ICompositeRoot"/> </term>
 	///			<description>
-	///				Create a concrete extension of <see cref="CompositeRoot"/> that will be the 
+	///				Create a concrete extension of <see cref="ICompositeRoot"/> that will be the 
 	///				root or first parent of the concrete <see cref="CompositeObject"/> instances.				
 	///			</description>
 	///		</item>

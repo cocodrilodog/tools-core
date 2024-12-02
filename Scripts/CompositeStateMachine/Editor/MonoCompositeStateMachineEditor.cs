@@ -6,7 +6,7 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 
 	[CustomEditor(typeof(MonoCompositeStateMachine), true)]
-	public class MonoCompositeStateMachineEditor : CompositeRootEditor {
+	public class MonoCompositeStateMachineEditor : MonoCompositeRootEditor {
 
 
 		#region Unity Methods

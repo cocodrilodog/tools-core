@@ -12,7 +12,7 @@ namespace CocodriloDog.Core {
 	/// Triggers collision events when other <see cref="T_CollisionTrigger"/>s enter and exit this one and have
 	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
 	/// </summary>
-	public abstract class CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector> : CompositeRoot
+	public abstract class CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector> : MonoCompositeRoot
 		where T_CollisionTrigger : CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector>
 		where T_Collider : Component
 		where T_Collision : class

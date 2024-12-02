@@ -11,7 +11,7 @@ namespace CocodriloDog.Core {
 	/// Intermediate non-generic class created to support a base editor for all subclasses of
 	/// <see cref="MonoCompositeStateMachine{T_State, T_Machine}"/>.
 	/// </summary>
-	public abstract class MonoCompositeStateMachine : CompositeRoot { }
+	public abstract class MonoCompositeStateMachine : MonoCompositeRoot { }
 
 	/// <summary>
 	/// Base class to create state machines that use <see cref="CompositeObject"/>s as base class for
