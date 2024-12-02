@@ -10,7 +10,7 @@ namespace CocodriloDog.Core.Examples {
 	/// with the support of the breadcrums, and sibling menus.
 	/// </summary>
 	[AddComponentMenu("")]
-	public class CompositeRoot_Example : CompositeRoot {
+	public class CompositeRoot_Example : MonoCompositeRoot {
 
 
 		#region Private Fields
