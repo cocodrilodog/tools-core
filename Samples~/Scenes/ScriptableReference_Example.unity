@@ -411,6 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ObjectToReference: {fileID: 955612159}
   m_Destination: {fileID: 11400000, guid: 31da45f75c5ad7848837344afc8e7675, type: 2}
+  m_SetValueOnAwake: 1
 --- !u!4 &955612159
 Transform:
   m_ObjectHideFlags: 0
@@ -513,6 +514,47 @@ MonoBehaviour:
     m_UseAsset: 1
     m_Value: -45
     m_Asset: {fileID: 11400000, guid: 1e35ff2bfed990e45a6f3949461897aa, type: 2}
+  m_ScaleData:
+    m_UseAsset: 1
+    m_Value:
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 136
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.5
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 136
+          weightedMode: 3
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 136
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      ScaleRange:
+        m_MinValue: 1
+        m_MaxValue: 2
+      Duration: 2
+    m_Asset: {fileID: 11400000, guid: dfb8edcd1d5ba28439c1ae752ff1890a, type: 2}
 --- !u!4 &1859765194
 Transform:
   m_ObjectHideFlags: 0

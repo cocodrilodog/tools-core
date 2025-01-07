@@ -11,14 +11,22 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+
+			var defaultHeight = base.GetPropertyHeight(property, label);
+
+			if (m_UseAssetAssetProperty.boolValue) {
+				return defaultHeight;
+			} else {
+				return EditorGUI.GetPropertyHeight(m_ValueProperty);
+			}
+
+		}
+
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 
 			base.OnGUI(position, property, label);
 			Label = EditorGUI.BeginProperty(Position, Label, Property);
-
-			var useAssetAssetProperty = Property.FindPropertyRelative("m_UseAsset");
-			var assetProperty = Property.FindPropertyRelative("m_Asset");
-			var valueProperty = Property.FindPropertyRelative("m_Value");
 			
 			var fieldRect = GetNextPosition();
 			fieldRect.xMax -= 22;
@@ -33,9 +41,9 @@ namespace CocodriloDog.Core {
 			var iconSize = EditorGUIUtility.GetIconSize();
 			EditorGUIUtility.SetIconSize(new Vector2(12, 12));
 
-			if (useAssetAssetProperty.boolValue) {
+			if (m_UseAssetAssetProperty.boolValue) {
 
-				EditorGUI.PropertyField(fieldRect, assetProperty, Label);
+				EditorGUI.PropertyField(fieldRect, m_AssetProperty, Label);
 
 				//// Using the system icon
 				//var assetIcon = EditorGUIUtility.IconContent("ScriptableObject Icon");
@@ -46,18 +54,18 @@ namespace CocodriloDog.Core {
 				var assetIcon = new GUIContent(texture, "Turn off asset mode");
 
 				if (GUI.Button(buttonRect, assetIcon, buttonStyle)) {
-					useAssetAssetProperty.boolValue = false;
+					m_UseAssetAssetProperty.boolValue = false;
 				}
 
 			} else {
 
-				EditorGUI.PropertyField(fieldRect, valueProperty, Label);
+				EditorGUI.PropertyField(fieldRect, m_ValueProperty, Label, true);
 
 				var texture = Resources.Load($"AssetModeOffIcon") as Texture;
 				var assetIcon = new GUIContent(texture, "Turn on asset mode");
 
 				if (GUI.Button(buttonRect, assetIcon, buttonStyle)) {
-					useAssetAssetProperty.boolValue = true;
+					m_UseAssetAssetProperty.boolValue = true;
 				}
 
 			}
@@ -67,6 +75,35 @@ namespace CocodriloDog.Core {
 			EditorGUI.EndProperty();
 
 		}
+
+		#endregion
+
+
+		#region Protected Methods
+
+		protected override void InitializePropertiesForGetHeight() {
+			base.InitializePropertiesForGetHeight();
+			m_UseAssetAssetProperty = Property.FindPropertyRelative("m_UseAsset");
+			m_ValueProperty = Property.FindPropertyRelative("m_Value");
+		}
+
+		protected override void InitializePropertiesForOnGUI() {
+			base.InitializePropertiesForOnGUI();
+			m_UseAssetAssetProperty = Property.FindPropertyRelative("m_UseAsset");
+			m_AssetProperty = Property.FindPropertyRelative("m_Asset");
+			m_ValueProperty = Property.FindPropertyRelative("m_Value");
+		}
+
+		#endregion
+
+
+		#region Private Fields
+
+		private SerializedProperty m_UseAssetAssetProperty;
+
+		private SerializedProperty m_AssetProperty;
+
+		private SerializedProperty m_ValueProperty;
 
 		#endregion
 

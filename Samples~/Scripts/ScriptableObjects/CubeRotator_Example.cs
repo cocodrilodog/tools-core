@@ -1,5 +1,5 @@
 namespace CocodriloDog.Core.Examples {
-
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -35,9 +35,19 @@ namespace CocodriloDog.Core.Examples {
 		}
 
 		private void Update() {
+
+			// Rotate
 			if (m_Cube.Value != null) {
 				m_Cube.Value.Rotate(0, m_RotationSpeed.Value * Time.deltaTime, 0);
 			}
+
+			// Scale
+			var t = Mathf.Repeat(Time.time, m_ScaleData.Value.Duration) / m_ScaleData.Value.Duration;
+			var scale = m_ScaleData.Value.ScaleRange.MinValue + m_ScaleData.Value.Curve.Evaluate(t) * m_ScaleData.Value.ScaleRange.Length;
+			if (m_Cube.Value != null) {
+				m_Cube.Value.localScale = Vector3.one * scale;
+			}
+
 		}
 
 		#endregion
@@ -66,8 +76,25 @@ namespace CocodriloDog.Core.Examples {
 		[SerializeField]
 		private ScriptableValueField<float> m_RotationSpeed;
 
+		[SerializeField]
+		private ScriptableValueField<ScaleData_Example> m_ScaleData;
+
 		#endregion
 
+
+	}
+
+	[Serializable]
+	public class ScaleData_Example {
+
+		[SerializeField]
+		public AnimationCurve Curve;
+
+		[SerializeField]
+		public FloatRange ScaleRange;
+
+		[SerializeField]
+		public float Duration;
 
 	}
 
