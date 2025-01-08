@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf021de3db72c6408c3c06b89f0769c, type: 3}
+  m_Name: ScriptableFlowStateMachine_Example
+  m_EditorClassIdentifier: 
+  m_SetDefaultStateOnEnable: 0
+  m_States:
+    m_List:
+    - rid: 5248092322129248263
+    - rid: 5248092322129248264
+    - rid: 5248092322129248265
+    m_CanAddRemove: 1
+    m_CanReorder: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 5248092322129248263
+      type: {class: ScriptableFlowStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
+      data:
+        m_Name: State1
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_OnEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84,
+                type: 2}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'UnityEvent: State1 Enter'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnExit:
+          m_PersistentCalls:
+            m_Calls: []
+        m_Duration: 0
+        m_Transitions:
+        - State3
+        - State2
+    - rid: 5248092322129248264
+      type: {class: ScriptableFlowStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
+      data:
+        m_Name: State2
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_OnEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84,
+                type: 2}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'UnityEvent: State2 Enter'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnExit:
+          m_PersistentCalls:
+            m_Calls: []
+        m_Duration: 0
+        m_Transitions:
+        - State1
+        - State3
+    - rid: 5248092322129248265
+      type: {class: ScriptableFlowStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
+      data:
+        m_Name: State3
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_OnEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84,
+                type: 2}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'UnityEvent: State3 Enter'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnExit:
+          m_PersistentCalls:
+            m_Calls: []
+        m_Duration: 0
+        m_Transitions:
+        - State2
+        - State1

@@ -4,14 +4,19 @@ namespace CocodriloDog.Core {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+
+#if UNITY_EDITOR
+	using UnityEditor;
+#endif
+
 	using UnityEngine;
 	using UnityEngine.Events;
 
 	/// <summary>
 	/// Intermediate non-generic class created to support a base editor for all subclasses of
-	/// <see cref="MonoCompositeStateMachine{T_State, T_Machine}"/>.
+	/// <see cref="ScriptableCompositeStateMachine{T_State, T_Machine}"/>.
 	/// </summary>
-	public abstract class MonoCompositeStateMachine : MonoCompositeRoot { }
+	public abstract class ScriptableCompositeStateMachine : ScriptableCompositeRoot { }
 
 	/// <summary>
 	/// Base class to create state machines that use <see cref="CompositeObject"/>s as base class for
@@ -19,9 +24,9 @@ namespace CocodriloDog.Core {
 	/// </summary>
 	/// <typeparam name="T_State">The type of the state</typeparam>
 	/// <typeparam name="T_Machine">The type of the state machine</typeparam>
-	public abstract class MonoCompositeStateMachine<T_State, T_Machine> : MonoCompositeStateMachine
-		where T_Machine : MonoCompositeStateMachine<T_State, T_Machine>
-		where T_State : MonoCompositeState<T_State, T_Machine> {
+	public abstract class ScriptableCompositeStateMachine<T_State, T_Machine> : ScriptableCompositeStateMachine
+		where T_Machine : ScriptableCompositeStateMachine<T_State, T_Machine>
+		where T_State : ScriptableCompositeState<T_State, T_Machine> {
 
 
 		#region Public Properties
@@ -59,6 +64,16 @@ namespace CocodriloDog.Core {
 		#region Public Methods
 
 		/// <summary>
+		/// Sets the default state.
+		/// </summary>
+		/// <remarks>
+		/// This method was created to work around the issue in which <see cref="OnEnable"/> is triggered
+		/// before <see cref="Application.isPlaying"/> equals <c>true</c>. If you need to be sure that the 
+		/// default state is set when the application is playing, you'll need to call this from a MonoBehaviour.
+		/// </remarks>
+		public void SetDefaultState() => SetState(m_States[0]);
+
+		/// <summary>
 		/// Checks whether a state with the provided <paramref name="name"/> exists or not.
 		/// </summary>
 		/// <param name="name">The name of the state.</param>
@@ -67,10 +82,10 @@ namespace CocodriloDog.Core {
 		/// otherwise.
 		/// </returns>
 		public bool HasState(string name) {
-			if(m_States.FirstOrDefault(s => name == s.Name) != null) {
+			if (m_States.FirstOrDefault(s => name == s.Name) != null) {
 				return true;
 			}
-			return false; 
+			return false;
 		}
 
 		/// <summary>
@@ -108,7 +123,7 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// <param name="action">The action.</param>
 		public void ForEachState(Action<T_State> action) {
-			foreach(var state in m_States) {
+			foreach (var state in m_States) {
 				action?.Invoke(state);
 			}
 		}
@@ -132,15 +147,23 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
-		protected virtual void Start() => SetState(m_States[0]);
+		protected virtual void OnEnable() {
 
-		protected virtual void Update() => m_CurrentState.Update();
+			if (!m_SetDefaultStateOnEnable) {
+				return;
+			}
 
-		protected virtual void FixedUpdate() => m_CurrentState.FixedUpdate();
+			if (Application.isPlaying) {
+				SetState(m_States[0]);
+				return;
+			}
 
-		protected virtual void OnDestroy() {
-			SetState(null); // This will exit the current state
-			ForEachState(s => s.OnDestroy());
+			// This handles and edge case in the editor in which OnEnable is called right before
+			// the editor swithces Application.isPlaying to true.
+			if (EditorApplication.isPlayingOrWillChangePlaymode) {
+				SetState(m_States[0]);
+			}
+
 		}
 
 		#endregion
@@ -154,6 +177,10 @@ namespace CocodriloDog.Core {
 		protected T_State CurrentState {
 			get {
 				Initialize();
+				// This guarantees it will never be null
+				if (m_CurrentState == null) {
+					SetDefaultState();
+				}
 				return m_CurrentState;
 			}
 		}
@@ -251,6 +278,14 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields - Serialized
 
+		[Tooltip(
+			"Check this to auto-set the default state OnEnable, but be warned that OnEnable " +
+			"of ScriptableObjects can be executed slightly before the application enters play " +
+			"mode, leading to possible unexpected results."
+		)]
+		[SerializeField]
+		private bool m_SetDefaultStateOnEnable = true;
+
 		[SerializeField]
 		private CompositeList<T_State> m_States = new CompositeList<T_State>();
 
@@ -285,9 +320,9 @@ namespace CocodriloDog.Core {
 	}
 
 	[Serializable]
-	public class MonoCompositeState<T_State, T_Machine> : CompositeState
-				where T_Machine : MonoCompositeStateMachine<T_State, T_Machine>
-				where T_State : MonoCompositeState<T_State, T_Machine> {
+	public class ScriptableCompositeState<T_State, T_Machine> : CompositeState
+				where T_Machine : ScriptableCompositeStateMachine<T_State, T_Machine>
+				where T_State : ScriptableCompositeState<T_State, T_Machine> {
 
 
 		#region Public Methods
@@ -305,7 +340,7 @@ namespace CocodriloDog.Core {
 			// - If that Enter() calls TransitionToState and the code is executed immediatly,
 			// another Exit() and Enter() will be called before the original m_OnEnter event
 			// is fired, potentially breaking the logic.
-			Machine.StartCoroutine(Transition());
+			MonoUpdater.StartCoroutine_(Transition());
 			IEnumerator Transition() {
 				yield return null;
 				Machine.SetState(Machine.States.FirstOrDefault(s => s.Name == name));

@@ -5,8 +5,8 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 	using UnityEditor;
 
-	[CustomEditor(typeof(MonoCompositeStateMachine), true)]
-	public class MonoCompositeStateMachineEditor : MonoCompositeRootEditor {
+	[CustomEditor(typeof(ScriptableCompositeStateMachine), true)]
+	public class ScriptableCompositeStateMachineEditor : ScriptableCompositeRootEditor {
 
 
 		#region Unity Methods
@@ -26,7 +26,7 @@ namespace CocodriloDog.Core {
 			serializedObject.Update();
 			CDEditorUtility.DrawDisabledField(m_ScriptProperty);
 			CDEditorUtility.IterateChildProperties(serializedObject, p => {
-				if(p.name != "m_Script" && p.name != "m_States") {
+				if (p.name != "m_Script" && p.name != "m_States") {
 					EditorGUILayout.PropertyField(p);
 				}
 			});
