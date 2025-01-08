@@ -158,11 +158,13 @@ namespace CocodriloDog.Core {
 				return;
 			}
 
+#if UNITY_EDITOR
 			// This handles and edge case in the editor in which OnEnable is called right before
 			// the editor swithces Application.isPlaying to true.
 			if (EditorApplication.isPlayingOrWillChangePlaymode) {
 				SetState(m_States[0]);
 			}
+#endif
 
 		}
 
