@@ -54,6 +54,15 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Public Constructors
+
+		public ScriptableValueField() { }
+
+		public ScriptableValueField(T defaultValue) => Value = defaultValue;
+
+		#endregion
+
+
 		#region Pubic Delegates
 
 		public delegate void ValueChange(T previousValue);
