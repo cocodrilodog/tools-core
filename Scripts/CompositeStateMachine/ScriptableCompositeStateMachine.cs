@@ -267,9 +267,9 @@ namespace CocodriloDog.Core {
 		internal void SetState(T_State value) {
 			Initialize();
 			if (value != m_CurrentState) {
-				m_CurrentState?._Exit();
+				m_CurrentState?.ExitAndRaiseOnExit();
 				m_CurrentState = value;
-				m_CurrentState?._Enter();
+				m_CurrentState?.EnterAndRaiseOnEnter();
 			}
 		}
 

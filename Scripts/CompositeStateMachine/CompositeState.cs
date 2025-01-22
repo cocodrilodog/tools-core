@@ -1,4 +1,5 @@
 namespace CocodriloDog.Core {
+
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -17,6 +18,16 @@ namespace CocodriloDog.Core {
 		public virtual void Enter() { }
 
 		public virtual void Exit() { }
+
+		public void EnterAndRaiseOnEnter() {
+			Enter();
+			RaiseOnEnter();
+		}
+
+		public void ExitAndRaiseOnExit() {
+			Exit();
+			RaiseOnExit();
+		}
 
 		#endregion
 
@@ -40,21 +51,6 @@ namespace CocodriloDog.Core {
 		public event Action OnEnter;
 
 		public event Action OnExit;
-
-		#endregion
-
-
-		#region Internal Methods
-
-		internal void _Enter() {
-			Enter();
-			RaiseOnEnter();
-		}
-
-		internal void _Exit() {
-			Exit();
-			RaiseOnExit();
-		}
 
 		#endregion
 
