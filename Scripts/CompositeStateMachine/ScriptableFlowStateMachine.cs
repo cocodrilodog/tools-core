@@ -28,13 +28,14 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
-		#region States
-
 		/// <summary>
 		/// The state class for the <see cref="ScriptableFlowStateMachine"/>.
 		/// </summary>
 		[Serializable]
 		public class State : ScriptableCompositeState<State, ScriptableFlowStateMachine> {
+
+
+			#region Public Methods
 
 			public override void Enter() {
 				if (m_Duration > 0) {
@@ -69,6 +70,11 @@ namespace CocodriloDog.Core {
 				}
 			}
 
+			#endregion
+
+
+			#region Private Fields - Serialized
+
 			[Tooltip(
 				"An optional duration of this state. After this time, the state machine will transition " +
 				"to the first state on the transitions list. If left as 0, it won't do anything."
@@ -81,13 +87,18 @@ namespace CocodriloDog.Core {
 			[SerializeField]
 			private List<string> m_Transitions;
 
+			#endregion
+
+
+			#region Private Methods - Non Serialized
+
 			[NonSerialized]
 			private Coroutine m_TimerCoroutine;
 
+			#endregion
+
+
 		}
-
-		#endregion
-
 
 	}
 
