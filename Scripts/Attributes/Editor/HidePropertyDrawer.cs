@@ -13,19 +13,24 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			if (m_Hide) {
-				return 0;
-			} else {
-				var defaultHeight = base.GetPropertyHeight(property, label);
-				var type = CDEditorUtility.GetPropertyType(Property);
-				if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
-					var listProperty = Property.FindPropertyRelative("m_List");
-					return EditorGUI.GetPropertyHeight(listProperty, Label);
-				} else {
-					return defaultHeight;
-				}
 
+			var defaultHeight = base.GetPropertyHeight(property, label);
+
+			if (m_HideByPropertyPath.TryGetValue(Property.propertyPath, out bool hide)) {
+				if (hide) {
+					return -2;
+				}
 			}
+
+			var type = CDEditorUtility.GetPropertyType(Property);
+
+			if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
+				var listProperty = Property.FindPropertyRelative("m_List");
+				return EditorGUI.GetPropertyHeight(listProperty, Label);
+			} else {
+				return defaultHeight;
+			}
+
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
@@ -55,11 +60,11 @@ namespace CocodriloDog.Core {
 			}
 
 			// Get the results
-			m_Hide = false;
+			m_HideByPropertyPath[Property.propertyPath] = false;
 			if (method != null) {
-				m_Hide = (bool)method.Invoke(targetObject, null);
+				m_HideByPropertyPath[Property.propertyPath] = (bool)method.Invoke(targetObject, null);
 			}
-			if (!m_Hide) {
+			if (!m_HideByPropertyPath[Property.propertyPath]) {
 				EditorGUI.indentLevel += hideAttribute.IndentDelta;
 				var type = CDEditorUtility.GetPropertyType(Property);
 				if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
@@ -82,7 +87,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		private bool m_Hide;
+		private Dictionary<string, bool> m_HideByPropertyPath = new Dictionary<string, bool>();
 
 		#endregion
 

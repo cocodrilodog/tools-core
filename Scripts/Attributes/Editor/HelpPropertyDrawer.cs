@@ -21,8 +21,10 @@ namespace CocodriloDog.Core {
 				var listProperty = Property.FindPropertyRelative("m_List");
 				height = EditorGUI.GetPropertyHeight(listProperty, Label);
 			}
-			if (m_ShouldDrawHelp) {
-				height += GetMessageHeight();
+			if (m_ShouldDrawHelpByPropertyPath.TryGetValue(Property.propertyPath, out bool shouldDrawHelpByPropertyPath)) {
+				if (shouldDrawHelpByPropertyPath) {
+					height += GetMessageHeight();
+				}
 			}
 
 			return height;
@@ -30,7 +32,7 @@ namespace CocodriloDog.Core {
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-			
+
 			base.OnGUI(position, property, label);
 
 			Label = EditorGUI.BeginProperty(Position, Label, Property);
@@ -82,17 +84,17 @@ namespace CocodriloDog.Core {
 			EditorGUI.EndDisabledGroup();
 
 			// Define whether to show the help box or not
-			m_ShouldDrawHelp = false;
+			m_ShouldDrawHelpByPropertyPath[Property.propertyPath] = false;
 			if (isList) {
 				if (isExpandedList && currentCode != 0) {
-					m_ShouldDrawHelp = true;
+					m_ShouldDrawHelpByPropertyPath[Property.propertyPath] = true;
 				}
 			} else if (currentCode != 0) {
-				m_ShouldDrawHelp = true;
+				m_ShouldDrawHelpByPropertyPath[Property.propertyPath] = true;
 			}
 
 			// Draw the helpbox
-			if (m_ShouldDrawHelp) {
+			if (m_ShouldDrawHelpByPropertyPath[Property.propertyPath]) {
 				var helpRect = GetNextPosition(GetMessageHeight());
 				helpRect.xMin += EditorGUI.indentLevel * 15;
 				EditorGUI.HelpBox(helpRect, m_CurrentMessage, (MessageType)Mathf.Abs(currentCode));
@@ -108,7 +110,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		private bool m_ShouldDrawHelp;
+		private Dictionary<string, bool> m_ShouldDrawHelpByPropertyPath = new Dictionary<string, bool>();
 
 		private string m_CurrentMessage;
 
