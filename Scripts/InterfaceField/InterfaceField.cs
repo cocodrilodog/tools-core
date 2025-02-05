@@ -27,6 +27,15 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Public Constructors
+
+		public InterfaceField() { }
+
+		public InterfaceField(T value) => Value = value;
+
+		#endregion
+
+
 		#region Private Fields
 
 		[SerializeField]
