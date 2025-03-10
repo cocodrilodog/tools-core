@@ -33,7 +33,7 @@ namespace CocodriloDog.Core {
 						var previousValue = m_Value;
 						m_Value = value;
 						if (m_RaiseChangeEvent) {
-							OnValueChange?.Invoke(previousValue);
+							OnValueChange?.Invoke(previousValue, m_Value);
 						}
 					}
 				} else { // Value type
@@ -41,7 +41,7 @@ namespace CocodriloDog.Core {
 						var previousValue = m_Value;
 						m_Value = value;
 						if (m_RaiseChangeEvent) {
-							OnValueChange?.Invoke(previousValue);
+							OnValueChange?.Invoke(previousValue, m_Value);
 						}
 					}
 				}
@@ -64,7 +64,7 @@ namespace CocodriloDog.Core {
 
 		#region Pubic Delegates
 
-		public delegate void ValueChange(T previousValue);
+		public delegate void ValueChange(T previousValue, T newValue);
 
 		#endregion
 
@@ -74,7 +74,7 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// Raised when the <see cref="Value"/> changes.
 		/// </summary>
-		public ValueChange OnValueChange;
+		public event ValueChange OnValueChange;
 
 		#endregion
 

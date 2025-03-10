@@ -19,11 +19,13 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// Sets the <see cref="ScriptableReference"/> value.
 		/// </summary>
+		[Button(3)]
 		public void SetValue() => m_Destination.Value = m_ObjectToReference;
 
 		/// <summary>
 		/// Sets the value to null on the <see cref="ScriptableReference"/> asset.
 		/// </summary>
+		[Button(3)]
 		public void SetToNull() => m_Destination.Value = null;
 
 		#endregion
@@ -36,6 +38,8 @@ namespace CocodriloDog.Core {
 				SetValue();
 			}
 		}
+
+		private void OnDestroy() => SetToNull();
 
 		#endregion
 

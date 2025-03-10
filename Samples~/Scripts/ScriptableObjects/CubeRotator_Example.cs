@@ -55,12 +55,12 @@ namespace CocodriloDog.Core.Examples {
 
 		#region Event Handlers
 
-		private void Cube_OnValueChange(Transform previousValue) {
-			Debug.Log($"Cube changed from {previousValue} to {m_Cube.Value}");
+		private void Cube_OnValueChange(Transform previousValue, Transform newValue) {
+			Debug.Log($"Cube changed from {previousValue} to {newValue}");
 		}
 
-		private void RotationSpeed_OnValueChange(float previousValue) {
-			Debug.Log($"RotationSpeed changed from {previousValue} to {m_RotationSpeed.Value}");
+		private void RotationSpeed_OnValueChange(float previousValue, float newValue) {
+			Debug.Log($"RotationSpeed changed from {previousValue} to {newValue}");
 		}
 
 		#endregion

@@ -20,6 +20,9 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		public int Index => m_Index;
 
+		// TODO: Implement this property
+		public bool HorizontalizeSameIndex => m_HorizontalizeSameIndex;
+
 		#endregion
 
 
@@ -31,8 +34,9 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// 
 		/// <param name="index">The index of the button in the inspector.</param>
-		public ButtonAttribute(int index = 0) {
+		public ButtonAttribute(int index = 0, bool horizontalizeSameIndex = false) {
 			m_Index = index;
+			m_HorizontalizeSameIndex = horizontalizeSameIndex;
 		}
 
 		#endregion
@@ -41,6 +45,8 @@ namespace CocodriloDog.Core {
 		#region Private Fields
 
 		private int m_Index;
+
+		private bool m_HorizontalizeSameIndex;
 
 		#endregion
 

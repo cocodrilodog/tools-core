@@ -38,13 +38,13 @@ namespace CocodriloDog.Core {
 						if (valueAsObject != (m_Value as object)) {
 							var previousValue = m_Value;
 							m_Value = value;
-							_OnValueChange?.Invoke(previousValue);
+							_OnValueChange?.Invoke(previousValue, m_Value);
 						}
 					} else { // Value type
 						if (!value.Equals(m_Value)) {
 							var previousValue = m_Value;
 							m_Value = value;
-							_OnValueChange?.Invoke(previousValue);
+							_OnValueChange?.Invoke(previousValue, m_Value);
 						}
 					}
 				}
@@ -65,7 +65,7 @@ namespace CocodriloDog.Core {
 
 		#region Pubic Delegates
 
-		public delegate void ValueChange(T previousValue);
+		public delegate void ValueChange(T previousValue, T newValue);
 
 		#endregion
 
@@ -79,7 +79,7 @@ namespace CocodriloDog.Core {
 			add {
 				lock (this) {
 					_OnValueChange += value;
-					m_AssetEventHandlers[value] = pv => value?.Invoke(pv);
+					m_AssetEventHandlers[value] = (pv, nv) => value?.Invoke(pv, nv);
 					m_Asset.OnValueChange += m_AssetEventHandlers[value];
 				}
 			}
@@ -116,7 +116,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Events
 
-		private ValueChange _OnValueChange;
+		private event ValueChange _OnValueChange;
 
 		#endregion
 

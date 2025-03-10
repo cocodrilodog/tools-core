@@ -25,6 +25,9 @@ namespace CocodriloDog.Core {
 
 			serializedObject.Update();
 
+			var buttonIndices = new HashSet<int>();
+			bool isHorizontalOpen = false;
+
 			CDEditorUtility.IterateChildProperties(serializedObject, p => {
 				if (p.propertyPath == "m_Script") {
 					CDEditorUtility.DrawDisabledField(p);
@@ -33,9 +36,21 @@ namespace CocodriloDog.Core {
 				}
 				if(m_MethodsWithButtonByIndex.TryGetValue(index, out var methods)){
 					foreach(var method in methods) {
+						if (buttonIndices.Add(index)) {
+							if (isHorizontalOpen) {
+								EditorGUILayout.EndHorizontal();
+								isHorizontalOpen = false;
+							}
+							EditorGUILayout.BeginHorizontal();
+							isHorizontalOpen = true;
+						}
 						if (GUILayout.Button(ObjectNames.NicifyVariableName(method.Name))) {
 							method.Invoke(target, null);
 						}
+					}
+					if (isHorizontalOpen) {
+						EditorGUILayout.EndHorizontal();
+						isHorizontalOpen = false;
 					}
 				}
 				index++;
