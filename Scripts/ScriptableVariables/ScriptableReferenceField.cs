@@ -38,7 +38,7 @@ namespace CocodriloDog.Core {
 					var previousValue = Value;
 
 					if (raiseChangeEvent && previousValue != null) {
-						_FinalizeTime?.Invoke(previousValue);
+						_OnInstanceDiscard?.Invoke(previousValue);
 					}
 
 					m_Value = value;
@@ -48,7 +48,7 @@ namespace CocodriloDog.Core {
 						_OnValueChange?.Invoke(previousValue, m_Value);
 
 						if (m_Value != null) {
-							_InitializeTime?.Invoke(m_Value);
+							_OnInstanceReady?.Invoke(m_Value);
 						}
 
 					}
@@ -96,17 +96,17 @@ namespace CocodriloDog.Core {
 			}
 		}
 
-		/// <inheritdoc cref="ScriptableReference.InitializeTime"/>
-		public event ReferenceChange InitializeTime {
+		/// <inheritdoc cref="ScriptableReference.OnInstanceReady"/>
+		public event ReferenceChange OnInstanceReady {
 			add {
 				lock (this) {
 					if (UseAsset && m_Asset != null) {
 						m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
-						m_Asset.InitializeTime += m_AssetReferenceChangeHandlers[value];
+						m_Asset.OnInstanceReady += m_AssetReferenceChangeHandlers[value];
 					} else {
-						_InitializeTime += value;
+						_OnInstanceReady += value;
 						if (Value != null) {
-							_InitializeTime?.Invoke(m_Value);
+							_OnInstanceReady?.Invoke(m_Value);
 						}
 					}
 				}
@@ -114,32 +114,32 @@ namespace CocodriloDog.Core {
 			remove {
 				lock (this) {
 					if (UseAsset && m_Asset != null) {
-						m_Asset.InitializeTime -= m_AssetReferenceChangeHandlers[value];
+						m_Asset.OnInstanceReady -= m_AssetReferenceChangeHandlers[value];
 					} else {
-						_InitializeTime -= value;
+						_OnInstanceReady -= value;
 					}
 				}
 			}
 		}
 
-		/// <inheritdoc cref="ScriptableReference.FinalizeTime"/>
-		public event ReferenceChange FinalizeTime {
+		/// <inheritdoc cref="ScriptableReference.OnInstanceDiscard"/>
+		public event ReferenceChange OnInstanceDiscard {
 			add {
 				lock (this) {
 					if (UseAsset && m_Asset != null) {
 						m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
-						m_Asset.FinalizeTime += m_AssetReferenceChangeHandlers[value];
+						m_Asset.OnInstanceDiscard += m_AssetReferenceChangeHandlers[value];
 					} else {
-						_FinalizeTime += value;
+						_OnInstanceDiscard += value;
 					}
 				}
 			}
 			remove {
 				lock (this) {
 					if (UseAsset && m_Asset != null) {
-						m_Asset.FinalizeTime -= m_AssetReferenceChangeHandlers[value];
+						m_Asset.OnInstanceDiscard -= m_AssetReferenceChangeHandlers[value];
 					} else {
-						_FinalizeTime -= value;
+						_OnInstanceDiscard -= value;
 					}
 				}
 			}
@@ -173,9 +173,9 @@ namespace CocodriloDog.Core {
 
 		private event ValueChange _OnValueChange;
 
-		private event ReferenceChange _InitializeTime;
+		private event ReferenceChange _OnInstanceReady;
 
-		private event ReferenceChange _FinalizeTime;
+		private event ReferenceChange _OnInstanceDiscard;
 
 		#endregion
 
