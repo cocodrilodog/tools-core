@@ -18,11 +18,11 @@ namespace CocodriloDog.Core {
 			get => base.Value;
 			set {
 				if (value != base.Value && base.Value != null) {
-					OnOldReference?.Invoke(Value);
+					FinalizeTime?.Invoke(Value);
 				}
 				base.Value = value;
 				if (Value != null) {
-					m_NowOrOnNewReference?.Invoke(Value);
+					m_InitializeTime?.Invoke(Value);
 				}
 			}
 		}
@@ -43,20 +43,20 @@ namespace CocodriloDog.Core {
 		/// Raised immediatly when adding a handler, if the reference value is non-null, and every time a non-null
 		/// reference value is set.
 		/// </summary>
-		public event ReferenceChange NowOrOnNewReference {
+		public event ReferenceChange InitializeTime {
 			add {
 				var shouldInvokeNow = false;
 				lock (this) {
 					shouldInvokeNow = Value != null;
-					m_NowOrOnNewReference += value;
+					m_InitializeTime += value;
 				}
 				if (shouldInvokeNow) {
-					m_NowOrOnNewReference?.Invoke(Value);
+					m_InitializeTime?.Invoke(Value);
 				}
 			}
 			remove {
 				lock (this) {
-					m_NowOrOnNewReference -= value;
+					m_InitializeTime -= value;
 				}
 			}
 		}
@@ -70,7 +70,7 @@ namespace CocodriloDog.Core {
 		/// Use this to clean old references that won't be used anymore. E.G. removing event handlers,
 		/// disposing objects, etc.
 		/// </remarks>
-		public event ReferenceChange OnOldReference;
+		public event ReferenceChange FinalizeTime;
 
 		#endregion
 
@@ -78,7 +78,7 @@ namespace CocodriloDog.Core {
 		#region Private Fields
 
 		[NonSerialized]
-		private ReferenceChange m_NowOrOnNewReference;
+		private ReferenceChange m_InitializeTime;
 
 		#endregion
 

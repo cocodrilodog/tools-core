@@ -37,8 +37,8 @@ namespace CocodriloDog.Core {
 					var raiseChangeEvent = value != m_Value;
 					var previousValue = Value;
 
-					if(raiseChangeEvent && previousValue != null) {
-						_OnOldReference?.Invoke(previousValue);
+					if (raiseChangeEvent && previousValue != null) {
+						_FinalizeTime?.Invoke(previousValue);
 					}
 
 					m_Value = value;
@@ -48,7 +48,7 @@ namespace CocodriloDog.Core {
 						_OnValueChange?.Invoke(previousValue, m_Value);
 
 						if (m_Value != null) {
-							_NowOrOnNewReference?.Invoke(m_Value);
+							_InitializeTime?.Invoke(m_Value);
 						}
 
 					}
@@ -77,57 +77,70 @@ namespace CocodriloDog.Core {
 		public event ValueChange OnValueChange {
 			add {
 				lock (this) {
-					_OnValueChange += value;
-					m_AssetValueChangeHandlers[value] = (pv, nv) => value?.Invoke(pv as T, nv as T);
-					m_Asset.OnValueChange += m_AssetValueChangeHandlers[value];
+					if (UseAsset && m_Asset != null) {
+						m_AssetValueChangeHandlers[value] = (pv, nv) => value?.Invoke(pv as T, nv as T);
+						m_Asset.OnValueChange += m_AssetValueChangeHandlers[value];
+					} else {
+						_OnValueChange += value;
+					}
 				}
 			}
 			remove {
 				lock (this) {
-					_OnValueChange -= value;
-					m_Asset.OnValueChange -= m_AssetValueChangeHandlers[value];
+					if (UseAsset && m_Asset != null) {
+						m_Asset.OnValueChange -= m_AssetValueChangeHandlers[value];
+					} else {
+						_OnValueChange -= value;
+					}
 				}
 			}
 		}
 
-		/// <inheritdoc cref="ScriptableReference.NowOrOnNewReference"/>
-		public event ReferenceChange NowOrOnNewReference {
+		/// <inheritdoc cref="ScriptableReference.InitializeTime"/>
+		public event ReferenceChange InitializeTime {
 			add {
 				lock (this) {
-					
-					_NowOrOnNewReference += value;
-					m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
-					m_Asset.NowOrOnNewReference += m_AssetReferenceChangeHandlers[value];
-
-					if (!UseAsset) {
+					if (UseAsset && m_Asset != null) {
+						m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
+						m_Asset.InitializeTime += m_AssetReferenceChangeHandlers[value];
+					} else {
+						_InitializeTime += value;
 						if (Value != null) {
-							_NowOrOnNewReference?.Invoke(m_Value);
+							_InitializeTime?.Invoke(m_Value);
 						}
 					}
-
 				}
 			}
 			remove {
 				lock (this) {
-					_NowOrOnNewReference -= value;
-					m_Asset.NowOrOnNewReference -= m_AssetReferenceChangeHandlers[value];
+					if (UseAsset && m_Asset != null) {
+						m_Asset.InitializeTime -= m_AssetReferenceChangeHandlers[value];
+					} else {
+						_InitializeTime -= value;
+					}
 				}
 			}
 		}
 
-		/// <inheritdoc cref="ScriptableReference.OnOldReference"/>
-		public event ReferenceChange OnOldReference {
+		/// <inheritdoc cref="ScriptableReference.FinalizeTime"/>
+		public event ReferenceChange FinalizeTime {
 			add {
 				lock (this) {
-					_OnOldReference += value;
-					m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
-					m_Asset.OnOldReference += m_AssetReferenceChangeHandlers[value];
+					if (UseAsset && m_Asset != null) {
+						m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
+						m_Asset.FinalizeTime += m_AssetReferenceChangeHandlers[value];
+					} else {
+						_FinalizeTime += value;
+					}
 				}
 			}
 			remove {
 				lock (this) {
-					_OnOldReference -= value;
-					m_Asset.OnOldReference -= m_AssetReferenceChangeHandlers[value];
+					if (UseAsset && m_Asset != null) {
+						m_Asset.FinalizeTime -= m_AssetReferenceChangeHandlers[value];
+					} else {
+						_FinalizeTime -= value;
+					}
 				}
 			}
 		}
@@ -160,9 +173,9 @@ namespace CocodriloDog.Core {
 
 		private event ValueChange _OnValueChange;
 
-		private event ReferenceChange _NowOrOnNewReference;
+		private event ReferenceChange _InitializeTime;
 
-		private event ReferenceChange _OnOldReference;
+		private event ReferenceChange _FinalizeTime;
 
 		#endregion
 
