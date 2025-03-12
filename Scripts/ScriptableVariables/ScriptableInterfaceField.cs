@@ -35,21 +35,20 @@ namespace CocodriloDog.Core {
 					m_Asset.Value = value as UnityEngine.Object; // This triggers the asset value change event
 				} else {
 
-					var raiseChangeEvent = value != m_Value;
 					var previousValue = Value;
+					var valueChanges = value != previousValue;
 
-					if (raiseChangeEvent && previousValue != null) {
-						_FinalizeTime?.Invoke(previousValue);
+					if (valueChanges && previousValue != null) {
+						_OnInstanceDiscard?.Invoke(previousValue);
 					}
 
-					m_Value.Value = value;
+					if (valueChanges) {
 
-					if (raiseChangeEvent) {
-
+						m_Value.Value = value;
 						_OnValueChange?.Invoke(previousValue, Value);
 
 						if (m_Value != null) {
-							_InitializeTime?.Invoke(m_Value as T);
+							_OnInstanceReady?.Invoke(m_Value as T);
 						}
 
 					}
@@ -98,17 +97,14 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <inheritdoc cref="ScriptableReference.OnInstanceReady"/>
-		public event ReferenceChange InitializeTime {
+		public event ReferenceChange OnInstanceReady {
 			add {
 				lock (this) {
 					if (UseAsset && m_Asset != null) {
 						m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
 						m_Asset.OnInstanceReady += m_AssetReferenceChangeHandlers[value];
 					} else {
-						_InitializeTime += value;
-						if (Value != null) {
-							_InitializeTime?.Invoke(m_Value as T);
-						}
+						_OnInstanceReady += value;
 					}
 				}
 			}
@@ -117,21 +113,21 @@ namespace CocodriloDog.Core {
 					if (UseAsset && m_Asset != null) {
 						m_Asset.OnInstanceReady -= m_AssetReferenceChangeHandlers[value];
 					} else {
-						_InitializeTime -= value;
+						_OnInstanceReady -= value;
 					}
 				}
 			}
 		}
 
 		/// <inheritdoc cref="ScriptableReference.OnInstanceDiscard"/>
-		public event ReferenceChange FinalizeTime {
+		public event ReferenceChange OnInstanceDiscard {
 			add {
 				lock (this) {
 					if (UseAsset && m_Asset != null) {
 						m_AssetReferenceChangeHandlers[value] = v => value?.Invoke(v as T);
 						m_Asset.OnInstanceDiscard += m_AssetReferenceChangeHandlers[value];
 					} else {
-						_FinalizeTime += value;
+						_OnInstanceDiscard += value;
 					}
 				}
 			}
@@ -140,7 +136,7 @@ namespace CocodriloDog.Core {
 					if (UseAsset && m_Asset != null) {
 						m_Asset.OnInstanceDiscard -= m_AssetReferenceChangeHandlers[value];
 					} else {
-						_FinalizeTime -= value;
+						_OnInstanceDiscard -= value;
 					}
 				}
 			}
@@ -174,9 +170,9 @@ namespace CocodriloDog.Core {
 
 		private event ValueChange _OnValueChange;
 
-		private event ReferenceChange _InitializeTime;
+		private event ReferenceChange _OnInstanceReady;
 
-		private event ReferenceChange _FinalizeTime;
+		private event ReferenceChange _OnInstanceDiscard;
 
 		#endregion
 

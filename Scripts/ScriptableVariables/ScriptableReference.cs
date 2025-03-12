@@ -17,13 +17,21 @@ namespace CocodriloDog.Core {
 		public override UnityEngine.Object Value {
 			get => base.Value;
 			set {
-				if (value != base.Value && base.Value != null) {
-					OnInstanceDiscard?.Invoke(Value);
+
+				var previousValue = base.Value;
+				var valueChanges = value != previousValue;
+
+				if (valueChanges && previousValue != null) {
+					OnInstanceDiscard?.Invoke(previousValue);
 				}
-				base.Value = value;
-				if (Value != null) {
-					m_OnInstanceReady?.Invoke(Value);
+
+				if (valueChanges) {
+					base.Value = value;
+					if (Value != null) {
+						m_OnInstanceReady?.Invoke(Value);
+					}
 				}
+
 			}
 		}
 
@@ -40,8 +48,7 @@ namespace CocodriloDog.Core {
 		#region Public Events
 
 		/// <summary>
-		/// Raised immediatly when adding a handler, if the reference value is non-null, and every time a non-null
-		/// reference value is set.
+		/// Raised every time a non-null reference value is set.
 		/// </summary>
 		/// 
 		/// <remarks>
@@ -49,13 +56,8 @@ namespace CocodriloDog.Core {
 		/// </remarks>
 		public event ReferenceChange OnInstanceReady {
 			add {
-				var shouldInvokeNow = false;
 				lock (this) {
-					shouldInvokeNow = Value != null;
 					m_OnInstanceReady += value;
-				}
-				if (shouldInvokeNow) {
-					m_OnInstanceReady?.Invoke(Value);
 				}
 			}
 			remove {
@@ -66,8 +68,7 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// Raised when the <c>Value</c> is about to change and the current value (soon to be released) 
-		/// is not null.
+		/// Raised when the <c>Value</c> is about to change and the current value is not null, and soon to be released.
 		/// </summary>
 		/// 
 		/// <remarks>

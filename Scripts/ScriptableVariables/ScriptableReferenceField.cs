@@ -34,17 +34,16 @@ namespace CocodriloDog.Core {
 					m_Asset.Value = value; // This triggers the asset value change events
 				} else {
 
-					var raiseChangeEvent = value != m_Value;
 					var previousValue = Value;
+					var valueChanges = value != previousValue;
 
-					if (raiseChangeEvent && previousValue != null) {
+					if (valueChanges && previousValue != null) {
 						_OnInstanceDiscard?.Invoke(previousValue);
 					}
 
-					m_Value = value;
+					if (valueChanges) {
 
-					if (raiseChangeEvent) {
-
+						m_Value = value;
 						_OnValueChange?.Invoke(previousValue, m_Value);
 
 						if (m_Value != null) {
@@ -105,9 +104,6 @@ namespace CocodriloDog.Core {
 						m_Asset.OnInstanceReady += m_AssetReferenceChangeHandlers[value];
 					} else {
 						_OnInstanceReady += value;
-						if (Value != null) {
-							_OnInstanceReady?.Invoke(m_Value);
-						}
 					}
 				}
 			}
