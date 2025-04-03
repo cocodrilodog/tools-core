@@ -16,7 +16,7 @@ namespace CocodriloDog.Core.Examples {
 		#region Private Fields
 
 		[SerializeReference]
-		private Folder m_MyDrive;
+		private Folder m_MyDisk;
 
 		#endregion
 

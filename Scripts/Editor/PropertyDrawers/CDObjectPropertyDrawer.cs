@@ -3,6 +3,7 @@ namespace CocodriloDog.Core {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using UnityEditor;
 	using UnityEngine;
@@ -41,12 +42,7 @@ namespace CocodriloDog.Core {
 					height += GetChildPropertyHeight(p);
 
 					// Add the height of the buttons of the methods with button
-					var methodsWithButtonByIndex = MethodsWithButtonUtility.GetMethodsWithButtonByIndex(m_Type);
-					if (methodsWithButtonByIndex.TryGetValue(index, out var methods)) {
-						foreach (var method in methods) {
-							height += EditorGUIUtility.singleLineHeight + 2;
-						}
-					}
+					height += MethodsWithButtonUtility.GetMethodButtonsHeightAtPropertyIndex(index, m_Type);
 
 					index++;
 
@@ -70,28 +66,20 @@ namespace CocodriloDog.Core {
 			if (Property.isExpanded) {
 
 				CDEditorUtility.GetPropertyValueAndType(Property, out var value, out m_Type);
-				var methodsWithButtonByIndex = MethodsWithButtonUtility.GetMethodsWithButtonByIndex(m_Type);
 				var index = 0;
 				
 				CDEditorUtility.IterateChildProperties(Property, p => {
 					
 					// Draw the child property
 					DrawChildProperty(p);
-					
-					// Draw method buttons if they are on this index
-					if (methodsWithButtonByIndex.TryGetValue(index, out var methods)) {
-						foreach (var method in methods) {
-							var buttonRect = GetNextPosition(1);
-							buttonRect.xMin += EditorGUI.indentLevel * 15;
-							if (GUI.Button(buttonRect, ObjectNames.NicifyVariableName(method.Name))) {
-								method.Invoke(value, null);
-							}
-						}
-					}
 
+					// Draw method buttons if they are on this index
+					MethodsWithButtonUtility.DrawMethodButtonsAtPropertyIndex(index, m_Type, value, () => GetNextPosition());
+					
 					index++;
 
 				});
+
 			}
 			EditorGUI.indentLevel--;
 

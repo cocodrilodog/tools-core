@@ -87,12 +87,12 @@
 
 		private bool HideString() => !ShowHiddenString;
 
-		[Button(17)]
+		[Button(17, disableInEditMode: true)]
 		public void ButtonMethod1() {
 			Debug.Log("Button Method 1 Invoked!");
 		}
 
-		[Button(17)]
+		[Button(17, horizontalizeSameIndex:true, disableInPlayMode: true)]
 		public void ButtonMethod2() {
 			Debug.Log("Button Method 2 Invoked!");
 		}
@@ -149,14 +149,14 @@
 		// For the ButtonAttribute to work in System.Object, the object must be drawn by CDObjectPropertyDrawer
 		// of a child class. In this case, I implemented SomeObjectPropertyDrawer.
 		// Alternatively, the object may inherit from CDObject, which supports the ButtonAttribute by default.
-		[Button(3)]
-		public void FindMissingResource() {
-			Debug.Log("Finding missing resource...");
+		[Button(3, horizontalizeSameIndex:true, disableInEditMode: true)]
+		public void SystemObjectButtonTest1() {
+			Debug.Log("System Object Button test 1");
 		}
 
-		[Button(3)]
-		public void TryAgain() {
-			Debug.Log("Trying again...");
+		[Button(3, disableInPlayMode: true)]
+		public void SystemObjectButtonTest2() {
+			Debug.Log("System Object Button test 2");
 		}
 
 		[Tooltip("StringOptions_ListAsset")]
@@ -239,14 +239,14 @@
 		public string StringOptions_MissingSource;
 
 		// This class inherits from CDObject, which supports the ButtonAttribute by default.
-		[Button(3)]
-		public void FindMissingResource() {
-			Debug.Log("Finding missing resource...");
+		[Button(3, horizontalizeSameIndex:true, disableInEditMode:true)]
+		public void CDObjectButtonTest1() {
+			Debug.Log("CDObject Button test 1");
 		}
 
-		[Button(3)]
-		public void TryAgain() {
-			Debug.Log("Trying again...");
+		[Button(3, disableInPlayMode:true)]
+		public void CDObjectButtonTest2() {
+			Debug.Log("CDObject Button test 2");
 		}
 
 		[Tooltip("StringOptions_ListAsset")]

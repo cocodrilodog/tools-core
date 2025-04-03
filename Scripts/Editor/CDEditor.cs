@@ -4,6 +4,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 	using System.Reflection;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	/// <summary>
 	/// An editor that supports the <see cref="ButtonAttribute"/> and implements 
@@ -34,9 +35,12 @@ namespace CocodriloDog.Core {
 				} else {
 					DrawProperty(p);
 				}
-				if(m_MethodsWithButtonByIndex.TryGetValue(index, out var methods)){
-					foreach(var method in methods) {
-						if (buttonIndices.Add(index)) {
+				if(m_MethodsWithButtonByIndex.TryGetValue(index, out var buttonMethodInfos)){
+
+					var horizontalizeSameIndex = buttonMethodInfos.Any(bmi => bmi.HorizontalizeSameIndex);
+
+					foreach(var buttonMethodInfo in buttonMethodInfos) {
+						if (buttonIndices.Add(index) && horizontalizeSameIndex) {
 							if (isHorizontalOpen) {
 								EditorGUILayout.EndHorizontal();
 								isHorizontalOpen = false;
@@ -44,14 +48,19 @@ namespace CocodriloDog.Core {
 							EditorGUILayout.BeginHorizontal();
 							isHorizontalOpen = true;
 						}
-						if (GUILayout.Button(ObjectNames.NicifyVariableName(method.Name))) {
-							method.Invoke(target, null);
+						EditorGUI.BeginDisabledGroup(
+							Application.isPlaying ? buttonMethodInfo.DisableInPlayMode : buttonMethodInfo.DisableInEditMode
+						);
+						if (GUILayout.Button(ObjectNames.NicifyVariableName(buttonMethodInfo.Method.Name))) {
+							buttonMethodInfo.Method.Invoke(target, null);
 						}
+						EditorGUI.EndDisabledGroup();
 					}
-					if (isHorizontalOpen) {
+					if (isHorizontalOpen && horizontalizeSameIndex) {
 						EditorGUILayout.EndHorizontal();
 						isHorizontalOpen = false;
 					}
+
 				}
 				index++;
 			});
@@ -81,7 +90,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
-		private Dictionary<int, List<MethodInfo>> m_MethodsWithButtonByIndex;
+		private Dictionary<int, List<ButtonMethodInfo>> m_MethodsWithButtonByIndex;
 
 		#endregion
 

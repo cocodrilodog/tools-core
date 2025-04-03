@@ -183,8 +183,11 @@ namespace CocodriloDog.Core {
 				if (!m_EventPaths.Contains(eventPropertyPath)) {
 
 					var propertyType = CDEditorUtility.GetPropertyType(serializedObject.FindProperty(eventPropertyPath));
-					var isUnityEvent = typeof(UnityEvent).IsAssignableFrom(propertyType) || 
-						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>));
+					var isUnityEvent = typeof(UnityEvent).IsAssignableFrom(propertyType) ||
+						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<>)) ||
+						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<,>)) ||
+						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<,,>)) ||
+						SystemUtility.IsSubclassOfRawGeneric(propertyType, typeof(UnityEvent<,,,>));
 
 					if (isUnityEvent) {
 						m_EventPaths.Add(eventPropertyPath);

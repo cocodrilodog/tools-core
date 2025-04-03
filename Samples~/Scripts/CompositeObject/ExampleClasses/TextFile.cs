@@ -23,8 +23,13 @@ namespace CocodriloDog.Core.Examples {
 
 		#region Private Methods
 
-		[Button]
+		[Button(horizontalizeSameIndex: true)]
 		private void LogContent() {
+			Debug.Log(m_Text);
+		}
+
+		[Button]
+		private void LogContentAgain() {
 			Debug.Log(m_Text);
 		}
 
