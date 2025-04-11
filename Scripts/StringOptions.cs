@@ -27,6 +27,9 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private List<string> m_Options;
 
+		[SerializeField]
+		private DocumentationComment m_DocumentationComment;
+
 		#endregion
 
 

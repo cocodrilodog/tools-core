@@ -63,6 +63,28 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Public Methods
+
+		/// <summary>
+		/// Creates a partial deep copy of this field (ignoring the events) by assigning the current 
+		/// <see cref="m_Value"/> and <see cref="ScriptableFieldBase.UseAsset"/> to the copy, and instantiating 
+		/// the <see cref="m_Asset"/> for the copy.
+		/// </summary>
+		/// 
+		/// <returns>A deep copy of this field, ignoring the events.</returns>
+		public virtual ScriptableValueField<T> Copy() {
+			var clone = new ScriptableValueField<T>();
+			clone.UseAsset = UseAsset;
+			clone.m_Value = m_Value;
+			if (m_Asset != null) {
+				clone.m_Asset = UnityEngine.Object.Instantiate(m_Asset);
+			}
+			return clone;
+		}
+
+		#endregion
+
+
 		#region Pubic Delegates
 
 		public delegate void ValueChange(T previousValue, T newValue);
