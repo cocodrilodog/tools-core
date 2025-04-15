@@ -40,6 +40,26 @@ For example, you can use a `CollisionTrigger` in a character and make the charac
 <br/>
 <img src="https://github.com/user-attachments/assets/9b6309e5-156e-4373-9ac9-d8c71556c445" alt="image" width="500"/>
 
+## `CompositeObject`
+
+Base class to create `System.Object`s that use the [SerializeReference] attribute. This class is suitable for creating composite structures like the one shown below, hence the name `CompositeObject`.
+
+Derived classes from `CompositeObject` support polymorphism, which means that they can serialize objects that inherit from the type used in the field, and keep all the additional properties saved.
+
+As in the example of the images below, you can create a base abstract class `FileBase` that inherits from `CompositeObject` and declare a field `FileBase m_SomeFile` with the `[SerializeReference]` attribute. Then you create a class `TextFile` and another one `Folder` that both inherit from `FileBase`. In the inspector, in the `m_SomeFile` field, you would be able to create a instance of either `TextFile` or `Folder` and both will be serialized with their own unique properties.
+
+This tech, was designed to be used in the `MotionKit` initially, but it has found its place in many other tools created by Cocodrilo Dog. 
+
+<img src="https://github.com/user-attachments/assets/543ce11c-52d1-4283-98d1-a7bcf8400d9c" alt="image" width="500"/>
+<br/>
+<img src="https://github.com/user-attachments/assets/3b54db8d-0537-4b20-a1a4-e22964d09e9f" alt="image" width="500"/>
+<br/>
+<img src="https://github.com/user-attachments/assets/35632b85-79e2-44c0-a032-64f971b4dd26" alt="image" width="500"/>
+<br/>
+<img src="https://github.com/user-attachments/assets/756a3d05-94b5-4ca5-aa5b-cc67c0254d07" alt="image" width="500"/>
+<br/>
+<img src="https://github.com/user-attachments/assets/7f09c699-c555-4ad6-849b-90af8f5b2150" alt="image" width="500"/>
+
 ## Attributes
 
 The `Core` package has many attributes that improves development process in several areas. Please read below for details about the attributes.
