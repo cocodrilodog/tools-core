@@ -15,6 +15,12 @@ A set of attributes that improves the quality of life of Unity developers.
 <img src="https://github.com/user-attachments/assets/766bcd27-0235-4653-8c36-85b514f173da" alt="image" height="500"/>
 <img src="https://github.com/user-attachments/assets/97f87cad-a657-41b2-9b24-95e1d6013318" alt="image" height="500"/>
 
+## `CollisionTrigger`
+<img src="https://github.com/user-attachments/assets/9adc377f-c71d-4e3b-80e9-229c5a1e34d9" alt="image" height="200"/>
+<img src="https://github.com/user-attachments/assets/70bcbf89-f4c4-415e-9061-a91661a59ca4" alt="image" height="200"/>
+
+
+
 ## Attributes
 
 The `Core` package has many attributes that improves development process in several areas. Please read below for details about the attributes.
