@@ -12,6 +12,16 @@ This helps a team of developers to agree on the coding style and makes every scr
 ## Attributes
 A set of attributes that improves quality of life for Unity developers.
 
+- `[MinMaxRange]` Inspector control to set ranges with sliders.
+- `[HorizontalLine]` A decorative horizontal line in the inspector.
+- `[CreateAsset]` Creates an asset of the type of the property, where the property derives from `ScriptableObject`.
+- `[StringOptions]` On a string field, draws a popup with options to choose from.
+- `[Help]` Draws a HelpBox based on a custom method.
+- `[Hide]` Hides the field, depending on a custom method.
+- `[Button]` Makes an inspector button that invokes the method below the attribute.
+- `[ReadOnly]` Makes the field read-only.
+- `[UnityEventGroup]` Groups multiple Unity events under a toolbar.
+
 <img src="https://github.com/user-attachments/assets/766bcd27-0235-4653-8c36-85b514f173da" alt="image" height="500"/>
 <img src="https://github.com/user-attachments/assets/97f87cad-a657-41b2-9b24-95e1d6013318" alt="image" height="500"/>
 
