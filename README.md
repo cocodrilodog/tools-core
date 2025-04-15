@@ -20,7 +20,7 @@ This component helps to easily identify and react to collisions.
 
 Normally developers would need to create some code in `MonoBehaviour`s implementing `OnCollision...` or `OnTrigger...` functions and comparing game object tags or any other identifying system in place, in order to achieve the desired collision results.
 
-With the `CollisionTrigger`, you can decide what to do when an object collides with another object and react according to the nature of other object, and you can set all that in the inspector. 
+With the `CollisionTrigger`, you can decide what to do when an object collides with another object and react according to the nature of other object. And you can set all that in the inspector! 
 
 For example, you can use a `CollisionTrigger` in a character and make the character gain gold when the it collides with coins, and lose health when it collides with spikes, without writing a single line of code related to the collision. All that can be setup in the inspector in a matter of seconds.
 
