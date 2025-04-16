@@ -37,7 +37,7 @@ public List<FloatRange> MinMaxRanges;
 <img src="https://github.com/user-attachments/assets/4144a308-d5d0-4f97-8d3d-caa06913c8df" alt="image" width="500"/>
 
 ### `[CreateAsset]`
-This allows to declare a field derived from `ScriptableObject` by adding a _Create_ button that makes the editor to create the correct type of asset for you. If there are more that one classes that are derived from the field class, a popup with the options will appear.
+This allows to declare a field derived from `ScriptableObject` that has a _Create_ button which makes the editor to create the correct type of asset for you. If there are more that one classes that are derived from the field class, a popup with the options will appear.
 ```
 [CreateAsset]
 public DerivedFromScriptableObject SomeScriptableObject;
