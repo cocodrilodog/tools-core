@@ -44,7 +44,7 @@ For example, you can use a `CollisionTrigger` in a character and make the charac
 
 Base class to create `System.Object`s that use the `[SerializeReference]` attribute. This class is suitable for creating composite structures like the one shown below, hence the name `CompositeObject`.
 
-Derived classes from `CompositeObject` support polymorphism, which means that they can serialize objects that inherit from the type used in the field, and keep all the additional properties saved.
+Derived classes from `CompositeObject` support polymorphism, which means that any field declared as `MyCompositeObject`, for example, can serialize data of any other class that derives from `MyCompositeObject`.
 
 In the example of the images below, I created an abstract class `FileBase`:
 ```
@@ -61,17 +61,24 @@ public class TextFile : FileBase {
 
 }
 ```
-Finally, I created a container class `Folder`:
+Additionally, I created a container class `Folder`:
 ```
 [Serializable]
 public class Folder : FileBase {
 
-  [SerializeField]
-  private CompositeList<FileBase> m_Files;
+  [SerializeReference] // <- Notice the SerializeReference attribute.
+  private List<FileBase> m_Files;
 
 }
 ```
+Finally, in the `MonoBehaviour` example class, I declared a `Folder` field , like this:
+```
+[SerializeReference] // <- Notice the SerializeReference attribute.
+private Folder m_MyDisk;
+```
 In this example, any field declared as `FieldBase` can hold either a `Folder` or a `TextFile` instance, and a `Folder` can contain children `FileBase` instances which again, could be either `Folder` or `TextField`. This creates a **composite** structure.
+
+In the images sequence below, I navigate throught the composite of folders and files:
 
 <img src="https://github.com/user-attachments/assets/543ce11c-52d1-4283-98d1-a7bcf8400d9c" alt="image" width="500"/>
 <br/>
@@ -81,9 +88,12 @@ In this example, any field declared as `FieldBase` can hold either a `Folder` or
 <br/>
 <img src="https://github.com/user-attachments/assets/756a3d05-94b5-4ca5-aa5b-cc67c0254d07" alt="image" width="500"/>
 <br/>
+<br/>
+This last image shows how a new entry would be created:
+<br/>
 <img src="https://github.com/user-attachments/assets/7f09c699-c555-4ad6-849b-90af8f5b2150" alt="image" width="500"/>
 
-This tech, was designed to be used in the `MotionKit` initially, but it has found its place in many other tools created by Cocodrilo Dog. 
+This tech, was designed to be used in the `MotionKit` initially, but it has found its place in many other tools created by Cocodrilo Dog. It incorporates a breadcrumb structure in the inspector so that complex composite structures can be easily navigated.
 
 
 
