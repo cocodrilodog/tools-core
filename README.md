@@ -25,6 +25,28 @@ A set of attributes that improves quality of life for Unity developers.
 <img src="https://github.com/user-attachments/assets/766bcd27-0235-4653-8c36-85b514f173da" alt="image" height="450"/>
 <img src="https://github.com/user-attachments/assets/97f87cad-a657-41b2-9b24-95e1d6013318" alt="image" height="450"/>
 
+### `[MinMaxRange]`
+Creates a control that allows to set a range with sliders. It can be used in `FloatRange` and `IntRange` fields.
+```
+[MinMaxRange(0, 10)]
+public FloatRange MinMaxRange;
+
+[MinMaxRange(0, 10)]
+public List<FloatRange> MinMaxRanges;
+```
+<img src="https://github.com/user-attachments/assets/4144a308-d5d0-4f97-8d3d-caa06913c8df" alt="image" width="500"/>
+
+### `[CreateAsset]`
+This allows to declare a field derived from `ScriptableObject` by adding a _Create_ button that makes the editor to create the correct type of asset for you. If there are more that one classes that are derived from the field class, a popup with the options will appear.
+```
+[CreateAsset]
+public DerivedFromScriptableObject SomeScriptableObject;
+
+[CreateAsset]
+public List<DerivedFromScriptableObject> ManyScriptableObjects;
+```
+<img src="https://github.com/user-attachments/assets/1e718d94-ce02-4d8b-a0c3-9b30ecde4079" alt="image" width="500"/>
+
 ## `CollisionTrigger`
 This component helps to easily identify and react to collisions. 
 
@@ -94,31 +116,3 @@ This last image shows how a new entry would be created:
 <img src="https://github.com/user-attachments/assets/7f09c699-c555-4ad6-849b-90af8f5b2150" alt="image" width="500"/>
 
 This tech, was designed to be used in the `MotionKit` initially, but it has found its place in many other tools created by Cocodrilo Dog. It incorporates a breadcrumb structure in the inspector so that complex composite structures can be easily navigated.
-
-
-
-## Attributes
-
-The `Core` package has many attributes that improves development process in several areas. Please read below for details about the attributes.
-
-### `[MinMaxRange]`
-Creates a control that allows to set a range with sliders. It can be used in `FloatRange` and `IntRange` fields.
-```
-[MinMaxRange(0, 10)]
-public FloatRange MinMaxRange;
-
-[MinMaxRange(0, 10)]
-public List<FloatRange> MinMaxRanges;
-```
-<img src="https://github.com/user-attachments/assets/4144a308-d5d0-4f97-8d3d-caa06913c8df" alt="image" width="500"/>
-
-### `[CreateAsset]`
-This allows to declare a field derived from `ScriptableObject` by adding a _Create_ button that makes the editor to create the correct type of asset for you. If there are more that one classes that are derived from the field class, a popup with the options will appear.
-```
-[CreateAsset]
-public DerivedFromScriptableObject SomeScriptableObject;
-
-[CreateAsset]
-public List<DerivedFromScriptableObject> ManyScriptableObjects;
-```
-<img src="https://github.com/user-attachments/assets/1e718d94-ce02-4d8b-a0c3-9b30ecde4079" alt="image" width="500"/>
