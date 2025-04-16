@@ -116,3 +116,8 @@ This last image shows how a new entry would be created:
 <img src="https://github.com/user-attachments/assets/7f09c699-c555-4ad6-849b-90af8f5b2150" alt="image" width="500"/>
 
 This tech, was designed to be used in the `MotionKit` initially, but it has found its place in many other tools created by Cocodrilo Dog. It incorporates a breadcrumb structure in the inspector so that complex composite structures can be easily navigated.
+
+## Composite State Machine
+## Interface Field
+## `MonoBehaviour`s
+## `ScriptableRefrence` and `ScriptableValue`
