@@ -47,7 +47,7 @@ public List<DerivedFromScriptableObject> ManyScriptableObjects;
 ```
 <img src="https://github.com/user-attachments/assets/1e718d94-ce02-4d8b-a0c3-9b30ecde4079" alt="image" width="500"/>
 
-## `CollisionTrigger`
+## `CollisionTrigger` Component
 This component helps to easily identify and react to collisions. 
 
 Normally developers would need to create some code in `MonoBehaviour`s implementing `OnCollision...` or `OnTrigger...` functions and comparing game object tags or any other identifying system in place, in order to achieve the desired collision results.
