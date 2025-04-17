@@ -2,6 +2,15 @@
 
 Cocodrilo Dog's core tools for general purpose.
 
+## How to Install
+
+To install the `Core` package in your Unity project, open the Package Manager and click the plus button, "Add package from URL..." and the use this URLs:
+https://github.com/cocodrilodog/tools-core.git
+
+<img src="https://github.com/cocodrilodog/tools-motion-kit/assets/8107813/6408c284-330b-4abb-a075-5f5452841775" height="150">
+
+<img src="https://github.com/cocodrilodog/tools-motion-kit/assets/8107813/57a94a49-0474-4744-88d7-f0835c7a6455" height="150">
+
 ## Code Standard
 A code standard guide for C# in Unity. 
 
@@ -10,6 +19,8 @@ This helps a team of developers to agree on the coding style and makes every scr
 <img src="https://github.com/user-attachments/assets/b5755ab5-837f-4886-baba-fb0ee79ac465" alt="image" width="700"/>
 
 ## Attributes
+See the ***Attributes_Example*** scene from the samples of this package for more details.
+
 A set of attributes that improves quality of life for Unity developers.
 
 - `[MinMaxRange]` Inspector control to set ranges with sliders.
@@ -38,6 +49,7 @@ public List<FloatRange> MinMaxRanges;
 
 ### `[CreateAsset]`
 This allows to declare a field derived from `ScriptableObject` that has a _Create_ button which makes the editor to create the correct type of asset for you. If there are more that one classes that are derived from the field class, a popup with the options will appear.
+
 ```
 [CreateAsset]
 public DerivedFromScriptableObject SomeScriptableObject;
