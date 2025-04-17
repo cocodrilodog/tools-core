@@ -220,14 +220,54 @@ private void Start() {
 
 ## `MonoBehaviour`s
 
+The `Core` package comes with some `MonoBehavior`-derived classes that solve common problems. Here is a table of the main ones:
+
 | Class | Description |
 |----------|----------|
 | `MonoSingleton` | Base class for creating `MonoBehaviour` singletons |
 | `MonoUpdater` | Class to use `Update` and coroutines from non-`MonoBehaviour` classes |
 | `MonoLifeCycleTrigger` | Component that invokes `OnAwake`, `OnStart`, `OnDestroy`, `OnEnable` and `OnDisable` as Unity events |
+| `DontDestroyOnLoad` | Add this component to any object that you don't want to be destroyed on load out of the box |
 
 <img src="https://github.com/user-attachments/assets/6f1fff09-0177-4bd5-be83-c547a603bf7b" alt="image" width="400"/>
 
-
 ## `ScriptableReference` and `ScriptableValue`
+
+`ScriptableObject`s that are used to store values or reference of other objects at a project level.
+
+> **For more details:**
+> <br/>
+> See the ***ScriptableReference_Example*** scene from the samples of this package.
+
+This is an easy way to store variables in a "global" way. This helps when:
+- A value is shared by many objects. For example a `string` or a `float`.
+- We need to have a reference of an object from another scene.
+- We need to have a reference of an object that resides in the `DonDestroyOnLoad` group.
+- We create objects with code and want wo have reference to other objects, and we don't want to set the references with code.
+
+### Workflow for `ScriptableValues`s:
+1. A `ScriptableValue<T>` is created in the project:
+<br/>
+<img src="https://github.com/user-attachments/assets/dfbe237c-1fbf-4ae5-beb2-a90a4ba03952" alt="image" width="200"/>
+<br/>
+2. The value is used by another object:
+<br/>
+<img src="https://github.com/user-attachments/assets/15487eb7-02da-4110-976b-369d8c03eb56" alt="image" width="400"/>
+<br/>
+
+### Workflow for `ScriptableReference`s:
+1. A `ScriptableReference` is created in the project:
+<br/>
+<img src="https://github.com/user-attachments/assets/846a203f-faef-40c0-9430-5bd1dd2879ba" alt="image" width="200"/>
+<br/>
+2. An object is sent to that `ScriptableReference` with the `ScriptableReferenceSetter`:
+<br/>
+<img src="https://github.com/user-attachments/assets/a4fe0e89-fbfb-412d-8dc4-9a446e0d8277" alt="image" width="400"/>
+<br/>
+3. The object is used by another object with the `ScriptableReferenceField<T>`:
+<br/>
+<img src="https://github.com/user-attachments/assets/d3f620df-3ac2-4c08-831a-98dd053006c4" alt="image" width="400"/>
+<br/>
+
+
 ## `StringOptions`
