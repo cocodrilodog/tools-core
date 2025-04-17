@@ -44,6 +44,7 @@ A set of attributes that improves quality of life for Unity developers.
 <img src="https://github.com/user-attachments/assets/766bcd27-0235-4653-8c36-85b514f173da" alt="image" height="450"/>
 <img src="https://github.com/user-attachments/assets/97f87cad-a657-41b2-9b24-95e1d6013318" alt="image" height="450"/>
 
+<!-- 
 ### `[MinMaxRange]`
 Creates a control that allows to set a range with sliders. It can be used in `FloatRange` and `IntRange` fields.
 ```
@@ -66,6 +67,7 @@ public DerivedFromScriptableObject SomeScriptableObject;
 public List<DerivedFromScriptableObject> ManyScriptableObjects;
 ```
 <img src="https://github.com/user-attachments/assets/1e718d94-ce02-4d8b-a0c3-9b30ecde4079" alt="image" width="500"/>
+-->
 
 ## `CollisionTrigger` Component
 This component helps to easily identify and react to collisions.
