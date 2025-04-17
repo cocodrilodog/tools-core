@@ -153,8 +153,19 @@ Base classes `MonoCompositeStateMachine`, `ScriptableCompositeStateMachine` and 
 > <br/>
 > See the ***CompositeStateMachine_Example*** scene from the samples of this package.
 
+Example of a class derived from `MonoCompositeStateMachine`. This rotates a circle around a distant point, and depending on the angle, it will have one of three colors:
+
 <img src="https://github.com/user-attachments/assets/a51d8380-ff51-4c5c-9577-692630410224" alt="image" height="160"/>
 <img src="https://github.com/user-attachments/assets/aa29b121-09a8-4979-92b4-45bc7dbab7f5" alt="image" height="160"/>
+<br/>
+
+Example of `MonoFlowStateMachine` used to create a simple player mechanism:
+
+<img src="https://github.com/user-attachments/assets/b33efc63-ab04-442b-81a0-a0ee00e26ab0" alt="image" width="400"/>
+<br/>
+<img src="https://github.com/user-attachments/assets/53e05b83-4d01-4b11-ac9d-92f6121b8be5" alt="image" width="400"/>
+
+
 
 ## Interface Field
 ## `MonoBehaviour`s
