@@ -190,7 +190,7 @@ public class Red : State {
 }
 ```
 
-Example of `MonoFlowStateMachine` used to create a simple player mechanism:
+Example of `MonoFlowStateMachine` used to create a simple media player mechanism:
 
 <img src="https://github.com/user-attachments/assets/b33efc63-ab04-442b-81a0-a0ee00e26ab0" alt="image" width="400"/>
 <br/>
@@ -231,7 +231,7 @@ The `Core` package comes with some `MonoBehavior`-derived classes that solve com
 
 <img src="https://github.com/user-attachments/assets/6f1fff09-0177-4bd5-be83-c547a603bf7b" alt="image" width="400"/>
 
-## `ScriptableReference` and `ScriptableValue`
+## `ScriptableValue` and `ScriptableReference` 
 
 `ScriptableObject`s that are used to store values or reference of other objects at a project level.
 
@@ -271,3 +271,31 @@ This is an easy way to store variables in a "global" way. This helps when:
 
 
 ## `StringOptions`
+`StringOptions` is a `ScriptableObject` that contains a list of strings and can be used in conjunction with the `[StringOptions]` attribute to make a `string` property to use a popup with the available values to choose from, instead of the normal input text.
+
+> **For more details:**
+> <br/>
+> See the ***StringOptions_Example*** scene from the samples of this package.
+
+This is a clean way to work with a set of strings with fixed values. Some possible advantages:
+- This can be used to replace enums in many cases, without the need to add enum values in the code, but just adding new strings to the `StringOptions` asset.
+- This can be used to replace Unity's built-in tags system. If the number of tags in the project increases, with `StringOptions`, the tags can be easily grouped, added, removed, changed, and reordered. This is a way more scalable solution as compared with Unity tags.
+
+### Workflow for `StringOptions`:
+
+1- Create a `StringOptions` asset:
+<br/>
+<img src="https://github.com/user-attachments/assets/68ca4a63-b669-44fb-aefc-1c8599e3d9f5" alt="image" width="250"/>
+<br/>
+<img src="https://github.com/user-attachments/assets/d5a01817-ffc5-4bd1-91ad-f27a9f09dd56" alt="image" width="400"/>
+<br/>
+2- Declare a `string` field and use the `[StringOptions]` attribute:
+```
+[StringOptions("SomeStringOptions"))]
+public string SomeString;
+```
+3- Choose from the options:
+<br/>
+<img src="https://github.com/user-attachments/assets/f941a8b5-d794-4d35-b1bd-83eb2dc55278" alt="image" width="500"/>
+
+This system is used by the `CollisionTrigger` component for tags.
