@@ -243,6 +243,8 @@ This is an easy way to store variables in a "global" way. This helps when:
 - We need to have a reference of an object that resides in the `DonDestroyOnLoad` group.
 - We create objects with code and want wo have reference to other objects, and we don't want to set the references with code.
 
+With this system, we can avoid the temptation of making singletons just to get the reference to an object through the `GetInstance()` method, which is a very common pitfall.
+
 ### Workflow for `ScriptableValues`s:
 1- A `ScriptableValue<T>` is created in the project:
 <br/>
