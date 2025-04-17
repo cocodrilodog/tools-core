@@ -90,7 +90,7 @@ For example, you can use a `CollisionTrigger` in a character and make the charac
 
 ## `CompositeObject`
 
-Base class to create `System.Object`s that use the `[SerializeReference]` attribute. This class is suitable for creating composite structures like the one shown below, hence the name `CompositeObject`.
+Base class to create `System.Object`s that use the `[SerializeReference]` attribute and that need to be polymorphic. This class is suitable for creating composite structures like the one shown below, hence the name `CompositeObject`.
 
 > **For more details:**
 > <br/>
