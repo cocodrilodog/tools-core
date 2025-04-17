@@ -153,8 +153,8 @@ Base classes `MonoCompositeStateMachine`, `ScriptableCompositeStateMachine` and 
 > <br/>
 > See the ***CompositeStateMachine_Example*** scene from the samples of this package.
 
-<img src="https://github.com/user-attachments/assets/a51d8380-ff51-4c5c-9577-692630410224" alt="image" height="200"/>
-<img src="https://github.com/user-attachments/assets/aa29b121-09a8-4979-92b4-45bc7dbab7f5" alt="image" height="200"/>
+<img src="https://github.com/user-attachments/assets/a51d8380-ff51-4c5c-9577-692630410224" alt="image" height="160"/>
+<img src="https://github.com/user-attachments/assets/aa29b121-09a8-4979-92b4-45bc7dbab7f5" alt="image" height="160"/>
 
 ## Interface Field
 ## `MonoBehaviour`s
