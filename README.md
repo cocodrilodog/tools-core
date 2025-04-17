@@ -226,10 +226,8 @@ The `Core` package comes with some `MonoBehavior`-derived classes that solve com
 |----------|----------|
 | `MonoSingleton` | Base class for creating `MonoBehaviour` singletons |
 | `MonoUpdater` | Class to use `Update` and coroutines from non-`MonoBehaviour` classes |
-| `MonoLifeCycleTrigger` | Component that invokes `OnAwake`, `OnStart`, `OnDestroy`, `OnEnable` and `OnDisable` as Unity events |
+| `MonoLifeCycleTrigger` | Component that invokes `OnAwake`, `OnStart`, `OnDestroy`, `OnEnable` and `OnDisable` as Unity events <br/> <img src="https://github.com/user-attachments/assets/6f1fff09-0177-4bd5-be83-c547a603bf7b" alt="image" width="400"/> |
 | `DontDestroyOnLoad` | Add this component to any object that you don't want to be destroyed on load out of the box |
-
-<img src="https://github.com/user-attachments/assets/6f1fff09-0177-4bd5-be83-c547a603bf7b" alt="image" width="400"/>
 
 ## `ScriptableValue` and `ScriptableReference` 
 
