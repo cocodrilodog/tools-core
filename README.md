@@ -298,4 +298,9 @@ public string SomeString;
 <br/>
 <img src="https://github.com/user-attachments/assets/f941a8b5-d794-4d35-b1bd-83eb2dc55278" alt="image" width="500"/>
 
-This system is used by the `CollisionTrigger` component for tags.
+The `string` parameter can be:
+- The name of a `StringOptions` asset on a Resources folder.
+- The name of a field of type `StringOptions`, declared in the same object.
+- The name of a method that returns a `List<string>`. 
+
+This system is used by the `CollisionTrigger` component for tagging the objects.
