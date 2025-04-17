@@ -246,25 +246,25 @@ This is an easy way to store variables in a "global" way. This helps when:
 - We create objects with code and want wo have reference to other objects, and we don't want to set the references with code.
 
 ### Workflow for `ScriptableValues`s:
-1. A `ScriptableValue<T>` is created in the project:
+1- A `ScriptableValue<T>` is created in the project:
 <br/>
 <img src="https://github.com/user-attachments/assets/dfbe237c-1fbf-4ae5-beb2-a90a4ba03952" alt="image" width="200"/>
 <br/>
-2. The value is used by another object:
+2- The value is used by another object:
 <br/>
 <img src="https://github.com/user-attachments/assets/15487eb7-02da-4110-976b-369d8c03eb56" alt="image" width="400"/>
 <br/>
 
 ### Workflow for `ScriptableReference`s:
-1. A `ScriptableReference` is created in the project:
+1- A `ScriptableReference` is created in the project:
 <br/>
 <img src="https://github.com/user-attachments/assets/846a203f-faef-40c0-9430-5bd1dd2879ba" alt="image" width="200"/>
 <br/>
-2. An object is sent to that `ScriptableReference` with the `ScriptableReferenceSetter`:
+2- An object is sent to that `ScriptableReference` with the `ScriptableReferenceSetter`:
 <br/>
 <img src="https://github.com/user-attachments/assets/a4fe0e89-fbfb-412d-8dc4-9a446e0d8277" alt="image" width="400"/>
 <br/>
-3. The object is used by another object with the `ScriptableReferenceField<T>`:
+3- The object is used by another object with the `ScriptableReferenceField<T>`:
 <br/>
 <img src="https://github.com/user-attachments/assets/d3f620df-3ac2-4c08-831a-98dd053006c4" alt="image" width="400"/>
 <br/>
