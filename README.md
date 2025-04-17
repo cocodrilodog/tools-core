@@ -196,8 +196,28 @@ Example of `MonoFlowStateMachine` used to create a simple player mechanism:
 <br/>
 <img src="https://github.com/user-attachments/assets/53e05b83-4d01-4b11-ac9d-92f6121b8be5" alt="image" width="400"/>
 
+## `InterfaceField`
+Did you ever wanted to work with interfaces in a Unity-friendly way, like this?
+```
+// Declare a variable of type IAnyInterface
+[SerializeField]
+private InterfaceField<IAnyInterface> m_AnyInterfaceObject;
 
+// And then use it
+private void Start() {
+  m_AnyInterfaceObject.Value.SomeMethod();
+}
+```
+> **For more details:**
+> <br/>
+> See the ***InterfaceField_Example*** scene from the samples of this package.
 
-## Interface Field
+`InterfaceField` was created for this purpose. This works with the normal Unity drag-and-drop system. If you declare an `InterfaceField<SomeInterface>`, It will receive any `MonoBehaviour` or `ScriptableObject` that implements `SomeInterface`, for example. 
+
+<img src="https://github.com/user-attachments/assets/2bce0e65-191f-4ded-a038-bb29d8a4dd1c" alt="image" width="400"/>
+<br/>
+<img src="https://github.com/user-attachments/assets/b6e5f091-d88f-4e16-94cd-d8ceb3b9079c" alt="image" width="400"/>
+
 ## `MonoBehaviour`s
 ## `ScriptableReference` and `ScriptableValue`
+## `StringOptions`
