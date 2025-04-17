@@ -54,7 +54,7 @@ public FloatRange MinMaxRange;
 [MinMaxRange(0, 10)]
 public List<FloatRange> MinMaxRanges;
 ```
-<img src="https://github.com/user-attachments/assets/4144a308-d5d0-4f97-8d3d-caa06913c8df" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/4144a308-d5d0-4f97-8d3d-caa06913c8df" alt="image" width="400"/>
 
 ### `[CreateAsset]`
 This allows to declare a field derived from `ScriptableObject` that has a _Create_ button which makes the editor to create the correct type of asset for you. If there are more that one classes that are derived from the field class, a popup with the options will appear.
@@ -66,7 +66,7 @@ public DerivedFromScriptableObject SomeScriptableObject;
 [CreateAsset]
 public List<DerivedFromScriptableObject> ManyScriptableObjects;
 ```
-<img src="https://github.com/user-attachments/assets/1e718d94-ce02-4d8b-a0c3-9b30ecde4079" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/1e718d94-ce02-4d8b-a0c3-9b30ecde4079" alt="image" width="400"/>
 -->
 
 ## `CollisionTrigger` Component
@@ -84,9 +84,9 @@ For example, you can use a `CollisionTrigger` in a character and make the charac
 
 <img src="https://github.com/user-attachments/assets/9adc377f-c71d-4e3b-80e9-229c5a1e34d9" alt="image" width="400"/>
 <br/>
-<img src="https://github.com/user-attachments/assets/70bcbf89-f4c4-415e-9061-a91661a59ca4" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/70bcbf89-f4c4-415e-9061-a91661a59ca4" alt="image" width="400"/>
 <br/>
-<img src="https://github.com/user-attachments/assets/9b6309e5-156e-4373-9ac9-d8c71556c445" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/9b6309e5-156e-4373-9ac9-d8c71556c445" alt="image" width="400"/>
 
 ## `CompositeObject`
 
@@ -132,18 +132,18 @@ In this example, any field declared as `FieldBase` can hold either a `Folder` or
 
 In the images sequence below, I navigate throught the composite of folders and files:
 
-<img src="https://github.com/user-attachments/assets/543ce11c-52d1-4283-98d1-a7bcf8400d9c" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/543ce11c-52d1-4283-98d1-a7bcf8400d9c" alt="image" width="400"/>
 <br/>
-<img src="https://github.com/user-attachments/assets/3b54db8d-0537-4b20-a1a4-e22964d09e9f" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/3b54db8d-0537-4b20-a1a4-e22964d09e9f" alt="image" width="400"/>
 <br/>
-<img src="https://github.com/user-attachments/assets/35632b85-79e2-44c0-a032-64f971b4dd26" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/35632b85-79e2-44c0-a032-64f971b4dd26" alt="image" width="400"/>
 <br/>
-<img src="https://github.com/user-attachments/assets/756a3d05-94b5-4ca5-aa5b-cc67c0254d07" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/756a3d05-94b5-4ca5-aa5b-cc67c0254d07" alt="image" width="400"/>
 <br/>
 <br/>
 This last image shows how a new entry would be created:
 <br/>
-<img src="https://github.com/user-attachments/assets/7f09c699-c555-4ad6-849b-90af8f5b2150" alt="image" width="500"/>
+<img src="https://github.com/user-attachments/assets/7f09c699-c555-4ad6-849b-90af8f5b2150" alt="image" width="400"/>
 
 This tech, was designed to be used in the `MotionKit` initially, but it has found its place in many other tools created by Cocodrilo Dog. It incorporates a breadcrumb structure in the inspector so that complex composite structures can be easily navigated.
 
@@ -219,5 +219,15 @@ private void Start() {
 <img src="https://github.com/user-attachments/assets/b6e5f091-d88f-4e16-94cd-d8ceb3b9079c" alt="image" width="400"/>
 
 ## `MonoBehaviour`s
+
+| Class | Description |
+|----------|----------|
+| `MonoSingleton` | Base class for creating `MonoBehaviour` singletons |
+| `MonoUpdater` | Class to use `Update` and coroutines from non-`MonoBehaviour` classes |
+| `MonoLifeCycleTrigger` | Component that invokes `OnAwake`, `OnStart`, `OnDestroy`, `OnEnable` and `OnDisable` as Unity events |
+
+<img src="https://github.com/user-attachments/assets/6f1fff09-0177-4bd5-be83-c547a603bf7b" alt="image" width="400"/>
+
+
 ## `ScriptableReference` and `ScriptableValue`
 ## `StringOptions`
