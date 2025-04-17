@@ -12,16 +12,24 @@ https://github.com/cocodrilodog/tools-core.git
 <img src="https://github.com/cocodrilodog/tools-motion-kit/assets/8107813/57a94a49-0474-4744-88d7-f0835c7a6455" height="150">
 
 ## Code Standard
+
 A code standard guide for C# in Unity. 
+
+> **For more details:**
+> <br/>
+> See the ***CodeStandard_Example*** script from the samples of this package.
 
 This helps a team of developers to agree on the coding style and makes every script in a project to look as if it was created by the same person. This makes it very easy to understand the code of your teammates.
 
 <img src="https://github.com/user-attachments/assets/b5755ab5-837f-4886-baba-fb0ee79ac465" alt="image" width="700"/>
 
 ## Attributes
-See the ***Attributes_Example*** scene from the samples of this package for more details.
 
 A set of attributes that improves quality of life for Unity developers.
+
+> **For more details:**
+> <br/>
+> See the ***Attributes_Example*** scene from the samples of this package.
 
 - `[MinMaxRange]` Inspector control to set ranges with sliders.
 - `[HorizontalLine]` A decorative horizontal line in the inspector.
@@ -60,7 +68,11 @@ public List<DerivedFromScriptableObject> ManyScriptableObjects;
 <img src="https://github.com/user-attachments/assets/1e718d94-ce02-4d8b-a0c3-9b30ecde4079" alt="image" width="500"/>
 
 ## `CollisionTrigger` Component
-This component helps to easily identify and react to collisions. 
+This component helps to easily identify and react to collisions.
+
+> **For more details:**
+> <br/>
+> See the ***Collision_Example*** scene from the samples of this package.
 
 Normally developers would need to create some code in `MonoBehaviour`s implementing `OnCollision...` or `OnTrigger...` functions and comparing game object tags or any other identifying system in place, in order to achieve the desired collision results.
 
@@ -77,6 +89,10 @@ For example, you can use a `CollisionTrigger` in a character and make the charac
 ## `CompositeObject`
 
 Base class to create `System.Object`s that use the `[SerializeReference]` attribute. This class is suitable for creating composite structures like the one shown below, hence the name `CompositeObject`.
+
+> **For more details:**
+> <br/>
+> See the ***Composite_Example*** scene from the samples of this package.
 
 Derived classes from `CompositeObject` support polymorphism, which means that any field declared as `MyCompositeObject`, for example, can serialize data of any other class that derives from `MyCompositeObject`.
 
@@ -130,6 +146,16 @@ This last image shows how a new entry would be created:
 This tech, was designed to be used in the `MotionKit` initially, but it has found its place in many other tools created by Cocodrilo Dog. It incorporates a breadcrumb structure in the inspector so that complex composite structures can be easily navigated.
 
 ## Composite State Machine
+
+Base classes `MonoCompositeStateMachine`, `ScriptableCompositeStateMachine` and concrete classes `MonoFlowStateMachine` and `ScriptableFlowStateMachine` used to create state machines that uses the `CompositeObject` technology to create polymorphic states.
+
+> **For more details:**
+> <br/>
+> See the ***CompositeStateMachine_Example*** scene from the samples of this package.
+
+<img src="https://github.com/user-attachments/assets/a51d8380-ff51-4c5c-9577-692630410224" alt="image" height="200"/>
+<img src="https://github.com/user-attachments/assets/aa29b121-09a8-4979-92b4-45bc7dbab7f5" alt="image" height="200"/>
+
 ## Interface Field
 ## `MonoBehaviour`s
 ## `ScriptableRefrence` and `ScriptableValue`
