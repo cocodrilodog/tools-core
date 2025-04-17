@@ -155,11 +155,40 @@ Base classes `MonoCompositeStateMachine`, `ScriptableCompositeStateMachine` and 
 > <br/>
 > See the ***CompositeStateMachine_Example*** scene from the samples of this package.
 
-Example of a class derived from `MonoCompositeStateMachine`. This rotates a circle around a distant point, and depending on the angle, it will have one of three colors:
+State machines using these classes expose the individual states of the machines in the inspector, allowing the developer to edit custom properties of each state, as well as to trigger actions `OnEnter` and `OnExit` of each state. 
+
+State machines that inherit from `MonoCompositeStateMachine` or `ScriptableCompositeStateMachine` can implement any logic in the states and their respective transitions. By programming the custom state machines and their respective states, the states can be left open for further editing or can be made read-only in the inspector, depending on the specific needs of the state machine. 
+
+Example of a class derived from `MonoCompositeStateMachine`: 
 
 <img src="https://github.com/user-attachments/assets/a51d8380-ff51-4c5c-9577-692630410224" alt="image" height="160"/>
 <img src="https://github.com/user-attachments/assets/aa29b121-09a8-4979-92b4-45bc7dbab7f5" alt="image" height="160"/>
 <br/>
+
+This rotates a circle around a distant point, and depending on the angle, it will have one of three colors. The logic is implemented in the individual state classes, like this:
+```
+[Serializable]
+public class Red : State {
+
+  public Red() => m_Color = Color.red;
+
+  public override void Enter() {
+    base.Enter();
+    Machine.m_BallContainer.GetComponentInChildren<Image>().color = m_Color;
+    Debug.Log("Red");
+  }
+
+  public override void Update() {
+    base.Update();
+    if(Machine.m_BallContainer.localEulerAngles.z >= 120) {
+      TransitionToState("Green");
+    } else if (Machine.m_BallContainer.localEulerAngles.z >= 240) {
+      TransitionToState("Blue");
+    }
+  }
+
+}
+```
 
 Example of `MonoFlowStateMachine` used to create a simple player mechanism:
 
@@ -171,4 +200,4 @@ Example of `MonoFlowStateMachine` used to create a simple player mechanism:
 
 ## Interface Field
 ## `MonoBehaviour`s
-## `ScriptableRefrence` and `ScriptableValue`
+## `ScriptableReference` and `ScriptableValue`
