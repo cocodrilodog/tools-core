@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9062477365081193905}
   - component: {fileID: 942219237576803853}
   m_Layer: 0
-  m_Name: NonSceneCube
+  m_Name: NonSceneCube2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,6 +60,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -115,7 +118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8313340043493845782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad86091eb655f846a2d4f0043cb014b, type: 3}
+  m_Script: {fileID: 11500000, guid: 72f5795f74200f947b49b9b4b0e64bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_RotateCubeButton:

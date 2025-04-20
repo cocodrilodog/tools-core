@@ -12,6 +12,18 @@ namespace CocodriloDog.Core.Examples {
 	public class SomeObjectPropertyDrawer : CDObjectPropertyDrawer {
 
 
+		#region Unity Methods
+
+		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+			base.OnGUI(position, property, label);
+			if (Event.current.type == EventType.Repaint) {
+				m_PropertyWidth = Position.width;
+			}
+		}
+
+		#endregion
+
+
 		#region Protected Methods
 
 		protected override void InitializePropertiesForGetHeight() {
@@ -27,8 +39,7 @@ namespace CocodriloDog.Core.Examples {
 		protected override float GetChildPropertyHeight(SerializedProperty property) {
 			if (property.propertyPath == m_StringOptions_MissingSource_Property.propertyPath) {
 				var height = EditorGUI.GetPropertyHeight(property) + 2; // Property height
-				height += GetHelpBoxHeight() + 2; // Help box height
-				height += EditorGUIUtility.singleLineHeight + 2; // Button height
+				height += CalcHelpBoxHeight() + 2; // Help box height
 				return height;
 			} else {
 				return base.GetChildPropertyHeight(property);
@@ -37,16 +48,13 @@ namespace CocodriloDog.Core.Examples {
 
 		protected override void DrawChildProperty(SerializedProperty property) {
 			
-			// Unity bug, sometimes I receive a value of 1 here
-			m_Width = Position.width > 1 ? Position.width : m_Width;
-			
 			if (property.propertyPath == m_StringOptions_MissingSource_Property.propertyPath) {
 
 				// Draw the property
 				EditorGUI.PropertyField(GetNextPosition(property), property);
 
 				// Draw a help box
-				var helpRect = GetNextPosition(GetHelpBoxHeight());
+				var helpRect = GetNextPosition(m_HelpBoxHeight);
 				GetNextPosition(2f);
 				helpRect.xMin += EditorGUI.indentLevel * 15;
 				EditorGUI.HelpBox(helpRect, m_HelpMessage, MessageType.Info);
@@ -67,20 +75,25 @@ namespace CocodriloDog.Core.Examples {
 		private string m_HelpMessage = "This help box tests how to draw individual child properties by using a " +
 			"property drawer that inherits from CDObjectPropertyDrawer, in this case: SomeObjectPropertyDrawer.";
 
-		private float m_Width;
+		private float m_PropertyWidth;
+
+		private float m_HelpBoxHeight;
 
 		#endregion
 
 
 		#region Private Methods
 
-		public float GetHelpBoxHeight() {
-			return EditorStyles.helpBox.CalcHeight(
+		/// <summary>
+		/// Call this from <see cref="GetChildPropertyHeight"/> only
+		/// </summary>
+		/// <returns></returns>
+		public float CalcHelpBoxHeight() {
+			var height = EditorStyles.helpBox.CalcHeight(
 				new GUIContent(m_HelpMessage),
-				m_Width // Start with the width of the property
-				- EditorGUI.indentLevel * 15 // Subtract the indent 
-				- 32 // Subtract the icon and space
+				m_PropertyWidth
 			);
+			return m_HelpBoxHeight = height;
 		}
 
 		#endregion

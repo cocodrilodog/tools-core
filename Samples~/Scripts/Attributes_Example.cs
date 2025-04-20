@@ -87,15 +87,19 @@
 
 		private bool HideString() => !ShowHiddenString;
 
-		[Button(17, disableInEditMode: true)]
+		[Button(18, disableInEditMode: true)]
 		public void ButtonMethod1() {
 			Debug.Log("Button Method 1 Invoked!");
 		}
 
-		[Button(17, horizontalizeSameIndex:true, disableInPlayMode: true)]
+		[Button(18, horizontalizeSameIndex:true, disableInPlayMode: true)]
 		public void ButtonMethod2() {
 			Debug.Log("Button Method 2 Invoked!");
 		}
+
+		[Tooltip("ReadOnlyString")]
+		[ReadOnly]
+		public string ReadOnlyString = "This is a read-only string.";
 
 		[Space]
 
@@ -197,6 +201,10 @@
 			return HelpValue;
 		}
 
+		[Tooltip("ReadOnlyString")]
+		[ReadOnly]
+		public string ReadOnlyString = "This is a read-only string.";
+
 		[Tooltip("ObjEvent1")]
 		[UnityEventGroup("ObjEventGroup")]
 		public UnityEvent<Vector3> ObjEvent1;
@@ -286,6 +294,10 @@
 			message = "Showing some integral help!";
 			return HelpValue;
 		}
+
+		[Tooltip("ReadOnlyString")]
+		[ReadOnly]
+		public string ReadOnlyString = "This is a read-only string.";
 
 		[Tooltip("ObjEvent1")]
 		[UnityEventGroup("ObjEventGroup")]
