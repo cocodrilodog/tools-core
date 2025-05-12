@@ -5,6 +5,7 @@ namespace CocodriloDog.Core {
 	using UnityEditor;
 	using UnityEngine;
 
+	[CanEditMultipleObjects]
 	[CustomEditor(typeof(ScriptableObject), true)]
 	public class ScriptableEditor : CDEditor { }
 
