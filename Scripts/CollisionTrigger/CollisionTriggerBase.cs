@@ -195,7 +195,7 @@ namespace CocodriloDog.Core {
 					}
 				}
 
-				// If the list set is empty, mark it for removal
+				// If the colliders list is empty, mark the collision trigger for removal
 				if (stayingCollisionTriggerColliders.Value.Count == 0) {
 					stayingCollisionTriggerCollidersToRemove =
 						stayingCollisionTriggerCollidersToRemove ?? new List<KeyValuePair<T_CollisionTrigger, List<T_Collider>>>();
@@ -204,7 +204,7 @@ namespace CocodriloDog.Core {
 
 			}
 
-			// Remove the list set
+			// Remove the collision triggers with their empty lists
 			if (stayingCollisionTriggerCollidersToRemove != null) {
 				foreach (var stayingCollisionTriggerColliders in stayingCollisionTriggerCollidersToRemove) {
 					m_StayingCollisionTriggers.Remove(stayingCollisionTriggerColliders.Key);
@@ -271,8 +271,8 @@ namespace CocodriloDog.Core {
 
 		private T_CollisionReaction GetMatchingReaction(T_CollisionTrigger otherCollisionTrigger) {
 			foreach (var otherTag in otherCollisionTrigger.m_ThisTags) {
-				foreach(var reaction in Reactions) {
-					if(reaction.OtherTag == otherTag) {
+				foreach (var reaction in Reactions) {
+					if (reaction.OtherTag == otherTag) {
 						return reaction;
 					}
 				}
@@ -281,7 +281,10 @@ namespace CocodriloDog.Core {
 		}
 
 		private bool IsColliderActiveAndEnabled(T_Collider collider) {
-			if(collider is Collider) {
+			if (collider == null) {
+				return false;
+			}
+			if (collider is Collider) {
 				var _collider = collider as Collider;
 				return _collider.enabled && _collider.gameObject.activeInHierarchy;
 			} else if (collider is Collider2D) {
