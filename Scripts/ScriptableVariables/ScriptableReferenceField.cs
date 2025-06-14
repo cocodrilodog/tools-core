@@ -24,7 +24,11 @@ namespace CocodriloDog.Core {
 		public T Value {
 			get {
 				if (UseAsset && m_Asset != null) {
-					return m_Asset.Value as T;
+					var assetValue = m_Asset.Value as T;
+					if(m_Asset.Value != null && assetValue == null) {
+						Debug.LogWarning($"{m_Asset.Value} type is not {typeof(T)} so the returned value will be null.");
+					}
+					return assetValue;
 				} else {
 					return m_Value;
 				}
