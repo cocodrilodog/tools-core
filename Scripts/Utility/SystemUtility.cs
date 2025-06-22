@@ -57,7 +57,7 @@ namespace CocodriloDog.Core {
 				return arrayOrListType.GetElementType();
 			}
 
-			// If it's a List
+			// If it's generic
 			if (arrayOrListType.IsGenericType) {
 
 				// Get the generic type definition
@@ -66,6 +66,36 @@ namespace CocodriloDog.Core {
 				if (genericTypeDef == typeof(List<>)) {
 					// Return the type argument of the generic type
 					return arrayOrListType.GetGenericArguments()[0];
+				}
+
+			}
+
+			// If it's not an array or a List, return null
+			return null;
+
+		}
+
+		/// <summary>
+		/// Returns the element type of the provided <paramref name="compositeListType"/> which is expected
+		/// to be a <see cref="CompositeList{T}"/> type.
+		/// </summary>
+		/// <param name="compositeListType">A CompositeList type.</param>
+		/// <returns>The type of the elements of the <see cref="CompositeList{T}"/>.</returns>
+		public static Type GetCompositeElementType(Type compositeListType) {
+
+			if (compositeListType == null) {
+				throw new ArgumentNullException(nameof(compositeListType));
+			}
+
+			// If it's generic
+			if (compositeListType.IsGenericType) {
+
+				// Get the generic type definition
+				var genericTypeDef = compositeListType.GetGenericTypeDefinition();
+
+				if (genericTypeDef == typeof(CompositeList<>)) {
+					// Return the type argument of the generic type
+					return compositeListType.GetGenericArguments()[0];
 				}
 
 			}
@@ -90,6 +120,16 @@ namespace CocodriloDog.Core {
 				type = type.BaseType;
 			}
 			return false;
+		}
+
+		public static bool IsArrayOfType(Type arrayType, Type type) {
+			if (!arrayType.IsArray) {
+				return false;
+			}
+			if (!arrayType.GetElementType().IsAssignableFrom(type)) {
+				return false;
+			}
+			return true;
 		}
 
 		/// <summary>
