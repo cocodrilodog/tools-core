@@ -16,7 +16,7 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// The referenced <see cref="CompositeObject"/>.
 		/// </summary>
-		public T Value => m_Value;
+		public T Value => RuntimeCompositeObjects.GetRuntimeCompositeObjectById(m_Id) as T;
 
 		#endregion
 
@@ -31,9 +31,9 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private bool m_OverrideSource;
 
-		[Tooltip("The reference to the CompositeObject.")]
-		[SerializeReference]
-		private T m_Value;
+		[Tooltip("The unique Id of the CompositeObject.")]
+		[SerializeField]
+		private string m_Id;
 
 		#endregion
 

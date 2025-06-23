@@ -9,6 +9,18 @@ namespace CocodriloDog.Core.Examples {
 	public class CompositeObjectReference_Example : MonoCompositeRoot {
 
 
+		#region Unity Methods
+
+		private void Start() {
+			Debug.Log(m_FileReference.Value.Name);
+			foreach(var fileReference in m_FileReferences) {
+				Debug.Log(fileReference.Value.Name);
+			}
+		}
+
+		#endregion
+
+
 		#region Private Fields
 
 		[Header("Files")]

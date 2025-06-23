@@ -16,13 +16,13 @@ namespace CocodriloDog.Core {
 
 		public event Action OnAwakeEv;		// added Ev for consistency
 
-		public event Action OnStartEv;		// added Ev for consistency
-
-		public event Action OnDestroyEv;	// added Ev to break the conflict with OnDestroy
-
 		public event Action OnEnableEv;		// added Ev to break the conflict with OnEnable
 
+		public event Action OnStartEv;		// added Ev for consistency
+
 		public event Action OnDisableEv;	// added Ev to break the conflict with OnDisable
+
+		public event Action OnDestroyEv;	// added Ev to break the conflict with OnDestroy
 
 		#endregion
 

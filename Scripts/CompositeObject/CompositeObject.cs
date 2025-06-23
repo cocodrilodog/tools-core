@@ -71,12 +71,17 @@ namespace CocodriloDog.Core {
 
 
 		/// <summary>
-		/// The name of the object
+		/// The name of the object.
 		/// </summary>
 		public string Name {
 			get => m_Name;
 			set => m_Name = value;
 		}
+
+		/// <summary>
+		/// A unique Id for this object.
+		/// </summary>
+		public string Id => m_Id;
 
 		/// <summary>
 		/// Enables or disables the edit button in the inspector.
@@ -147,7 +152,33 @@ namespace CocodriloDog.Core {
 
 		#region Public Constructor
 
-		public CompositeObject() => m_Name = DefaultName;
+		public CompositeObject() { 
+			m_Name = DefaultName;
+			if (MonoUpdater.IsAwake) {
+				// The app is running already, so OnAwakeEv was already triggered
+				// 
+				// Wait for one frame for the serialized object to transfer the data to the instance.
+				MonoUpdater.StartCoroutine_(Register());
+				IEnumerator Register() {
+					yield return new WaitForEndOfFrame();
+					RuntimeCompositeObjects.Register(this);
+				}
+			} else {
+				// We need to wait for Awake for the serialized Id to take over, otherwise
+				// it uses one created before the serialized data is transferred to the object.
+				MonoUpdater.OnAwakeEv -= MonoUpdater_OnAwakeEv; // Prevent multiple subscriptions
+				MonoUpdater.OnAwakeEv += MonoUpdater_OnAwakeEv;
+			}
+		}
+
+		private void MonoUpdater_OnAwakeEv() {
+			MonoUpdater.OnAwakeEv -= MonoUpdater_OnAwakeEv;
+			RuntimeCompositeObjects.Register(this);
+		}
+
+		~CompositeObject() {
+			RuntimeCompositeObjects.Unregister(this);
+		}
 
 		#endregion
 
@@ -157,6 +188,10 @@ namespace CocodriloDog.Core {
 		[Tooltip("The name of this CompositeObject")]
 		[SerializeField]
 		private string m_Name;
+
+		//[HideInInspector]
+		[SerializeField]
+		private string m_Id = Guid.NewGuid().ToString();
 
 		[HideInInspector]
 		[SerializeField]

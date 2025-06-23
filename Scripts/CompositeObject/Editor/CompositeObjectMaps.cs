@@ -2,9 +2,10 @@ namespace CocodriloDog.Core {
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
-	using UnityEditor;
 	using UnityEngine;
+	using UnityEditor;
 
 	/// <summary>
 	/// Constructs and stores dictionaries containing references to <see cref="CompositeObject"/>s
@@ -20,20 +21,17 @@ namespace CocodriloDog.Core {
 			
 			ObjectChangeEvents.changesPublished -= ObjectChangeEvents_ChangesPublished;
 			ObjectChangeEvents.changesPublished += ObjectChangeEvents_ChangesPublished;
-			
+
 			Selection.selectionChanged -= Selection_SelectionChanged;
 			Selection.selectionChanged += Selection_SelectionChanged;
-		
-		}
 
-		private static void Selection_SelectionChanged() => s_MapsByObject.Clear();
+		}
 
 		#endregion
 
 
 		#region Public Static Methods
 
-		// TODO: Test this
 		/// <summary>
 		/// Gets a dictionary with all the <see cref="CompositeObject"/>s of type <typeparamref name="T"/> mapped
 		/// by their path in the <paramref name="root"/> object.
@@ -71,6 +69,7 @@ namespace CocodriloDog.Core {
 
 				// Get the type of the node
 				var type = compositeNode.GetType();
+
 				const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 				// Look for type and inherited types
@@ -147,6 +146,16 @@ namespace CocodriloDog.Core {
 		/// <returns></returns>
 		public static bool ClearCompositeObjectsMap(UnityEngine.Object root) => s_MapsByObject.Remove(root);
 	
+		public static T GetCompositeObjectById<T>(UnityEngine.Object root, string id) where T : CompositeObject {
+			return GetCompositeObjectById(root, typeof(T), id) as T;
+		}
+
+		public static CompositeObject GetCompositeObjectById(UnityEngine.Object root, Type referencedType, string id) {
+			var map = GetCompositeObjectsMap(root, referencedType);
+			var compositeObject = map.FirstOrDefault(pathToCompositeObject => pathToCompositeObject.Value.Id == id).Value;
+			return compositeObject;
+		}
+
 		#endregion
 
 
@@ -172,6 +181,8 @@ namespace CocodriloDog.Core {
 				}
 			}
 		}
+
+		private static void Selection_SelectionChanged() => s_MapsByObject.Clear();
 
 		#endregion
 

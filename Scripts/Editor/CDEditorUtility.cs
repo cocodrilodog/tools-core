@@ -250,10 +250,19 @@
 				//	 return property.objectReferenceValue != null ? property.objectReferenceValue.GetType() : typeof(UnityEngine.Object);
 
 				case SerializedPropertyType.ManagedReference: {
+						
 						// Example of managedReferenceFieldTypename: "CocodriloDog.Core.Examples CocodriloDog.Core.Examples.Folder"
-						var typenameParts = property.managedReferenceFieldTypename.Split(' ');
-						var assembly = Assembly.Load(typenameParts[0]);
-						return assembly.GetType(typenameParts[1]);
+						var typeName = property.managedReferenceFieldTypename;
+						int firstSpaceIndex = property.managedReferenceFieldTypename.IndexOf(' ');
+						var namespace_ = typeName.Substring(0, firstSpaceIndex);
+
+						if (firstSpaceIndex >= 0) {
+							typeName = typeName.Substring(firstSpaceIndex + 1);
+						}
+
+						var assembly = Assembly.Load(namespace_);
+						return assembly.GetType(typeName);
+
 					}
 
 				default: {

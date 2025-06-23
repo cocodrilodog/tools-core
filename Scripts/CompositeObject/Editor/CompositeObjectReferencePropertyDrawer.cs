@@ -80,9 +80,12 @@
 			var options = compositeObjectsMap.Keys.ToList();
 			options.Insert(0, "Null"); // Allow the first choice to be null
 
-			// Find the key of the current composite object (if any) in the map
+			// Find the key (path) of the current composite object (if any) in the map
+			var currentCompositeObject = CompositeObjectMaps.GetCompositeObjectById(
+				m_SourceProperty.objectReferenceValue, referencedType, m_IdProperty.stringValue
+			);
 			var currentPath = compositeObjectsMap.FirstOrDefault(
-				pathToCompositeObject => pathToCompositeObject.Value == m_ValueProperty.managedReferenceValue
+				pathToCompositeObject => pathToCompositeObject.Value == currentCompositeObject
 			).Key;
 
 			// Find the corresponding index in the options list
@@ -100,9 +103,11 @@
 
 				Undo.RecordObject(m_SourceProperty.objectReferenceValue, $"Modify {Property.displayName}");
 				if (compositeObjectsMap.TryGetValue(m_NewPath.CompositePath, out var newValue)) {
-					m_ValueProperty.managedReferenceValue = newValue;
+					//m_ValueProperty.managedReferenceValue = newValue;
+					m_IdProperty.stringValue = newValue.Id;
 				} else {
-					m_ValueProperty.managedReferenceValue = null;
+					//m_ValueProperty.managedReferenceValue = null;
+					m_IdProperty.stringValue = null;
 				}
 				EditorUtility.SetDirty(m_SourceProperty.objectReferenceValue);
 
@@ -119,11 +124,20 @@
 
 		#region Protected Methods
 
+		protected override void InitializePropertiesForGetHeight() {
+			base.InitializePropertiesForGetHeight();
+			m_SourceProperty = Property.FindPropertyRelative("m_Source");
+			m_OverrideSourceProperty = Property.FindPropertyRelative("m_OverrideSource");
+			//m_ValueProperty = Property.FindPropertyRelative("m_Value");
+			m_IdProperty = Property.FindPropertyRelative("m_Id");
+		}
+
 		protected override void InitializePropertiesForOnGUI() {
 			base.InitializePropertiesForOnGUI();
 			m_SourceProperty = Property.FindPropertyRelative("m_Source");
 			m_OverrideSourceProperty = Property.FindPropertyRelative("m_OverrideSource");
-			m_ValueProperty = Property.FindPropertyRelative("m_Value");
+			//m_ValueProperty = Property.FindPropertyRelative("m_Value");
+			m_IdProperty = Property.FindPropertyRelative("m_Id");
 		}
 
 		#endregion
@@ -135,7 +149,9 @@
 
 		private SerializedProperty m_OverrideSourceProperty;
 
-		private SerializedProperty m_ValueProperty;
+		//private SerializedProperty m_ValueProperty;
+
+		private SerializedProperty m_IdProperty;
 
 		private CompositeObjectPath m_NewPath;
 

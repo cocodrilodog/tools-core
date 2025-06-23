@@ -1,5 +1,6 @@
 namespace CocodriloDog.Core {
 
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -27,6 +28,13 @@ namespace CocodriloDog.Core {
 	/// calls and create coroutines.
 	/// </remarks>
 	public class MonoUpdater : MonoSingleton<MonoUpdater> {
+
+
+		#region Public Static Properties
+
+		public static bool IsAwake { get; private set; }
+
+		#endregion
 
 
 		#region Public Static Methods
@@ -96,12 +104,33 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Public Static Events
+
+		public static event Action OnAwakeEv;      // added Ev for consistency
+
+		public static event Action OnEnableEv;     // added Ev to break the conflict with OnEnable
+
+		public static event Action OnStartEv;      // added Ev for consistency
+
+		public static event Action OnDisableEv;    // added Ev to break the conflict with OnDisable
+
+		public static event Action OnDestroyEv;    // added Ev to break the conflict with OnDestroy
+
+		#endregion
+
+
 		#region Unity Methods
 
 		protected override void Awake() {
 			base.Awake();
 			DontDestroyOnLoad(gameObject);
+			IsAwake = true;
+			OnAwakeEv?.Invoke();
 		}
+
+		private void OnEnable() => OnEnableEv?.Invoke();
+
+		private void Start() => OnStartEv?.Invoke();
 
 		private void FixedUpdate() {
 			foreach (var fixedUpdatable in m_FixedUpdatables) {
@@ -113,6 +142,13 @@ namespace CocodriloDog.Core {
 			foreach(var updatable in m_Updatables) {
 				updatable.Update();
 			}
+		}
+
+		private void OnDisable() => OnDisableEv?.Invoke();
+
+		protected override void OnDestroy() {
+			base.OnDestroy();
+			OnDestroyEv?.Invoke();
 		}
 
 		#endregion

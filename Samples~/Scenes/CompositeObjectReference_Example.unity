@@ -328,61 +328,26 @@ MonoBehaviour:
   m_FileReference:
     m_Source: {fileID: 9044163716658033316}
     m_OverrideSource: 0
-    m_Value:
-      rid: 1697029204662550545
+    m_Id: 6db90a44-e29a-41d5-9f71-afb3aeabc73f
   m_FileReferences:
   - m_Source: {fileID: 9044163716658033316}
     m_OverrideSource: 0
-    m_Value:
-      rid: -2
+    m_Id: 15ffefb0-9deb-4754-b79d-12cb2994849d
   - m_Source: {fileID: 9044163716658033316}
     m_OverrideSource: 0
-    m_Value:
-      rid: 1697029204662550542
+    m_Id: 583deeba-bf4f-4be8-8bfa-8b98886554f4
   - m_Source: {fileID: 9044163716658033316}
     m_OverrideSource: 0
-    m_Value:
-      rid: 5946232990644306019
+    m_Id: adbccd03-3236-4cb6-9799-86873b3a6985
   - m_Source: {fileID: 9044163716658033316}
     m_OverrideSource: 0
-    m_Value:
-      rid: 5946232990644306021
+    m_Id: d15d32e7-30d2-4346-9e87-7a73450e11c4
   - m_Source: {fileID: 9044163716658033316}
     m_OverrideSource: 0
-    m_Value:
-      rid: 5946232990644306023
+    m_Id: 7c473431-f6de-44a3-84f9-129d51c4d041
   - m_Source: {fileID: 9044163716658033316}
     m_OverrideSource: 0
-    m_Value:
-      rid: 1697029204662550545
-  - m_Source: {fileID: 9044163716658033316}
-    m_OverrideSource: 0
-    m_Value:
-      rid: 5946233013367734355
-  - m_Source: {fileID: 9044163716658033316}
-    m_OverrideSource: 0
-    m_Value:
-      rid: 5946233013367734357
-  - m_Source: {fileID: 9044163716658033316}
-    m_OverrideSource: 0
-    m_Value:
-      rid: 5946233013367734358
-  - m_Source: {fileID: 9044163716658033316}
-    m_OverrideSource: 0
-    m_Value:
-      rid: 5946232990644305996
-  - m_Source: {fileID: 9044163716658033316}
-    m_OverrideSource: 0
-    m_Value:
-      rid: 5946233013367734365
-  - m_Source: {fileID: 9044163716658033316}
-    m_OverrideSource: 0
-    m_Value:
-      rid: 5946233013367734368
-  - m_Source: {fileID: 9044163716658033316}
-    m_OverrideSource: 0
-    m_Value:
-      rid: 5946233013367734367
+    m_Id: cad9b2a7-b5fc-4ea9-9f7b-1309e61608be
   references:
     version: 2
     RefIds:
@@ -392,6 +357,7 @@ MonoBehaviour:
       type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Documents
+        m_Id: 993a0bda-14bf-4c11-a588-d30b6ddceea9
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -407,6 +373,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: TODOs
+        m_Id: e6b0e951-cccf-4744-9b21-a8750e61edd3
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -427,6 +394,7 @@ MonoBehaviour:
       type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Game Dev
+        m_Id: 150c08f3-ea19-4457-a6ab-c732ed4de936
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -442,6 +410,7 @@ MonoBehaviour:
       type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Game Design
+        m_Id: 5fb8a0ff-6f57-4ee9-a02f-9143d756c35b
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -457,6 +426,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: C# Architecture
+        m_Id: 15ffefb0-9deb-4754-b79d-12cb2994849d
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -467,6 +437,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Design Patterns
+        m_Id: c25d134a-2094-479a-82af-fd01a97f134b
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -477,6 +448,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Optimization Techniques
+        m_Id: ba51b108-c7d5-46f4-bb35-f3dce641df0b
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -488,6 +460,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Emotion
+        m_Id: 583deeba-bf4f-4be8-8bfa-8b98886554f4
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -498,6 +471,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Venue
+        m_Id: 05208473-c30a-4d7d-a515-73235a14253d
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -508,6 +482,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: Fun
+        m_Id: 6db90a44-e29a-41d5-9f71-afb3aeabc73f
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -518,6 +493,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: SomeOtherFile
+        m_Id: adbccd03-3236-4cb6-9799-86873b3a6985
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -527,6 +503,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File A
+        m_Id: d15d32e7-30d2-4346-9e87-7a73450e11c4
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -536,6 +513,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File B
+        m_Id: 8a9c3284-8703-4919-bdf5-c576640dae22
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -545,6 +523,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File C
+        m_Id: e8ee8f61-c07c-48af-ae7b-63df9b4a5d61
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -554,6 +533,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File 1
+        m_Id: 7c473431-f6de-44a3-84f9-129d51c4d041
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -563,6 +543,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File 2
+        m_Id: 76c9f567-0528-476f-b010-f2fb68c87345
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -572,6 +553,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File 3
+        m_Id: a6039525-4f54-469f-bede-5f7b0820b21f
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -581,6 +563,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File X
+        m_Id: cad9b2a7-b5fc-4ea9-9f7b-1309e61608be
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -590,6 +573,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File Z
+        m_Id: 4f288416-8499-4b28-a297-b42c55509c2a
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
@@ -599,6 +583,7 @@ MonoBehaviour:
       type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
       data:
         m_Name: File Y
+        m_Id: 09fedd5c-a077-4fad-aafd-da51e996d139
         m_CanEnterEdit: 1
         m_CanEditName: 1
         m_CanDeleteInstance: 1
