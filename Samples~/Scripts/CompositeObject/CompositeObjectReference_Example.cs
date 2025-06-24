@@ -1,5 +1,6 @@
 namespace CocodriloDog.Core.Examples {
 
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
@@ -11,17 +12,41 @@ namespace CocodriloDog.Core.Examples {
 
 		#region Unity Methods
 
-		private void Start() {
+		private IEnumerator Start() {
+
+			Debug.Log("----------------");
 			Debug.Log(m_FileReference.Value.Name);
-			foreach(var fileReference in m_FileReferences) {
+			foreach (var fileReference in m_FileReferences) {
 				Debug.Log(fileReference.Value.Name);
 			}
+
+			yield return new WaitForSeconds(2);
+			if (m_Copy) {
+				Instantiate(m_CopyPrefab);
+			}
+
+		}
+
+		private void OnDestroy() {
+			m_MyDisk.Dispose();
+			m_OtherFile.Dispose();
+			m_OtherFileNull?.Dispose();
+			m_OtherFilesCompositeList.ForEach(f => f.Dispose());
+			m_OtherFilesCompositeListEmpty.ForEach(f => f.Dispose());
+			m_OtherFilesList.ForEach(f => f.Dispose());
+			m_OtherFilesArray.ForEach(f => f.Dispose());
 		}
 
 		#endregion
 
 
 		#region Private Fields
+
+		[SerializeField]
+		private GameObject m_CopyPrefab;
+
+		[SerializeField]
+		private bool m_Copy;
 
 		[Header("Files")]
 
@@ -49,6 +74,9 @@ namespace CocodriloDog.Core.Examples {
 		private List<FileBase> m_OtherFilesArray;
 
 		[Header("References")]
+
+		[SerializeField]
+		private bool m_LogReferences = true;
 
 		[Tooltip("Find a file.")]
 		[SerializeField]

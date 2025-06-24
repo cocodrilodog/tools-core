@@ -64,7 +64,7 @@ namespace CocodriloDog.Core {
 	/// 
 	/// </remarks>
 	[Serializable]
-	public abstract class CompositeObject {
+	public abstract class CompositeObject : ISerializationCallbackReceiver {
 
 
 		#region Public Properties
@@ -152,32 +152,40 @@ namespace CocodriloDog.Core {
 
 		#region Public Constructor
 
-		public CompositeObject() { 
-			m_Name = DefaultName;
-			if (MonoUpdater.IsAwake) {
-				// The app is running already, so OnAwakeEv was already triggered
-				// 
-				// Wait for one frame for the serialized object to transfer the data to the instance.
-				MonoUpdater.StartCoroutine_(Register());
-				IEnumerator Register() {
-					yield return new WaitForEndOfFrame();
-					RuntimeCompositeObjects.Register(this);
-				}
+		public CompositeObject() => m_Name = DefaultName;
+
+		#endregion
+
+
+		#region Public Methods
+
+		public void OnBeforeSerialize() { }
+
+		public void OnAfterDeserialize() {
+			// Register this object in RuntimeCompositeObjects
+			// 
+			// OnAfterDeserialize guarantees the values in the inspector are updated in the instance
+			if (MonoUpdater.IsAwake) { // Make sure we are on play mode without invoking Unity API Application.isPlaying
+				RuntimeCompositeObjects.Register(this);
 			} else {
-				// We need to wait for Awake for the serialized Id to take over, otherwise
-				// it uses one created before the serialized data is transferred to the object.
+				// Otherwise, we need to wait for Awake
 				MonoUpdater.OnAwakeEv -= MonoUpdater_OnAwakeEv; // Prevent multiple subscriptions
 				MonoUpdater.OnAwakeEv += MonoUpdater_OnAwakeEv;
 			}
 		}
 
+		public virtual void Dispose() {
+			RuntimeCompositeObjects.Unregister(this);
+		}
+
+		#endregion
+
+
+		#region Event Handlers
+
 		private void MonoUpdater_OnAwakeEv() {
 			MonoUpdater.OnAwakeEv -= MonoUpdater_OnAwakeEv;
 			RuntimeCompositeObjects.Register(this);
-		}
-
-		~CompositeObject() {
-			RuntimeCompositeObjects.Unregister(this);
 		}
 
 		#endregion
@@ -189,7 +197,7 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private string m_Name;
 
-		//[HideInInspector]
+		[HideInInspector]
 		[SerializeField]
 		private string m_Id = Guid.NewGuid().ToString();
 

@@ -13,6 +13,16 @@ namespace CocodriloDog.Core.Examples {
 	public class Folder : FileBase {
 
 
+		#region Public Methods
+
+		public override void Dispose() {
+			base.Dispose();
+			m_Files.ForEach(f => f.Dispose());
+		}
+
+		#endregion
+
+
 		#region Private Fields
 
 		/// <summary>

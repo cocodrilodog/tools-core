@@ -32,6 +32,9 @@ namespace CocodriloDog.Core {
 
 		#region Public Static Properties
 
+		/// <summary>
+		/// Has the singleton awaken?
+		/// </summary>
 		public static bool IsAwake { get; private set; }
 
 		#endregion
@@ -132,23 +135,26 @@ namespace CocodriloDog.Core {
 
 		private void Start() => OnStartEv?.Invoke();
 
-		private void FixedUpdate() {
-			foreach (var fixedUpdatable in m_FixedUpdatables) {
-				fixedUpdatable.FixedUpdate();
-			}
-		}
+		private void FixedUpdate() => m_FixedUpdatables.ForEach(fu => fu.FixedUpdate());
 
-		private void Update() {
-			foreach(var updatable in m_Updatables) {
-				updatable.Update();
-			}
-		}
+		private void Update() => m_Updatables.ForEach(u => u.Update());
 
 		private void OnDisable() => OnDisableEv?.Invoke();
 
 		protected override void OnDestroy() {
 			base.OnDestroy();
+			IsAwake = false;
 			OnDestroyEv?.Invoke();
+		}
+
+		#endregion
+
+
+		#region Private Static Methods
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+		private static void Init() {
+			_ = Instance; // Force Init as soon as possible
 		}
 
 		#endregion

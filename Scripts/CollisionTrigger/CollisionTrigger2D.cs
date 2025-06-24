@@ -88,6 +88,8 @@ namespace CocodriloDog.Core {
 			}
 		}
 
+		private void OnDestroy() => m_Reactions.ForEach(r => r.Dispose());
+
 		#endregion
 
 

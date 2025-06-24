@@ -101,6 +101,13 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Utility
+
+		public void ForEach(Action<T> action) => m_List.ForEach(action);
+
+		#endregion
+
+
 		#region Private Fields
 
 		[SerializeReference]

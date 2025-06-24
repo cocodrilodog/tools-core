@@ -13,6 +13,15 @@ namespace CocodriloDog.Core.Examples {
 	public class Composite_Example : MonoBehaviour {
 
 
+		#region Unity Methods
+
+		private void OnDestroy() {
+			m_MyDrive?.Dispose();
+		}
+
+		#endregion
+
+
 		#region Private Fields
 
 		[SerializeReference]

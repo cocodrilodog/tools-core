@@ -140,7 +140,7 @@ namespace CocodriloDog.Core {
 
 		protected virtual void OnDestroy() {
 			SetState(null); // This will exit the current state
-			ForEachState(s => s.OnDestroy());
+			ForEachState(s => s.Dispose());
 		}
 
 		#endregion
