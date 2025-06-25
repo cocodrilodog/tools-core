@@ -6,7 +6,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// Runtime storage of all the <see cref="CompositeObject"/>s by <c>Id</c> that plan to be reachable by
+	/// Runtime storage of all the <see cref="CompositeObject"/>s by <c>Id</c> that are planned to be reachable by
 	/// <see cref="CompositeObjectReference{T}"/>.
 	/// </summary>
 	public static class ReferenceableCompositeObjects {
@@ -20,8 +20,8 @@ namespace CocodriloDog.Core {
 		/// <param name="root">The root Unity.Object that contains the <see cref="CompositeObject"/></param>
 		/// <param name="compositeObject">The <see cref="CompositeObject"/>.</param>
 		public static void Register(UnityEngine.Object root, CompositeObject compositeObject) {
-			s_RuntimeCompositeObjects.TryAdd(root, new Dictionary<string, CompositeObject>());
-			s_RuntimeCompositeObjects[root][compositeObject.Id] = compositeObject;
+			s_ReferenceableCompositeObjects.TryAdd(root, new Dictionary<string, CompositeObject>());
+			s_ReferenceableCompositeObjects[root][compositeObject.Id] = compositeObject;
 			//Debug.Log($"Registered: {compositeObject.Name} {compositeObject.Id}");
 		}
 
@@ -33,11 +33,14 @@ namespace CocodriloDog.Core {
 		/// <returns></returns>
 		public static bool Unregister(UnityEngine.Object root, CompositeObject compositeObject) {
 			var result = false;
-			if (s_RuntimeCompositeObjects.TryGetValue(root, out var compositeObjectsById)) {
+			if (s_ReferenceableCompositeObjects.TryGetValue(root, out var compositeObjectsById)) {
 				result = compositeObjectsById.Remove(compositeObject.Id);
-				//if (result) {
-				//	Debug.Log($"Unregistered: {compositeObject.Name} {compositeObject.Id}");
-				//}
+				if (result) {
+					//Debug.Log($"Unregistered: {compositeObject.Name} {compositeObject.Id}");
+					if (compositeObjectsById.Count == 0) {
+						s_ReferenceableCompositeObjects.Remove(root);
+					}
+				}
 			}
 			return result;
 		}
@@ -50,18 +53,23 @@ namespace CocodriloDog.Core {
 		/// <returns>The <see cref="CompositeObject"/>.</returns>
 		public static CompositeObject GetById(UnityEngine.Object root, string id) {
 			CompositeObject compositeObject = null;
-			if (s_RuntimeCompositeObjects.TryGetValue(root, out var compositeObjectsById)) {
+			if (s_ReferenceableCompositeObjects.TryGetValue(root, out var compositeObjectsById)) {
 				compositeObjectsById.TryGetValue(id, out compositeObject);
 			}
 			return compositeObject;
 		}
+
+		/// <summary>
+		/// Removes all registered <see cref="CompositeObject"/>s.
+		/// </summary>
+		public static void Purge() => s_ReferenceableCompositeObjects.Clear();
 
 		#endregion
 
 
 		#region Private Static Fields
 
-		private static Dictionary<UnityEngine.Object, Dictionary<string, CompositeObject>> s_RuntimeCompositeObjects = new();
+		private static Dictionary<UnityEngine.Object, Dictionary<string, CompositeObject>> s_ReferenceableCompositeObjects = new();
 
 		#endregion
 
