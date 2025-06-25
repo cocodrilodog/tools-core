@@ -148,25 +148,28 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		protected virtual void OnEnable() {
-
-			if (!m_SetDefaultStateOnEnable) {
-				return;
-			}
-
-			if (Application.isPlaying) {
-				SetState(m_States[0]);
-				return;
-			}
-
+			if (Application.isPlaying
 #if UNITY_EDITOR
-			// This handles and edge case in the editor in which OnEnable is called right before
-			// the editor swithces Application.isPlaying to true.
-			if (EditorApplication.isPlayingOrWillChangePlaymode) {
-				SetState(m_States[0]);
-			}
+				// This handles and edge case in the editor in which OnEnable is called right before
+				// the editor swithces Application.isPlaying to true.
+				|| EditorApplication.isPlayingOrWillChangePlaymode
 #endif
-
+				) {
+				m_States.ForEach(s => s.RegisterAsReferenceable(this));
+				if (m_SetDefaultStateOnEnable) {
+					SetState(m_States[0]);
+				}
+				MonoUpdater.OnDestroyEv -= MonoUpdater_OnDestroyEv;
+				MonoUpdater.OnDestroyEv += MonoUpdater_OnDestroyEv;
+			}
 		}
+
+		#endregion
+
+
+		#region Event Handlers
+
+		private void MonoUpdater_OnDestroyEv() => m_States.ForEach(s => s.UnregisterReferenceable(this));
 
 		#endregion
 

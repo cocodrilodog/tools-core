@@ -70,6 +70,8 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
+		private void Awake() => m_Reactions.ForEach(r => r?.RegisterAsReferenceable(this));
+
 		private void OnTriggerEnter2D(Collider2D other) => _OnTriggerEnter(other);
 
 		private void OnTriggerExit2D(Collider2D other) => _OnTriggerExit(other);
@@ -88,7 +90,7 @@ namespace CocodriloDog.Core {
 			}
 		}
 
-		private void OnDestroy() => m_Reactions.ForEach(r => r.Dispose());
+		private void OnDestroy() => m_Reactions.ForEach(r => r?.UnregisterReferenceable(this));
 
 		#endregion
 

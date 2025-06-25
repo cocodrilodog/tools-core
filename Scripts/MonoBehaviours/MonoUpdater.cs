@@ -20,7 +20,9 @@ namespace CocodriloDog.Core {
 
 
 	/// <summary>
-	/// Calls Update and FixedUpdate in the added objects, and starts/stops coroutines.
+	/// Calls Update and FixedUpdate in the added objects, and starts/stops coroutines and raises static 
+	/// events: <see cref="OnAwakeEv"/>, <see cref="OnEnableEv"/>, <see cref="OnStartEv"/>, 
+	/// <see cref="OnDisableEv"/>, and <see cref="OnDestroyEv"/>
 	/// </summary>
 	/// 
 	/// <remarks>
@@ -109,14 +111,21 @@ namespace CocodriloDog.Core {
 
 		#region Public Static Events
 
+		/// <summary>
+		/// Invoked on <see cref="Awake"/> of this <see cref="MonoUpdater"/>.
+		/// </summary>
+		/// <remarks>
+		/// This can be used by processes that happen before awake and need to wait for awakening, such 
+		/// as constructors or OnAfterDeserialize.
+		/// </remarks>
 		public static event Action OnAwakeEv;      // added Ev for consistency
 
-		public static event Action OnEnableEv;     // added Ev to break the conflict with OnEnable
-
-		public static event Action OnStartEv;      // added Ev for consistency
-
-		public static event Action OnDisableEv;    // added Ev to break the conflict with OnDisable
-
+		/// <summary>
+		/// Invoked <see cref="OnDestroy"/> of this <see cref="MonoUpdater"/>.
+		/// </summary>
+		/// <remarks>
+		/// This can be used by objects that don't have an OnDestroy when the game finishes, like ScriptableObjects.
+		/// </remarks>
 		public static event Action OnDestroyEv;    // added Ev to break the conflict with OnDestroy
 
 		#endregion
@@ -131,15 +140,9 @@ namespace CocodriloDog.Core {
 			OnAwakeEv?.Invoke();
 		}
 
-		private void OnEnable() => OnEnableEv?.Invoke();
-
-		private void Start() => OnStartEv?.Invoke();
-
 		private void FixedUpdate() => m_FixedUpdatables.ForEach(fu => fu.FixedUpdate());
 
 		private void Update() => m_Updatables.ForEach(u => u.Update());
-
-		private void OnDisable() => OnDisableEv?.Invoke();
 
 		protected override void OnDestroy() {
 			base.OnDestroy();

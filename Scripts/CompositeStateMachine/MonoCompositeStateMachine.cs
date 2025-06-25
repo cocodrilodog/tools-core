@@ -132,6 +132,8 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
+		protected virtual void Awake() => m_States.ForEach(s => s.RegisterAsReferenceable(this));
+
 		protected virtual void Start() => SetState(m_States[0]);
 
 		protected virtual void Update() => m_CurrentState.Update();
@@ -140,7 +142,8 @@ namespace CocodriloDog.Core {
 
 		protected virtual void OnDestroy() {
 			SetState(null); // This will exit the current state
-			ForEachState(s => s.Dispose());
+			m_States.ForEach(s => s.UnregisterReferenceable(this));
+			m_States.ForEach(s => s.OnDestroy());
 		}
 
 		#endregion

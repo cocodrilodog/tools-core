@@ -15,9 +15,14 @@ namespace CocodriloDog.Core.Examples {
 
 		#region Public Methods
 
-		public override void Dispose() {
-			base.Dispose();
-			m_Files.ForEach(f => f.Dispose());
+		public override void RegisterAsReferenceable(UnityEngine.Object root) {
+			base.RegisterAsReferenceable(root);
+			m_Files.ForEach(f => f.RegisterAsReferenceable(root));
+		}
+
+		public override void UnregisterReferenceable(UnityEngine.Object root) {
+			base.UnregisterReferenceable(root);
+			m_Files.ForEach(f => f.UnregisterReferenceable(root));
 		}
 
 		#endregion

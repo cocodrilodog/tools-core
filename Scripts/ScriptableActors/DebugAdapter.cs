@@ -4,6 +4,9 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	/// <summary>
+	/// Class designed to log messages from Unity event callbacks hooked on the inspector.
+	/// </summary>
 	[CreateAssetMenu(menuName = "Cocodrilo Dog/Core/Debug Adapter")]
 	public class DebugAdapter : ScriptableObject {
 

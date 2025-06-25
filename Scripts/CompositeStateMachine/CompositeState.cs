@@ -38,8 +38,7 @@ namespace CocodriloDog.Core {
 
 		public virtual void FixedUpdate() { }
 
-		public override void Dispose() {
-			base.Dispose();
+		public virtual void OnDestroy() {
 			OnEnter = null;
 			OnExit = null;
 		}

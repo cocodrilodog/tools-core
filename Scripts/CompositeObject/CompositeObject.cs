@@ -64,7 +64,7 @@ namespace CocodriloDog.Core {
 	/// 
 	/// </remarks>
 	[Serializable]
-	public abstract class CompositeObject : ISerializationCallbackReceiver {
+	public abstract class CompositeObject {
 
 
 		#region Public Properties
@@ -159,34 +159,9 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
-		public void OnBeforeSerialize() { }
+		public virtual void RegisterAsReferenceable(UnityEngine.Object root) => ReferenceableCompositeObjects.Register(root, this);
 
-		public void OnAfterDeserialize() {
-			// Register this object in RuntimeCompositeObjects
-			// 
-			// OnAfterDeserialize guarantees the values in the inspector are updated in the instance
-			if (MonoUpdater.IsAwake) { // Make sure we are on play mode without invoking Unity API Application.isPlaying
-				RuntimeCompositeObjects.Register(this);
-			} else {
-				// Otherwise, we need to wait for Awake
-				MonoUpdater.OnAwakeEv -= MonoUpdater_OnAwakeEv; // Prevent multiple subscriptions
-				MonoUpdater.OnAwakeEv += MonoUpdater_OnAwakeEv;
-			}
-		}
-
-		public virtual void Dispose() {
-			RuntimeCompositeObjects.Unregister(this);
-		}
-
-		#endregion
-
-
-		#region Event Handlers
-
-		private void MonoUpdater_OnAwakeEv() {
-			MonoUpdater.OnAwakeEv -= MonoUpdater_OnAwakeEv;
-			RuntimeCompositeObjects.Register(this);
-		}
+		public virtual void UnregisterReferenceable(UnityEngine.Object root) => ReferenceableCompositeObjects.Unregister(root, this);
 
 		#endregion
 

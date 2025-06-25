@@ -4,8 +4,18 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// An object that can search for and reference <see cref="CompositeObject"/>s of the current root 
+	/// An object that can search for and reference <see cref="CompositeObject"/>s of the default root 
+	/// or the overriden root.
 	/// </summary>
+	/// 
+	/// <remarks>
+	/// For this system to work, the <see cref="CompositeObject"/> instance must be registered before
+	/// <see cref="Value"/> is requested, normally on <c>Awake</c>. For the <see cref="CompositeObject"/>
+	/// to be garbage collected, the instance must be unregistered, normally <c>OnDestroy</c>. For this purpose,
+	/// you can use <see cref="CompositeObject.RegisterAsReferenceable(UnityEngine.Object)"/> and
+	/// <see cref="CompositeObject.UnregisterReferenceable(UnityEngine.Object)"/>
+	/// </remarks>
+	/// 
 	/// <typeparam name="T">The type of <see cref="CompositeObject"/> to look for</typeparam>
 	[Serializable]
 	public class CompositeObjectReference<T> where T : CompositeObject {
@@ -16,7 +26,7 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// The referenced <see cref="CompositeObject"/>.
 		/// </summary>
-		public T Value => RuntimeCompositeObjects.GetRuntimeCompositeObjectById(m_Id) as T;
+		public T Value => ReferenceableCompositeObjects.GetById(m_Source, m_Id) as T;
 
 		#endregion
 

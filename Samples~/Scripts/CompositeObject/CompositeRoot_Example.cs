@@ -13,15 +13,6 @@ namespace CocodriloDog.Core.Examples {
 	public class CompositeRoot_Example : MonoCompositeRoot {
 
 
-		#region Unity Methods
-
-		private void OnDestroy() {
-			m_MyDisk?.Dispose();
-		}
-
-		#endregion
-
-
 		#region Private Fields
 
 		[SerializeReference]

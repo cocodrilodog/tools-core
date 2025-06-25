@@ -12,6 +12,16 @@ namespace CocodriloDog.Core.Examples {
 
 		#region Unity Methods
 
+		private void Awake() {
+			m_MyDisk.RegisterAsReferenceable(this);
+			m_OtherFile.RegisterAsReferenceable(this);
+			m_OtherFileNull?.RegisterAsReferenceable(this);
+			m_OtherFilesCompositeList.ForEach(f => f.RegisterAsReferenceable(this));
+			m_OtherFilesCompositeListEmpty.ForEach(f => f.RegisterAsReferenceable(this));
+			m_OtherFilesList.ForEach(f => f.RegisterAsReferenceable(this));
+			m_OtherFilesArray.ForEach(f => f.RegisterAsReferenceable(this));
+		}
+
 		private IEnumerator Start() {
 
 			Debug.Log("----------------");
@@ -28,13 +38,13 @@ namespace CocodriloDog.Core.Examples {
 		}
 
 		private void OnDestroy() {
-			m_MyDisk.Dispose();
-			m_OtherFile.Dispose();
-			m_OtherFileNull?.Dispose();
-			m_OtherFilesCompositeList.ForEach(f => f.Dispose());
-			m_OtherFilesCompositeListEmpty.ForEach(f => f.Dispose());
-			m_OtherFilesList.ForEach(f => f.Dispose());
-			m_OtherFilesArray.ForEach(f => f.Dispose());
+			m_MyDisk.UnregisterReferenceable(this);
+			m_OtherFile.UnregisterReferenceable(this);
+			m_OtherFileNull?.UnregisterReferenceable(this);
+			m_OtherFilesCompositeList.ForEach(f => f.UnregisterReferenceable(this));
+			m_OtherFilesCompositeListEmpty.ForEach(f => f.UnregisterReferenceable(this));
+			m_OtherFilesList.ForEach(f => f.UnregisterReferenceable(this));
+			m_OtherFilesArray.ForEach(f => f.UnregisterReferenceable(this));
 		}
 
 		#endregion
