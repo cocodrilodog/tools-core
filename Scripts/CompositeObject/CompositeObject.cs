@@ -6,61 +6,32 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// A base <see cref="object"/> class that can be extended to create composite and polymorphic 
-	/// structures optionally (and preferrably) on top of a MonoBehaviour or optionally on top of a 
-	/// <see cref="ICompositeRoot"/> which is derived from <see cref="MonoBehaviour"/>.
+	/// A base <see cref="System.Object"/> class that can be extended to create composite and polymorphic 
+	/// structures on top of a MonoBehaviour, ScriptableObject, or preferably <see cref="MonoCompositeRoot"/>
+	/// and <see cref="ScriptableCompositeRoot"/>
 	/// </summary>
 	/// 
 	/// <remarks>
-	/// <see cref="CompositeObject"/>s can have children <see cref="CompositeObject"/>s hence the name
-	/// "Composite". If they are implemented without a corresponding <see cref="ICompositeRoot"/>,
-	/// they will open and close in a similar style as serializable <see cref="object"/>s. It means that 
-	/// all the <see cref="CompositeObject"/> properties their children, grand-children, etc, when opened,
-	/// will be visible always one inside the other (too noisy!).
 	/// 
-	/// On the other hand, when a corresponding <see cref="ICompositeRoot"/> is implemented, if a 
-	/// <see cref="CompositeObject"/> is selected, its property drawer will takeover the entire inspector 
-	/// and it will allow to navigate to its children with the "Edit" button and to its parent and sibling
-	/// objects via breadcrums.
+	/// <para>
+	/// <see cref="CompositeObject"/>s can have <see cref="CompositeObject"/> children, hence the name
+	/// "Composite". They can exist in MonoBehaviour and ScriptableObject, but the inspector is more usable if 
+	/// they are implemented in a <see cref="MonoCompositeRoot"/> or <see cref="ScriptableCompositeRoot"/>.
+	/// </para>
 	/// 
-	/// The following steps describe how to create a concrete composite system:
+	/// <para>
+	/// For single instances of <see cref="CompositeObject"/>, they must be declared using the <see cref="SerializeReference"/>
+	/// attribute. Lists and arrays would also require the <see cref="SerializeReference"/> attribute, but it is strongly
+	/// recommended to use <see cref="CompositeList{T}"/> with the normal <see cref="SerializeField"/>, instead. 
+	/// <see cref="CompositeList{T}"/> handles a list internally with <see cref="SerializeReference"/> and handles 
+	/// prefab use cases that causes prefab corruption, due to a Unity bug.
+	/// </para>
 	/// 
-	/// <list type="bullet">
-	///		<item>
-	///			<term>Extend <see cref="CompositeObject"/></term>
-	///			<description>
-	///				Create a concrete extension of <see cref="CompositeObject"/>. Any field that is referencing
-	///				a instance of this class must use the <see cref="SerializeReference"/> attribute for the 
-	///				system to work.
-	///			</description>
-	///		</item>
-	///		<item>
-	///			<term>Optional, but recommended: Extend <see cref="ICompositeRoot"/> </term>
-	///			<description>
-	///				Create a concrete extension of <see cref="ICompositeRoot"/> that will be the 
-	///				root or first parent of the concrete <see cref="CompositeObject"/> instances.				
-	///			</description>
-	///		</item>
-	///		<item>
-	///			<term>Optional, but recommended: Use <see cref="CompositeList{T}"/> for lists.</term>
-	///			<description>
-	///				When using <see cref="CompositeObject"/> lists, it is better to use <see cref="CompositeList{T}"/>
-	///				instead of normal lists or arrays, because <see cref="CompositeList{T}"/> handles the modification
-	///				of prefabs, which prevents data corruption.
-	///			</description>
-	///		</item>
-	///		<item>
-	///			<term>Optional: Extend <c>CompositePropertyDrawer</c></term>
-	///			<description>
-	///				The default property drawer for composite objects allows the user to create, edit, 
-	///				remove <see cref="CompositeObject"/>s and navigate through the composite structure.		
-	///				Optionally, you can create a concrete extension of <c>CompositePropertyDrawer</c> and 
-	///				make it a <c>CustomPropertyDrawer</c> of the concrete <see cref="CompositeObject"/> to 
-	///				draw a customized version. In this case, you'll need to override 
-	///				<c>CompositePropertyDrawer.UseDefaultDrawer</c> for it to return to <c>false</c>.
-	///			</description>
-	///		</item>
-	/// </list>
+	/// <para>
+	/// If the <see cref="CompositeObject"/> is intended to be referenced by a <see cref="CompositeObjectReference{T}"/>
+	/// you must invoke <see cref="RegisterAsReferenceable(UnityEngine.Object)"/> on Awake and 
+	/// <see cref="UnregisterReferenceable(UnityEngine.Object)"/> on destroy.
+	/// </para>
 	/// 
 	/// </remarks>
 	[Serializable]
@@ -159,8 +130,23 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
+		/// <summary>
+		/// Registers this <see cref="CompositeObject"/> so that it is reachable by a <see cref="CompositeObjectReference{T}"/>
+		/// at runtime. Normally this would be called on <c>Awake</c>.
+		/// </summary>
+		/// <remarks>
+		/// Don't forget to call <see cref="UnregisterReferenceable(UnityEngine.Object)"/>.
+		/// </remarks>
+		/// <param name="root">The root object where the <see cref="CompositeObject"/> belongs.</param>
 		public virtual void RegisterAsReferenceable(UnityEngine.Object root) => ReferenceableCompositeObjects.Register(root, this);
 
+		/// <summary>
+		/// Unregisters this <see cref="CompositeObject"/>. Normally this would be called <c>OnDestroy</c>. 
+		/// </summary>
+		/// <remarks>
+		/// Important: When the object was previosuly registered, not calling this may result in the object not being garbage collected. 
+		/// </remarks>
+		/// <param name="root">The root object where the <see cref="CompositeObject"/> belongs.</param>
 		public virtual void UnregisterReferenceable(UnityEngine.Object root) => ReferenceableCompositeObjects.Unregister(root, this);
 
 		#endregion
