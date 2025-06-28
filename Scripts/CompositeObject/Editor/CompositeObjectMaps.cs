@@ -57,6 +57,10 @@ namespace CocodriloDog.Core {
 		/// <returns></returns>
 		public static Dictionary<string, CompositeObject> GetCompositeObjectsMap(UnityEngine.Object root, Type referencedType) {
 
+			if(root == null) {
+				return null;
+			}
+
 			Dictionary<string, CompositeObject> map = new();
 
 			if (s_MapsByObject.ContainsKey(root)) {
@@ -146,12 +150,30 @@ namespace CocodriloDog.Core {
 		/// <returns></returns>
 		public static bool ClearCompositeObjectsMap(UnityEngine.Object root) => s_MapsByObject.Remove(root);
 	
+		/// <summary>
+		/// Gets a <see cref="CompositeObject"/> of type <typeparamref name="T"/> in the <paramref name="root"/> with the
+		/// provided <paramref name="id"/>.
+		/// </summary>
+		/// <typeparam name="T">The type of <see cref="CompositeObject"/></typeparam>
+		/// <param name="root">The root Unity.Object where the <see cref="CompositeObject"/> was created on.</param>
+		/// <param name="id">The unique id for the <see cref="CompositeObject"/></param>
+		/// <returns>The <see cref="CompositeObject"/></returns>
 		public static T GetCompositeObjectById<T>(UnityEngine.Object root, string id) where T : CompositeObject {
 			return GetCompositeObjectById(root, typeof(T), id) as T;
 		}
 
+		/// <summary>
+		/// Gets a <see cref="CompositeObject"/> in the <paramref name="root"/> with the provided <paramref name="id"/>.
+		/// </summary>
+		/// <param name="root">The root Unity.Object where the <see cref="CompositeObject"/> was created on.</param>
+		/// <param name="referencedType">The concrete type of the <see cref="CompositeObject"/></param>
+		/// <param name="id">The unique id for the <see cref="CompositeObject"/></param>
+		/// <returns></returns>
 		public static CompositeObject GetCompositeObjectById(UnityEngine.Object root, Type referencedType, string id) {
 			var map = GetCompositeObjectsMap(root, referencedType);
+			if(map == null) {
+				return null;
+			}
 			var compositeObject = map.FirstOrDefault(pathToCompositeObject => pathToCompositeObject.Value.Id == id).Value;
 			return compositeObject;
 		}

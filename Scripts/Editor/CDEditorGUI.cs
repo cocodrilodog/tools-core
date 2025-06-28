@@ -12,20 +12,27 @@ namespace CocodriloDog.Core {
 		#region Public Static Methods
 
 		/// <summary>
-		/// Draws a tooltip when hovering over the <paramref name="controlRect"/>
+		/// Draws a tooltip when hovering over the <paramref name="controlRect"/> to the left side of the 
+		/// <paramref name="controlRect"/>.
 		/// </summary>
 		/// <remarks>
 		/// Unity doesn't support this by default, so this is kind of a hack.
 		/// </remarks>
 		/// <param name="controlRect">The rect that will react to show the tooltip.</param>
 		/// <param name="text">The text of the tooltip</param>
-		public static void DrawControlTooltip(Rect controlRect, string text) {
+		/// <param name="positionOffset">Offset with respect to the default position of the tooltip.</param>
+		public static void DrawControlTooltip(Rect controlRect, string text, Vector2 positionOffset = default) {
 			if (controlRect.Contains(Event.current.mousePosition)) {
 
 				var content = new GUIContent(text);
+
 				var size = EditorStyles.helpBox.CalcSize(content);
 				size.x += 10; // Sometimes it needs more room, since Unity 6
-				var rect = new Rect(controlRect.position + Vector2.left * size.x, size);
+				
+				var position = controlRect.position + Vector2.left * size.x;
+				position += positionOffset;
+				
+				var rect = new Rect(position, size);
 
 				// Use the dark color of the editor
 				EditorGUI.DrawRect(rect, new Color(0.216f, 0.216f, 0.216f));

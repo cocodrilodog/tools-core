@@ -57,7 +57,7 @@
 			var overrideSourceRect = new Rect(Vector2.zero, Vector2.one * 20);
 			overrideSourceRect.center = Position.center;
 			m_OverrideSourceProperty.boolValue = EditorGUI.Toggle(overrideSourceRect, m_OverrideSourceProperty.boolValue);
-			CDEditorGUI.DrawControlTooltip(overrideSourceRect, "Override source");
+			CDEditorGUI.DrawControlTooltip(overrideSourceRect, "Override source", Vector2.down * 10);
 
 			// Draw the value field
 			var valueRect = Position;
