@@ -26,7 +26,14 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// The referenced <see cref="CompositeObject"/>.
 		/// </summary>
-		public T Value => ReferenceableCompositeObjects.GetById(m_Source, m_Id) as T;
+		public T Value {
+			get {
+				if (!Application.isPlaying) {
+					Debug.LogWarning("CompositeObjectReference<T>.Vale only works at runtime.");
+				}
+				return ReferenceableCompositeObjects.GetById(m_Source, m_Id) as T;
+			}
+		}
 
 		#endregion
 

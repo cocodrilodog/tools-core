@@ -47,6 +47,7 @@ namespace CocodriloDog.Core {
 		/// <returns>The copy</returns>
 		public static CompositeObject Paste() {
 			var clone = Instantiate(Instance).CompositeObject;
+			clone.RecreateGuid();
 			return clone;
 		}
 

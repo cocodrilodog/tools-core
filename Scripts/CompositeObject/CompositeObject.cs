@@ -152,6 +152,16 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Internal Methods
+
+		/// <summary>
+		/// Recreates the <see cref="Id"/> for this object.
+		/// </summary>
+		internal void RecreateGuid() => m_Id = Guid.NewGuid().ToString();
+
+		#endregion
+
+
 		#region Private Fields
 
 		[Tooltip("The name of this CompositeObject")]

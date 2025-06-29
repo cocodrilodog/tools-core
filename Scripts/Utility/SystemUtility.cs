@@ -122,6 +122,12 @@ namespace CocodriloDog.Core {
 			return false;
 		}
 
+		/// <summary>
+		/// Checks wether an <paramref name="arrayType"/> is of type <paramref name="type"/>
+		/// </summary>
+		/// <param name="arrayType">The array type, for example <c>GameObject[]</c>.</param>
+		/// <param name="type">The type to check against, for example <c>GameObject</c></param>
+		/// <returns></returns>
 		public static bool IsArrayOfType(Type arrayType, Type type) {
 			if (!arrayType.IsArray) {
 				return false;

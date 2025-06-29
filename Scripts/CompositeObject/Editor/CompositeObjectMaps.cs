@@ -38,7 +38,7 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// <typeparam name="T">The type of <see cref="CompositeObject"/> we are looking for.</typeparam>
 		/// <param name="root">The root object.</param>
-		/// <returns></returns>
+		/// <returns>The dictionary.</returns>
 		public static Dictionary<string, T> GetCompositeObjectsMap<T>(UnityEngine.Object root) where T : CompositeObject {
 			var baseMap = GetCompositeObjectsMap(root, typeof(T));
 			var concreteMap = new Dictionary<string, T>();
@@ -49,24 +49,52 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// Gets a dictionary with all the <see cref="CompositeObject"/>s of type <paramref name="referencedType"/> mapped
+		/// Gets a dictionary with all the <see cref="CompositeObject"/>s of type <paramref name="subtypeFilter"/> mapped
 		/// by their path in the <paramref name="root"/> object.
 		/// </summary>
 		/// <param name="root">The root object.</param>
-		/// <param name="referencedType">The referenced type. It must be a <see cref="CompositeObject"/> or derived from it.</param>
-		/// <returns></returns>
-		public static Dictionary<string, CompositeObject> GetCompositeObjectsMap(UnityEngine.Object root, Type referencedType) {
+		/// <param name="subtypeFilter">The subtype that we are looking for. It must be a <see cref="CompositeObject"/> or derived from it.</param>
+		/// <returns>The dictionary.</returns>
+		public static Dictionary<string, CompositeObject> GetCompositeObjectsMap(UnityEngine.Object root, Type subtypeFilter) {
 
-			if(root == null) {
+			var completeMap = GetCompositeObjectsMap(root);
+			if(completeMap == null) {
 				return null;
 			}
 
-			Dictionary<string, CompositeObject> map = new();
+			var mapCopy = new Dictionary<string, CompositeObject>(completeMap);
+			var compositeObjectsToRemove = mapCopy
+				.Where(pathToCompositeObject => !subtypeFilter.IsAssignableFrom(pathToCompositeObject.Value.GetType()))
+				.Select(pathToCompositeObject => pathToCompositeObject.Key)
+				.ToList();
+
+			foreach (var key in compositeObjectsToRemove) {
+				mapCopy.Remove(key);
+			}
+
+			return mapCopy;
+
+		}
+
+		/// <summary>
+		/// Gets a dictionary with all the <see cref="CompositeObject"/>s mapped by their path in the <paramref name="root"/> object.
+		/// </summary>
+		/// <param name="root">The root object.</param>
+		/// <returns>The dictionary.</returns>
+		public static Dictionary<string, CompositeObject> GetCompositeObjectsMap(UnityEngine.Object root) {
+
+			if (root == null) {
+				return null;
+			}
 
 			if (s_MapsByObject.ContainsKey(root)) {
 				return s_MapsByObject[root];
 			}
 
+			// Create a new map if not available
+			Dictionary<string, CompositeObject> map = new();
+
+			// Start with the root node.
 			InspectNode(root);
 
 			void InspectNode(object compositeNode, string basePath = null) {
@@ -86,7 +114,7 @@ namespace CocodriloDog.Core {
 
 						if ((isPublic || isSerialized || isSerializedReference) && !field.IsStatic) {
 
-							if (referencedType.IsAssignableFrom(field.FieldType)) {
+							if (typeof(CompositeObject).IsAssignableFrom(field.FieldType)) {
 								// Single instance
 								var compositeObject = field.GetValue(compositeNode) as CompositeObject;
 								if (compositeObject != null) {
@@ -110,7 +138,7 @@ namespace CocodriloDog.Core {
 								}
 
 								// Matching element type
-								if (referencedType.IsAssignableFrom(elementType)) {
+								if (typeof(CompositeObject).IsAssignableFrom(elementType)) {
 									foreach (var compositeObject in field.GetValue(compositeNode) as IEnumerable<CompositeObject>) {
 										if (compositeObject != null) {
 											IncludeNode(compositeObject);
@@ -166,11 +194,11 @@ namespace CocodriloDog.Core {
 		/// Gets a <see cref="CompositeObject"/> in the <paramref name="root"/> with the provided <paramref name="id"/>.
 		/// </summary>
 		/// <param name="root">The root Unity.Object where the <see cref="CompositeObject"/> was created on.</param>
-		/// <param name="referencedType">The concrete type of the <see cref="CompositeObject"/></param>
+		/// <param name="subtypeFilter">The concrete type of the <see cref="CompositeObject"/> that we are looking for.</param>
 		/// <param name="id">The unique id for the <see cref="CompositeObject"/></param>
 		/// <returns></returns>
-		public static CompositeObject GetCompositeObjectById(UnityEngine.Object root, Type referencedType, string id) {
-			var map = GetCompositeObjectsMap(root, referencedType);
+		public static CompositeObject GetCompositeObjectById(UnityEngine.Object root, Type subtypeFilter, string id) {
+			var map = GetCompositeObjectsMap(root, subtypeFilter);
 			if(map == null) {
 				return null;
 			}
