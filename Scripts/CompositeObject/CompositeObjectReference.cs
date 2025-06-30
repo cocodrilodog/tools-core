@@ -35,6 +35,17 @@ namespace CocodriloDog.Core {
 			}
 		}
 
+		/// <summary>
+		/// Enables/disables the option to <see cref="m_OverrideSource"/> in the inspector.
+		/// </summary>
+		/// <remarks>
+		/// This should be set <c>OnValidate</c>.
+		/// </remarks>
+		public bool AllowOverrideSource {
+			get => m_AllowOverrideSource;
+			set => m_AllowOverrideSource = value;
+		}
+
 		#endregion
 
 
@@ -47,6 +58,9 @@ namespace CocodriloDog.Core {
 		[Tooltip("Allows to choose another object as the source root.")]
 		[SerializeField]
 		private bool m_OverrideSource;
+
+		[SerializeField]
+		private bool m_AllowOverrideSource = true;
 
 		[Tooltip("The unique Id of the CompositeObject.")]
 		[SerializeField]

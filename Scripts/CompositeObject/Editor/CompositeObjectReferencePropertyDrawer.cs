@@ -39,30 +39,40 @@
 			EditorGUI.LabelField(sourceLabelRect, Label);
 			EditorGUIUtility.labelWidth = previousLabelWidth;
 
-			// Draw the source field
-			var sourceFieldRect = Position;
-			sourceFieldRect.width = sourceFieldRect.width * 0.5f - centralSeparation * 0.5f;
-			sourceFieldRect.xMin += labelWidth;
+			if (m_AllowOverrideSourceProperty.boolValue) {
 
-			EditorGUI.BeginDisabledGroup(!m_OverrideSourceProperty.boolValue);
-			EditorGUI.PropertyField(sourceFieldRect, m_SourceProperty, GUIContent.none);
-			EditorGUI.EndDisabledGroup();
+				// Draw the source field
+				var sourceFieldRect = Position;
+				sourceFieldRect.width = sourceFieldRect.width * 0.5f - centralSeparation * 0.5f;
+				sourceFieldRect.xMin += labelWidth;
 
-			// Set default source if it is null and not overriden
-			if (m_SourceProperty.objectReferenceValue == null || !m_OverrideSourceProperty.boolValue) {
-				m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
+				EditorGUI.BeginDisabledGroup(!m_OverrideSourceProperty.boolValue);
+				EditorGUI.PropertyField(sourceFieldRect, m_SourceProperty, GUIContent.none);
+				EditorGUI.EndDisabledGroup();
+
+				// Set default source if it is null and not overriden
+				if (m_SourceProperty.objectReferenceValue == null || !m_OverrideSourceProperty.boolValue) {
+					m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
+				}
+
+				// Draw override source toggle
+				var overrideSourceRect = new Rect(Vector2.zero, Vector2.one * 20);
+				overrideSourceRect.center = Position.center;
+				m_OverrideSourceProperty.boolValue = EditorGUI.Toggle(overrideSourceRect, m_OverrideSourceProperty.boolValue);
+				CDEditorGUI.DrawControlTooltip(overrideSourceRect, "Override source", Vector2.down * 10);
+
 			}
-
-			// Draw override source toggle
-			var overrideSourceRect = new Rect(Vector2.zero, Vector2.one * 20);
-			overrideSourceRect.center = Position.center;
-			m_OverrideSourceProperty.boolValue = EditorGUI.Toggle(overrideSourceRect, m_OverrideSourceProperty.boolValue);
-			CDEditorGUI.DrawControlTooltip(overrideSourceRect, "Override source", Vector2.down * 10);
 
 			// Draw the value field
 			var valueRect = Position;
-			valueRect.xMin += valueRect.width * 0.5f + centralSeparation;
-			
+			if (m_AllowOverrideSourceProperty.boolValue) {
+				// Make it half the inspector
+				valueRect.xMin += valueRect.width * 0.5f + centralSeparation;
+			} else {
+				// Make it normal
+				valueRect.xMin += EditorGUIUtility.labelWidth;
+			}
+
 			// Remove the default value if override is checked and draw a temp UI while other source is chosen
 			if (m_OverrideSourceProperty.boolValue && m_SourceProperty.objectReferenceValue == Property.serializedObject.targetObject) {
 				m_SourceProperty.objectReferenceValue = null;
@@ -126,18 +136,12 @@
 
 		protected override void InitializePropertiesForGetHeight() {
 			base.InitializePropertiesForGetHeight();
-			m_SourceProperty = Property.FindPropertyRelative("m_Source");
-			m_OverrideSourceProperty = Property.FindPropertyRelative("m_OverrideSource");
-			//m_ValueProperty = Property.FindPropertyRelative("m_Value");
-			m_IdProperty = Property.FindPropertyRelative("m_Id");
+			InitializeProperties();
 		}
 
 		protected override void InitializePropertiesForOnGUI() {
 			base.InitializePropertiesForOnGUI();
-			m_SourceProperty = Property.FindPropertyRelative("m_Source");
-			m_OverrideSourceProperty = Property.FindPropertyRelative("m_OverrideSource");
-			//m_ValueProperty = Property.FindPropertyRelative("m_Value");
-			m_IdProperty = Property.FindPropertyRelative("m_Id");
+			InitializeProperties();
 		}
 
 		#endregion
@@ -149,7 +153,7 @@
 
 		private SerializedProperty m_OverrideSourceProperty;
 
-		//private SerializedProperty m_ValueProperty;
+		private SerializedProperty m_AllowOverrideSourceProperty;
 
 		private SerializedProperty m_IdProperty;
 
@@ -171,6 +175,18 @@
 				CompositePath = compositePath;
 			}
 
+		}
+
+		#endregion
+
+
+		#region Private Fields
+
+		private void InitializeProperties() {
+			m_SourceProperty = Property.FindPropertyRelative("m_Source");
+			m_OverrideSourceProperty = Property.FindPropertyRelative("m_OverrideSource");
+			m_AllowOverrideSourceProperty = Property.FindPropertyRelative("m_AllowOverrideSource");
+			m_IdProperty = Property.FindPropertyRelative("m_Id");
 		}
 
 		#endregion

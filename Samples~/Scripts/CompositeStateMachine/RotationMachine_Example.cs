@@ -33,7 +33,9 @@ namespace CocodriloDog.Core {
 			m_BallContainer.localEulerAngles = eulerAngles;
 		}
 
-		private void OnValidate() {
+		protected override void OnValidate() {
+
+			base.OnValidate(); 
 
 			// Create the states programatically
 			SetStateIfNull(typeof(Red), 0);

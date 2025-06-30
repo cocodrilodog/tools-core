@@ -140,6 +140,8 @@ namespace CocodriloDog.Core {
 
 		protected virtual void FixedUpdate() => m_CurrentState.FixedUpdate();
 
+		protected virtual void OnValidate() => m_States.ForEach(s => s.OnValidate());
+
 		protected virtual void OnDestroy() {
 			SetState(null); // This will exit the current state
 			m_States.ForEach(s => s.UnregisterReferenceable(this));

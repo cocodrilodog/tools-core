@@ -38,6 +38,8 @@ namespace CocodriloDog.Core {
 
 		public virtual void FixedUpdate() { }
 
+		public virtual void OnValidate() { }
+
 		public virtual void OnDestroy() {
 			OnEnter = null;
 			OnExit = null;
