@@ -36,7 +36,7 @@
 				if (!s_HasInstance) {
 
 					// If the object was created in the editor, it will be found here:
-					s_Instance = FindObjectOfType<T>();
+					s_Instance = FindFirstObjectByType<T>(); 
 
 					// If it is still null, create a game object
 					if (s_Instance == null) { 
