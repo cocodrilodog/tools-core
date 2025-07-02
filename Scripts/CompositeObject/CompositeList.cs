@@ -3,6 +3,7 @@ namespace CocodriloDog.Core {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using UnityEngine;
 
 	/// <summary>
@@ -104,6 +105,8 @@ namespace CocodriloDog.Core {
 		#region Utility
 
 		public void ForEach(Action<T> action) => m_List.ForEach(action);
+
+		public IEnumerable<T> Where(Func<T, bool> condition) => m_List.Where(condition);
 
 		#endregion
 
