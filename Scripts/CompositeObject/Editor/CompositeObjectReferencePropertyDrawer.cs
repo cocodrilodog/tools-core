@@ -39,7 +39,18 @@
 			EditorGUI.LabelField(sourceLabelRect, Label);
 			EditorGUIUtility.labelWidth = previousLabelWidth;
 
+			// Set default source if it is null.
+			if (m_SourceProperty.objectReferenceValue == null) {
+				m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
+			}
+
 			if (m_AllowOverrideSourceProperty.boolValue) {
+
+				// Remove the default value if override is checked
+				if (m_OverrideSourceProperty.boolValue &&
+					m_SourceProperty.objectReferenceValue == Property.serializedObject.targetObject) {
+					m_SourceProperty.objectReferenceValue = null;
+				}
 
 				// Draw the source field
 				var sourceFieldRect = Position;
@@ -50,15 +61,20 @@
 				EditorGUI.PropertyField(sourceFieldRect, m_SourceProperty, GUIContent.none);
 				EditorGUI.EndDisabledGroup();
 
-				// Set default source if it is null and not overriden
-				if (m_SourceProperty.objectReferenceValue == null || !m_OverrideSourceProperty.boolValue) {
-					m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
-				}
-
 				// Draw override source toggle
 				var overrideSourceRect = new Rect(Vector2.zero, Vector2.one * 20);
 				overrideSourceRect.center = Position.center;
+				EditorGUI.BeginChangeCheck();
 				m_OverrideSourceProperty.boolValue = EditorGUI.Toggle(overrideSourceRect, m_OverrideSourceProperty.boolValue);
+				if (EditorGUI.EndChangeCheck()) {
+					// Set default source if it is null and override source was unchecked.
+					if (!m_OverrideSourceProperty.boolValue && 
+						m_SourceProperty.objectReferenceValue == null) {
+						m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
+					}
+					return;
+				}
+
 				CDEditorGUI.DrawControlTooltip(overrideSourceRect, "Override source", Vector2.down * 10);
 
 			}
@@ -73,9 +89,8 @@
 				valueRect.xMin += EditorGUIUtility.labelWidth;
 			}
 
-			// Remove the default value if override is checked and draw a temp UI while other source is chosen
-			if (m_OverrideSourceProperty.boolValue && m_SourceProperty.objectReferenceValue == Property.serializedObject.targetObject) {
-				m_SourceProperty.objectReferenceValue = null;
+			// Draw a temp UI while other source is chosen
+			if (m_OverrideSourceProperty.boolValue && m_SourceProperty.objectReferenceValue == null) {
 				valueRect.yMax -= 2;
 				EditorGUI.HelpBox(valueRect, "Choose a new source.", MessageType.Warning);
 				EditorGUI.EndProperty();
@@ -87,6 +102,7 @@
 				m_SourceProperty.objectReferenceValue, 
 				referencedType
 			);
+
 			var options = compositeObjectsMap.Keys.ToList();
 			options.Insert(0, "Null"); // Allow the first choice to be null
 

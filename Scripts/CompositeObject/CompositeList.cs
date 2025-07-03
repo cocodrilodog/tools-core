@@ -108,6 +108,10 @@ namespace CocodriloDog.Core {
 
 		public IEnumerable<T> Where(Func<T, bool> condition) => m_List.Where(condition);
 
+		public T FirstOrDefault() => m_List.FirstOrDefault();
+
+		public T FirstOrDefault(Func<T, bool> predicate) => m_List.FirstOrDefault(predicate);
+
 		#endregion
 
 
