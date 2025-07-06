@@ -16,9 +16,9 @@ namespace CocodriloDog.Core {
 	/// <see cref="CompositeObject.UnregisterReferenceable(UnityEngine.Object)"/>
 	/// </remarks>
 	/// 
-	/// <typeparam name="T">The type of <see cref="CompositeObject"/> to look for</typeparam>
+	/// <typeparam name="T">The type of <see cref="CompositeObject"/> or interface to look for</typeparam>
 	[Serializable]
-	public class CompositeObjectReference<T> where T : CompositeObject {
+	public class CompositeObjectReference<T> where T : class {
 
 
 		#region Public Properties
