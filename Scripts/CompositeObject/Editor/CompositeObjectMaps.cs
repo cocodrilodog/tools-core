@@ -92,12 +92,14 @@ namespace CocodriloDog.Core {
 			}
 
 			// Create a new map if not available
+			// Creating the map even for objects that have no composite object is optimal because it doesn't need to
+			// inspect more times, once the empty map is cached 
 			Dictionary<string, CompositeObject> map = new();
 
 			// Start with the root node.
-			InspectNode(root);
+			InspectNode(root, $"{root.GetType().Name}");
 
-			void InspectNode(object compositeNode, string basePath = null) {
+			void InspectNode(object compositeNode, string basePath) {
 
 				// Get the type of the node
 				var type = compositeNode.GetType();
@@ -139,11 +141,18 @@ namespace CocodriloDog.Core {
 
 								// Matching element type
 								if (typeof(CompositeObject).IsAssignableFrom(elementType)) {
-									foreach (var compositeObject in field.GetValue(compositeNode) as IEnumerable<CompositeObject>) {
-										if (compositeObject != null) {
-											IncludeNode(compositeObject);
+									
+									var enumerableCompositeObjects = field.GetValue(compositeNode) as IEnumerable<CompositeObject>;
+									
+									// This check is needed because arrays and lists sometimes are null when the component is just created.
+									if (enumerableCompositeObjects != null) {
+										foreach (var compositeObject in enumerableCompositeObjects) {
+											if (compositeObject != null) {
+												IncludeNode(compositeObject);
+											}
 										}
 									}
+
 								}
 
 							}
@@ -159,7 +168,7 @@ namespace CocodriloDog.Core {
 					if (string.IsNullOrEmpty(basePath)) {
 						path = compositeObject.Name;
 					} else {
-						path = basePath + $"/{compositeObject.Name}";
+						path = basePath + $"/{compositeObject.DisplayName}";
 					}
 					map[path] = compositeObject;
 					InspectNode(compositeObject, path); // Recursive

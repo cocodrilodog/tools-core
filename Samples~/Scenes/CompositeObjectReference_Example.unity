@@ -256,6 +256,345 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &1140991680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1140991682}
+  - component: {fileID: 1140991681}
+  - component: {fileID: 1140991683}
+  m_Layer: 0
+  m_Name: OtherComposite_Root_Example
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1140991681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140991680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafaa61b2806b148b92959517e9ac49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MyDisk:
+    rid: 1697029204662550538
+  references:
+    version: 2
+    RefIds:
+    - rid: 1697029204662550538
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Documents
+        m_Id: 17c6df02-56db-4e3a-846d-f305d70522b5
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Files:
+          m_List:
+          - rid: 1697029204662550539
+          - rid: 1697029204662550540
+          - rid: 1697029204662550541
+          m_CanAddRemove: 1
+          m_CanReorder: 1
+    - rid: 1697029204662550539
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: TODOs
+        m_Id: 0f4f1f96-42a1-4b51-80d7-81daf304e427
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: '- Illustrations
+
+          - 3D Models
+
+          - Animations
+
+          -
+          Music
+
+          - Programming
+
+          - Learn something new'
+    - rid: 1697029204662550540
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Dev
+        m_Id: 5f51e374-5f84-4712-854c-668df530a322
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Files:
+          m_List:
+          - rid: 1697029204662550542
+          - rid: 1697029204662550543
+          - rid: 1697029204662550544
+          m_CanAddRemove: 1
+          m_CanReorder: 1
+    - rid: 1697029204662550541
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Design
+        m_Id: 448d7a07-2da7-4abb-b4be-e662e6d785ef
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Files:
+          m_List:
+          - rid: 1697029204662550545
+          - rid: 1697029204662550546
+          - rid: 1697029204662550547
+          m_CanAddRemove: 1
+          m_CanReorder: 1
+    - rid: 1697029204662550542
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: C# Architecture
+        m_Id: 3be811da-fa04-40ad-8965-d4df3ba80843
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: "- Decouple and think of reusability\r\n- Actors do things, controllers
+          tell them when to.\r\n- C# events\r\n- Data in ScriptableObject\rs"
+    - rid: 1697029204662550543
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Design Patterns
+        m_Id: b8b059d1-42b3-46c1-a408-759549a04402
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: "- Factory \r\n- Pool\r\n- Adapter\r\n- Mediator\r\n- Prototype\r\n-
+          Composite\r\n- Observer\r\n- State\r\n- Singleton\r"
+    - rid: 1697029204662550544
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Optimization Techniques
+        m_Id: 81154942-a77c-4985-9c0c-cd3e53ec6b00
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: "- Static batching\r\n- Share materials\r\n- GPU instancing: When
+          they use the same mesh\r\n- Dynamic batching: Last resort, careful with
+          CPU\r\n- Reduce vertex count\r\n- Occlusion culling\r\n- UI optimization\r"
+    - rid: 1697029204662550545
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Emotion (Other) 1
+        m_Id: 3673e43d-10e7-435f-9942-060951436711
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: People may forget what you said, but they'll never forget how you
+          made them feel.
+    - rid: 1697029204662550546
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Venue
+        m_Id: ec99e61f-eea7-4497-b6d9-06d36595885e
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: The places that we play exert tremendous influence on the design
+          of our games.
+    - rid: 1697029204662550547
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Fun
+        m_Id: 5461f1b8-100a-44f4-a9d1-2dced833bc69
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: Fun is desirable in nearly every game, though sometimes fun defies
+          analysis.
+--- !u!4 &1140991682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140991680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1140991683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140991680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55bab473b8f56b43b47564f8c6c3ab4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MyDisk:
+    rid: 4010142276602298473
+  references:
+    version: 2
+    RefIds:
+    - rid: 4010142276602298473
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Documents
+        m_Id: 8f0034c2-3a60-4956-ae3e-e8f98008132e
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Files:
+          m_List:
+          - rid: 4010142276602298474
+          - rid: 4010142276602298475
+          - rid: 4010142276602298476
+          m_CanAddRemove: 1
+          m_CanReorder: 1
+    - rid: 4010142276602298474
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: TODOs
+        m_Id: 0f4f1f96-42a1-4b51-80d7-81daf304e427
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: '- Illustrations
+
+          - 3D Models
+
+          - Animations
+
+          -
+          Music
+
+          - Programming
+
+          - Learn something new'
+    - rid: 4010142276602298475
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Dev
+        m_Id: 5f51e374-5f84-4712-854c-668df530a322
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Files:
+          m_List:
+          - rid: 4010142276602298477
+          - rid: 4010142276602298478
+          - rid: 4010142276602298479
+          m_CanAddRemove: 1
+          m_CanReorder: 1
+    - rid: 4010142276602298476
+      type: {class: Folder, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Game Design
+        m_Id: 448d7a07-2da7-4abb-b4be-e662e6d785ef
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Files:
+          m_List:
+          - rid: 4010142276602298480
+          - rid: 4010142276602298481
+          - rid: 4010142276602298482
+          m_CanAddRemove: 1
+          m_CanReorder: 1
+    - rid: 4010142276602298477
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: C# Architecture
+        m_Id: 3be811da-fa04-40ad-8965-d4df3ba80843
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: "- Decouple and think of reusability\r\n- Actors do things, controllers
+          tell them when to.\r\n- C# events\r\n- Data in ScriptableObject\rs"
+    - rid: 4010142276602298478
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Design Patterns
+        m_Id: b8b059d1-42b3-46c1-a408-759549a04402
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: "- Factory \r\n- Pool\r\n- Adapter\r\n- Mediator\r\n- Prototype\r\n-
+          Composite\r\n- Observer\r\n- State\r\n- Singleton\r"
+    - rid: 4010142276602298479
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Optimization Techniques
+        m_Id: 81154942-a77c-4985-9c0c-cd3e53ec6b00
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: "- Static batching\r\n- Share materials\r\n- GPU instancing: When
+          they use the same mesh\r\n- Dynamic batching: Last resort, careful with
+          CPU\r\n- Reduce vertex count\r\n- Occlusion culling\r\n- UI optimization\r"
+    - rid: 4010142276602298480
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Emotion (Other) 2
+        m_Id: 3673e43d-10e7-435f-9942-060951436711
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: People may forget what you said, but they'll never forget how you
+          made them feel.
+    - rid: 4010142276602298481
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Venue
+        m_Id: ec99e61f-eea7-4497-b6d9-06d36595885e
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: The places that we play exert tremendous influence on the design
+          of our games.
+    - rid: 4010142276602298482
+      type: {class: TextFile, ns: CocodriloDog.Core.Examples, asm: CocodriloDog.Core.Examples}
+      data:
+        m_Name: Fun
+        m_Id: 5461f1b8-100a-44f4-a9d1-2dced833bc69
+        m_CanEnterEdit: 1
+        m_CanEditName: 1
+        m_CanDeleteInstance: 1
+        m_DocumentationComment: 
+        m_Text: Fun is desirable in nearly every game, though sometimes fun defies
+          analysis.
 --- !u!4 &1695377958962515636
 Transform:
   m_ObjectHideFlags: 0
@@ -331,26 +670,43 @@ MonoBehaviour:
   m_FileReference:
     m_Source: {fileID: 7976455875748082104}
     m_OverrideSource: 0
+    m_AllowOverrideSource: 1
     m_Id: 6db90a44-e29a-41d5-9f71-afb3aeabc73f
   m_FileReferences:
   - m_Source: {fileID: 7976455875748082104}
     m_OverrideSource: 0
+    m_AllowOverrideSource: 1
     m_Id: 15ffefb0-9deb-4754-b79d-12cb2994849d
   - m_Source: {fileID: 7976455875748082104}
     m_OverrideSource: 0
+    m_AllowOverrideSource: 1
     m_Id: 583deeba-bf4f-4be8-8bfa-8b98886554f4
   - m_Source: {fileID: 7976455875748082104}
     m_OverrideSource: 0
+    m_AllowOverrideSource: 1
     m_Id: adbccd03-3236-4cb6-9799-86873b3a6985
   - m_Source: {fileID: 7976455875748082104}
     m_OverrideSource: 0
+    m_AllowOverrideSource: 1
     m_Id: d15d32e7-30d2-4346-9e87-7a73450e11c4
   - m_Source: {fileID: 7976455875748082104}
     m_OverrideSource: 0
+    m_AllowOverrideSource: 1
     m_Id: 7c473431-f6de-44a3-84f9-129d51c4d041
   - m_Source: {fileID: 7976455875748082104}
     m_OverrideSource: 0
+    m_AllowOverrideSource: 1
     m_Id: cad9b2a7-b5fc-4ea9-9f7b-1309e61608be
+  m_FileFromScriptableObject:
+    m_Source: {fileID: 11400000, guid: 956d6c157ec0de94d93e4011922493e5, type: 2}
+    m_OverrideSource: 1
+    m_AllowOverrideSource: 1
+    m_Id: 15ffefb0-9deb-4754-b79d-12cb2994849d
+  m_FileFromOtherGO:
+    m_Source: {fileID: 1140991683}
+    m_OverrideSource: 1
+    m_AllowOverrideSource: 1
+    m_Id: 3673e43d-10e7-435f-9942-060951436711
   references:
     version: 2
     RefIds:
@@ -598,3 +954,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 506034117}
   - {fileID: 1695377958962515636}
+  - {fileID: 1140991682}

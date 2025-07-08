@@ -97,14 +97,51 @@
 				return;
 			}
 
-			// Get the map of the existing composite objects (referencedType) on the source object
-			var compositeObjectsMap = CompositeObjectMaps.GetCompositeObjectsMap(
-				m_SourceProperty.objectReferenceValue, 
-				referencedType
-			);
+			// Get the map either from one source object, or several components in a GO.
+			Dictionary<string, CompositeObject> compositeObjectsMap = new();
+
+			// Optional storage for when the source object is a GO.
+			Dictionary<string, Component> compositeObjectPathsToComponents = new();
+
+			// The source GO, if any.
+			GameObject gameObject = null;
+
+			if (m_SourceProperty.objectReferenceValue is GameObject go) {
+				gameObject = go;
+			} else if (m_SourceProperty.objectReferenceValue is Component comp) {
+				gameObject = comp.gameObject;
+			}
+
+			if (gameObject != null && m_OverrideSourceProperty.boolValue) {
+				// The source is either a GO or a component.
+				foreach (var component in gameObject.GetComponents<Component>()) {
+					// Get the map of each component
+					var compositeObjectsMapOfComponent = CompositeObjectMaps.GetCompositeObjectsMap(
+						component,
+						referencedType
+					);
+					// If found, add it to the main map, keyValue by keyValue.
+					if(compositeObjectsMapOfComponent != null) {
+						foreach(var keyValue in compositeObjectsMapOfComponent) {
+							// Key is the CompositeObject path, value is the CompositeObject
+							compositeObjectsMap.Add(keyValue.Key, keyValue.Value);
+							// Save a reference of the component to replace the GO source, when this
+							// CompositeObject is chosen.
+							compositeObjectPathsToComponents.Add(keyValue.Key, component);
+						}
+					}
+				}
+			} else {
+				// The source is the default Component without m_OverrideSource  or a ScriptableObject
+				compositeObjectsMap = CompositeObjectMaps.GetCompositeObjectsMap(
+					m_SourceProperty.objectReferenceValue,
+					referencedType
+				);
+			}
 
 			var options = compositeObjectsMap.Keys.ToList();
 			options.Insert(0, "Null"); // Allow the first choice to be null
+			options.Insert(1, "--"); // Add a separator
 
 			// Find the key (path) of the current composite object (if any) in the map
 			var currentCompositeObject = CompositeObjectMaps.GetCompositeObjectById(
@@ -120,24 +157,27 @@
 
 			// Draw the hierarchy dropdown with the options.
 			CDEditorGUI.HierarchyDropdown(Property.propertyPath, valueRect, currentPath, options, (id, newPath) => {
-				m_NewPath = new CompositeObjectPath(id, newPath);
+				compositeObjectPathsToComponents.TryGetValue(newPath, out var component);
+				m_NewChoice = new CompositeObjectData(id, newPath, component);
 			});
 
-			// There is a pending new path m_NewPath.CompositePath that needs to be assigned to property at path
+			// There is a pending new choice at m_NewPath.CompositePath that needs to be assigned to the property with path
 			// m_NewPath.PropertyPath
-			if (m_NewPath != null && m_NewPath.PropertyPath == Property.propertyPath) {
+			if (m_NewChoice != null && m_NewChoice.CompositeObjectReference_PropertyPath == Property.propertyPath) {
 
-				Undo.RecordObject(m_SourceProperty.objectReferenceValue, $"Modify {Property.displayName}");
-				if (compositeObjectsMap.TryGetValue(m_NewPath.CompositePath, out var newValue)) {
-					//m_ValueProperty.managedReferenceValue = newValue;
+				// Here the source GO needs to change to the component if it was obtained from a GO
+				if (m_NewChoice.ComponentSource != null) {
+					m_SourceProperty.objectReferenceValue = m_NewChoice.ComponentSource;
+				}
+
+				// Assign the Id now, if it is found
+				if (compositeObjectsMap.TryGetValue(m_NewChoice.CompositeObjectPath, out var newValue)) {
 					m_IdProperty.stringValue = newValue.Id;
 				} else {
-					//m_ValueProperty.managedReferenceValue = null;
 					m_IdProperty.stringValue = null;
 				}
-				EditorUtility.SetDirty(m_SourceProperty.objectReferenceValue);
 
-				m_NewPath = null;
+				m_NewChoice = null;
 
 			}
 
@@ -173,36 +213,60 @@
 
 		private SerializedProperty m_IdProperty;
 
-		private CompositeObjectPath m_NewPath;
+		private CompositeObjectData m_NewChoice;
 
 		#endregion
 
 
-		#region Support Classes
-
-		public class CompositeObjectPath {
-
-			public string PropertyPath;
-
-			public string CompositePath;
-
-			public CompositeObjectPath(string propertyPath, string compositePath) {
-				PropertyPath = propertyPath;
-				CompositePath = compositePath;
-			}
-
-		}
-
-		#endregion
-
-
-		#region Private Fields
+		#region Private Methods
 
 		private void InitializeProperties() {
 			m_SourceProperty = Property.FindPropertyRelative("m_Source");
 			m_OverrideSourceProperty = Property.FindPropertyRelative("m_OverrideSource");
 			m_AllowOverrideSourceProperty = Property.FindPropertyRelative("m_AllowOverrideSource");
 			m_IdProperty = Property.FindPropertyRelative("m_Id");
+		}
+
+		#endregion
+
+
+		#region Support Classes
+
+		/// <summary>
+		/// Data about a <see cref="CompositeObject"/> that is used to set a new <see cref="CompositeObjectReference{T}"/> 
+		/// value asynchronously given the fact that the 
+		/// <see cref="CDEditorGUI.HierarchyDropdown(string, Rect, string, List{string}, Action{string, string})"/>
+		/// is asynchronous.
+		/// </summary>
+		public class CompositeObjectData {
+
+			/// <summary>
+			/// The property path of the <see cref="CompositeObjectReference{T}"/> used as an Id.
+			/// </summary>
+			public string CompositeObjectReference_PropertyPath;
+
+			/// <summary>
+			/// The path of the <see cref="CompositeObject"/>, from the root to itself.
+			/// </summary>
+			public string CompositeObjectPath;
+
+			/// <summary>
+			/// An optional <see cref="Component"/> used when the <see cref="m_SourceProperty"/> object is a 
+			/// <see cref="GameObject"/> and needs to be changed to a <see cref="Component"/> when the user
+			/// chooses a <see cref="CompositeObject"/>.
+			/// </summary>
+			public Component ComponentSource;
+
+			public CompositeObjectData(
+				string compositeObjectReference_propertyPath, 
+				string compositeObjectPath, 
+				Component componentSource
+			) {
+				CompositeObjectReference_PropertyPath = compositeObjectReference_propertyPath;
+				CompositeObjectPath = compositeObjectPath;
+				ComponentSource = componentSource;
+			}
+
 		}
 
 		#endregion

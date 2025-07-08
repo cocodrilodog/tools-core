@@ -30,6 +30,13 @@ namespace CocodriloDog.Core.Examples {
 				Debug.Log(fileReference.Value.Name);
 			}
 
+			Debug.Log(m_FileFromScriptableObject.Value.Name);
+
+			// It is null on the prefab instance.
+			if (m_FileFromOtherGO.Value != null) {
+				Debug.Log(m_FileFromOtherGO.Value.Name);
+			}
+
 			yield return new WaitForSeconds(2);
 			if (m_Copy) {
 				Instantiate(m_CopyPrefab);
@@ -95,6 +102,14 @@ namespace CocodriloDog.Core.Examples {
 		[Tooltip("Find many files.")]
 		[SerializeField]
 		private List<CompositeObjectReference<FileBase>> m_FileReferences;
+
+		[Tooltip("Find a file in a ScriptableObject.")]
+		[SerializeField]
+		private CompositeObjectReference<FileBase> m_FileFromScriptableObject;
+
+		[Tooltip("Find a file in another game object.")]
+		[SerializeField]
+		private CompositeObjectReference<FileBase> m_FileFromOtherGO;
 
 		#endregion
 

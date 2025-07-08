@@ -46,10 +46,11 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// <param name="id">
 		/// A string that will be used to identify who called this when <paramref name="onNewPath"/> is invoked which happens a few milliseconds later.
+		/// A good option for this parameter is the property path of the relevant property.
 		/// </param>
 		/// <param name="rect">The rect of the dropdownbutton.</param>
 		/// <param name="currentPath">The current path that is selected, for example "Parent/Child/Grandchild"</param>
-		/// <param name="allPaths">A list of all the paths that the GenericMenu will show.</param>
+		/// <param name="allPaths">A list of all the paths that the GenericMenu will show. A path "--" will create a horizontal separator</param>
 		/// <param name="onNewPath">A callback that receives the <paramref name="id"/> and the choosen composite object path.</param>
 		public static void HierarchyDropdown(string id, Rect rect, string currentPath, List<string> allPaths, Action<string, string> onNewPath) {
 
@@ -59,10 +60,14 @@ namespace CocodriloDog.Core {
 				var menu = new GenericMenu();
 				foreach (var path in allPaths) {
 					var compositeObjectPath = path;
-					menu.AddItem(new GUIContent(path), path == currentPath, () => {
-						onNewPath?.Invoke(id, compositeObjectPath);
-						GUI.changed = true;
-					});
+					if (path == "--") {
+						menu.AddSeparator("");
+					} else {
+						menu.AddItem(new GUIContent(path), path == currentPath, () => {
+							onNewPath?.Invoke(id, compositeObjectPath);
+							GUI.changed = true;
+						});
+					}
 				}
 				menu.DropDown(rect);
 			}

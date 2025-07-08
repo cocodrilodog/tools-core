@@ -31,7 +31,11 @@ namespace CocodriloDog.Core {
 				if (!Application.isPlaying) {
 					Debug.LogWarning("CompositeObjectReference<T>.Vale only works at runtime.");
 				}
-				return ReferenceableCompositeObjects.GetById(m_Source, m_Id) as T;
+				var compositeObject = ReferenceableCompositeObjects.GetById(m_Source, m_Id);
+				if(compositeObject == null) {
+					Debug.LogWarning("CompositeObject not found. Did you forget to register it with RegisterAsReferenceable()?");
+				}
+				return compositeObject as T;
 			}
 		}
 
