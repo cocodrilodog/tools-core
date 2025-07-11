@@ -149,15 +149,10 @@ namespace CocodriloDog.Core {
 		/// <param name="root">The root object where the <see cref="CompositeObject"/> belongs.</param>
 		public virtual void UnregisterReferenceable(UnityEngine.Object root) => ReferenceableCompositeObjects.Unregister(root, this);
 
-		#endregion
-
-
-		#region Internal Methods
-
 		/// <summary>
-		/// Recreates the <see cref="Id"/> for this object.
+		/// Invoked when this <see cref="CompositeObject"/> is pasted.
 		/// </summary>
-		internal void RecreateGuid() => m_Id = Guid.NewGuid().ToString();
+		public virtual void OnPaste() => m_Id = Guid.NewGuid().ToString();
 
 		#endregion
 

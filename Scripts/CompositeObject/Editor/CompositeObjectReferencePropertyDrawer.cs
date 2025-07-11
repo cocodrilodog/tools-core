@@ -67,9 +67,9 @@
 				EditorGUI.BeginChangeCheck();
 				m_OverrideSourceProperty.boolValue = EditorGUI.Toggle(overrideSourceRect, m_OverrideSourceProperty.boolValue);
 				if (EditorGUI.EndChangeCheck()) {
-					// Set default source if it is null and override source was unchecked.
-					if (!m_OverrideSourceProperty.boolValue && 
-						m_SourceProperty.objectReferenceValue == null) {
+					// Set default source when override source is unchecked.
+					// This is required, when the source is null and when the source is other than the default.
+					if (!m_OverrideSourceProperty.boolValue) {
 						m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
 					}
 					return;
@@ -97,11 +97,11 @@
 				return;
 			}
 
-			// Get the map either from one source object, or several components in a GO.
-			Dictionary<string, CompositeObject> compositeObjectsMap = new();
+			// Get the map either from one source object, or several MonoBehaviours in a GO.
+			Dictionary<string, CompositeObject> compositeObjectsByPath = new();
 
 			// Optional storage for when the source object is a GO.
-			Dictionary<string, Component> compositeObjectPathsToComponents = new();
+			Dictionary<string, MonoBehaviour> monoBehavioursByCompositeObjectPath = new();
 
 			// The source GO, if any.
 			GameObject gameObject = null;
@@ -113,33 +113,58 @@
 			}
 
 			if (gameObject != null && m_OverrideSourceProperty.boolValue) {
-				// The source is either a GO or a component.
-				foreach (var component in gameObject.GetComponents<Component>()) {
-					// Get the map of each component
-					var compositeObjectsMapOfComponent = CompositeObjectMaps.GetCompositeObjectsMap(
-						component,
+				
+				var repeatedMonoBehaviourTypesCount = new Dictionary<Type, int>();
+			
+				// The source is either a GO or a Component.
+				// Search only on MonoBehaviours for optimal processing
+				foreach (var monoBehaviour in gameObject.GetComponents<MonoBehaviour>()) {
+
+					// Check for repeated types
+					if (!repeatedMonoBehaviourTypesCount.TryAdd(monoBehaviour.GetType(), 0)) {
+						repeatedMonoBehaviourTypesCount[monoBehaviour.GetType()]++;
+					}
+
+					// Get the map of each MonoBehaviour
+					var monoBehaviour_compositeObjectsByPath = CompositeObjectMaps.GetCompositeObjectsMap(
+						monoBehaviour,
 						referencedType
 					);
+
 					// If found, add it to the main map, keyValue by keyValue.
-					if(compositeObjectsMapOfComponent != null) {
-						foreach(var keyValue in compositeObjectsMapOfComponent) {
+					if(monoBehaviour_compositeObjectsByPath != null) {
+						foreach(var path_compositeObject in monoBehaviour_compositeObjectsByPath) {
+							
 							// Key is the CompositeObject path, value is the CompositeObject
-							compositeObjectsMap.Add(keyValue.Key, keyValue.Value);
-							// Save a reference of the component to replace the GO source, when this
+							var path = path_compositeObject.Key;
+
+							// This happens when a component is repeated
+							if (repeatedMonoBehaviourTypesCount[monoBehaviour.GetType()] >= 1) {
+								int slashIndex = path.IndexOf('/');
+								if (slashIndex >= 0) {
+									// Insert a number on the monobehaviour part of the path
+									path = path.Insert(slashIndex, $" ({repeatedMonoBehaviourTypesCount[monoBehaviour.GetType()]})");
+								}
+							}
+
+							compositeObjectsByPath.Add(path, path_compositeObject.Value);
+							// Save a reference of the MonoBehaviour to replace the GO source, when this
 							// CompositeObject is chosen.
-							compositeObjectPathsToComponents.Add(keyValue.Key, component);
+							monoBehavioursByCompositeObjectPath.Add(path, monoBehaviour);
+
 						}
 					}
 				}
+
 			} else {
-				// The source is the default Component without m_OverrideSource  or a ScriptableObject
-				compositeObjectsMap = CompositeObjectMaps.GetCompositeObjectsMap(
+				// The source is the default MonoBehaviour without m_OverrideSource  or a ScriptableObject
+				compositeObjectsByPath = CompositeObjectMaps.GetCompositeObjectsMap(
 					m_SourceProperty.objectReferenceValue,
 					referencedType
 				);
 			}
 
-			var options = compositeObjectsMap.Keys.ToList();
+			var options = compositeObjectsByPath.Keys.ToList();
 			options.Insert(0, "Null"); // Allow the first choice to be null
 			options.Insert(1, "--"); // Add a separator
 
@@ -147,7 +172,7 @@
 			var currentCompositeObject = CompositeObjectMaps.GetCompositeObjectById(
 				m_SourceProperty.objectReferenceValue, referencedType, m_IdProperty.stringValue
 			);
-			var currentPath = compositeObjectsMap.FirstOrDefault(
+			var currentPath = compositeObjectsByPath.FirstOrDefault(
 				pathToCompositeObject => pathToCompositeObject.Value == currentCompositeObject
 			).Key;
 
@@ -157,7 +182,7 @@
 
 			// Draw the hierarchy dropdown with the options.
 			CDEditorGUI.HierarchyDropdown(Property.propertyPath, valueRect, currentPath, options, (id, newPath) => {
-				compositeObjectPathsToComponents.TryGetValue(newPath, out var component);
+				monoBehavioursByCompositeObjectPath.TryGetValue(newPath, out var component);
 				m_NewChoice = new CompositeObjectData(id, newPath, component);
 			});
 
@@ -166,12 +191,12 @@
 			if (m_NewChoice != null && m_NewChoice.CompositeObjectReference_PropertyPath == Property.propertyPath) {
 
 				// Here the source GO needs to change to the component if it was obtained from a GO
-				if (m_NewChoice.ComponentSource != null) {
-					m_SourceProperty.objectReferenceValue = m_NewChoice.ComponentSource;
+				if (m_NewChoice.MonoBehaviour != null) {
+					m_SourceProperty.objectReferenceValue = m_NewChoice.MonoBehaviour;
 				}
 
 				// Assign the Id now, if it is found
-				if (compositeObjectsMap.TryGetValue(m_NewChoice.CompositeObjectPath, out var newValue)) {
+				if (compositeObjectsByPath.TryGetValue(m_NewChoice.CompositeObjectPath, out var newValue)) {
 					m_IdProperty.stringValue = newValue.Id;
 				} else {
 					m_IdProperty.stringValue = null;
@@ -251,20 +276,20 @@
 			public string CompositeObjectPath;
 
 			/// <summary>
-			/// An optional <see cref="Component"/> used when the <see cref="m_SourceProperty"/> object is a 
-			/// <see cref="GameObject"/> and needs to be changed to a <see cref="Component"/> when the user
+			/// An optional <see cref="UnityEngine.MonoBehaviour"/> used when the <see cref="m_SourceProperty"/> object is a 
+			/// <see cref="GameObject"/> and needs to be changed to a <see cref="UnityEngine.MonoBehaviour"/> when the user
 			/// chooses a <see cref="CompositeObject"/>.
 			/// </summary>
-			public Component ComponentSource;
+			public Component MonoBehaviour;
 
 			public CompositeObjectData(
 				string compositeObjectReference_propertyPath, 
-				string compositeObjectPath, 
-				Component componentSource
+				string compositeObjectPath,
+				MonoBehaviour monoBehaviour
 			) {
 				CompositeObjectReference_PropertyPath = compositeObjectReference_propertyPath;
 				CompositeObjectPath = compositeObjectPath;
-				ComponentSource = componentSource;
+				MonoBehaviour = monoBehaviour;
 			}
 
 		}

@@ -95,6 +95,7 @@ namespace CocodriloDog.Core {
 			// Creating the map even for objects that have no composite object is optimal because it doesn't need to
 			// inspect more times, once the empty map is cached 
 			Dictionary<string, CompositeObject> map = new();
+			Dictionary<string, int> repeatedPathsCount = new();
 
 			// Start with the root node.
 			InspectNode(root, $"{root.GetType().Name}");
@@ -170,7 +171,15 @@ namespace CocodriloDog.Core {
 					} else {
 						path = basePath + $"/{compositeObject.DisplayName}";
 					}
-					map[path] = compositeObject;
+					// Try to add the path as it comes
+					if(!map.TryAdd(path, compositeObject)) {
+						// But, this path is repeated, so count the repetition number
+						if(!repeatedPathsCount.TryAdd(path, 1)) {
+							repeatedPathsCount[path]++;
+						}
+						// And add that number to the end of the path to differentiate it.
+						map.TryAdd($"{path} ({repeatedPathsCount[path]})", compositeObject);
+					}
 					InspectNode(compositeObject, path); // Recursive
 				}
 

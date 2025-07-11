@@ -5,7 +5,7 @@ namespace CocodriloDog.Core {
 
 	/// <summary>
 	/// An object that can search for and reference <see cref="CompositeObject"/>s of the default root 
-	/// or the overriden root.
+	/// or an overriden root.
 	/// </summary>
 	/// 
 	/// <remarks>
@@ -53,18 +53,37 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Public Methods
+
+		/// <summary>
+		/// Used to set the source to <c>null</c> so that the inspector resets it to the default root object
+		/// when <see cref="m_OverrideSource"/> is <c>false</c>.
+		/// </summary>
+		/// <remarks>
+		/// Only has effect when not overriding the source, because otherwise the user may want to preserve 
+		/// the overriding <see cref="m_Source"/>.
+		/// </remarks>
+		public void ClearSourceToDefault() {
+			if (!m_OverrideSource) {
+				m_Source = null;
+			}
+		}
+
+		#endregion
+
+
 		#region Private Fields
 
 		[Tooltip("The root of the CompositeObject.")]
 		[SerializeField]
 		private UnityEngine.Object m_Source;
 
+		[SerializeField]
+		private bool m_AllowOverrideSource = true;
+
 		[Tooltip("Allows to choose another object as the source root.")]
 		[SerializeField]
 		private bool m_OverrideSource;
-
-		[SerializeField]
-		private bool m_AllowOverrideSource = true;
 
 		[Tooltip("The unique Id of the CompositeObject.")]
 		[SerializeField]

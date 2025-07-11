@@ -36,6 +36,10 @@ namespace CocodriloDog.Core.Examples {
 			if (m_FileFromOtherGO.Value != null) {
 				Debug.Log(m_FileFromOtherGO.Value.Name);
 			}
+			// It is null on the prefab instance.
+			if (m_FileFromOtherGO2.Value != null) {
+				Debug.Log(m_FileFromOtherGO2.Value.Name);
+			}
 
 			yield return new WaitForSeconds(2);
 			if (m_Copy) {
@@ -110,6 +114,10 @@ namespace CocodriloDog.Core.Examples {
 		[Tooltip("Find a file in another game object.")]
 		[SerializeField]
 		private CompositeObjectReference<FileBase> m_FileFromOtherGO;
+
+		[Tooltip("Find a file in another game object.")]
+		[SerializeField]
+		private CompositeObjectReference<FileBase> m_FileFromOtherGO2;
 
 		#endregion
 
