@@ -6,7 +6,8 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 
 	/// <summary>
-	/// Wrapper for lists that work correctly with <see cref="HelpAttribute"/>, and <see cref="HideAttribute"/>.
+	/// Wrapper for lists that work correctly with <see cref="HelpAttribute"/>, <see cref="HideAttribute"/>, and
+	/// <see cref="ReadOnlyAttribute"/>.
 	/// </summary>
 	/// 
 	/// <typeparam name="T">Any type</typeparam>
