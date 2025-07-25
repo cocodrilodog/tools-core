@@ -102,11 +102,17 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
-		#region Utility
+		#region Utility & Linq
 
 		public void ForEach(Action<T> action) => m_List.ForEach(action);
 
 		public IEnumerable<T> Where(Func<T, bool> condition) => m_List.Where(condition);
+
+		public IEnumerable<T> Where(Func<T, int, bool> condition) => m_List.Where(condition);
+
+		public IEnumerable<TResult> Select<TResult>(Func<T, TResult> selector) => m_List.Select(selector);
+
+		public IEnumerable<TResult> Select<TResult>(Func<T, int, TResult> selector) => m_List.Select(selector);
 
 		public T FirstOrDefault() => m_List.FirstOrDefault();
 

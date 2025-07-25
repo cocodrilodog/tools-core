@@ -3,6 +3,7 @@ namespace CocodriloDog.Core {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using UnityEngine;
 
 	/// <summary>
@@ -74,6 +75,25 @@ namespace CocodriloDog.Core {
 		#region IEnumerable
 
 		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)m_List).GetEnumerator();
+
+		#endregion
+
+
+		#region Utility & Linq
+
+		public void ForEach(Action<T> action) => m_List.ForEach(action);
+
+		public IEnumerable<T> Where(Func<T, bool> condition) => m_List.Where(condition);
+
+		public IEnumerable<T> Where(Func<T, int, bool> condition) => m_List.Where(condition);
+
+		public IEnumerable<TResult> Select<TResult>(Func<T, TResult> selector) => m_List.Select(selector);
+
+		public IEnumerable<TResult> Select<TResult>(Func<T, int, TResult> selector) => m_List.Select(selector);
+
+		public T FirstOrDefault() => m_List.FirstOrDefault();
+
+		public T FirstOrDefault(Func<T, bool> predicate) => m_List.FirstOrDefault(predicate);
 
 		#endregion
 
