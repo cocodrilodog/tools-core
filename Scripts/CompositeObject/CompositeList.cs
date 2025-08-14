@@ -77,6 +77,8 @@ namespace CocodriloDog.Core {
 
 		public void Add(T item) => m_List.Add(item);
 
+		public void AddRange(IEnumerable<T> collection) => m_List.AddRange(collection);
+
 		public void Clear() => m_List.Clear();
 
 		public bool Contains(T item) => m_List.Contains(item);
