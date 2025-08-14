@@ -11,7 +11,15 @@ namespace CocodriloDog.Core {
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 			base.GetPropertyHeight(property, label);
-			return EditorGUI.GetPropertyHeight(property, label, true);
+			var type = CDEditorUtility.GetPropertyType(Property);
+			if (SystemUtility.IsSubclassOfRawGeneric(type, typeof(ListWrapper<>))) {
+				// ListWrapper property.
+				var listProperty = Property.FindPropertyRelative("m_List");
+				return EditorGUI.GetPropertyHeight(listProperty, Label);
+			} else {
+				// The rest
+				return EditorGUI.GetPropertyHeight(Property, Label);
+			}
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {

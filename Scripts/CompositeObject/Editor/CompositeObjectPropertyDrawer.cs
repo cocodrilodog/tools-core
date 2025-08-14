@@ -137,7 +137,7 @@
 		protected virtual void Edit_InitializePropertiesForGetHeight() { }
 
 		protected sealed override void InitializePropertiesForOnGUI() {
-			
+
 			base.InitializePropertiesForOnGUI();
 
 			// It seems that the properties need to be initialized (retrieved) in both places for it to work
@@ -170,7 +170,7 @@
 		/// <param name="label">The label</param>
 		/// <returns>The height</returns>
 		protected virtual float Edit_GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			
+
 			float height = 0;
 
 			var compositeRoot = property.serializedObject.targetObject as ICompositeRoot;
@@ -189,7 +189,7 @@
 				height += base.GetPropertyHeight(property, label) + EditorGUI.GetPropertyHeight(NameProperty) + 2;
 			}
 
-			if((Property.managedReferenceValue as CompositeObject).EditDocumentationComment) {
+			if ((Property.managedReferenceValue as CompositeObject).EditDocumentationComment) {
 				height += EditorGUI.GetPropertyHeight(DocumentationCommentProperty) + 2;
 				height += EditorGUIUtility.singleLineHeight + 2;
 				height += 10; // Give dome space before owner and reuse id
@@ -243,7 +243,7 @@
 		/// <param name="property">The property</param>
 		/// <param name="label">The label</param>
 		protected virtual void Edit_OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-			
+
 			// Name property.
 			var rect = GetNextPosition();
 			var nameRect = rect;
@@ -337,7 +337,7 @@
 
 			// Documentation tooltip
 			if (Property.managedReferenceValue != null && !string.IsNullOrEmpty(DocumentationCommentProperty.stringValue)) {
-			
+
 				var documentationRect = fieldRect;
 				documentationRect.xMax = fieldRect.xMin - 2;
 				documentationRect.xMin = documentationRect.xMax - 20;
@@ -358,7 +358,7 @@
 			DrawPropertyFieldBox(fieldRect, objectIcon, name);
 
 			// Draw object icon, if any
-			if(objectIcon != null) {
+			if (objectIcon != null) {
 				var iconRect = fieldRect;
 				iconRect.position += new Vector2(0, 1);
 				iconRect.size = new Vector2(16, 16);
@@ -377,9 +377,38 @@
 		/// <param name="objectIcon">The icon of the box, if any.</param>
 		/// <param name="name">The name to be displayed on the box.</param>
 		protected virtual void DrawPropertyFieldBox(Rect boxRect, Texture objectIcon, string name) {
+
 			EditorGUI.BeginDisabledGroup(true);
 			GUI.Box(boxRect, objectIcon != null ? $"     {name}" : name, EditorStyles.objectField);
 			EditorGUI.EndDisabledGroup();
+
+			if (Property.managedReferenceValue == null) {
+				return;
+			}
+
+			if (Event.current.type == EventType.MouseDown &&
+				Event.current.button == 0 && // Left mouse button
+				boxRect.Contains(Event.current.mousePosition)) {
+
+				Event.current.Use(); // Consume the event if desired
+
+				var type = Property.managedReferenceValue.GetType();
+				string[] guids = AssetDatabase.FindAssets($"{type.Name} t:MonoScript");
+
+				foreach (string guid in guids) {
+					string path = AssetDatabase.GUIDToAssetPath(guid);
+					var monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+					if (monoScript != null && monoScript.GetClass() == type) {
+						EditorGUIUtility.PingObject(monoScript);
+						if (Event.current.clickCount == 2) {
+							AssetDatabase.OpenAsset(monoScript);
+						}
+						break;
+					}
+				}
+
+			}
+
 		}
 
 		#endregion
@@ -410,7 +439,7 @@
 				var buttonRect = GetNextPosition();
 				DrawNextButton($" ▴ ", () => CompositeObject.Edit = false);
 				DrawNextButton($"{(Property.managedReferenceValue as CompositeObject).Name}");
-				
+
 				void DrawNextButton(string label, Action action = null) {
 
 					// Fit the button to the text
@@ -539,9 +568,9 @@
 			if (compositeRoot != null) {
 				if (GUI.Button(rect, "Edit ▸")) {
 					CompositeRootEditor.SelectCompositeObject(Property.serializedObject, Property.propertyPath);
-				} 
+				}
 			} else {
-				if (GUI.Button(rect, "Edit ▾")) {					
+				if (GUI.Button(rect, "Edit ▾")) {
 					CompositeObject.Edit = true;
 				}
 			}
@@ -575,10 +604,10 @@
 			var deleteButtonEnabled = canAddRemove && thereIsInstanceAndCanBeDeleted && PrefabUtility.GetPrefabInstanceHandle(Property.serializedObject.targetObject) == null;
 			EditorGUI.BeginDisabledGroup(!deleteButtonEnabled);
 			var content = new GUIContent(
-				"Delete", 
+				"Delete",
 				(deleteButtonEnabled || Property.managedReferenceValue == null) ? "" : $"To delete {Property.displayName}, open the prefab."
 			);
-			if (GUI.Button(rect, content)){
+			if (GUI.Button(rect, content)) {
 				Property.managedReferenceValue = null;
 			}
 			EditorGUI.EndDisabledGroup();
