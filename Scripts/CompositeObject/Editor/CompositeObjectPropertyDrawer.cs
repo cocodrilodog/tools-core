@@ -1,12 +1,8 @@
 ﻿namespace CocodriloDog.Core {
 
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
 	using UnityEditor;
-	using UnityEditorInternal;
 	using UnityEngine;
 
 	/// <summary>
@@ -386,25 +382,30 @@
 				return;
 			}
 
+			// Ping/Open the script
 			if (Event.current.type == EventType.MouseDown &&
 				Event.current.button == 0 && // Left mouse button
 				boxRect.Contains(Event.current.mousePosition)) {
 
-				Event.current.Use(); // Consume the event if desired
+				Event.current.Use();
 
 				var type = Property.managedReferenceValue.GetType();
 				string[] guids = AssetDatabase.FindAssets($"{type.Name} t:MonoScript");
 
 				foreach (string guid in guids) {
+
 					string path = AssetDatabase.GUIDToAssetPath(guid);
 					var monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-					if (monoScript != null && monoScript.GetClass() == type) {
+
+					if (monoScript != null && CDEditorUtility.IsTypeInScript(monoScript, type)) {
 						EditorGUIUtility.PingObject(monoScript);
 						if (Event.current.clickCount == 2) {
 							AssetDatabase.OpenAsset(monoScript);
 						}
 						break;
+
 					}
+
 				}
 
 			}

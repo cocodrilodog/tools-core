@@ -7,9 +7,9 @@
 	using UnityEngine;
 	using UnityEngine.UIElements;
 	using UnityEditor;
-	using UnityEditor.UIElements;
 	using System.Linq;
 	using System.Text.RegularExpressions;
+	using System.IO;
 
 
 	#region Small Types
@@ -120,7 +120,7 @@
 			GUI.Box(rect, GUIContent.none, HorizontalLineStyle);
 			GUI.color = color;
 		}
-		
+
 		/// <summary>
 		/// Draws a horizontal line for inspectors with <see cref="GUILayout"/>.
 		/// </summary>
@@ -219,29 +219,29 @@
 		public static Type GetPropertyType(SerializedProperty property) {
 			switch (property.propertyType) {
 
-				case SerializedPropertyType.AnimationCurve:	return typeof(AnimationCurve);
-				case SerializedPropertyType.Boolean:		return typeof(bool);
-				case SerializedPropertyType.Bounds:			return typeof(Bounds);
-				case SerializedPropertyType.BoundsInt:		return typeof(Bounds);
+				case SerializedPropertyType.AnimationCurve:				return typeof(AnimationCurve);
+				case SerializedPropertyType.Boolean:					return typeof(bool);
+				case SerializedPropertyType.Bounds:						return typeof(Bounds);
+				case SerializedPropertyType.BoundsInt:					return typeof(Bounds);
 				//case SerializedPropertyType.Character:				return ???;
-				case SerializedPropertyType.Color:			return typeof(Color);
+				case SerializedPropertyType.Color:						return typeof(Color);
 				//case SerializedPropertyType.Enum:						return ???;
 				//case SerializedPropertyType.ExposedReference:			return ???;
 				//case SerializedPropertyType.FixedBufferSize:			return ???;
-				case SerializedPropertyType.Float:			return typeof(float);
-				case SerializedPropertyType.Gradient:		return typeof(Gradient);
-				case SerializedPropertyType.Hash128:		return typeof(Hash128);
-				case SerializedPropertyType.Integer:		return typeof(int);
-				case SerializedPropertyType.LayerMask:		return typeof(LayerMask);
-				case SerializedPropertyType.Quaternion:		return typeof(Quaternion);
-				case SerializedPropertyType.Rect:			return typeof(Rect);
-				case SerializedPropertyType.RectInt:		return typeof(Rect);
-				case SerializedPropertyType.String:			return typeof(string);
-				case SerializedPropertyType.Vector2:		return typeof(Vector2);
-				case SerializedPropertyType.Vector2Int:		return typeof(Vector2);
-				case SerializedPropertyType.Vector3:		return typeof(Vector3);
-				case SerializedPropertyType.Vector3Int:		return typeof(Vector3);
-				case SerializedPropertyType.Vector4:		return typeof(Vector4);
+				case SerializedPropertyType.Float:						return typeof(float);
+				case SerializedPropertyType.Gradient:					return typeof(Gradient);
+				case SerializedPropertyType.Hash128:					return typeof(Hash128);
+				case SerializedPropertyType.Integer:					return typeof(int);
+				case SerializedPropertyType.LayerMask:					return typeof(LayerMask);
+				case SerializedPropertyType.Quaternion:					return typeof(Quaternion);
+				case SerializedPropertyType.Rect:						return typeof(Rect);
+				case SerializedPropertyType.RectInt:					return typeof(RectInt);
+				case SerializedPropertyType.String:						return typeof(string);
+				case SerializedPropertyType.Vector2:					return typeof(Vector2);
+				case SerializedPropertyType.Vector2Int:					return typeof(Vector2Int);
+				case SerializedPropertyType.Vector3:					return typeof(Vector3);
+				case SerializedPropertyType.Vector3Int:					return typeof(Vector3Int);
+				case SerializedPropertyType.Vector4:					return typeof(Vector4);
 
 				// ObjectReference is better handled in the generic way below. Otherwise when the value is null
 				// the result would lose presicion. Commenting this for future reference
@@ -250,7 +250,7 @@
 				//	 return property.objectReferenceValue != null ? property.objectReferenceValue.GetType() : typeof(UnityEngine.Object);
 
 				case SerializedPropertyType.ManagedReference: {
-						
+
 						// Example of managedReferenceFieldTypename: "CocodriloDog.Core.Examples CocodriloDog.Core.Examples.Folder"
 						var typeName = property.managedReferenceFieldTypename;
 						int firstSpaceIndex = property.managedReferenceFieldTypename.IndexOf(' ');
@@ -342,7 +342,7 @@
 					// Look for the object inside the current object
 					currentObject = field?.GetValue(currentObject);
 					type = currentObject != null ? currentObject.GetType() : field?.FieldType;
-				
+
 				}
 
 			}
@@ -483,13 +483,44 @@
 		#endregion
 
 
+		#region Public Static Methods - MonoScript
+
+		/// <summary>
+		/// Is <paramref name="type"/> defined in this <paramref name="monoScript"/> file?
+		/// </summary>
+		/// <param name="monoScript">The <see cref="MonoScript"/> to check agaist.</param>
+		/// <param name="type">The type that we are checking for.</param>
+		/// <returns></returns>
+		public static bool IsTypeInScript(MonoScript monoScript, Type type) {
+
+			if (monoScript == null || type == null) {
+				return false;
+			}
+
+			// Fast path: when Unity can resolve the top-level type for this file
+			var outer = monoScript.GetClass();
+			if (outer != null) {
+				if (outer == type) {
+					return true;
+				}
+				return IsTypeInType(outer, type);
+			}
+
+			// Fallback for partials (GetClass == null): scan the file text lightly.
+			return IsTypeInCode(monoScript, type);
+
+		}
+
+		#endregion
+
+
 		#region Event Handlers
 
 		private static void EditorApplication_Update() {
 
 			// Non-ID delayed actions
 			List<DelayedActionInfo> actionsToRemove = null;
-			foreach(var actionInfo in m_DelayedActionInfos) {
+			foreach (var actionInfo in m_DelayedActionInfos) {
 				double elapsed = EditorApplication.timeSinceStartup - actionInfo.Time;
 				if (elapsed >= actionInfo.Delay) {
 					actionInfo.Action();
@@ -548,6 +579,102 @@
 				}
 				return m_HorizontalLineStyle;
 			}
+		}
+
+		#endregion
+
+
+		#region Private Static Methods - MonoScript
+
+		/// <summary>
+		/// Searches for the <paramref name="type"/> in the <paramref name="containerType"/>
+		/// </summary>
+		/// <param name="containerType">The potentially container type.</param>
+		/// <param name="type">The type</param>
+		/// <returns><c>true</c> if found, <c>false</c>, otherwise.</returns>
+		private static bool IsTypeInType(Type containerType, Type type) {
+			if (containerType == type) {
+				return true;
+			}
+			foreach (var n in containerType.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic)) {
+				if (n == type) {
+					return true;
+				}
+				if (IsTypeInType(n, type)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Searches for the <paramref name="type"/> in the <paramref name="monoScript"/> code.
+		/// </summary>
+		/// <param name="monoScript">The script that has the code.</param>
+		/// <param name="type">The type</param>
+		/// <returns><c>true</c> if found, <c>false</c>, otherwise.</returns>
+		private static bool IsTypeInCode(MonoScript monoScript, Type type) {
+
+			var path = AssetDatabase.GetAssetPath(monoScript);
+
+			if (string.IsNullOrEmpty(path) || !File.Exists(path)) {
+				// Probably in a DLL or no source available
+				return false;
+			}
+
+			string code;
+			try {
+				code = File.ReadAllText(path);
+			} catch {
+				return false;
+			}
+
+			// If the file declares a namespace, ensure it matches the type's namespace.
+			// (If no namespace found in file, we skip this check.)
+			var nsMatch = Regex.Match(code, @"\bnamespace\s+([A-Za-z_][A-Za-z0-9_.]*)");
+			if (nsMatch.Success && !string.Equals(nsMatch.Groups[1].Value, type.Namespace, StringComparison.Ordinal)) {
+				return false;
+			}
+
+			// Build a small regex that matches "class <Name>" (optionally "partial").
+			static string ClassDeclaration(string nameNoArity) => $@"\b(?:partial\s+)?(?:class|struct|record|interface)\s+{Regex.Escape(nameNoArity)}\b";
+			//$@"\b(?:partial\s+)?   class                         \s+{Regex.Escape(nameNoArity)}\b";
+
+			// Strip generic arity (e.g., "Thing`1" -> "Thing")
+			static string NoArity(string n) {
+				var i = n.IndexOf('`');
+				return i >= 0 ? n.Substring(0, i) : n;
+			}
+
+			if (!type.IsNested) {
+				// Just check this file declares that class name.
+				return Regex.IsMatch(code, ClassDeclaration(NoArity(type.Name)));
+			} else {
+
+				// For nested types, we keep it simple:
+				// 1) The innermost class name must be declared in this file.
+				// 2) If the outermost class name also appears here, great — but we
+				//    don't *require* it (partials can split outer across files).
+				var chain = GetDeclaringChain(type).Select(t => NoArity(t.Name)).ToArray();
+				var innerName = chain[^1];
+
+				if (!Regex.IsMatch(code, ClassDeclaration(innerName))) {
+					return false;
+				}
+
+				return true;
+
+			}
+
+		}
+
+		private static Type[] GetDeclaringChain(Type t) {
+			// [Outer, Inner, InnerMost]
+			var stack = new Stack<Type>();
+			for (var cur = t; cur != null; cur = cur.DeclaringType) {
+				stack.Push(cur);
+			}
+			return stack.ToArray();
 		}
 
 		#endregion
