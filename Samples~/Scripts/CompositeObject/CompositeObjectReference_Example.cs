@@ -41,6 +41,11 @@ namespace CocodriloDog.Core.Examples {
 				Debug.Log(m_FileFromOtherGO2.Value.Name);
 			}
 
+			// It is null on the prefab instance.
+			if (m_HideEnableChooseSource.Value != null) {
+				Debug.Log(m_HideEnableChooseSource.Value.Name);
+			}
+
 			yield return new WaitForSeconds(2);
 			if (m_Copy) {
 				Instantiate(m_CopyPrefab);
@@ -56,6 +61,16 @@ namespace CocodriloDog.Core.Examples {
 			m_OtherFilesCompositeListEmpty.ForEach(f => f.UnregisterReferenceable(this));
 			m_OtherFilesList.ForEach(f => f.UnregisterReferenceable(this));
 			m_OtherFilesArray.ForEach(f => f.UnregisterReferenceable(this));
+		}
+
+		private void OnValidate() {
+			
+			m_HideEnableChooseSource.ShowEnableChooseSource = false;
+			m_HideSource.ShowSource = false;
+
+			m_ForceChooseSource.ShowEnableChooseSource = false;
+			m_ForceChooseSource.EnableChooseSource = true;
+
 		}
 
 		#endregion
@@ -118,6 +133,18 @@ namespace CocodriloDog.Core.Examples {
 		[Tooltip("Find a file in another game object.")]
 		[SerializeField]
 		private CompositeObjectReference<FileBase> m_FileFromOtherGO2;
+
+		[Tooltip("Hide enable choose source.")]
+		[SerializeField]
+		private CompositeObjectReference<FileBase> m_HideEnableChooseSource;
+
+		[Tooltip("Hide source.")]
+		[SerializeField]
+		private CompositeObjectReference<FileBase> m_HideSource;
+
+		[Tooltip("Force choose source.")]
+		[SerializeField]
+		private CompositeObjectReference<FileBase> m_ForceChooseSource;
 
 		#endregion
 

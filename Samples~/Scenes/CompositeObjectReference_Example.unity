@@ -1237,49 +1237,77 @@ MonoBehaviour:
   m_LogReferences: 1
   m_FileReference:
     m_Source: {fileID: 7976455875748082104}
-    m_OverrideSource: 0
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
     m_Id: 6db90a44-e29a-41d5-9f71-afb3aeabc73f
   m_FileReferences:
   - m_Source: {fileID: 7976455875748082104}
-    m_OverrideSource: 0
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
     m_Id: 15ffefb0-9deb-4754-b79d-12cb2994849d
   - m_Source: {fileID: 7976455875748082104}
-    m_OverrideSource: 0
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
     m_Id: 583deeba-bf4f-4be8-8bfa-8b98886554f4
   - m_Source: {fileID: 7976455875748082104}
-    m_OverrideSource: 0
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
     m_Id: adbccd03-3236-4cb6-9799-86873b3a6985
   - m_Source: {fileID: 7976455875748082104}
-    m_OverrideSource: 0
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
     m_Id: d15d32e7-30d2-4346-9e87-7a73450e11c4
   - m_Source: {fileID: 7976455875748082104}
-    m_OverrideSource: 0
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
     m_Id: 7c473431-f6de-44a3-84f9-129d51c4d041
   - m_Source: {fileID: 7976455875748082104}
-    m_OverrideSource: 0
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
     m_Id: cad9b2a7-b5fc-4ea9-9f7b-1309e61608be
   m_FileFromScriptableObject:
     m_Source: {fileID: 11400000, guid: 956d6c157ec0de94d93e4011922493e5, type: 2}
-    m_OverrideSource: 1
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 1
+    m_ShowEnableChooseSource: 1
     m_Id: 15ffefb0-9deb-4754-b79d-12cb2994849d
   m_FileFromOtherGO:
     m_Source: {fileID: 1140991683}
-    m_OverrideSource: 1
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 1
+    m_ShowEnableChooseSource: 1
     m_Id: c4623ca4-d508-4f98-9032-aba49a0f4954
   m_FileFromOtherGO2:
     m_Source: {fileID: 1889778487}
-    m_OverrideSource: 1
-    m_AllowOverrideSource: 1
+    m_ShowSource: 1
+    m_EnableChooseSource: 1
+    m_ShowEnableChooseSource: 1
     m_Id: 17c6df02-56db-4e3a-846d-f305d70522b5
+  m_HideEnableChooseSource:
+    m_Source: {fileID: 7976455875748082104}
+    m_ShowSource: 1
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 0
+    m_Id: 7c473431-f6de-44a3-84f9-129d51c4d041
+  m_HideSource:
+    m_Source: {fileID: 7976455875748082104}
+    m_ShowSource: 0
+    m_EnableChooseSource: 0
+    m_ShowEnableChooseSource: 1
+    m_Id: 76c9f567-0528-476f-b010-f2fb68c87345
+  m_ForceChooseSource:
+    m_Source: {fileID: 11400000, guid: 956d6c157ec0de94d93e4011922493e5, type: 2}
+    m_ShowSource: 1
+    m_EnableChooseSource: 1
+    m_ShowEnableChooseSource: 0
+    m_Id: c25d134a-2094-479a-82af-fd01a97f134b
   references:
     version: 2
     RefIds:
