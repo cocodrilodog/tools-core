@@ -47,9 +47,9 @@ namespace CocodriloDog.Core {
 		/// <remarks>
 		/// This should be set <c>OnValidate</c>.
 		/// </remarks>
-		public bool ShowSource {
-			get => m_ShowSource;
-			set => m_ShowSource = value;
+		public bool ShowSourceField {
+			get => m_ShowSourceField;
+			set => m_ShowSourceField = value;
 		}
 
 		/// <summary>
@@ -58,20 +58,20 @@ namespace CocodriloDog.Core {
 		/// <remarks>
 		/// This should be set <c>OnValidate</c>.
 		/// </remarks>
-		public bool EnableChooseSource {
-			get => m_EnableChooseSource;
-			set => m_EnableChooseSource = value;
+		public bool EnableSourceField {
+			get => m_EnableSourceField;
+			set => m_EnableSourceField = value;
 		}
 
 		/// <summary>
-		/// Shows/hides the toggle <see cref="m_EnableChooseSource"/> in the inspector.
+		/// Shows/hides the <see cref="m_EnableSourceField"/> toggle in the inspector.
 		/// </summary>
 		/// <remarks>
 		/// This should be set <c>OnValidate</c>.
 		/// </remarks>
-		public bool ShowEnableChooseSource {
-			get => m_ShowEnableChooseSource;
-			set => m_ShowEnableChooseSource = value;
+		public bool ShowEnableSourceFieldToggle {
+			get => m_ShowEnableSourceFieldToggle;
+			set => m_ShowEnableSourceFieldToggle = value;
 		}
 
 		#endregion
@@ -81,14 +81,14 @@ namespace CocodriloDog.Core {
 
 		/// <summary>
 		/// Used to set the source to <c>null</c> so that the inspector resets it to the default root object
-		/// when <see cref="m_EnableChooseSource"/> is <c>false</c>.
+		/// when <see cref="m_EnableSourceField"/> is <c>false</c>.
 		/// </summary>
 		/// <remarks>
 		/// Only has effect when not overriding the source, because otherwise the user may want to preserve 
 		/// the overriding <see cref="m_Source"/>.
 		/// </remarks>
 		public void ClearSourceToDefault() {
-			if (!m_EnableChooseSource) {
+			if (!m_EnableSourceField) {
 				m_Source = null;
 			}
 		}
@@ -102,17 +102,20 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private UnityEngine.Object m_Source;
 
+		[FormerlySerializedAs("m_ShowSource")]
 		[SerializeField]
-		private bool m_ShowSource = true;
+		private bool m_ShowSourceField = true;
 
 		[Tooltip("Allows to choose another object as the source root.")]
+		[FormerlySerializedAs("m_EnableChooseSource")]
 		[FormerlySerializedAs("m_OverrideSource")]
 		[SerializeField]
-		private bool m_EnableChooseSource;
+		private bool m_EnableSourceField;
 
+		[FormerlySerializedAs("m_ShowEnableChooseSource")]
 		[FormerlySerializedAs("m_AllowOverrideSource")]
 		[SerializeField]
-		private bool m_ShowEnableChooseSource = true;
+		private bool m_ShowEnableSourceFieldToggle = true;
 
 		[Tooltip("The unique Id of the CompositeObject.")]
 		[SerializeField]

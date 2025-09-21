@@ -30,7 +30,7 @@
 
 			var centralSeparation = 24;
 			var previousLabelWidth = EditorGUIUtility.labelWidth;
-			var labelWidth = m_ShowSourceProperty.boolValue ? previousLabelWidth * 0.7f : previousLabelWidth;
+			var labelWidth = m_ShowSourceFieldProperty.boolValue ? previousLabelWidth * 0.7f : previousLabelWidth;
 
 			// Draw the source label
 			var sourceLabelRect = Position;
@@ -44,10 +44,10 @@
 				m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
 			}
 
-			if (m_ShowSourceProperty.boolValue) {
+			if (m_ShowSourceFieldProperty.boolValue) {
 
 				// Remove the default value if override is checked
-				if (m_EnableChooseSourceProperty.boolValue &&
+				if (m_EnableSourceFieldProperty.boolValue &&
 					m_SourceProperty.objectReferenceValue == Property.serializedObject.targetObject) {
 					m_SourceProperty.objectReferenceValue = null;
 				}
@@ -57,32 +57,32 @@
 				sourceFieldRect.width = sourceFieldRect.width * 0.5f - centralSeparation * 0.5f;
 				sourceFieldRect.xMin += labelWidth;
 
-				EditorGUI.BeginDisabledGroup(!m_EnableChooseSourceProperty.boolValue);
+				EditorGUI.BeginDisabledGroup(!m_EnableSourceFieldProperty.boolValue);
 				EditorGUI.PropertyField(sourceFieldRect, m_SourceProperty, GUIContent.none);
 				EditorGUI.EndDisabledGroup();
 
 				// Draw choose source toggle
-				if (m_ShowEnableChooseSourceProperty.boolValue) {
+				if (m_ShowEnableSourceFieldToggleProperty.boolValue) {
 					var chooseSourceRect = new Rect(Vector2.zero, Vector2.one * 20);
 					chooseSourceRect.center = Position.center;
 					EditorGUI.BeginChangeCheck();
-					m_EnableChooseSourceProperty.boolValue = EditorGUI.Toggle(chooseSourceRect, m_EnableChooseSourceProperty.boolValue);
+					m_EnableSourceFieldProperty.boolValue = EditorGUI.Toggle(chooseSourceRect, m_EnableSourceFieldProperty.boolValue);
 					if (EditorGUI.EndChangeCheck()) {
 						// Set default source when choose source is unchecked.
 						// This is required, when the source is null and when the source is other than the default.
-						if (!m_EnableChooseSourceProperty.boolValue) {
+						if (!m_EnableSourceFieldProperty.boolValue) {
 							m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
 						}
 						return;
 					}
-					CDEditorGUI.DrawControlTooltip(chooseSourceRect, "Enable choose source", Vector2.down * 10);
+					CDEditorGUI.DrawControlTooltip(chooseSourceRect, "Enable to choose a different source", Vector2.down * 10);
 				}
 
 			}
 
 			// Draw the value field
 			var valueRect = Position;
-			if (m_ShowSourceProperty.boolValue) {
+			if (m_ShowSourceFieldProperty.boolValue) {
 				// Make it half the inspector
 				valueRect.xMin += valueRect.width * 0.5f + centralSeparation;
 			} else {
@@ -91,7 +91,7 @@
 			}
 
 			// Draw a temp UI while other source is chosen
-			if (m_EnableChooseSourceProperty.boolValue && m_SourceProperty.objectReferenceValue == null) {
+			if (m_EnableSourceFieldProperty.boolValue && m_SourceProperty.objectReferenceValue == null) {
 				valueRect.yMax -= 2;
 				EditorGUI.HelpBox(valueRect, "Choose a source.", MessageType.Warning);
 				EditorGUI.EndProperty();
@@ -113,7 +113,7 @@
 				gameObject = comp.gameObject;
 			}
 
-			if (gameObject != null && m_EnableChooseSourceProperty.boolValue) {
+			if (gameObject != null && m_EnableSourceFieldProperty.boolValue) {
 				
 				var repeatedMonoBehaviourTypesCount = new Dictionary<Type, int>();
 			
@@ -233,11 +233,11 @@
 
 		private SerializedProperty m_SourceProperty;
 
-		private SerializedProperty m_ShowSourceProperty;
+		private SerializedProperty m_ShowSourceFieldProperty;
 
-		private SerializedProperty m_EnableChooseSourceProperty;
+		private SerializedProperty m_EnableSourceFieldProperty;
 
-		private SerializedProperty m_ShowEnableChooseSourceProperty;
+		private SerializedProperty m_ShowEnableSourceFieldToggleProperty;
 
 		private SerializedProperty m_IdProperty;
 
@@ -249,11 +249,11 @@
 		#region Private Methods
 
 		private void InitializeProperties() {
-			m_SourceProperty					= Property.FindPropertyRelative("m_Source");
-			m_ShowSourceProperty				= Property.FindPropertyRelative("m_ShowSource");
-			m_EnableChooseSourceProperty		= Property.FindPropertyRelative("m_EnableChooseSource");
-			m_ShowEnableChooseSourceProperty	= Property.FindPropertyRelative("m_ShowEnableChooseSource");
-			m_IdProperty						= Property.FindPropertyRelative("m_Id");
+			m_SourceProperty						= Property.FindPropertyRelative("m_Source");
+			m_ShowSourceFieldProperty				= Property.FindPropertyRelative("m_ShowSourceField");
+			m_EnableSourceFieldProperty				= Property.FindPropertyRelative("m_EnableSourceField");
+			m_ShowEnableSourceFieldToggleProperty	= Property.FindPropertyRelative("m_ShowEnableSourceFieldToggle");
+			m_IdProperty							= Property.FindPropertyRelative("m_Id");
 		}
 
 		#endregion

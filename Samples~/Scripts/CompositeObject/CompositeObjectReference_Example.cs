@@ -46,6 +46,16 @@ namespace CocodriloDog.Core.Examples {
 				Debug.Log(m_HideEnableChooseSource.Value.Name);
 			}
 
+			// It is null on the prefab instance.
+			if (m_HideSource.Value != null) {
+				Debug.Log(m_HideSource.Value.Name);
+			}
+
+			// It is null on the prefab instance.
+			if (m_ForceChooseSource.Value != null) {
+				Debug.Log(m_ForceChooseSource.Value.Name);
+			}
+
 			yield return new WaitForSeconds(2);
 			if (m_Copy) {
 				Instantiate(m_CopyPrefab);
@@ -65,11 +75,11 @@ namespace CocodriloDog.Core.Examples {
 
 		private void OnValidate() {
 			
-			m_HideEnableChooseSource.ShowEnableChooseSource = false;
-			m_HideSource.ShowSource = false;
+			m_HideEnableChooseSource.ShowEnableSourceFieldToggle = false;
+			m_HideSource.ShowSourceField = false;
 
-			m_ForceChooseSource.ShowEnableChooseSource = false;
-			m_ForceChooseSource.EnableChooseSource = true;
+			m_ForceChooseSource.ShowEnableSourceFieldToggle = false;
+			m_ForceChooseSource.EnableSourceField = true;
 
 		}
 
