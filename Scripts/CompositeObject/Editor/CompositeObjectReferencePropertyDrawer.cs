@@ -30,8 +30,7 @@
 
 			var centralSeparation = 24;
 			var previousLabelWidth = EditorGUIUtility.labelWidth;
-			//var labelWidth = m_ShowEnableChooseSourceProperty.boolValue ? previousLabelWidth * 0.7f : previousLabelWidth;
-			var labelWidth = previousLabelWidth * 0.7f;
+			var labelWidth = m_ShowSourceProperty.boolValue ? previousLabelWidth * 0.7f : previousLabelWidth;
 
 			// Draw the source label
 			var sourceLabelRect = Position;
@@ -94,7 +93,7 @@
 			// Draw a temp UI while other source is chosen
 			if (m_EnableChooseSourceProperty.boolValue && m_SourceProperty.objectReferenceValue == null) {
 				valueRect.yMax -= 2;
-				EditorGUI.HelpBox(valueRect, "Choose a new source.", MessageType.Warning);
+				EditorGUI.HelpBox(valueRect, "Choose a source.", MessageType.Warning);
 				EditorGUI.EndProperty();
 				return;
 			}
