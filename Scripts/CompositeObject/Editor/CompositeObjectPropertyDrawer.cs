@@ -322,14 +322,7 @@
 		/// <param name="name">The name of the object to display inside the field box.</param>
 		protected virtual void DrawPropertyField(Rect propertyRect, GUIContent guiContent, string name) {
 
-			// Label rect
-			var labelWidth = Position.width * 0.25f;
-			var labelRect = propertyRect;
-			labelRect.width = labelWidth;
-
-			// Field rect
-			var fieldRect = propertyRect;
-			fieldRect.xMin += labelWidth + 2;
+			GetPropertySubRects(propertyRect, out var labelRect, out var fieldRect);
 
 			// Documentation tooltip
 			if (Property.managedReferenceValue != null && !string.IsNullOrEmpty(DocumentationCommentProperty.stringValue)) {
@@ -373,43 +366,9 @@
 		/// <param name="objectIcon">The icon of the box, if any.</param>
 		/// <param name="name">The name to be displayed on the box.</param>
 		protected virtual void DrawPropertyFieldBox(Rect boxRect, Texture objectIcon, string name) {
-
 			EditorGUI.BeginDisabledGroup(true);
 			GUI.Box(boxRect, objectIcon != null ? $"     {name}" : name, EditorStyles.objectField);
 			EditorGUI.EndDisabledGroup();
-
-			if (Property.managedReferenceValue == null) {
-				return;
-			}
-
-			// Ping/Open the script
-			if (Event.current.type == EventType.MouseDown &&
-				Event.current.button == 0 && // Left mouse button
-				boxRect.Contains(Event.current.mousePosition)) {
-
-				Event.current.Use();
-
-				var type = Property.managedReferenceValue.GetType();
-				string[] guids = AssetDatabase.FindAssets($"{type.Name} t:MonoScript");
-
-				foreach (string guid in guids) {
-
-					string path = AssetDatabase.GUIDToAssetPath(guid);
-					var monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-
-					if (monoScript != null && CDEditorUtility.IsTypeInScript(monoScript, type)) {
-						EditorGUIUtility.PingObject(monoScript);
-						if (Event.current.clickCount == 2) {
-							AssetDatabase.OpenAsset(monoScript);
-						}
-						break;
-
-					}
-
-				}
-
-			}
-
 		}
 
 		#endregion
@@ -489,9 +448,13 @@
 			} else {
 				// Edit button
 				if (CDEditorUtility.GetElementIndex(Property, out var index)) {
+					// Array element
 					DrawPropertyField(propertyRect, $"Element {index}", $"{DisplayName()}");
+					ProcessPing(propertyRect);
 				} else {
+					// Single instance
 					DrawPropertyField(propertyRect, new GUIContent(Property.displayName, Property.tooltip), $"{DisplayName()}");
+					ProcessPing(propertyRect);
 				}
 				DrawEditButton(firstButtonRect);
 			}
@@ -507,6 +470,57 @@
 
 		private void DrawPropertyField(Rect propertyRect, string label, string name) {
 			DrawPropertyField(propertyRect, new GUIContent(label), name);
+		}
+
+		private void ProcessPing(Rect propertyRect) {
+
+			if (Property.managedReferenceValue == null) {
+				return;
+			}
+
+			GetPropertySubRects(propertyRect, out var _, out var fieldRect);
+
+			// Ping/Open the script
+			if (Event.current.type == EventType.MouseDown &&
+				Event.current.button == 0 && // Left mouse button
+				fieldRect.Contains(Event.current.mousePosition)) {
+
+				Event.current.Use();
+
+				var type = Property.managedReferenceValue.GetType();
+				string[] guids = AssetDatabase.FindAssets($"{type.Name} t:MonoScript");
+
+				foreach (string guid in guids) {
+
+					string path = AssetDatabase.GUIDToAssetPath(guid);
+					var monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+
+					if (monoScript != null && CDEditorUtility.IsTypeInScript(monoScript, type)) {
+						EditorGUIUtility.PingObject(monoScript);
+						if (Event.current.clickCount == 2) {
+							AssetDatabase.OpenAsset(monoScript);
+						}
+						break;
+
+					}
+
+				}
+
+			}
+
+		}
+
+		private void GetPropertySubRects(Rect propertyRect, out Rect labelRect, out Rect fieldRect) {
+
+			// Label rect
+			var labelWidth = Position.width * 0.25f;
+			labelRect = propertyRect;
+			labelRect.width = labelWidth;
+
+			// Field rect
+			fieldRect = propertyRect;
+			fieldRect.xMin += labelWidth + 2;
+
 		}
 
 		private void DrawCreateButton(Rect rect) {
