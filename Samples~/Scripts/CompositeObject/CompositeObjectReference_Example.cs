@@ -25,8 +25,10 @@ namespace CocodriloDog.Core.Examples {
 		private IEnumerator Start() {
 
 			Debug.Log("----------------");
-			Debug.Log(m_FileReference.Value.Name);
-			foreach (var fileReference in m_FileReferences) {
+
+			Debug.Log(m_FileFromCurrentComponent.Value.Name);
+
+			foreach (var fileReference in m_FilesFromCurrentComponent) {
 				Debug.Log(fileReference.Value.Name);
 			}
 
@@ -41,22 +43,16 @@ namespace CocodriloDog.Core.Examples {
 				Debug.Log(m_FileFromOtherGO2.Value.Name);
 			}
 
-			// It is null on the prefab instance.
-			if (m_HideEnableChooseSource.Value != null) {
-				Debug.Log(m_HideEnableChooseSource.Value.Name);
-			}
+			Debug.Log(m_FileFromFixedSource.Value.Name);
 
-			// It is null on the prefab instance.
-			if (m_HideSource.Value != null) {
-				Debug.Log(m_HideSource.Value.Name);
-			}
+			Debug.Log(m_FileFromFixedHiddenSource.Value.Name);
 
-			// It is null on the prefab instance.
-			if (m_ForceChooseSource.Value != null) {
-				Debug.Log(m_ForceChooseSource.Value.Name);
+			foreach (var fileReference in m_FilesFromFixedSource) {
+				Debug.Log(fileReference.Value.Name);
 			}
 
 			yield return new WaitForSeconds(2);
+
 			if (m_Copy) {
 				Instantiate(m_CopyPrefab);
 			}
@@ -75,11 +71,14 @@ namespace CocodriloDog.Core.Examples {
 
 		private void OnValidate() {
 			
-			m_HideEnableChooseSource.ShowEnableSourceFieldToggle = false;
-			m_HideSource.ShowSourceField = false;
-
-			m_ForceChooseSource.ShowEnableSourceFieldToggle = false;
-			m_ForceChooseSource.EnableSourceField = true;
+			m_FileFromFixedSource.Source = this;
+			m_FileFromFixedSource.SetMode(CompositeObjectReferenceMode.CannotChooseSource_ShowSource);
+			
+			m_FileFromFixedHiddenSource.Source = this;
+			m_FileFromFixedHiddenSource.SetMode(CompositeObjectReferenceMode.CannotChooseSource_HideSource);
+			
+			m_FilesFromFixedSource.ForEach(fr => fr.Source = this);
+			m_FilesFromFixedSource.ForEach(fr => fr.SetMode(CompositeObjectReferenceMode.CannotChooseSource_ShowSource));
 
 		}
 
@@ -124,13 +123,17 @@ namespace CocodriloDog.Core.Examples {
 		[SerializeField]
 		private bool m_LogReferences = true;
 
-		[Tooltip("Find a file.")]
+		[Tooltip("File reference field with default settings.")]
 		[SerializeField]
-		private CompositeObjectReference<FileBase> m_FileReference;
+		private CompositeObjectReference<FileBase> m_FileFieldWithDefaultSettings;
 
-		[Tooltip("Find many files.")]
+		[Tooltip("Find a file in the current component.")]
 		[SerializeField]
-		private List<CompositeObjectReference<FileBase>> m_FileReferences;
+		private CompositeObjectReference<FileBase> m_FileFromCurrentComponent;
+
+		[Tooltip("Find many files in the current component.")]
+		[SerializeField]
+		private List<CompositeObjectReference<FileBase>> m_FilesFromCurrentComponent;
 
 		[Tooltip("Find a file in a ScriptableObject.")]
 		[SerializeField]
@@ -144,17 +147,17 @@ namespace CocodriloDog.Core.Examples {
 		[SerializeField]
 		private CompositeObjectReference<FileBase> m_FileFromOtherGO2;
 
-		[Tooltip("Hide enable choose source.")]
+		[Tooltip("Find a file in a fixed source.")]
 		[SerializeField]
-		private CompositeObjectReference<FileBase> m_HideEnableChooseSource;
+		private CompositeObjectReference<FileBase> m_FileFromFixedSource;
 
-		[Tooltip("Hide source.")]
+		[Tooltip("Find a file in a fixed and hidden source.")]
 		[SerializeField]
-		private CompositeObjectReference<FileBase> m_HideSource;
+		private CompositeObjectReference<FileBase> m_FileFromFixedHiddenSource;
 
-		[Tooltip("Force choose source.")]
+		[Tooltip("Find many files in a fixed source.")]
 		[SerializeField]
-		private CompositeObjectReference<FileBase> m_ForceChooseSource;
+		private List<CompositeObjectReference<FileBase>> m_FilesFromFixedSource;
 
 		#endregion
 

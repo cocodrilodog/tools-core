@@ -4,9 +4,37 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 	using UnityEngine.Serialization;
 
+
+	#region Small Types
+
 	/// <summary>
-	/// An object that can search for and reference <see cref="CompositeObject"/>s from the current composite root 
-	/// or chosen one.
+	/// Defines how to show the <see cref="CompositeObjectReference{T}"/> field.
+	/// </summary>
+	public enum CompositeObjectReferenceMode {
+		
+		/// <summary>
+		/// Sets the field so that the user can choose a source.
+		/// </summary>
+		CanChooseSource,
+
+		/// <summary>
+		/// Sets the field so that the user can't choose a source, but can see a disabled field with the current source.
+		/// </summary>
+		CannotChooseSource_ShowSource,
+
+		/// <summary>
+		/// Sets the field so that the user can't choose a source, and the field with the current source is not visible.
+		/// </summary>
+		CannotChooseSource_HideSource,
+
+	}
+
+	#endregion
+
+
+	/// <summary>
+	/// An object that can search for and reference <see cref="CompositeObject"/>s from the <see cref="Source"/>
+	/// root.
 	/// </summary>
 	/// 
 	/// <remarks>
@@ -20,10 +48,18 @@ namespace CocodriloDog.Core {
 	/// 
 	/// <typeparam name="T">The type of <see cref="CompositeObject"/> or interface to look for</typeparam>
 	[Serializable]
-	public class CompositeObjectReference<T> where T : class {
+	public class CompositeObjectReference<T> : ISerializationCallbackReceiver where T : class {
 
 
 		#region Public Properties
+
+		/// <summary>
+		/// The source of the <see cref="CompositeObject"/>.
+		/// </summary>
+		public UnityEngine.Object Source { 
+			get => m_Source; 
+			set => m_Source = value; 
+		}
 
 		/// <summary>
 		/// The referenced <see cref="CompositeObject"/>.
@@ -41,43 +77,40 @@ namespace CocodriloDog.Core {
 			}
 		}
 
-		/// <summary>
-		/// Shows/hides the <see cref="m_Source"/> field in the inspector.
-		/// </summary>
-		/// <remarks>
-		/// This should be set <c>OnValidate</c>.
-		/// </remarks>
-		public bool ShowSourceField {
-			get => m_ShowSourceField;
-			set => m_ShowSourceField = value;
-		}
-
-		/// <summary>
-		/// Enables/disables the <see cref="m_Source"/> field in the inspector.
-		/// </summary>
-		/// <remarks>
-		/// This should be set <c>OnValidate</c>.
-		/// </remarks>
-		public bool EnableSourceField {
-			get => m_EnableSourceField;
-			set => m_EnableSourceField = value;
-		}
-
-		/// <summary>
-		/// Shows/hides the <see cref="m_EnableSourceField"/> toggle in the inspector.
-		/// </summary>
-		/// <remarks>
-		/// This should be set <c>OnValidate</c>.
-		/// </remarks>
-		public bool ShowEnableSourceFieldToggle {
-			get => m_ShowEnableSourceFieldToggle;
-			set => m_ShowEnableSourceFieldToggle = value;
-		}
-
 		#endregion
 
 
 		#region Public Methods
+
+		public void OnAfterDeserialize() => Initialize();
+
+		public void OnBeforeSerialize() { }
+
+		/// <summary>
+		/// Sets <see cref="ShowSourceField"/>, <see cref="EnableSourceField"/>, and 
+		/// <see cref="ShowEnableSourceFieldToggle"/> according to the specified <paramref name="mode"/>.
+		/// </summary>
+		/// <param name="mode">The mode.</param>
+		public void SetMode(CompositeObjectReferenceMode mode) {
+			switch (mode) {
+
+				case CompositeObjectReferenceMode.CanChooseSource:
+					m_ShowSourceField = true;
+					m_EnableSourceField = true;
+					break;
+
+				case CompositeObjectReferenceMode.CannotChooseSource_ShowSource:
+					m_ShowSourceField = true;
+					m_EnableSourceField = false;
+					break;
+
+				case CompositeObjectReferenceMode.CannotChooseSource_HideSource:
+					m_ShowSourceField = false;
+					m_EnableSourceField = false;
+					break;
+
+			}
+		}
 
 		/// <summary>
 		/// Used to set the source to <c>null</c> so that the inspector resets it to the default root object
@@ -98,28 +131,39 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
+		[HideInInspector]
+		[SerializeField]
+		private bool m_Initialized;
+
 		[Tooltip("The root of the CompositeObject.")]
 		[SerializeField]
 		private UnityEngine.Object m_Source;
 
-		[FormerlySerializedAs("m_ShowSource")]
 		[SerializeField]
 		private bool m_ShowSourceField = true;
 
 		[Tooltip("Allows to choose another object as the source root.")]
-		[FormerlySerializedAs("m_EnableChooseSource")]
-		[FormerlySerializedAs("m_OverrideSource")]
 		[SerializeField]
-		private bool m_EnableSourceField;
-
-		[FormerlySerializedAs("m_ShowEnableChooseSource")]
-		[FormerlySerializedAs("m_AllowOverrideSource")]
-		[SerializeField]
-		private bool m_ShowEnableSourceFieldToggle = true;
+		private bool m_EnableSourceField = true;
 
 		[Tooltip("The unique Id of the CompositeObject.")]
 		[SerializeField]
 		private string m_Id;
+
+		#endregion
+
+
+		#region Private Methods
+
+		private void Initialize() {
+			if (!m_Initialized) {
+				// Force default values
+				// This is needed only in array elements
+				m_ShowSourceField = true;
+				m_EnableSourceField = true;
+				m_Initialized = true;
+			}
+		}
 
 		#endregion
 

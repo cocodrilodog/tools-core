@@ -28,7 +28,6 @@
 			var propertyType = CDEditorUtility.GetPropertyType(Property);
 			var referencedType = propertyType.GetGenericArguments()[0];
 
-			var centralSeparation = 24;
 			var previousLabelWidth = EditorGUIUtility.labelWidth;
 			var labelWidth = m_ShowSourceFieldProperty.boolValue ? previousLabelWidth * 0.7f : previousLabelWidth;
 
@@ -39,43 +38,19 @@
 			EditorGUI.LabelField(sourceLabelRect, Label);
 			EditorGUIUtility.labelWidth = previousLabelWidth;
 
-			// Set default source if it is null.
-			if (m_SourceProperty.objectReferenceValue == null) {
-				m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
-			}
-
+			// Draw the source field
 			if (m_ShowSourceFieldProperty.boolValue) {
 
-				// Remove the default value if override is checked
-				if (m_EnableSourceFieldProperty.boolValue &&
-					m_SourceProperty.objectReferenceValue == Property.serializedObject.targetObject) {
-					m_SourceProperty.objectReferenceValue = null;
-				}
-
-				// Draw the source field
 				var sourceFieldRect = Position;
-				sourceFieldRect.width = sourceFieldRect.width * 0.5f - centralSeparation * 0.5f;
+				sourceFieldRect.width = sourceFieldRect.width * 0.5f - 2;
 				sourceFieldRect.xMin += labelWidth;
 
 				EditorGUI.BeginDisabledGroup(!m_EnableSourceFieldProperty.boolValue);
 				EditorGUI.PropertyField(sourceFieldRect, m_SourceProperty, GUIContent.none);
 				EditorGUI.EndDisabledGroup();
 
-				// Draw choose source toggle
-				if (m_ShowEnableSourceFieldToggleProperty.boolValue) {
-					var chooseSourceRect = new Rect(Vector2.zero, Vector2.one * 20);
-					chooseSourceRect.center = Position.center;
-					EditorGUI.BeginChangeCheck();
-					m_EnableSourceFieldProperty.boolValue = EditorGUI.Toggle(chooseSourceRect, m_EnableSourceFieldProperty.boolValue);
-					if (EditorGUI.EndChangeCheck()) {
-						// Set default source when choose source is unchecked.
-						// This is required, when the source is null and when the source is other than the default.
-						if (!m_EnableSourceFieldProperty.boolValue) {
-							m_SourceProperty.objectReferenceValue = Property.serializedObject.targetObject;
-						}
-						return;
-					}
-					CDEditorGUI.DrawControlTooltip(chooseSourceRect, "Enable to choose a different source", Vector2.down * 10);
+				if (m_SourceProperty.objectReferenceValue == null) {
+					CDEditorGUI.DrawControlTooltip(sourceFieldRect, "Choose a source object with\nCompositeObject instances.", new Vector2(60, -24));
 				}
 
 			}
@@ -84,15 +59,14 @@
 			var valueRect = Position;
 			if (m_ShowSourceFieldProperty.boolValue) {
 				// Make it half the inspector
-				valueRect.xMin += valueRect.width * 0.5f + centralSeparation;
+				valueRect.xMin += valueRect.width * 0.5f;
 			} else {
 				// Make it normal
 				valueRect.xMin += EditorGUIUtility.labelWidth;
 			}
 
-			// Draw a temp UI while other source is chosen
-			if (m_EnableSourceFieldProperty.boolValue && m_SourceProperty.objectReferenceValue == null) {
-				valueRect.yMax -= 2;
+			// Draw a temp UI while no source is chosen
+			if (m_SourceProperty.objectReferenceValue == null) {
 				EditorGUI.HelpBox(valueRect, "Choose a source.", MessageType.Warning);
 				EditorGUI.EndProperty();
 				return;
@@ -113,7 +87,8 @@
 				gameObject = comp.gameObject;
 			}
 
-			if (gameObject != null && m_EnableSourceFieldProperty.boolValue) {
+			// It is a game object 
+			if (gameObject != null) {
 				
 				var repeatedMonoBehaviourTypesCount = new Dictionary<Type, int>();
 			
@@ -158,13 +133,20 @@
 				}
 
 			} else {
-				// The source is the default MonoBehaviour without m_ChooseSource  or a ScriptableObject
+				// It is a ScriptableObject
 				compositeObjectsByPath = CompositeObjectMaps.GetCompositeObjectsMap(
 					m_SourceProperty.objectReferenceValue,
 					referencedType
 				);
 			}
 
+			// This can be null if there is no source
+			if (compositeObjectsByPath == null) {
+				EditorGUI.EndProperty();
+				return;
+			}
+
+			// Draw the value field
 			var options = compositeObjectsByPath.Keys.ToList();
 			options.Insert(0, "Null"); // Allow the first choice to be null
 			options.Insert(1, "--"); // Add a separator
@@ -237,8 +219,6 @@
 
 		private SerializedProperty m_EnableSourceFieldProperty;
 
-		private SerializedProperty m_ShowEnableSourceFieldToggleProperty;
-
 		private SerializedProperty m_IdProperty;
 
 		private CompositeObjectData m_NewChoice;
@@ -252,7 +232,6 @@
 			m_SourceProperty						= Property.FindPropertyRelative("m_Source");
 			m_ShowSourceFieldProperty				= Property.FindPropertyRelative("m_ShowSourceField");
 			m_EnableSourceFieldProperty				= Property.FindPropertyRelative("m_EnableSourceField");
-			m_ShowEnableSourceFieldToggleProperty	= Property.FindPropertyRelative("m_ShowEnableSourceFieldToggle");
 			m_IdProperty							= Property.FindPropertyRelative("m_Id");
 		}
 
