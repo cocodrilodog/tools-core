@@ -52,7 +52,7 @@ namespace CocodriloDog.Core {
 				var otherTrigger = hitsInfo[i].collider.GetComponentInParent<CollisionTrigger>();
 				if (otherTrigger != null) {
 					foreach (var otherTag in otherTags) {
-						if (otherTrigger.ThisTags.Contains(otherTag)) {
+						if (otherTrigger.Tags.Contains(otherTag)) {
 							return true;
 						}
 					}

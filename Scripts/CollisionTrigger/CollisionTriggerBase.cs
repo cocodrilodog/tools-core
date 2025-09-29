@@ -7,12 +7,13 @@ namespace CocodriloDog.Core {
 	using System.Linq;
 	using UnityEngine;
 	using UnityEngine.Events;
+	using UnityEngine.Serialization;
 
 	/// <summary>
 	/// Triggers collision events when other <see cref="T_CollisionTrigger"/>s enter and exit this one and have
-	/// <see cref="ThisTags"/> that match the <see cref="OtherTags"/>.
+	/// <see cref="Tags"/> that match the <see cref="OtherTags"/>.
 	/// </summary>
-	public abstract class CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector> : MonoCompositeRoot
+	public abstract class CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector> : MonoCompositeRoot, ITaggedObject
 		where T_CollisionTrigger : CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector>
 		where T_Collider : Component
 		where T_Collision : class
@@ -24,9 +25,9 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// A set of tags for this trigger to be identified by other triggers.
 		/// </summary>
-		public List<string> ThisTags {
-			get => m_ThisTags;
-			set => m_ThisTags = value;
+		public List<string> Tags {
+			get => m_Tags;
+			set => m_Tags = value;
 		}
 
 		/// <summary>
@@ -93,7 +94,7 @@ namespace CocodriloDog.Core {
 		/// collisioning with this one, <c>false</c> otherwise.
 		/// </returns>
 		public bool IsOtherStaying(string otherTag) {
-			var otherCollisioning = m_StayingCollisionTriggers.Keys.FirstOrDefault(t => t.ThisTags.Contains(otherTag));
+			var otherCollisioning = m_StayingCollisionTriggers.Keys.FirstOrDefault(t => t.Tags.Contains(otherTag));
 			return otherCollisioning != null;
 		}
 
@@ -252,8 +253,9 @@ namespace CocodriloDog.Core {
 
 		[Tooltip("A set of tags for this trigger to be identified by other triggers.")]
 		[StringOptions("m_TagOptions")]
+		[FormerlySerializedAs("m_ThisTags")]
 		[SerializeField]
-		private List<string> m_ThisTags;
+		private List<string> m_Tags;
 
 		#endregion
 
@@ -269,8 +271,9 @@ namespace CocodriloDog.Core {
 
 		#region Private Methods
 
+		// TODO: Use ITaggedObject, instead so that it can evaluate against a non-collisiontrigger object
 		private T_CollisionReaction GetMatchingReaction(T_CollisionTrigger otherCollisionTrigger) {
-			foreach (var otherTag in otherCollisionTrigger.m_ThisTags) {
+			foreach (var otherTag in otherCollisionTrigger.m_Tags) {
 				foreach (var reaction in Reactions) {
 					if (reaction.OtherTag == otherTag) {
 						return reaction;

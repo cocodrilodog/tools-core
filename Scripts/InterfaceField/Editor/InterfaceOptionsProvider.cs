@@ -40,7 +40,7 @@ namespace CocodriloDog.Core {
 			};
 
 			// Search in scene
-			var sceneObjects = new List<MonoBehaviour>(FindObjectsOfType<MonoBehaviour>())
+			var sceneObjects = new List<MonoBehaviour>(FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None))
 				.Where(c => m_InterfaceType.IsAssignableFrom(c.GetType())).ToList();
 
 			if (sceneObjects.Count > 0) {
