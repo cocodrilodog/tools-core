@@ -637,12 +637,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TagOptions: {fileID: 11400000, guid: b79b7cc4ef2a2794081328ad48abf150, type: 2}
-  m_ThisTags:
+  m_Tags:
   - Block1
   m_Reactions:
     m_List:
     - rid: 3134690603350360068
     - rid: 3134690603350360069
+    - rid: 8489483870914478246
     m_CanAddRemove: 1
     m_CanReorder: 1
   references:
@@ -786,6 +787,76 @@ MonoBehaviour:
                 m_IntArgument: 0
                 m_FloatArgument: 0
                 m_StringArgument: 'Block1: OnTriggerExit! - Sphere2_2'
+                m_BoolArgument: 0
+              m_CallState: 2
+    - rid: 8489483870914478246
+      type: {class: CollisionReaction, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
+      data:
+        m_Name: Sphere2_3
+        m_Id: 65711eb7-9a56-46a4-a770-416056b599ff
+        m_CanEnterEdit: 1
+        m_CanEditName: 0
+        m_CanDeleteInstance: 0
+        m_DocumentationComment: 
+        m_OtherTag: Sphere2_3
+        m_OnCollisionEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnCollisionEnter! - Sphere2_3'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnCollisionExit:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnCollisionExit! - Sphere2_3'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerEnter:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnTriggerEnter! - Sphere2_3'
+                m_BoolArgument: 0
+              m_CallState: 2
+        m_OnTriggerExit:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 11400000, guid: f4bcf37c79b538a40a7ddf6d76171b84, type: 2}
+              m_TargetAssemblyTypeName: CocodriloDog.Core.DebugAdapter, CocodriloDog.Core
+              m_MethodName: Log
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 'Block1: OnTriggerExit! - Sphere2_3'
                 m_BoolArgument: 0
               m_CallState: 2
 --- !u!1 &360800804
@@ -1018,7 +1089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TagOptions: {fileID: 11400000, guid: b79b7cc4ef2a2794081328ad48abf150, type: 2}
-  m_ThisTags:
+  m_Tags:
   - Sphere2_2
   m_Reactions:
     m_List:
@@ -1567,7 +1638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TagOptions: {fileID: 11400000, guid: b79b7cc4ef2a2794081328ad48abf150, type: 2}
-  m_ThisTags:
+  m_Tags:
   - Block2
   m_Reactions:
     m_List: []
@@ -1859,6 +1930,7 @@ GameObject:
   - component: {fileID: 1472806947}
   - component: {fileID: 1472806946}
   - component: {fileID: 1472806945}
+  - component: {fileID: 1472806948}
   m_Layer: 0
   m_Name: Sphere2_3
   m_TagString: Untagged
@@ -1955,6 +2027,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1472806943}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1472806948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472806943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1e6c36317ff86849b67be23ed9ecc51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TagOptions: {fileID: 11400000, guid: b79b7cc4ef2a2794081328ad48abf150, type: 2}
+  m_Tags:
+  - Sphere2_3
 --- !u!1 &1573117788
 GameObject:
   m_ObjectHideFlags: 0

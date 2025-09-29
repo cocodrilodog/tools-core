@@ -74,14 +74,14 @@ namespace CocodriloDog.Core {
 		public abstract T_CollisionReaction GetReaction(int index);
 
 		/// <summary>
-		/// Returns <c>true</c> if the provided <paramref name="otherTrigger"/> is collisioning with this 
+		/// Returns <c>true</c> if the provided <paramref name="otherTaggedObject"/> is collisioning with this 
 		/// game object, otherwise <c>false</c>.
 		/// </summary>
-		/// <param name="otherTrigger">Other collision trigger</param>
+		/// <param name="otherTaggedObject">Other tagged object</param>
 		/// <returns>
-		/// <c>true</c> if there <paramref name="otherTrigger"/> is collisioning with this one, <c>false</c> otherwise.
+		/// <c>true</c> if there <paramref name="otherTaggedObject"/> is collisioning with this one, <c>false</c> otherwise.
 		/// </returns>
-		public bool IsOtherStaying(ITaggedObject otherTrigger) => m_StayingTaggedObjects.ContainsKey(otherTrigger);
+		public bool IsOtherStaying(ITaggedObject otherTaggedObject) => m_StayingTaggedObjects.ContainsKey(otherTaggedObject);
 
 		/// <summary>
 		/// Returns <c>true</c> if there is any collision trigger with self tag <paramref name="otherTag"/>
@@ -270,7 +270,6 @@ namespace CocodriloDog.Core {
 
 		#region Private Methods
 
-		// TODO: Use ITaggedObject, instead so that it can evaluate against a non-collisiontrigger object
 		private T_CollisionReaction GetMatchingReaction(ITaggedObject otherTaggedObject) {
 			foreach (var otherTag in otherTaggedObject.Tags) {
 				foreach (var reaction in Reactions) {
