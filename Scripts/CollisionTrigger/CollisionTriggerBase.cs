@@ -10,14 +10,13 @@ namespace CocodriloDog.Core {
 	using UnityEngine.Serialization;
 
 	/// <summary>
-	/// Triggers collision events when other <see cref="T_CollisionTrigger"/>s enter and exit this one and have
+	/// Triggers collision events when other <see cref="ITaggedObject"/>s enter and exit this one and have
 	/// <see cref="Tags"/> that match the <see cref="OtherTags"/>.
 	/// </summary>
-	public abstract class CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector> : MonoCompositeRoot, ITaggedObject
-		where T_CollisionTrigger : CollisionTriggerBase<T_CollisionTrigger, T_Collider, T_Collision, T_CollisionReaction, T_Vector>
+	public abstract class CollisionTriggerBase<T_Collider, T_Collision, T_CollisionReaction, T_Vector> : MonoCompositeRoot, ITaggedObject
 		where T_Collider : Component
 		where T_Collision : class
-		where T_CollisionReaction : CollisionReactionBase<T_CollisionTrigger, T_Collision> {
+		where T_CollisionReaction : CollisionReactionBase<T_Collision> {
 
 
 		#region Public Properties
@@ -34,7 +33,7 @@ namespace CocodriloDog.Core {
 		/// Gets the collision triggers that are currently collisioning with this one.
 		/// </summary>
 		/// <returns>The list</returns>
-		public List<T_CollisionTrigger> OtherStaying => m_StayingCollisionTriggers.Keys.ToList();
+		public List<ITaggedObject> OtherStaying => m_StayingTaggedObjects.Keys.ToList();
 
 		/// <summary>
 		/// The number of reactions that this collision trigger has.
@@ -47,7 +46,7 @@ namespace CocodriloDog.Core {
 		#region Public Methods
 
 		/// <summary>
-		/// Adds a reaction that will raise enter and exit events when another collider with 
+		/// Adds a reaction that will raise enter and exit events when another tagged object with 
 		/// tag <paramref name="otherTag"/> enters or exits this <see cref="CollisionTrigger"/>.
 		/// </summary>
 		/// <param name="otherTag"><c>OtherTag</c> to be assigned to the created reaction.</param>
@@ -82,7 +81,7 @@ namespace CocodriloDog.Core {
 		/// <returns>
 		/// <c>true</c> if there <paramref name="otherTrigger"/> is collisioning with this one, <c>false</c> otherwise.
 		/// </returns>
-		public bool IsOtherStaying(T_CollisionTrigger otherTrigger) => m_StayingCollisionTriggers.ContainsKey(otherTrigger);
+		public bool IsOtherStaying(ITaggedObject otherTrigger) => m_StayingTaggedObjects.ContainsKey(otherTrigger);
 
 		/// <summary>
 		/// Returns <c>true</c> if there is any collision trigger with self tag <paramref name="otherTag"/>
@@ -94,7 +93,7 @@ namespace CocodriloDog.Core {
 		/// collisioning with this one, <c>false</c> otherwise.
 		/// </returns>
 		public bool IsOtherStaying(string otherTag) {
-			var otherCollisioning = m_StayingCollisionTriggers.Keys.FirstOrDefault(t => t.Tags.Contains(otherTag));
+			var otherCollisioning = m_StayingTaggedObjects.Keys.FirstOrDefault(t => t.Tags.Contains(otherTag));
 			return otherCollisioning != null;
 		}
 
@@ -106,32 +105,32 @@ namespace CocodriloDog.Core {
 		#region Unity Methods
 
 		protected void _OnTriggerEnter(T_Collider other) {
-			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
-			if (otherCollisionTrigger != null) {
-				var reaction = GetMatchingReaction(otherCollisionTrigger);
+			var otherTaggedObject = other.GetComponentInParent<ITaggedObject>(true);
+			if (otherTaggedObject != null) {
+				var reaction = GetMatchingReaction(otherTaggedObject);
 				if (reaction != null) {
-					if (!m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
-						m_StayingCollisionTriggers[otherCollisionTrigger] = new List<T_Collider>();
-						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
-						reaction.RaiseTriggerEnter(otherCollisionTrigger);
+					if (!m_StayingTaggedObjects.ContainsKey(otherTaggedObject)) {
+						m_StayingTaggedObjects[otherTaggedObject] = new List<T_Collider>();
+						m_StayingTaggedObjects[otherTaggedObject].Add(other);
+						reaction.RaiseTriggerEnter(otherTaggedObject);
 					} else {
-						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
+						m_StayingTaggedObjects[otherTaggedObject].Add(other);
 					}
 				}
 			}
 		}
 
 		protected void _OnTriggerExit(T_Collider other) {
-			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
-			if (otherCollisionTrigger != null) {
-				var reaction = GetMatchingReaction(otherCollisionTrigger);
-				// Checking the key handles edge cases when the m_StayingCollisionTriggers is cleared
+			var otherTaggedObject = other.GetComponentInParent<ITaggedObject>(true);
+			if (otherTaggedObject != null) {
+				var reaction = GetMatchingReaction(otherTaggedObject);
+				// Checking the key, handles edge cases when the m_StayingTaggedObjects is cleared
 				// prior to OnTriggerExit
-				if (reaction != null && m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
-					m_StayingCollisionTriggers[otherCollisionTrigger].Remove(other);
-					if (m_StayingCollisionTriggers[otherCollisionTrigger].Count == 0) {
-						m_StayingCollisionTriggers.Remove(otherCollisionTrigger);
-						reaction.RaiseTriggerExit(otherCollisionTrigger);
+				if (reaction != null && m_StayingTaggedObjects.ContainsKey(otherTaggedObject)) {
+					m_StayingTaggedObjects[otherTaggedObject].Remove(other);
+					if (m_StayingTaggedObjects[otherTaggedObject].Count == 0) {
+						m_StayingTaggedObjects.Remove(otherTaggedObject);
+						reaction.RaiseTriggerExit(otherTaggedObject);
 					}
 				}
 			}
@@ -139,16 +138,16 @@ namespace CocodriloDog.Core {
 
 		protected void _OnCollisionEnter(T_Collision collision) {
 			var other = GetColliderFromCollision(collision);
-			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
-			if (otherCollisionTrigger != null) {
-				var reaction = GetMatchingReaction(otherCollisionTrigger);
+			var otherTaggedObject = other.GetComponentInParent<ITaggedObject>(true);
+			if (otherTaggedObject != null) {
+				var reaction = GetMatchingReaction(otherTaggedObject);
 				if (reaction != null) {
-					if (!m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
-						m_StayingCollisionTriggers[otherCollisionTrigger] = new List<T_Collider>();
-						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
+					if (!m_StayingTaggedObjects.ContainsKey(otherTaggedObject)) {
+						m_StayingTaggedObjects[otherTaggedObject] = new List<T_Collider>();
+						m_StayingTaggedObjects[otherTaggedObject].Add(other);
 						reaction.RaiseCollisionEnter(collision);
 					} else {
-						m_StayingCollisionTriggers[otherCollisionTrigger].Add(other);
+						m_StayingTaggedObjects[otherTaggedObject].Add(other);
 					}
 				}
 			}
@@ -156,15 +155,15 @@ namespace CocodriloDog.Core {
 
 		protected void _OnCollisionExit(T_Collision collision) {
 			var other = GetColliderFromCollision(collision);
-			var otherCollisionTrigger = other.GetComponentInParent<T_CollisionTrigger>(true);
-			if (otherCollisionTrigger != null) {
-				var reaction = GetMatchingReaction(otherCollisionTrigger);
-				// Checking the key handles edge cases when the m_StayingCollisionTriggers is cleared
+			var otherTaggedObject = other.GetComponentInParent<ITaggedObject>(true);
+			if (otherTaggedObject != null) {
+				var reaction = GetMatchingReaction(otherTaggedObject);
+				// Checking the key, handles edge cases when the m_StayingTaggedObjects is cleared
 				// prior to OnCollisionExit
-				if (reaction != null && m_StayingCollisionTriggers.ContainsKey(otherCollisionTrigger)) {
-					m_StayingCollisionTriggers[otherCollisionTrigger].Remove(other);
-					if (m_StayingCollisionTriggers[otherCollisionTrigger].Count == 0) {
-						m_StayingCollisionTriggers.Remove(otherCollisionTrigger);
+				if (reaction != null && m_StayingTaggedObjects.ContainsKey(otherTaggedObject)) {
+					m_StayingTaggedObjects[otherTaggedObject].Remove(other);
+					if (m_StayingTaggedObjects[otherTaggedObject].Count == 0) {
+						m_StayingTaggedObjects.Remove(otherTaggedObject);
 						reaction.RaiseCollisionExit(collision);
 					}
 				}
@@ -174,15 +173,15 @@ namespace CocodriloDog.Core {
 		private void Update() {
 
 			// Remove the disabled colliders from the list / dictionary
-			List<KeyValuePair<T_CollisionTrigger, List<T_Collider>>> stayingCollisionTriggerCollidersToRemove = null;
+			List<KeyValuePair<ITaggedObject, List<T_Collider>>> stayingTaggedObjectCollidersToRemove = null;
 
 			// Each list set
-			foreach (var stayingCollisionTriggerColliders in m_StayingCollisionTriggers) {
+			foreach (var stayingTaggedObjectColliders in m_StayingTaggedObjects) {
 
 				List<T_Collider> collidersToRemove = null;
 
 				// Each collider. If the collider is disabled, mark it for removal
-				foreach (var collider in stayingCollisionTriggerColliders.Value) {
+				foreach (var collider in stayingTaggedObjectColliders.Value) {
 					if (!IsColliderActiveAndEnabled(collider)) {
 						collidersToRemove = collidersToRemove ?? new List<T_Collider>();
 						collidersToRemove.Add(collider);
@@ -192,23 +191,23 @@ namespace CocodriloDog.Core {
 				// Remove the collider from the list
 				if (collidersToRemove != null) {
 					foreach (var collider in collidersToRemove) {
-						stayingCollisionTriggerColliders.Value.Remove(collider);
+						stayingTaggedObjectColliders.Value.Remove(collider);
 					}
 				}
 
 				// If the colliders list is empty, mark the collision trigger for removal
-				if (stayingCollisionTriggerColliders.Value.Count == 0) {
-					stayingCollisionTriggerCollidersToRemove =
-						stayingCollisionTriggerCollidersToRemove ?? new List<KeyValuePair<T_CollisionTrigger, List<T_Collider>>>();
-					stayingCollisionTriggerCollidersToRemove.Add(stayingCollisionTriggerColliders);
+				if (stayingTaggedObjectColliders.Value.Count == 0) {
+					stayingTaggedObjectCollidersToRemove =
+						stayingTaggedObjectCollidersToRemove ?? new List<KeyValuePair<ITaggedObject, List<T_Collider>>>();
+					stayingTaggedObjectCollidersToRemove.Add(stayingTaggedObjectColliders);
 				}
 
 			}
 
 			// Remove the collision triggers with their empty lists
-			if (stayingCollisionTriggerCollidersToRemove != null) {
-				foreach (var stayingCollisionTriggerColliders in stayingCollisionTriggerCollidersToRemove) {
-					m_StayingCollisionTriggers.Remove(stayingCollisionTriggerColliders.Key);
+			if (stayingTaggedObjectCollidersToRemove != null) {
+				foreach (var stayingTaggedObjectColliders in stayingTaggedObjectCollidersToRemove) {
+					m_StayingTaggedObjects.Remove(stayingTaggedObjectColliders.Key);
 				}
 			}
 
@@ -219,7 +218,7 @@ namespace CocodriloDog.Core {
 			// colliders. If the component is disabled, the only thing that will happen is that the 
 			// Update won't be called for a while.
 			if (!gameObject.activeInHierarchy) {
-				m_StayingCollisionTriggers.Clear();
+				m_StayingTaggedObjects.Clear();
 			}
 		}
 
@@ -263,8 +262,8 @@ namespace CocodriloDog.Core {
 		#region Private Fields - Non Serialized
 
 		[NonSerialized]
-		Dictionary<T_CollisionTrigger, List<T_Collider>> m_StayingCollisionTriggers =
-			new Dictionary<T_CollisionTrigger, List<T_Collider>>();
+		Dictionary<ITaggedObject, List<T_Collider>> m_StayingTaggedObjects =
+			new Dictionary<ITaggedObject, List<T_Collider>>();
 
 		#endregion
 
@@ -272,8 +271,8 @@ namespace CocodriloDog.Core {
 		#region Private Methods
 
 		// TODO: Use ITaggedObject, instead so that it can evaluate against a non-collisiontrigger object
-		private T_CollisionReaction GetMatchingReaction(T_CollisionTrigger otherCollisionTrigger) {
-			foreach (var otherTag in otherCollisionTrigger.m_Tags) {
+		private T_CollisionReaction GetMatchingReaction(ITaggedObject otherTaggedObject) {
+			foreach (var otherTag in otherTaggedObject.Tags) {
 				foreach (var reaction in Reactions) {
 					if (reaction.OtherTag == otherTag) {
 						return reaction;

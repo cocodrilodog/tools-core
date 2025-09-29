@@ -11,7 +11,7 @@ namespace CocodriloDog.Core {
 	/// Triggers collision events when other <see cref="CollisionTrigger"/>s enter and exit this one and have
 	/// <see cref="ThisTags"/> that match the <see cref="OtherTag"/> of the reactions.
 	/// </summary>
-	public class CollisionTrigger : CollisionTriggerBase<CollisionTrigger, Collider, Collision, CollisionReaction, Vector3> {
+	public class CollisionTrigger : CollisionTriggerBase<Collider, Collision, CollisionReaction, Vector3> {
 
 
 		#region Public Methods
@@ -115,7 +115,7 @@ namespace CocodriloDog.Core {
 	#region Small Types
 
 	[Serializable]
-	public class CollisionReaction : CollisionReactionBase<CollisionTrigger, Collision> { }
+	public class CollisionReaction : CollisionReactionBase<Collision> { }
 
 	#endregion
 

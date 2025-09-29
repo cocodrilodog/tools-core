@@ -18,7 +18,7 @@ namespace CocodriloDog.Core {
 
 
 	[Serializable]
-	public class CollisionReactionBase<T_CollisionTrigger, T_Collision> : CollisionReactionBase {
+	public class CollisionReactionBase<T_Collision> : CollisionReactionBase {
 
 
 		#region Public Properties
@@ -33,14 +33,14 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
-		public void RaiseTriggerEnter(T_CollisionTrigger otherTrigger) {
-			OnTriggerEnterEv?.Invoke(otherTrigger);
-			m_OnTriggerEnter.Invoke(otherTrigger);
+		public void RaiseTriggerEnter(ITaggedObject otherTaggedObject) {
+			OnTriggerEnterEv?.Invoke(otherTaggedObject);
+			m_OnTriggerEnter.Invoke(otherTaggedObject);
 		}
 
-		public void RaiseTriggerExit(T_CollisionTrigger otherTrigger) {
-			m_OnTriggerExit?.Invoke(otherTrigger);
-			OnTriggerExitEv?.Invoke(otherTrigger);
+		public void RaiseTriggerExit(ITaggedObject otherTaggedObject) {
+			m_OnTriggerExit?.Invoke(otherTaggedObject);
+			OnTriggerExitEv?.Invoke(otherTaggedObject);
 		}
 
 		public void RaiseCollisionEnter(T_Collision collision) {
@@ -62,9 +62,9 @@ namespace CocodriloDog.Core {
 
 		public event Action<T_Collision> OnCollisionExitEv;
 
-		public event Action<T_CollisionTrigger> OnTriggerEnterEv;
+		public event Action<ITaggedObject> OnTriggerEnterEv;
 
-		public event Action<T_CollisionTrigger> OnTriggerExitEv;
+		public event Action<ITaggedObject> OnTriggerExitEv;
 
 		#endregion
 
@@ -84,7 +84,7 @@ namespace CocodriloDog.Core {
 		#region Private Fields
 
 		[Tooltip(
-			"Tag of other triggers that when collide with this one, they will make " +
+			"Tag of other tagged objects that when collide with this one, they will make " +
 			"this trigger to raise collision events."
 		)]
 		[StringOptions("m_TagOptions")]
@@ -92,7 +92,7 @@ namespace CocodriloDog.Core {
 		private string m_OtherTag;
 
 		[Tooltip(
-			"Raised when another collision trigger with ThisTags that match the " +
+			"Raised when another tagged object with Tags that match the " +
 			"OtherTag of this reaction enters this collision trigger."
 		)]
 		[UnityEventGroup("CollisionEvents")]
@@ -100,20 +100,20 @@ namespace CocodriloDog.Core {
 		private UnityEvent<T_Collision> m_OnCollisionEnter;
 
 		[Tooltip(
-			"Raised when another collision trigger with ThisTags that match the " +
-			"OtherTags of this reaction exits this collision trigger."
+			"Raised when another tagged object with Tags that match the " +
+			"OtherTag of this reaction exits this collision trigger."
 		)]
 		[UnityEventGroup("CollisionEvents")]
 		[SerializeField]
 		private UnityEvent<T_Collision> m_OnCollisionExit;
 
 		[Tooltip(
-			"Raised when another collision trigger with ThisTags that match the " +
+			"Raised when another tagged object with Tags that match the " +
 			"OtherTag of this reaction, enters this collision trigger."
 		)]
 		[UnityEventGroup("TriggerEvents")]
 		[SerializeField]
-		private UnityEvent<T_CollisionTrigger> m_OnTriggerEnter;
+		private UnityEvent<ITaggedObject> m_OnTriggerEnter;
 
 		[Tooltip(
 			"Raised when another collision trigger with ThisTags that match the " +
@@ -121,7 +121,7 @@ namespace CocodriloDog.Core {
 		)]
 		[UnityEventGroup("TriggerEvents")]
 		[SerializeField]
-		private UnityEvent<T_CollisionTrigger> m_OnTriggerExit;
+		private UnityEvent<ITaggedObject> m_OnTriggerExit;
 
 		#endregion
 
