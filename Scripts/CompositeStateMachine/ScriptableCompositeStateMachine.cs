@@ -164,7 +164,10 @@ namespace CocodriloDog.Core {
 			}
 		}
 
-		protected virtual void OnValidate() => m_States.ForEach(s => s?.OnValidate());
+		protected virtual void OnValidate() {
+			m_States.ForEach(s => s?.OnValidate());
+			m_States.ForEach(s => s?.OnValidate(this));
+		}
 
 		#endregion
 

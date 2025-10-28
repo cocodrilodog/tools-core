@@ -40,6 +40,8 @@ namespace CocodriloDog.Core {
 
 		public virtual void OnValidate() { }
 
+		public virtual void OnValidate(UnityEngine.Object editModeMachine) { }
+
 		public virtual void OnDestroy() {
 			OnEnter = null;
 			OnExit = null;

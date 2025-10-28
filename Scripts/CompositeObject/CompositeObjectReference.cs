@@ -112,20 +112,6 @@ namespace CocodriloDog.Core {
 			}
 		}
 
-		/// <summary>
-		/// Used to set the source to <c>null</c> so that the inspector resets it to the default root object
-		/// when <see cref="m_EnableSourceField"/> is <c>false</c>.
-		/// </summary>
-		/// <remarks>
-		/// Only has effect when not overriding the source, because otherwise the user may want to preserve 
-		/// the overriding <see cref="m_Source"/>.
-		/// </remarks>
-		public void ClearSourceToDefault() {
-			if (!m_EnableSourceField) {
-				m_Source = null;
-			}
-		}
-
 		#endregion
 
 
