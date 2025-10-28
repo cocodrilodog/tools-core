@@ -6,6 +6,12 @@ namespace CocodriloDog.Core {
 	using System.Collections.Generic;
 	using System.Linq;
 
+	public enum PathStyle {
+		SeparatedBySlash,
+		SeparatedByPoint,
+		OnlyLastStep
+	}
+
 	public static class CDEditorGUI {
 
 
@@ -50,13 +56,20 @@ namespace CocodriloDog.Core {
 		/// </param>
 		/// <param name="rect">The rect of the dropdownbutton.</param>
 		/// <param name="currentPath">The current path that is selected, for example "Parent/Child/Grandchild"</param>
+		/// <param name="pathStyle">The style to display the path in the button.</param>
+		/// <param name="defaultPath">The path that is shown in the dropdpwn button whrn no path is selected.</param>
 		/// <param name="allPaths">A list of all the paths that the GenericMenu will show. A path "--" will create a horizontal separator</param>
 		/// <param name="onNewPath">A callback that receives the <paramref name="id"/> and the choosen composite object path.</param>
-		public static void HierarchyDropdown(string id, Rect rect, string currentPath, List<string> allPaths, Action<string, string> onNewPath) {
+		public static void HierarchyDropdown(string id, Rect rect, string currentPath, PathStyle pathStyle, string defaultPath, List<string> allPaths, Action<string, string> onNewPath) {
 
-			var buttonContent = new GUIContent(GetLeafName(currentPath));
+			string buttonText = string.IsNullOrEmpty(currentPath) ? defaultPath : pathStyle switch {
+				PathStyle.SeparatedBySlash => currentPath,
+				PathStyle.SeparatedByPoint => currentPath.Replace("/", "."),
+				PathStyle.OnlyLastStep => GetLeafName(currentPath, defaultPath),
+				_ => defaultPath,
+			};
 
-			if (EditorGUI.DropdownButton(rect, buttonContent, FocusType.Keyboard)) {
+			if (EditorGUI.DropdownButton(rect, new GUIContent(buttonText), FocusType.Keyboard)) {
 				var menu = new GenericMenu();
 				foreach (var path in allPaths) {
 					var compositeObjectPath = path;
@@ -79,8 +92,8 @@ namespace CocodriloDog.Core {
 
 		#region Private Static Methods
 
-		private static string GetLeafName(string path) {
-			return string.IsNullOrEmpty(path) ? "Null" : path.Split('/').Last();
+		private static string GetLeafName(string path, string defaultLeaf) {
+			return string.IsNullOrEmpty(path) ? defaultLeaf : path.Split('/').Last();
 		}
 
 		#endregion

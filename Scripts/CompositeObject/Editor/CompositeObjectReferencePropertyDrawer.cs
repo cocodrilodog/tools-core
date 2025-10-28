@@ -164,10 +164,18 @@
 			currentIndex = currentIndex == -1 ? 0 : currentIndex; // If currentIndex == -1 choose 0 to display "Null"
 
 			// Draw the hierarchy dropdown with the options.
-			CDEditorGUI.HierarchyDropdown(Property.propertyPath, valueRect, currentPath, options, (id, newPath) => {
-				monoBehavioursByCompositeObjectPath.TryGetValue(newPath, out var component);
-				m_NewChoice = new CompositeObjectData(id, newPath, component);
-			});
+			CDEditorGUI.HierarchyDropdown(
+				id: Property.propertyPath, 
+				rect: valueRect, 
+				currentPath: currentPath, 
+				pathStyle: PathStyle.OnlyLastStep, 
+				defaultPath: "Null", 
+				allPaths: options, 
+				onNewPath: (id, newPath) => {
+					monoBehavioursByCompositeObjectPath.TryGetValue(newPath, out var component);
+					m_NewChoice = new CompositeObjectData(id, newPath, component);
+				}
+			);
 
 			// There is a pending new choice at m_NewPath.CompositePath that needs to be assigned to the property with path
 			// m_NewPath.PropertyPath
