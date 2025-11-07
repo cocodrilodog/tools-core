@@ -7,6 +7,8 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 	using UnityEngine.Events;
 
+	// TODO: Apply latest changes to the ScriptableCompositeStateMachine
+
 	/// <summary>
 	/// Intermediate non-generic class created to support a base editor for all subclasses of
 	/// <see cref="MonoCompositeStateMachine{T_State, T_Machine}"/>.
@@ -81,11 +83,17 @@ namespace CocodriloDog.Core {
 		public T_State GetState(int index) => index >= 0 && index < m_States.Count ? m_States[index] : null;
 
 		/// <summary>
-		/// Gets the state that has the specified <paramref name="name"/> or null if there is none.
+		/// Gets the state that has the specified <paramref name="nameOrId"/> or null if there is none.
 		/// </summary>
-		/// <param name="name">The name.</param>
+		/// <param name="nameOrId">The name.</param>
 		/// <returns>The state.</returns>
-		public T_State GetState(string name) => m_States.FirstOrDefault(s => name == s.Name);
+		public T_State GetState(string nameOrId) {
+			var state = m_States.FirstOrDefault(s => nameOrId == s.Name);
+			if (state == null) {
+				state = m_States.FirstOrDefault(s => nameOrId == s.Id);
+			}
+			return state;
+		}
 
 		/// <summary>
 		/// Gets the index of the specified <paramref name="state"/>
@@ -134,11 +142,15 @@ namespace CocodriloDog.Core {
 
 		protected virtual void Awake() => m_States.ForEach(s => s.RegisterAsReferenceable(this));
 
-		protected virtual void Start() => SetState(m_States[0]);
+		protected virtual void Start() {
+			if (m_States.Count > 0) {
+				SetState(m_States[0]);
+			}
+		}
 
-		protected virtual void Update() => m_CurrentState.Update();
+		protected virtual void Update() => m_CurrentState?.Update();
 
-		protected virtual void FixedUpdate() => m_CurrentState.FixedUpdate();
+		protected virtual void FixedUpdate() => m_CurrentState?.FixedUpdate();
 
 		protected virtual void OnValidate() {
 			m_States.ForEach(s => s?.OnValidate());
@@ -185,6 +197,27 @@ namespace CocodriloDog.Core {
 			T_State state = Activator.CreateInstance(type) as T_State;
 			m_States.Add(state);
 			state.SetMachine(this as T_Machine);
+			// This happens when the machine starts without states.
+			if(m_CurrentState == null) {
+				SetState(state);
+			}
+		}
+
+		/// <summary>
+		/// Removes the state at the specified <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		protected void RemoveState(int index) => m_States.RemoveAt(index);
+
+		/// <summary>
+		/// Removes the state with the provided <paramref name="nameOrId"/>
+		/// </summary>
+		/// <param name="id">The id.</param>
+		protected void RemoveState(string nameOrId) {
+			var stateToRemove = GetState(nameOrId);
+			if (stateToRemove != null) {
+				m_States.Remove(stateToRemove);
+			}
 		}
 
 		/// <summary>
