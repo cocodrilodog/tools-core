@@ -7,7 +7,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 	using UnityEngine.Events;
 
-	// TODO: Apply latest changes to the ScriptableCompositeStateMachine
+	// TODO: Apply latest changes to the ScriptableCompositeStateMachine (99a668c8d12e987f06ed65ab46738e7f4fbb074c)
 
 	/// <summary>
 	/// Intermediate non-generic class created to support a base editor for all subclasses of
