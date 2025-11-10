@@ -204,6 +204,19 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
+		/// Adds a state of type <paramref name="type"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		protected void AddState(T_State state) {
+			m_States.Add(state);
+			state.SetMachine(this as T_Machine);
+			// This happens when the machine starts without states.
+			if (m_CurrentState == null) {
+				SetState(state);
+			}
+		}
+
+		/// <summary>
 		/// Removes the state at the specified <paramref name="index"/>.
 		/// </summary>
 		/// <param name="index">The index.</param>
