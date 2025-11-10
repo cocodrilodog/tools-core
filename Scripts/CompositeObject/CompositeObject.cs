@@ -54,7 +54,7 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		public string Id {
 			get => m_Id;
-			set => m_Id = value;
+			internal set => m_Id = value;
 		}
 
 		/// <summary>
@@ -166,7 +166,7 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private string m_Name;
 
-		[HideInInspector]
+		//[HideInInspector]
 		[SerializeField]
 		private string m_Id = Guid.NewGuid().ToString();
 
