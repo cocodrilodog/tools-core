@@ -217,36 +217,36 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// Sets a state of type <typeparamref name="T"/> at the specified <paramref name="index"/> if there is none.
+		/// Creates a state of type <typeparamref name="T"/> at the specified <paramref name="index"/> if there is none.
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="index">The index.</param>
-		protected void SetStateIfNull<T>(int index) where T : T_State => SetStateIfNull(typeof(T), index);
+		protected void CreateStateIfNull<T>(int index) where T : T_State => CreateStateIfNull(typeof(T), index);
 
 		/// <summary>
-		/// Sets a state of type <paramref name="type"/> at the specified <paramref name="index"/> if there is none.
+		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/> if there is none.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
-		protected void SetStateIfNull(Type type, int index) {
+		protected void CreateStateIfNull(Type type, int index) {
 			if (GetState(index) == null) {
-				SetState(type, index);
+				CreateState(type, index);
 			}
 		}
 
 		/// <summary>
-		/// Sets a state of type <typeparamref name="T"/> at the specified <paramref name="index"/>.
+		/// Creates a state of type <typeparamref name="T"/> at the specified <paramref name="index"/>.
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="index">The index.</param>
-		protected void SetState<T>(int index) where T : T_State => SetState(typeof(T), index);
+		protected void CreateState<T>(int index) where T : T_State => CreateState(typeof(T), index);
 
 		/// <summary>
-		/// Sets a state of type <paramref name="type"/> at the specified <paramref name="index"/>.
+		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/>.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
-		protected void SetState(Type type, int index) {
+		protected void CreateState(Type type, int index) {
 			T_State state = Activator.CreateInstance(type) as T_State;
 			while (index > m_States.Count - 1) {
 				m_States.Add(null);
@@ -335,6 +335,16 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
+		public void EnterAndRaiseOnEnter() {
+			Enter();
+			RaiseOnEnter();
+		}
+
+		public void ExitAndRaiseOnExit() {
+			Exit();
+			RaiseOnExit();
+		}
+
 		public virtual void TransitionToState(string name) {
 			if (name == Name) {
 				return;
@@ -345,6 +355,15 @@ namespace CocodriloDog.Core {
 			}
 			Machine.SetState(Machine.States.FirstOrDefault(s => s.Name == name));
 		}
+
+		#endregion
+
+
+		#region Public Events
+
+		public event Action<T_State> OnEnter;
+
+		public event Action<T_State> OnExit;
 
 		#endregion
 
@@ -363,10 +382,38 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Private Fields - Serialized
+
+		[UnityEventGroup("Events")]
+		[SerializeField]
+		private UnityEvent<T_State> m_OnEnter = new();
+
+		[UnityEventGroup("Events")]
+		[SerializeField]
+		private UnityEvent<T_State> m_OnExit = new();
+
+		#endregion
+
+
 		#region Private Fields - Non Serialized
 
 		[NonSerialized]
 		private T_Machine m_Machine;
+
+		#endregion
+
+
+		#region Private Methods
+
+		private void RaiseOnEnter() {
+			OnEnter?.Invoke(this as T_State);
+			m_OnEnter.Invoke(this as T_State);
+		}
+
+		private void RaiseOnExit() {
+			OnExit?.Invoke(this as T_State);
+			m_OnExit.Invoke(this as T_State);
+		}
 
 		#endregion
 

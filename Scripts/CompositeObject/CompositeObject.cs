@@ -166,7 +166,7 @@ namespace CocodriloDog.Core {
 		[SerializeField]
 		private string m_Name;
 
-		//[HideInInspector]
+		[HideInInspector]
 		[SerializeField]
 		private string m_Id = Guid.NewGuid().ToString();
 

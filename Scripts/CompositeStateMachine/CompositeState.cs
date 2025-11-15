@@ -19,16 +19,6 @@ namespace CocodriloDog.Core {
 
 		public virtual void Exit() { }
 
-		public void EnterAndRaiseOnEnter() {
-			Enter();
-			RaiseOnEnter();
-		}
-
-		public void ExitAndRaiseOnExit() {
-			Exit();
-			RaiseOnExit();
-		}
-
 		#endregion
 
 
@@ -42,49 +32,10 @@ namespace CocodriloDog.Core {
 
 		public virtual void OnValidate(UnityEngine.Object editModeMachine) { }
 
-		public virtual void OnDestroy() {
-			OnEnter = null;
-			OnExit = null;
-		}
-
 		#endregion
 
 
-		#region Public Events
 
-		public event Action OnEnter;
-
-		public event Action OnExit;
-
-		#endregion
-
-
-		#region Private Fields - Serialized
-
-		[UnityEventGroup("Events")]
-		[SerializeField]
-		private UnityEvent m_OnEnter = new();
-
-		[UnityEventGroup("Events")]
-		[SerializeField]
-		private UnityEvent m_OnExit = new();
-
-		#endregion
-
-
-		#region Private Methods
-
-		private void RaiseOnEnter() {
-			OnEnter?.Invoke();
-			m_OnEnter.Invoke();
-		}
-
-		private void RaiseOnExit() {
-			OnExit?.Invoke();
-			m_OnExit.Invoke();
-		}
-
-		#endregion
 
 
 	}

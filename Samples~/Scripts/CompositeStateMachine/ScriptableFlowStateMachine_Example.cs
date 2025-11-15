@@ -11,9 +11,9 @@ namespace CocodriloDog.Core.Examples {
 		#region Unity Methods
 
 		private void OnEnable() {
-			m_ScriptableFlowStateMachine.GetState(0).OnEnter += () => Debug.Log("C# Event: State1 Enter");
-			m_ScriptableFlowStateMachine.GetState(1).OnEnter += () => Debug.Log("C# Event: State2 Enter");
-			m_ScriptableFlowStateMachine.GetState(2).OnEnter += () => Debug.Log("C# Event: State3 Enter");
+			m_ScriptableFlowStateMachine.GetState(0).OnEnter += s => Debug.Log("C# Event: State1 Enter");
+			m_ScriptableFlowStateMachine.GetState(1).OnEnter += s => Debug.Log("C# Event: State2 Enter");
+			m_ScriptableFlowStateMachine.GetState(2).OnEnter += s => Debug.Log("C# Event: State3 Enter");
 		}
 
 		private void Start() {
