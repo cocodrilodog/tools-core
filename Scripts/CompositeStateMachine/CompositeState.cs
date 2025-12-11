@@ -63,11 +63,11 @@ namespace CocodriloDog.Core {
 
 		[UnityEventGroup("Events")]
 		[SerializeField]
-		private UnityEvent m_OnEnter;
+		private UnityEvent m_OnEnter = new();
 
 		[UnityEventGroup("Events")]
 		[SerializeField]
-		private UnityEvent m_OnExit;
+		private UnityEvent m_OnExit = new();
 
 		#endregion
 
