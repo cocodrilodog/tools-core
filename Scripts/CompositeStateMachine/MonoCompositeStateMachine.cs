@@ -79,7 +79,7 @@ namespace CocodriloDog.Core {
 		/// otherwise.
 		/// </returns>
 		public bool HasState(string nameOrId) {
-			if(m_States.FirstOrDefault(s => nameOrId == s.Name) != null) {
+			if (m_States.FirstOrDefault(s => nameOrId == s.Name) != null) {
 				return true;
 			}
 			if (m_States.FirstOrDefault(s => nameOrId == s.Id) != null) {
@@ -129,7 +129,7 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// <param name="action">The action.</param>
 		public void ForEachState(Action<T_State> action) {
-			foreach(var state in m_States) {
+			foreach (var state in m_States) {
 				action?.Invoke(state);
 			}
 		}
@@ -387,23 +387,10 @@ namespace CocodriloDog.Core {
 
 		#region Unity Events
 
-		public virtual void OnDestroy() {
+		public override void OnDestroy() {
 			OnEnter = null;
 			OnExit = null;
 		}
-
-		#endregion
-
-
-		#region Private Fields - Serialized
-
-		[UnityEventGroup("Events")]
-		[SerializeField]
-		private UnityEvent<T_State> m_OnEnter = new();
-
-		[UnityEventGroup("Events")]
-		[SerializeField]
-		private UnityEvent<T_State> m_OnExit = new();
 
 		#endregion
 
@@ -428,6 +415,19 @@ namespace CocodriloDog.Core {
 			Exit();
 			RaiseOnExit();
 		}
+
+		#endregion
+
+
+		#region Private Fields - Serialized
+
+		[UnityEventGroup("Events")]
+		[SerializeField]
+		private UnityEvent<T_State> m_OnEnter = new();
+
+		[UnityEventGroup("Events")]
+		[SerializeField]
+		private UnityEvent<T_State> m_OnExit = new();
 
 		#endregion
 

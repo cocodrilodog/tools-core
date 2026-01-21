@@ -54,6 +54,16 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
+		/// Returns the current active state.
+		/// </summary>
+		public T_State CurrentState {
+			get {
+				Initialize();
+				return m_CurrentState;
+			}
+		}
+
+		/// <summary>
 		/// The number of states.
 		/// </summary>
 		public int StatesCount => m_States.Count;
@@ -74,15 +84,18 @@ namespace CocodriloDog.Core {
 		public void SetDefaultState() => SetState(m_States[0]);
 
 		/// <summary>
-		/// Checks whether a state with the provided <paramref name="name"/> exists or not.
+		/// Checks whether a state with the provided <paramref name="nameOrId"/> exists or not.
 		/// </summary>
-		/// <param name="name">The name of the state.</param>
+		/// <param name="nameOrId">The name of the state.</param>
 		/// <returns>
-		/// <c>true</c> if a state with the specified <paramref name="name"/> exists, <c>false</c>
+		/// <c>true</c> if a state with the specified <paramref name="nameOrId"/> exists, <c>false</c>
 		/// otherwise.
 		/// </returns>
-		public bool HasState(string name) {
-			if (m_States.FirstOrDefault(s => name == s.Name) != null) {
+		public bool HasState(string nameOrId) {
+			if (m_States.FirstOrDefault(s => nameOrId == s.Name) != null) {
+				return true;
+			}
+			if (m_States.FirstOrDefault(s => nameOrId == s.Id) != null) {
 				return true;
 			}
 			return false;
@@ -96,11 +109,17 @@ namespace CocodriloDog.Core {
 		public T_State GetState(int index) => index >= 0 && index < m_States.Count ? m_States[index] : null;
 
 		/// <summary>
-		/// Gets the state that has the specified <paramref name="name"/> or null if there is none.
+		/// Gets the state that has the specified <paramref name="nameOrId"/> or null if there is none.
 		/// </summary>
-		/// <param name="name">The name.</param>
+		/// <param name="nameOrId">The name.</param>
 		/// <returns>The state.</returns>
-		public T_State GetState(string name) => m_States.FirstOrDefault(s => name == s.Name);
+		public T_State GetState(string nameOrId) {
+			var state = m_States.FirstOrDefault(s => nameOrId == s.Name);
+			if (state == null) {
+				state = m_States.FirstOrDefault(s => nameOrId == s.Id);
+			}
+			return state;
+		}
 
 		/// <summary>
 		/// Gets the index of the specified <paramref name="state"/>
@@ -174,25 +193,10 @@ namespace CocodriloDog.Core {
 
 		#region Event Handlers
 
-		private void MonoUpdater_OnDestroyEv() => m_States.ForEach(s => s.UnregisterReferenceable(this));
-
-		#endregion
-
-
-		#region Protected Properties
-
-		/// <summary>
-		/// Returns the current active state.
-		/// </summary>
-		protected T_State CurrentState {
-			get {
-				Initialize();
-				// This guarantees it will never be null
-				if (m_CurrentState == null) {
-					SetDefaultState();
-				}
-				return m_CurrentState;
-			}
+		private void MonoUpdater_OnDestroyEv() {
+			SetState(null); // This will exit the current state
+			m_States.ForEach(s => s.UnregisterReferenceable(this));
+			m_States.ForEach(s => s.OnDestroy());
 		}
 
 		#endregion
@@ -204,16 +208,60 @@ namespace CocodriloDog.Core {
 		/// Adds a state of type <typeparamref name="T"/>.
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
-		protected void AddState<T>() where T : T_State => AddState(typeof(T));
+		/// <returns>The created state.</returns>
+		protected T_State AddState<T>() where T : T_State => AddState(typeof(T));
 
 		/// <summary>
 		/// Adds a state of type <paramref name="type"/>.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		protected void AddState(Type type) {
+		/// <returns>The created state.</returns>
+		protected T_State AddState(Type type) {
 			T_State state = Activator.CreateInstance(type) as T_State;
+			AddState(state);
+			return state;
+		}
+
+		/// <summary>
+		/// Adds a state of type <paramref name="type"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		protected void AddState(T_State state) {
 			m_States.Add(state);
 			state.SetMachine(this as T_Machine);
+			// This happens when the machine starts without states.
+			if (m_CurrentState == null) {
+				SetState(state);
+			}
+			state.RegisterAsReferenceable(this);
+		}
+
+		/// <summary>
+		/// Removes the state at the specified <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		protected void RemoveState(int index) {
+			m_States.RemoveAt(index);
+			if (m_States.Count == 0) {
+				SetState(null);
+			}
+		}
+
+		/// <summary>
+		/// Removes the state with the provided <paramref name="nameOrId"/>
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <returns>Whether the operation was successful or not.</returns>
+		protected bool RemoveState(string nameOrId) {
+			var stateToRemove = GetState(nameOrId);
+			var result = false;
+			if (stateToRemove != null) {
+				result = m_States.Remove(stateToRemove);
+				if (m_States.Count == 0) {
+					SetState(null);
+				}
+			}
+			return result;
 		}
 
 		/// <summary>
@@ -221,17 +269,24 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="index">The index.</param>
-		protected void CreateStateIfNull<T>(int index) where T : T_State => CreateStateIfNull(typeof(T), index);
+		/// <returns>
+		/// The created or the existing state, or null if the existing state is of a type different from 
+		/// <typeparamref name="T"/>
+		/// </returns>
+		protected T CreateStateIfNull<T>(int index) where T : T_State => CreateStateIfNull(typeof(T), index) as T;
 
 		/// <summary>
 		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/> if there is none.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
-		protected void CreateStateIfNull(Type type, int index) {
+		/// <returns>The created or the existing state.</returns>
+		protected T_State CreateStateIfNull(Type type, int index) {
+			var state = GetState(index);
 			if (GetState(index) == null) {
-				CreateState(type, index);
+				return CreateState(type, index);
 			}
+			return state;
 		}
 
 		/// <summary>
@@ -239,20 +294,23 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="index">The index.</param>
-		protected void CreateState<T>(int index) where T : T_State => CreateState(typeof(T), index);
+		/// <returns>The created state.</returns>
+		protected T_State CreateState<T>(int index) where T : T_State => CreateState(typeof(T), index);
 
 		/// <summary>
 		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/>.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
-		protected void CreateState(Type type, int index) {
+		/// <returns>The created state.</returns>
+		protected T_State CreateState(Type type, int index) {
 			T_State state = Activator.CreateInstance(type) as T_State;
 			while (index > m_States.Count - 1) {
 				m_States.Add(null);
 			}
 			m_States[index] = state;
 			state.SetMachine(this as T_Machine);
+			return state;
 		}
 
 		#endregion
@@ -335,16 +393,6 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
-		public void EnterAndRaiseOnEnter() {
-			Enter();
-			RaiseOnEnter();
-		}
-
-		public void ExitAndRaiseOnExit() {
-			Exit();
-			RaiseOnExit();
-		}
-
 		public virtual void TransitionToState(string name) {
 			if (name == Name) {
 				return;
@@ -368,6 +416,16 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Unity Events
+
+		public override void OnDestroy() {
+			OnEnter = null;
+			OnExit = null;
+		}
+
+		#endregion
+
+
 		#region Protected Properties
 
 		protected T_Machine Machine => m_Machine;
@@ -378,6 +436,16 @@ namespace CocodriloDog.Core {
 		#region Internal Methods
 
 		internal void SetMachine(T_Machine machine) => m_Machine = machine;
+
+		internal void EnterAndRaiseOnEnter() {
+			Enter();
+			RaiseOnEnter();
+		}
+
+		internal void ExitAndRaiseOnExit() {
+			Exit();
+			RaiseOnExit();
+		}
 
 		#endregion
 
@@ -400,7 +468,7 @@ namespace CocodriloDog.Core {
 		[NonSerialized]
 		private T_Machine m_Machine;
 
-		#endregion
+		#endregion  
 
 
 		#region Private Methods
