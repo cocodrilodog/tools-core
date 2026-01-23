@@ -25,6 +25,9 @@ namespace CocodriloDog.Core {
 
 		#region Public Properties
 
+		/// <summary>
+		/// The count of <see cref="DecisionTrigger"/>s of this state machine.
+		/// </summary>
 		public int TriggersCount => m_Triggers.Count;
 
 		#endregion
@@ -32,6 +35,10 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
+		/// <summary>
+		/// Transitions to the first state referenced in the 
+		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
+		/// </summary>
 		public void NextState() {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Did nothing.");
@@ -40,35 +47,71 @@ namespace CocodriloDog.Core {
 			CurrentState.Next();
 		}
 
+		/// <summary>
+		/// Transitions to the state at <paramref name="index"/> in the 
+		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
+		/// </summary>
+		/// <param name="index">The index of the <see cref="DecisionOption{T_State, T_Machine}"/>.</param>
 		public void NextStateByIndex(int index) {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Index: {index}. Did nothing.");
-				return;
 			}
 			CurrentState.NextByIndex(index);
 		}
 
+		/// <summary>
+		/// Transitions to the state referenced by the <see cref="DecisionOption{T_State, T_Machine}"/>
+		/// that has the provided <paramref name="trigger"/> in the 
+		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
+		/// </summary>
+		/// <param name="trigger">The trigger.</param>
 		public void NextStateByTrigger(string trigger) {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Trigger: {trigger}. Did nothing.");
-				return;
 			}
 			CurrentState.NextByTrigger(trigger);
 		}
 
+		/// <summary>
+		/// Forecefully transitions to the state with <paramref name="name"/>, bypassing the 
+		/// <c>NextState...()</c> logic.
+		/// </summary>
+		/// <param name="name"></param>
 		public void ForceStateByName(string name) => CurrentState.TransitionToState(name);
 
+		/// <summary>
+		/// Gets the <see cref="DecisionTrigger"/> at <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index">The index of the trigger.</param>
+		/// <returns>The <see cref="DecisionTrigger"/>.</returns>
 		public DecisionTrigger GetTriggerAtIndex(int index) => m_Triggers[index];
 
+		/// <summary>
+		/// Gets the <see cref="DecisionTrigger"/> with <paramref name="name"/>..
+		/// </summary>
+		/// <param name="name">The name of the trigger.</param>
+		/// <returns>The <see cref="DecisionTrigger"/>.</returns>
 		public DecisionTrigger GetTriggerByName(string name) => m_Triggers.FirstOrDefault(t => t.Name == name);
 
+		/// <summary>
+		/// adds a <see cref="DecisionTrigger"/>.
+		/// </summary>
+		/// <param name="trigger">The name of trigger to add.</param>
 		public void AddTrigger(string trigger) => AddTrigger(new DecisionTrigger(trigger));
 
+		/// <summary>
+		/// adds a <see cref="DecisionTrigger"/>.
+		/// </summary>
+		/// <param name="trigger">The trigger to add.</param>
 		public void AddTrigger(DecisionTrigger trigger) {
 			m_Triggers.Add(trigger);
 			trigger.RegisterAsReferenceable(this);
 		}
 
+		/// <summary>
+		/// Removes the <see cref="DecisionTrigger"/> at the provided <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index"></param>
 		public void RemoveTrigger(int index) => m_Triggers.RemoveAt(index);
 
 		#endregion
@@ -111,28 +154,11 @@ namespace CocodriloDog.Core {
 
 	}
 
-	[Serializable]
-	public class DecisionTrigger : CompositeObject {
-
-
-		#region Public Properties
-
-		public override string DisplayName => $"{base.DisplayName} (Trigger)";
-
-		#endregion
-
-
-		#region Public Constructors
-
-		public DecisionTrigger() { }
-
-		public DecisionTrigger(string name) => Name = name;
-
-		#endregion
-
-
-	}
-
+	/// <summary>
+	/// Base class for states for <see cref="MonoCompositeStateMachine{T_State, T_Machine}"/>
+	/// </summary>
+	/// <typeparam name="T_State">The type of <see cref="DecisionStateBase{T_State, T_Machine}"/> </typeparam>
+	/// <typeparam name="T_Machine">The type of <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}"/></typeparam>
 	[Serializable]
 	public abstract class DecisionStateBase<T_State, T_Machine> : MonoCompositeState<T_State, T_Machine>
 			where T_Machine : MonoDecisionStateMachineBase<T_State, T_Machine>
@@ -141,6 +167,9 @@ namespace CocodriloDog.Core {
 
 		#region Public Properties
 
+		/// <summary>
+		/// The count of <see cref="DecisionOption{T_State, T_Machine}"/>s that this state has.
+		/// </summary>
 		public int NextOptionsCount => m_NextOptions.Count;
 
 		#endregion
@@ -148,16 +177,39 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
+		/// <summary>
+		/// Gets the <see cref="DecisionOption{T_State, T_Machine}"/> at the specified <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index">The index of the <see cref="DecisionOption{T_State, T_Machine}"/></param>
+		/// <returns>The <see cref="DecisionOption{T_State, T_Machine}"/>.</returns>
 		public DecisionOption<T_State, T_Machine> GetNextOptionAtIndex(int index) => m_NextOptions[index];
 
+		/// <summary>
+		/// Adds a <see cref="DecisionOption{T_State, T_Machine}"/>.
+		/// </summary>
+		/// <param name="nextOption">The <see cref="DecisionOption{T_State, T_Machine}"/> to add.</param>
 		public void AddNextOption(DecisionOption<T_State, T_Machine> nextOption) => m_NextOptions.Add(nextOption);
 
+		/// <summary>
+		/// Removes the <see cref="DecisionOption{T_State, T_Machine}"/> at <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index"></param>
 		public void RemoveNextOption(int index) => m_NextOptions.RemoveAt(index);
 
+		/// <summary>
+		/// Transitions to the state in the first <see cref="DecisionOption{T_State, T_Machine}"/>
+		/// </summary>
+		/// <returns><c>true</c> if successful, otherwise <c>false</c></returns>
 		public virtual bool Next() {
 			return NextByIndex(0);
 		}
 
+		/// <summary>
+		/// Transitions to the state in the <see cref="DecisionOption{T_State, T_Machine}"/> at the 
+		/// specified <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index">The index of the <see cref="DecisionOption{T_State, T_Machine}"/></param>
+		/// <returns><c>true</c> if successful, otherwise <c>false</c></returns>
 		public virtual bool NextByIndex(int index) {
 			if (index >= 0 && index < m_NextOptions.Count) { // Index is valid
 				TransitionToState(m_NextOptions[index].State.Value.Name);
@@ -166,6 +218,12 @@ namespace CocodriloDog.Core {
 			return false;
 		}
 
+		/// <summary>
+		/// Transitions to the state in the <see cref="DecisionOption{T_State, T_Machine}"/> that
+		/// has the specified <paramref name="trigger"/>.
+		/// </summary>
+		/// <param name="trigger">The trigger</param>
+		/// <returns><c>true</c> if successful, otherwise <c>false</c></returns>
 		public virtual bool NextByTrigger(string trigger) {
 
 			var stateOption = m_NextOptions.FirstOrDefault(o => o.Trigger?.Name == trigger);
@@ -196,6 +254,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
+		[Tooltip("The options for this state to transition to.")]
 		[FormerlySerializedAs("m_NextStateOptions")]
 		[SerializeField]
 		private List<DecisionOption<T_State, T_Machine>> m_NextOptions = new();
@@ -205,12 +264,18 @@ namespace CocodriloDog.Core {
 
 	}
 
-	/// <summary>
-	/// Non-generic class to support custom property drawer.
-	/// </summary>
+	// Non-generic class to support custom property drawer.
 	[Serializable]
 	public class DecisionOption { }
 
+	/// <summary>
+	/// An option for a <see cref="DecisionStateBase{T_State, T_Machine}"/> to transition to, when invoking
+	/// <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}.NextState"/>,
+	/// <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}.NextStateByIndex"/>,
+	/// and <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}.NextStateByTrigger"/>,
+	/// </summary>
+	/// <typeparam name="T_State">The type of <see cref="DecisionStateBase{T_State, T_Machine}"/> </typeparam>
+	/// <typeparam name="T_Machine">The type of <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}"/></typeparam>
 	[Serializable]
 	public class DecisionOption<T_State, T_Machine> : DecisionOption
 		where T_Machine : MonoDecisionStateMachineBase<T_State, T_Machine>
@@ -219,8 +284,16 @@ namespace CocodriloDog.Core {
 
 		#region Public Properties
 
+		/// <summary>
+		/// The <see cref="DecisionTrigger"/> that will transition to the specified <see cref="State"/>
+		/// when invoking <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}.NextStateByTrigger"/>.
+		/// </summary>
 		public DecisionTrigger Trigger => m_Trigger.Value;
 
+		/// <summary>
+		/// A reference to the <see cref="DecisionStateBase{T_State, T_Machine}"/> that this option
+		/// will transition to.
+		/// </summary>
 		public CompositeObjectReference<T_State> State => m_State;
 
 		public string TriggerId {
@@ -286,6 +359,33 @@ namespace CocodriloDog.Core {
 			m_State.SetMode(mode);
 			m_Trigger.SetMode(mode);
 		}
+
+		#endregion
+
+
+	}
+
+	/// <summary>
+	/// The <see cref="DecisionOption{T_State, T_Machine}.Trigger"/> to be used in 
+	/// <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}.NextStateByTrigger(string)"/>
+	/// to transition to the corresponding <see cref="DecisionOption{T_State, T_Machine}.State"/>.
+	/// </summary>
+	[Serializable]
+	public class DecisionTrigger : CompositeObject {
+
+
+		#region Public Properties
+
+		public override string DisplayName => $"{base.DisplayName} (Trigger)";
+
+		#endregion
+
+
+		#region Public Constructors
+
+		public DecisionTrigger() { }
+
+		public DecisionTrigger(string name) => Name = name;
 
 		#endregion
 

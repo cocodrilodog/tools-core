@@ -6,15 +6,25 @@ namespace CocodriloDog.Core {
 	using UnityEngine.Events;
 	using UnityEngine.Serialization;
 
+	/// <summary>
+	/// With this component, coroutines can be created in the inspector.
+	/// </summary>
 	public class CoroutineTrigger : MonoCompositeRoot {
 
 
 		#region Public Methods
 
+		/// <summary>
+		/// Starts the first coroutine in the list.
+		/// </summary>
 		public void StartCoroutineUnit() {
 			m_CoroutineUnits[0]?.StartCoroutine(this);
 		}
 
+		/// <summary>
+		/// Starts the coroutine with name <paramref name="unitName"/>.
+		/// </summary>
+		/// <param name="unitName">The name of the <see cref="CoroutineUnit"/>.</param>
 		public void StartCoroutineUnit(string unitName) {
 			m_CoroutineUnits.FirstOrDefault(b => b.Name == unitName)?.StartCoroutine(this);
 		}
@@ -33,6 +43,7 @@ namespace CocodriloDog.Core {
 
 		#region Private Fields
 
+		[Tooltip("Objects that have properties of coroutines and fire events accordingly.")]
 		[FormerlySerializedAs("m_CoroutineBlocks")]
 		[SerializeField]
 		private CompositeList<CoroutineUnit> m_CoroutineUnits;
@@ -42,12 +53,20 @@ namespace CocodriloDog.Core {
 
 	}
 
+	/// <summary>
+	/// Base class for coroutine units. Concrete classes should have properties and events 
+	/// relevant to the coroutine that they will start.
+	/// </summary>
 	[Serializable]
 	public abstract class CoroutineUnit : CompositeObject {
 
 
 		#region Public Methods
 
+		/// <summary>
+		/// Starts the coroutine.
+		/// </summary>
+		/// <param name="monoBehaviour">The MonoBehaviour that starts the coroutine.</param>
 		public virtual void StartCoroutine(MonoBehaviour monoBehaviour) { }
 
 		#endregion
@@ -55,6 +74,9 @@ namespace CocodriloDog.Core {
 
 	}
 
+	/// <summary>
+	/// <see cref="CoroutineUnit"/> that uses a <see cref="WaitForEndOfFrame"/> coroutine.
+	/// </summary>
 	[Serializable]
 	public class WaitForEndOfFrameUnit : CoroutineUnit {
 
@@ -86,6 +108,9 @@ namespace CocodriloDog.Core {
 
 	}
 
+	/// <summary>
+	/// <see cref="CoroutineUnit"/> that uses a <see cref="WaitForSeconds"/> coroutine.
+	/// </summary>
 	[Serializable]
 	public class WaitForSecondsUnit : CoroutineUnit {
 

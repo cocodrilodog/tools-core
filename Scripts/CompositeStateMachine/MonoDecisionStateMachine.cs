@@ -6,6 +6,9 @@ namespace CocodriloDog.Core {
 	using UnityEngine;
 	using UnityEngine.Serialization;
 
+	/// <summary>
+	/// Concrete immplementation of <see cref="MonoDecisionStateMachineBase{T_State, T_Machine}"/>.
+	/// </summary>
 	public class MonoDecisionStateMachine : MonoDecisionStateMachineBase<MonoDecisionStateMachine.State, MonoDecisionStateMachine> {
 
 
