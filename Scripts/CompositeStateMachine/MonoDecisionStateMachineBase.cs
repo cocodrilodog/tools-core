@@ -55,6 +55,7 @@ namespace CocodriloDog.Core {
 		public void NextStateByIndex(int index) {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Index: {index}. Did nothing.");
+				return;
 			}
 			CurrentState.NextByIndex(index);
 		}
@@ -68,6 +69,7 @@ namespace CocodriloDog.Core {
 		public void NextStateByTrigger(string trigger) {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Trigger: {trigger}. Did nothing.");
+				return;
 			}
 			CurrentState.NextByTrigger(trigger);
 		}
