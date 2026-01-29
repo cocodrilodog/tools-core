@@ -52,7 +52,10 @@ namespace CocodriloDog.Core {
 		/// <summary>
 		/// A unique Id for this object.
 		/// </summary>
-		public string Id => m_Id;
+		public string Id {
+			get => m_Id;
+			internal set => m_Id = value;
+		}
 
 		/// <summary>
 		/// Enables or disables the edit button in the inspector.

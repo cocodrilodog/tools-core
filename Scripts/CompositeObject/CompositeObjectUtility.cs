@@ -2,6 +2,7 @@ namespace CocodriloDog.Core {
 
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using UnityEngine;
 
 	public class CompositeObjectUtility : MonoBehaviour {
@@ -28,6 +29,19 @@ namespace CocodriloDog.Core {
 			}
 			return block;
 		}
+
+		/// <summary>
+		/// Helper method to change the <see cref="CompositeObject.Id"/> when an exteme edge case
+		/// requires it.
+		/// </summary>
+		/// 
+		/// <remarks>
+		/// Only use this if you know what you are doing.
+		/// </remarks>
+		/// 
+		/// <param name="compositeObject">The composite object.</param>
+		/// <param name="newId">The new Id</param>
+		public static void ChangeId(CompositeObject compositeObject, string newId) => compositeObject.Id = newId;
 
 		#endregion
 

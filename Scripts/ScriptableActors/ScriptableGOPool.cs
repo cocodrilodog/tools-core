@@ -40,8 +40,12 @@ namespace CocodriloDog.Core {
         /// <param name="go">The game object to return</param>
         public void Return(GameObject go) {
 
-            if (!m_ActiveGOs.Contains(go)) {
-                throw new ArgumentException($"GameObject {go} does not belong to this {GetType().Name}");
+			if (m_InactiveGOs.Contains(go)) {
+				throw new ArgumentException($"GameObject {go.name} can not be returned to this {GetType().Name} because is not active");
+			}
+
+			if (!m_ActiveGOs.Contains(go)) {
+                throw new ArgumentException($"GameObject {go.name} does not belong to this {GetType().Name}");
             }
 
             m_ActiveGOs.Remove(go);

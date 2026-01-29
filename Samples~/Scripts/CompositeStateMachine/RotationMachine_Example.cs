@@ -38,9 +38,9 @@ namespace CocodriloDog.Core {
 			base.OnValidate(); 
 
 			// Create the states programatically
-			SetStateIfNull(typeof(Red), 0);
-			SetStateIfNull(typeof(Green), 1);
-			SetStateIfNull(typeof(Blue), 2);
+			CreateStateIfNull(typeof(Red), 0);
+			CreateStateIfNull(typeof(Green), 1);
+			CreateStateIfNull(typeof(Blue), 2);
 
 			// don't allow to change the states in the inspector
 			CanAddRemoveStates = false;

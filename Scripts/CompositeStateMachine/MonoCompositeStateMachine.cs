@@ -51,6 +51,16 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
+		/// Returns the current active state.
+		/// </summary>
+		public T_State CurrentState {
+			get {
+				Initialize();
+				return m_CurrentState;
+			}
+		}
+
+		/// <summary>
 		/// The number of states.
 		/// </summary>
 		public int StatesCount => m_States.Count;
@@ -61,15 +71,18 @@ namespace CocodriloDog.Core {
 		#region Public Methods
 
 		/// <summary>
-		/// Checks whether a state with the provided <paramref name="name"/> exists or not.
+		/// Checks whether a state with the provided <paramref name="nameOrId"/> exists or not.
 		/// </summary>
-		/// <param name="name">The name of the state.</param>
+		/// <param name="nameOrId">The name of the state.</param>
 		/// <returns>
-		/// <c>true</c> if a state with the specified <paramref name="name"/> exists, <c>false</c>
+		/// <c>true</c> if a state with the specified <paramref name="nameOrId"/> exists, <c>false</c>
 		/// otherwise.
 		/// </returns>
-		public bool HasState(string name) {
-			if(m_States.FirstOrDefault(s => name == s.Name) != null) {
+		public bool HasState(string nameOrId) {
+			if (m_States.FirstOrDefault(s => nameOrId == s.Name) != null) {
+				return true;
+			}
+			if (m_States.FirstOrDefault(s => nameOrId == s.Id) != null) {
 				return true;
 			}
 			return false; 
@@ -116,7 +129,7 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		/// <param name="action">The action.</param>
 		public void ForEachState(Action<T_State> action) {
-			foreach(var state in m_States) {
+			foreach (var state in m_States) {
 				action?.Invoke(state);
 			}
 		}
@@ -166,97 +179,115 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
-		#region Protected Properties
-
-		/// <summary>
-		/// Returns the current active state.
-		/// </summary>
-		protected T_State CurrentState {
-			get {
-				Initialize();
-				return m_CurrentState;
-			}
-		}
-
-		#endregion
-
-
 		#region Protected Methods
 
 		/// <summary>
 		/// Adds a state of type <typeparamref name="T"/>.
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
-		protected void AddState<T>() where T : T_State => AddState(typeof(T));
+		/// <returns>The created state.</returns>
+		protected T_State AddState<T>() where T : T_State => AddState(typeof(T));
 
 		/// <summary>
 		/// Adds a state of type <paramref name="type"/>.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		protected void AddState(Type type) {
+		/// <returns>The created state.</returns>
+		protected T_State AddState(Type type) {
 			T_State state = Activator.CreateInstance(type) as T_State;
+			AddState(state);
+			return state;
+		}
+
+		/// <summary>
+		/// Adds a state of type <paramref name="type"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		protected void AddState(T_State state) {
 			m_States.Add(state);
 			state.SetMachine(this as T_Machine);
 			// This happens when the machine starts without states.
-			if(m_CurrentState == null) {
+			if (m_CurrentState == null) {
 				SetState(state);
 			}
+			state.RegisterAsReferenceable(this);
 		}
 
 		/// <summary>
 		/// Removes the state at the specified <paramref name="index"/>.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		protected void RemoveState(int index) => m_States.RemoveAt(index);
+		protected void RemoveState(int index) {
+			m_States.RemoveAt(index);
+			if(m_States.Count == 0) {
+				SetState(null);
+			}
+		}
 
 		/// <summary>
 		/// Removes the state with the provided <paramref name="nameOrId"/>
 		/// </summary>
 		/// <param name="id">The id.</param>
-		protected void RemoveState(string nameOrId) {
+		/// <returns>Whether the operation was successful or not.</returns>
+		protected bool RemoveState(string nameOrId) {
 			var stateToRemove = GetState(nameOrId);
+			var result = false;
 			if (stateToRemove != null) {
-				m_States.Remove(stateToRemove);
+				result = m_States.Remove(stateToRemove);
+				if (m_States.Count == 0) {
+					SetState(null);
+				}
 			}
+			return result;
 		}
 
 		/// <summary>
-		/// Sets a state of type <typeparamref name="T"/> at the specified <paramref name="index"/> if there is none.
+		/// Creates a state of type <typeparamref name="T"/> at the specified <paramref name="index"/> if there is none.
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="index">The index.</param>
-		protected void SetStateIfNull<T>(int index) where T : T_State => SetStateIfNull(typeof(T), index);
+		/// <returns>
+		/// The created or the existing state, or null if the existing state is of a type different from 
+		/// <typeparamref name="T"/>
+		/// </returns>
+		protected T CreateStateIfNull<T>(int index) where T : T_State => CreateStateIfNull(typeof(T), index) as T;
 
 		/// <summary>
-		/// Sets a state of type <paramref name="type"/> at the specified <paramref name="index"/> if there is none.
+		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/> if there is none.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
-		protected void SetStateIfNull(Type type, int index) {
+		/// <returns>The created or the existing state.</returns>
+		protected T_State CreateStateIfNull(Type type, int index) {
+			var state = GetState(index);
 			if (GetState(index) == null) {
-				SetState(type, index);
+				return CreateState(type, index);
 			}
+			return state;
 		}
 
 		/// <summary>
-		/// Sets a state of type <typeparamref name="T"/> at the specified <paramref name="index"/>.
+		/// Creates a state of type <typeparamref name="T"/> at the specified <paramref name="index"/>.
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="index">The index.</param>
-		protected void SetState<T>(int index) where T : T_State => SetState(typeof(T), index);
+		/// <returns>The created state.</returns>
+		protected T_State CreateState<T>(int index) where T : T_State => CreateState(typeof(T), index);
 
 		/// <summary>
-		/// Sets a state of type <paramref name="type"/> at the specified <paramref name="index"/>.
+		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/>.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
-		protected void SetState(Type type, int index) {
+		/// <returns>The created state.</returns>
+		protected T_State CreateState(Type type, int index) {
 			T_State state = Activator.CreateInstance(type) as T_State;
 			while (index > m_States.Count - 1) {
 				m_States.Add(null);
 			}
 			m_States[index] = state;
 			state.SetMachine(this as T_Machine);
+			return state;
 		}
 
 		#endregion
@@ -345,6 +376,25 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
+		#region Public Events
+
+		public event Action<T_State> OnEnter;
+
+		public event Action<T_State> OnExit;
+
+		#endregion
+
+
+		#region Unity Events
+
+		public override void OnDestroy() {
+			OnEnter = null;
+			OnExit = null;
+		}
+
+		#endregion
+
+
 		#region Protected Properties
 
 		protected T_Machine Machine => m_Machine;
@@ -356,6 +406,29 @@ namespace CocodriloDog.Core {
 
 		internal void SetMachine(T_Machine machine) => m_Machine = machine;
 
+		internal void EnterAndRaiseOnEnter() {
+			Enter();
+			RaiseOnEnter();
+		}
+
+		internal void ExitAndRaiseOnExit() {
+			Exit();
+			RaiseOnExit();
+		}
+
+		#endregion
+
+
+		#region Private Fields - Serialized
+
+		[UnityEventGroup("Events")]
+		[SerializeField]
+		private UnityEvent<T_State> m_OnEnter = new();
+
+		[UnityEventGroup("Events")]
+		[SerializeField]
+		private UnityEvent<T_State> m_OnExit = new();
+
 		#endregion
 
 
@@ -363,6 +436,21 @@ namespace CocodriloDog.Core {
 
 		[NonSerialized]
 		private T_Machine m_Machine;
+
+		#endregion
+
+
+		#region Private Methods
+
+		private void RaiseOnEnter() {
+			OnEnter?.Invoke(this as T_State);
+			m_OnEnter.Invoke(this as T_State);
+		}
+
+		private void RaiseOnExit() {
+			OnExit?.Invoke(this as T_State);
+			m_OnExit.Invoke(this as T_State);
+		}
 
 		#endregion
 

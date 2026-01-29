@@ -62,6 +62,14 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
+		/// The unique Id of the <see cref="CompositeObject"/>
+		/// </summary>
+		public string Id {
+			get => m_Id;
+			set => m_Id = value == null ? "" : value; // Id should never be null
+		}
+
+		/// <summary>
 		/// The referenced <see cref="CompositeObject"/>.
 		/// </summary>
 		public T Value {
@@ -134,7 +142,7 @@ namespace CocodriloDog.Core {
 
 		[Tooltip("The unique Id of the CompositeObject.")]
 		[SerializeField]
-		private string m_Id;
+		private string m_Id = ""; // Id should never be null
 
 		#endregion
 
