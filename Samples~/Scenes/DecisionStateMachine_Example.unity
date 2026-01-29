@@ -453,7 +453,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 63a1b02cec03ba340ac48a15d74fcdd4, type: 3}
   m_Color: {r: 1, g: 0.53031415, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1099,16 +1099,16 @@ MonoBehaviour:
             m_Calls: []
         m_NextOptions:
         - m_Trigger:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 515b01f4-8702-44d8-b0d5-a3e473bd9538
           m_State:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 3a51d287-5c69-4d9a-aade-652cf6d591ea
     - rid: 8489483706106118236
       type: {class: MonoDecisionStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
@@ -1176,28 +1176,28 @@ MonoBehaviour:
             m_Calls: []
         m_NextOptions:
         - m_Trigger:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 9873b927-8267-4673-a52b-258dba0fc9e3
           m_State:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 477def2e-f5a1-4d9f-899a-2bde4623ed1f
         - m_Trigger:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 9dd85223-cd41-40ac-9d9f-32e4f8ec4603
           m_State:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 6643869a-ef8f-41f7-8518-e636828d00ba
     - rid: 8489483706106118237
       type: {class: DecisionTrigger, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
@@ -1206,7 +1206,7 @@ MonoBehaviour:
         m_Id: 515b01f4-8702-44d8-b0d5-a3e473bd9538
         m_CanEnterEdit: 1
         m_CanEditName: 1
-        m_CanDeleteInstance: 1
+        m_CanDeleteInstance: 0
         m_DocumentationComment: 
     - rid: 8489483706106118238
       type: {class: DecisionTrigger, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
@@ -1215,7 +1215,7 @@ MonoBehaviour:
         m_Id: 9873b927-8267-4673-a52b-258dba0fc9e3
         m_CanEnterEdit: 1
         m_CanEditName: 1
-        m_CanDeleteInstance: 1
+        m_CanDeleteInstance: 0
         m_DocumentationComment: 
     - rid: 8489483706106118254
       type: {class: MonoDecisionStateMachine/State, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
@@ -1283,28 +1283,28 @@ MonoBehaviour:
             m_Calls: []
         m_NextOptions:
         - m_Trigger:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 9873b927-8267-4673-a52b-258dba0fc9e3
           m_State:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 477def2e-f5a1-4d9f-899a-2bde4623ed1f
         - m_Trigger:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 515b01f4-8702-44d8-b0d5-a3e473bd9538
           m_State:
+            m_Initialized: 1
             m_Source: {fileID: 1697386800}
             m_ShowSourceField: 0
             m_EnableSourceField: 0
-            m_ShowEnableSourceFieldToggle: 0
             m_Id: 3a51d287-5c69-4d9a-aade-652cf6d591ea
     - rid: 8489483706106118255
       type: {class: DecisionTrigger, ns: CocodriloDog.Core, asm: CocodriloDog.Core}
@@ -1313,7 +1313,7 @@ MonoBehaviour:
         m_Id: 9dd85223-cd41-40ac-9d9f-32e4f8ec4603
         m_CanEnterEdit: 1
         m_CanEditName: 1
-        m_CanDeleteInstance: 1
+        m_CanDeleteInstance: 0
         m_DocumentationComment: 
 --- !u!4 &1697386801
 Transform:
