@@ -449,7 +449,9 @@ namespace CocodriloDog.Core {
 
 		private void RaiseOnExit() {
 			OnExit?.Invoke(this as T_State);
-			m_OnExit.Invoke(this as T_State);
+			try { // This prevents null exceptions in the editor
+				m_OnExit.Invoke(this as T_State);
+			} catch { }
 		}
 
 		#endregion
