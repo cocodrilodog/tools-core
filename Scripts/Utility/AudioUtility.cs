@@ -11,17 +11,17 @@
 
 		// Source: https://answers.unity.com/questions/283192/how-to-convert-decibel-number-to-audio-source-volu.html
 		public static float LinearToDecibel(float linear) {
-			float dB;
-			// TODO: Check if this must be "if (linear > 0)" instead
-			if (linear != 0) {
-				dB = 20.0f * Mathf.Log10(linear);
-			} else {
-				dB = -144.0f;
+			// Log10 is undefined for 0 or negative values.
+			// Unity mixers usually clamp around -80 dB.
+			if (linear <= 0.0f) {
+				return -80.0f;
 			}
-			return dB;
+			return 20.0f * Mathf.Log10(linear);
 		}
 
-		public static float DecibelToLinear(float dB) => Mathf.Pow(10.0f, dB / 20.0f);
+		public static float DecibelToLinear(float dB) {
+			return Mathf.Pow(10.0f, dB / 20.0f);
+		}
 
 		#endregion
 
