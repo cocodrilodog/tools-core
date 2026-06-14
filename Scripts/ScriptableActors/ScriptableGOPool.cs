@@ -54,6 +54,14 @@ namespace CocodriloDog.Core {
 
         }
 
+		/// <summary>
+		/// Clears the pool.
+		/// </summary>
+		public void Clear() {
+			m_ActiveGOs.Clear();
+			m_InactiveGOs.Clear();
+		}
+
         #endregion
 
 
