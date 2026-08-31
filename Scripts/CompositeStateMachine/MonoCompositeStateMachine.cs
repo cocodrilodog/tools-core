@@ -8,6 +8,7 @@ namespace CocodriloDog.Core {
 	using UnityEngine.Events;
 
 	// TODO: Apply latest changes to the ScriptableCompositeStateMachine (99a668c8d12e987f06ed65ab46738e7f4fbb074c)
+	// TODO: Apply latest changes to the ScriptableCompositeStateMachine (???)
 
 	/// <summary>
 	/// Intermediate non-generic class created to support a base editor for all subclasses of
@@ -48,16 +49,6 @@ namespace CocodriloDog.Core {
 		public bool CanReorderStates {
 			get => m_States.CanReorder;
 			set => m_States.CanReorder = value;
-		}
-
-		/// <summary>
-		/// Returns the current active state.
-		/// </summary>
-		public T_State CurrentState {
-			get {
-				Initialize();
-				return m_CurrentState;
-			}
 		}
 
 		/// <summary>
@@ -153,13 +144,7 @@ namespace CocodriloDog.Core {
 
 		#region Unity Methods
 
-		protected virtual void Awake() => m_States.ForEach(s => s.RegisterAsReferenceable(this));
-
-		protected virtual void Start() {
-			if (m_States.Count > 0) {
-				SetState(m_States[0]);
-			}
-		}
+		protected virtual void Awake() => Initialize();
 
 		protected virtual void Update() => m_CurrentState?.Update();
 
@@ -174,6 +159,21 @@ namespace CocodriloDog.Core {
 			SetState(null); // This will exit the current state
 			m_States.ForEach(s => s.UnregisterReferenceable(this));
 			m_States.ForEach(s => s.OnDestroy());
+		}
+
+		#endregion
+
+
+		#region Protected Properties
+
+		/// <summary>
+		/// Returns the current active state.
+		/// </summary>
+		protected T_State CurrentState {
+			get {
+				Initialize();
+				return m_CurrentState;
+			}
 		}
 
 		#endregion
@@ -300,11 +300,16 @@ namespace CocodriloDog.Core {
 		/// </summary>
 		internal CompositeList<T_State> States => m_States;
 
+		#endregion
+
+
+		#region Internal Methods
+
 		/// <summary>
 		/// Sets an active state.
 		/// </summary>
 		/// <remarks>
-		/// The satte machine will set the first state on <see cref="Start"/>.
+		/// The satte machine will set the first state on <see cref="Awake"/>.
 		/// </remarks>
 		/// <param name="value">The state.</param>
 		internal void SetState(T_State value) {
@@ -343,9 +348,14 @@ namespace CocodriloDog.Core {
 		private void Initialize() {
 			if (!m_IsInitialized) {
 				m_IsInitialized = true;
-				foreach (var state in m_States) {
-					state.SetMachine(this as T_Machine);
+				m_States.ForEach(s => s.SetMachine(this as T_Machine));
+				m_States.ForEach(s => s.RegisterAsReferenceable(this));
+				if (m_States.Count > 0) {
+					SetState(m_States[0]);
 				}
+				//foreach (var state in m_States) {
+				//	state.SetMachine(this as T_Machine);
+				//}
 			}
 		}
 
