@@ -242,7 +242,8 @@ namespace CocodriloDog.Core {
 		}
 
 		/// <summary>
-		/// Creates a state of type <typeparamref name="T"/> at the specified <paramref name="index"/> if there is none.
+		/// Creates a state of type <typeparamref name="T"/> at the specified <paramref name="index"/> if there is none
+		/// or if the current one is of a different type from the requested one.
 		/// </summary>
 		/// <typeparam name="T">The type.</typeparam>
 		/// <param name="index">The index.</param>
@@ -253,14 +254,15 @@ namespace CocodriloDog.Core {
 		protected T CreateStateIfNull<T>(int index) where T : T_State => CreateStateIfNull(typeof(T), index) as T;
 
 		/// <summary>
-		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/> if there is none.
+		/// Creates a state of type <paramref name="type"/> at the specified <paramref name="index"/> if there is none
+		/// or if the current one is of a different type from the requested one.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
 		/// <returns>The created or the existing state.</returns>
 		protected T_State CreateStateIfNull(Type type, int index) {
 			var state = GetState(index);
-			if (GetState(index) == null) {
+			if (state == null || state.GetType() != type) {
 				return CreateState(type, index);
 			}
 			return state;
@@ -353,9 +355,6 @@ namespace CocodriloDog.Core {
 				if (m_States.Count > 0) {
 					SetState(m_States[0]);
 				}
-				//foreach (var state in m_States) {
-				//	state.SetMachine(this as T_Machine);
-				//}
 			}
 		}
 
