@@ -39,12 +39,20 @@ namespace CocodriloDog.Core {
 		/// Transitions to the first state referenced in the 
 		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
 		/// </summary>
-		public void NextState() {
+		public void NextState() => NextState(out var _);
+
+		/// <summary>
+		/// Transitions to the first state referenced in the 
+		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
+		/// </summary>
+		/// <param name="transitioned">Whether a transition happened or not.</param>
+		public void NextState(out bool transitioned) {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Did nothing.");
+				transitioned = false;
 				return;
 			}
-			CurrentState.Next();
+			transitioned = CurrentState.Next(); ;
 		}
 
 		/// <summary>
@@ -52,12 +60,21 @@ namespace CocodriloDog.Core {
 		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
 		/// </summary>
 		/// <param name="index">The index of the <see cref="DecisionOption{T_State, T_Machine}"/>.</param>
-		public void NextStateByIndex(int index) {
+		public void NextStateByIndex(int index) => NextStateByIndex(index, out var _);
+
+		/// <summary>
+		/// Transitions to the state at <paramref name="index"/> in the 
+		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
+		/// </summary>
+		/// <param name="index">The index of the <see cref="DecisionOption{T_State, T_Machine}"/>.</param>
+		/// <param name="transitioned">Whether a transition happened or not.</param>
+		public void NextStateByIndex(int index, out bool transitioned) {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Index: {index}. Did nothing.");
+				transitioned = false;
 				return;
 			}
-			CurrentState.NextByIndex(index);
+			transitioned = CurrentState.NextByIndex(index); ;
 		}
 
 		/// <summary>
@@ -66,12 +83,22 @@ namespace CocodriloDog.Core {
 		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
 		/// </summary>
 		/// <param name="trigger">The trigger.</param>
-		public void NextStateByTrigger(string trigger) {
+		public void NextStateByTrigger(string trigger) => NextStateByTrigger(trigger, out var _);
+
+		/// <summary>
+		/// Transitions to the state referenced by the <see cref="DecisionOption{T_State, T_Machine}"/>
+		/// that has the provided <paramref name="trigger"/> in the 
+		/// <see cref="DecisionStateBase{T_State, T_Machine}.m_NextOptions"/> list.
+		/// </summary>
+		/// <param name="trigger">The trigger.</param>
+		/// <param name="transitioned">Whether a transition happened or not.</param>
+		public void NextStateByTrigger(string trigger, out bool transitioned) {
 			if (CurrentState == null) {
 				Debug.LogWarning($"{name}: State is null. Trigger: {trigger}. Did nothing.");
+				transitioned = false;
 				return;
 			}
-			CurrentState.NextByTrigger(trigger);
+			transitioned = CurrentState.NextByTrigger(trigger);
 		}
 
 		/// <summary>
@@ -141,6 +168,14 @@ namespace CocodriloDog.Core {
 			base.OnDestroy();
 			m_Triggers.ForEach(t => t.UnregisterReferenceable(this));
 		}
+
+		#endregion
+
+
+		#region Internal Fields
+
+		[SerializeField]
+		internal bool m_LogStateTransitions = true;
 
 		#endregion
 
@@ -232,7 +267,9 @@ namespace CocodriloDog.Core {
 
 			// Trigger is valid
 			if (stateOption != null) {
-				Debug.Log($"{Machine.name}: {Name} -> {trigger} -> {stateOption.State.Value.Name}");
+				if (Machine.m_LogStateTransitions) {
+					Debug.Log($"{Machine.name}: {Name} -> {trigger} -> {stateOption.State.Value.Name}");
+				}
 				TransitionToState(stateOption.State.Value.Name);
 				return true;
 			}
