@@ -1,6 +1,7 @@
 namespace CocodriloDog.Core {
 
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using UnityEngine;
@@ -214,6 +215,29 @@ namespace CocodriloDog.Core {
 
 		#region Public Methods
 
+		public override void Enter() {
+			base.Enter();
+			if (m_IsTimed) {
+				m_DurationCoroutine = Machine.StartCoroutine(WaitForDuration());
+			}
+			IEnumerator WaitForDuration() {
+				if (m_UseRealTime) {
+					yield return new WaitForSecondsRealtime(m_Duration);
+				} else {
+					yield return new WaitForSeconds(m_Duration);
+				}
+				Next();
+			}
+		}
+
+		public override void Exit() {
+			base.Exit();
+			if (m_DurationCoroutine != null) {
+				Machine.StopCoroutine(m_DurationCoroutine);
+				m_DurationCoroutine = null;
+			}
+		}
+
 		/// <summary>
 		/// Gets the <see cref="DecisionOption{T_State, T_Machine}"/> at the specified <paramref name="index"/>.
 		/// </summary>
@@ -291,12 +315,44 @@ namespace CocodriloDog.Core {
 		#endregion
 
 
-		#region Private Fields
+		#region Private Fields - Serialized
 
 		[Tooltip("The options for this state to transition to.")]
 		[FormerlySerializedAs("m_NextStateOptions")]
 		[SerializeField]
 		private List<DecisionOption<T_State, T_Machine>> m_NextOptions = new();
+
+		[Tooltip(
+			"Whether this state has a duration. If so, after the duration, it will " +
+			"auto-transition to the state referenced in the first next option."
+		)]
+		[SerializeField]
+		private bool m_IsTimed;
+
+		[Tooltip("The duration of the state.")]
+		[Hide(nameof(HideDuration))]
+		[SerializeField]
+		private float m_Duration;
+
+		[Tooltip("The duration is tracked in real (non-scaled time).")]
+		[Hide(nameof(HideDuration))]
+		[SerializeField]
+		private bool m_UseRealTime;
+
+		#endregion
+
+
+		#region Private Fields - Non Serialized
+
+		[NonSerialized]
+		private Coroutine m_DurationCoroutine;
+
+		#endregion
+
+
+		#region Private Methods
+
+		private bool HideDuration() => !m_IsTimed;
 
 		#endregion
 
